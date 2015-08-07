@@ -1,0 +1,76 @@
+\hypertarget{classExponentiationBinary}{\section{Exponentiation\-Binary$<$ T $>$ Class Template Reference}
+\label{classExponentiationBinary}\index{Exponentiation\-Binary$<$ T $>$@{Exponentiation\-Binary$<$ T $>$}}
+}
+
+
+class for left-\/to-\/right binary exponentiation  
+
+
+
+
+{\ttfamily \#include $<$Exponentiation\-Binary.\-hpp$>$}
+
+Inheritance diagram for Exponentiation\-Binary$<$ T $>$\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d3/d44/classExponentiationBinary}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classExponentiationBinary_ab2743c957571da9b56a8369b1d00a176}{power} (T \&C, const T \&A, const Z\-Z \&n)
+\begin{DoxyCompactList}\small\item\em Computes A$^\wedge$n using left-\/to-\/right binary exponentiation. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$class T$>$class Exponentiation\-Binary$<$ T $>$}
+
+class for left-\/to-\/right binary exponentiation 
+
+\begin{DoxyRemark}{Remarks}
+This concrete class defines a method for standard left-\/to-\/right binary exponentiation. The base type is templated, and must have the following functions defined\-:
+\begin{DoxyItemize}
+\item assign(\-T \&\-C, const T \&\-A)\-: sets C = A
+\item mul(\-T \&\-C, const T \&\-A, const T \&\-B)\-: computes C = A\-B
+\item sqr(\-T \&\-C, const T \&\-A)\-: computes C = A\-A 
+\end{DoxyItemize}
+\end{DoxyRemark}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classExponentiationBinary_ab2743c957571da9b56a8369b1d00a176}{\index{Exponentiation\-Binary@{Exponentiation\-Binary}!power@{power}}
+\index{power@{power}!ExponentiationBinary@{Exponentiation\-Binary}}
+\subsubsection[{power}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ void {\bf Exponentiation\-Binary}$<$ T $>$\-::power (
+\begin{DoxyParamCaption}
+\item[{T \&}]{C, }
+\item[{const T \&}]{A, }
+\item[{const Z\-Z \&}]{n}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}}\label{classExponentiationBinary_ab2743c957571da9b56a8369b1d00a176}
+
+
+Computes A$^\wedge$n using left-\/to-\/right binary exponentiation. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em C} & result of computing A$^\wedge$n \\
+\hline
+\mbox{\tt in}  & {\em A} & base for exponentiation \\
+\hline
+\mbox{\tt in}  & {\em n} & exponent\\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+n $>$= 0 
+\end{DoxyPrecond}
+
+
+Implements \hyperlink{classExponentiation_a6bb016d4ff587f16a5369ee70fe39936}{Exponentiation$<$ T $>$}.
+
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\-A\-N\-T\-L/\-Exponentiation/\hyperlink{ExponentiationBinary_8hpp}{Exponentiation\-Binary.\-hpp}\item 
+src/\-Exponentiation/\hyperlink{ExponentiationBinary__impl_8hpp}{Exponentiation\-Binary\-\_\-impl.\-hpp}\end{DoxyCompactItemize}

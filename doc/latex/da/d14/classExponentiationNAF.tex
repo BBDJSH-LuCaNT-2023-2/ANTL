@@ -1,0 +1,117 @@
+\hypertarget{classExponentiationNAF}{\section{Exponentiation\-N\-A\-F$<$ T $>$ Class Template Reference}
+\label{classExponentiationNAF}\index{Exponentiation\-N\-A\-F$<$ T $>$@{Exponentiation\-N\-A\-F$<$ T $>$}}
+}
+
+
+class for left-\/to-\/right N\-A\-F exponentiation  
+
+
+
+
+{\ttfamily \#include $<$Exponentiation\-N\-A\-F.\-hpp$>$}
+
+Inheritance diagram for Exponentiation\-N\-A\-F$<$ T $>$\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{da/d14/classExponentiationNAF}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classExponentiationNAF_a1e9b79ec2538f12535cc54b6dde9b68c}{initialize} (const T \&A, const Z\-Z \&n)
+\begin{DoxyCompactList}\small\item\em Setup the class to compute A$^\wedge$n. Compute inverse of A and allocates a digit vector of size Num\-Bits(n)+1. \end{DoxyCompactList}\item 
+void \hyperlink{classExponentiationNAF_a1d880c4c55d754fcf5e225c36e980c03}{power} (T \&C, const T \&A, const Z\-Z \&n)
+\begin{DoxyCompactList}\small\item\em Computes A$^\wedge$n. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+vector$<$ short $>$ \hyperlink{classExponentiationNAF_a466325261b0b566860678ca2e0622ba4}{e}
+\item 
+T \hyperlink{classExponentiationNAF_ae74221c4e5a501c9919d229c92fd87a0}{Ainv}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$class T$>$class Exponentiation\-N\-A\-F$<$ T $>$}
+
+class for left-\/to-\/right N\-A\-F exponentiation 
+
+\begin{DoxyRemark}{Remarks}
+This concrete class defines a method for left-\/to-\/right non-\/adjacent form exponentiation. The method first computes the N\-A\-F representation of the exponent using the basic right-\/to-\/left method, and then applies it to the base left-\/to-\/right. The base type is templated, and must have the following functions defined\-:
+\begin{DoxyItemize}
+\item assign(\-T \&\-C, const T \&\-A)\-: sets C = A
+\item mul(\-T \&\-C, const T \&\-A, const T \&\-B)\-: computes C = A\-B
+\item sqr(\-T \&\-C, const T \&\-A)\-: computes C = A\-A
+\item inv(\-T \&\-C, const T \&\-A)\-: computes C = inverse of A 
+\end{DoxyItemize}
+\end{DoxyRemark}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classExponentiationNAF_a1e9b79ec2538f12535cc54b6dde9b68c}{\index{Exponentiation\-N\-A\-F@{Exponentiation\-N\-A\-F}!initialize@{initialize}}
+\index{initialize@{initialize}!ExponentiationNAF@{Exponentiation\-N\-A\-F}}
+\subsubsection[{initialize}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ void {\bf Exponentiation\-N\-A\-F}$<$ T $>$\-::initialize (
+\begin{DoxyParamCaption}
+\item[{const T \&}]{A, }
+\item[{const Z\-Z \&}]{n}
+\end{DoxyParamCaption}
+)}}\label{classExponentiationNAF_a1e9b79ec2538f12535cc54b6dde9b68c}
+
+
+Setup the class to compute A$^\wedge$n. Compute inverse of A and allocates a digit vector of size Num\-Bits(n)+1. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em A} & base for exponentiation \\
+\hline
+\mbox{\tt in}  & {\em n} & exponent\\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+n $>$= 0 
+\end{DoxyPrecond}
+\hypertarget{classExponentiationNAF_a1d880c4c55d754fcf5e225c36e980c03}{\index{Exponentiation\-N\-A\-F@{Exponentiation\-N\-A\-F}!power@{power}}
+\index{power@{power}!ExponentiationNAF@{Exponentiation\-N\-A\-F}}
+\subsubsection[{power}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ void {\bf Exponentiation\-N\-A\-F}$<$ T $>$\-::power (
+\begin{DoxyParamCaption}
+\item[{T \&}]{C, }
+\item[{const T \&}]{A, }
+\item[{const Z\-Z \&}]{n}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}}\label{classExponentiationNAF_a1d880c4c55d754fcf5e225c36e980c03}
+
+
+Computes A$^\wedge$n. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em C} & result of computing A$^\wedge$n using left-\/to-\/right N\-A\-F exponentiation \\
+\hline
+\mbox{\tt in}  & {\em A} & base for exponentiation \\
+\hline
+\mbox{\tt in}  & {\em n} & exponent\\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+n $>$= 0 
+\end{DoxyPrecond}
+
+
+Implements \hyperlink{classExponentiation_a6bb016d4ff587f16a5369ee70fe39936}{Exponentiation$<$ T $>$}.
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classExponentiationNAF_ae74221c4e5a501c9919d229c92fd87a0}{\index{Exponentiation\-N\-A\-F@{Exponentiation\-N\-A\-F}!Ainv@{Ainv}}
+\index{Ainv@{Ainv}!ExponentiationNAF@{Exponentiation\-N\-A\-F}}
+\subsubsection[{Ainv}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ T {\bf Exponentiation\-N\-A\-F}$<$ T $>$\-::Ainv\hspace{0.3cm}{\ttfamily [protected]}}}\label{classExponentiationNAF_ae74221c4e5a501c9919d229c92fd87a0}
+inverse of the base element \hypertarget{classExponentiationNAF_a466325261b0b566860678ca2e0622ba4}{\index{Exponentiation\-N\-A\-F@{Exponentiation\-N\-A\-F}!e@{e}}
+\index{e@{e}!ExponentiationNAF@{Exponentiation\-N\-A\-F}}
+\subsubsection[{e}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ vector$<$short$>$ {\bf Exponentiation\-N\-A\-F}$<$ T $>$\-::e\hspace{0.3cm}{\ttfamily [protected]}}}\label{classExponentiationNAF_a466325261b0b566860678ca2e0622ba4}
+vector containing N\-A\-F expansion of exponent 
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\-A\-N\-T\-L/\-Exponentiation/\hyperlink{ExponentiationNAF_8hpp}{Exponentiation\-N\-A\-F.\-hpp}\item 
+src/\-Exponentiation/\hyperlink{ExponentiationNAF__impl_8hpp}{Exponentiation\-N\-A\-F\-\_\-impl.\-hpp}\end{DoxyCompactItemize}

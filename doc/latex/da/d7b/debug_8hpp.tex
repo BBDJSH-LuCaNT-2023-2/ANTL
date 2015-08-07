@@ -1,0 +1,243 @@
+\hypertarget{debug_8hpp}{\section{include/\-A\-N\-T\-L/debug.hpp File Reference}
+\label{debug_8hpp}\index{include/\-A\-N\-T\-L/debug.\-hpp@{include/\-A\-N\-T\-L/debug.\-hpp}}
+}
+
+
+Macros and functions useful for debugging.  
+
+
+{\ttfamily \#include $<$cassert$>$}\\*
+{\ttfamily \#include $<$iostream$>$}\\*
+{\ttfamily \#include $<$vector$>$}\\*
+{\ttfamily \#include $<$N\-T\-L/\-Z\-Z.\-h$>$}\\*
+{\ttfamily \#include $<$N\-T\-L/\-R\-R.\-h$>$}\\*
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classANTL_1_1debug}{A\-N\-T\-L\-::debug}
+\begin{DoxyCompactList}\small\item\em Controls where debug output goes, and allows global enable/disable on debug output streams. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{debug_8hpp_a4020418f03d4432675d84cd5c4f8441e}{\#define {\bfseries A\-N\-T\-L\-\_\-\-C\-U\-R\-R\-E\-N\-T\-\_\-\-M\-E\-T\-H\-O\-D\-\_\-\-N\-A\-M\-E}~\-\_\-\-\_\-func\-\_\-\-\_\-}\label{debug_8hpp_a4020418f03d4432675d84cd5c4f8441e}
+
+\item 
+\#define \hyperlink{debug_8hpp_ab76db8dd852cac8e993373ffbc61be36}{A\-N\-T\-L\-\_\-\-T\-R\-A\-C\-E}()
+\begin{DoxyCompactList}\small\item\em Prints the current method name to the trace stream, if {\ttfamily N\-D\-E\-B\-U\-G} is not defined. \end{DoxyCompactList}\item 
+\#define \hyperlink{debug_8hpp_a7cb0bdb11717ce58fcef5dd19ee48e57}{A\-N\-T\-L\-\_\-\-T\-R\-A\-C\-E\-\_\-\-A\-R\-G}(arg)
+\begin{DoxyCompactList}\small\item\em Prints message of the form \char`\"{}arg = value\-\_\-of\-\_\-arg\char`\"{} to the trace stream, if {\ttfamily N\-D\-E\-B\-U\-G} is not defined. \end{DoxyCompactList}\item 
+\#define \hyperlink{debug_8hpp_ac7240bc2dc75f67050f7fe87cd74896b}{A\-N\-T\-L\-\_\-\-T\-R\-A\-C\-E\-\_\-\-A\-R\-G\-\_\-\-D\-E\-T\-A\-I\-L}(arg, detail)
+\begin{DoxyCompactList}\small\item\em Prints message of the form \char`\"{}detail (arg) = value\-\_\-of\-\_\-arg\char`\"{} to the trace stream, if {\ttfamily N\-D\-E\-B\-U\-G} is not defined. \end{DoxyCompactList}\item 
+\#define \hyperlink{debug_8hpp_a0687f208677d5056208a0591e3729f93}{A\-N\-T\-L\-\_\-\-I\-N\-F\-O}(message)
+\begin{DoxyCompactList}\small\item\em Prints {\ttfamily message} to the info stream, if {\ttfamily N\-D\-E\-B\-U\-G} is not defined. \end{DoxyCompactList}\item 
+\hypertarget{debug_8hpp_a047ff2684dc4a5e76810db4cbd23124b}{\#define \hyperlink{debug_8hpp_a047ff2684dc4a5e76810db4cbd23124b}{A\-N\-T\-L\-\_\-\-I\-N\-F\-O\-\_\-\-V\-A\-R}(var)~\hyperlink{debug_8hpp_a0687f208677d5056208a0591e3729f93}{A\-N\-T\-L\-\_\-\-I\-N\-F\-O}( \#var \char`\"{} = \char`\"{} $<$$<$ var )}\label{debug_8hpp_a047ff2684dc4a5e76810db4cbd23124b}
+
+\begin{DoxyCompactList}\small\item\em Prints message of the form \char`\"{}var = value\-\_\-of\-\_\-var\char`\"{} to the info stream, if {\ttfamily N\-D\-E\-B\-U\-G} is not defined. \end{DoxyCompactList}\item 
+\hypertarget{debug_8hpp_a39b560bc2a967ad895e900e41ac056bf}{\#define \hyperlink{debug_8hpp_a39b560bc2a967ad895e900e41ac056bf}{A\-N\-T\-L\-\_\-\-I\-N\-F\-O\-\_\-\-V\-A\-R\-\_\-\-D\-E\-T\-A\-I\-L}(var, detail)~\hyperlink{debug_8hpp_a0687f208677d5056208a0591e3729f93}{A\-N\-T\-L\-\_\-\-I\-N\-F\-O}( detail $<$$<$ \char`\"{} (\char`\"{} \#var \char`\"{}) = \char`\"{} $<$$<$ var )}\label{debug_8hpp_a39b560bc2a967ad895e900e41ac056bf}
+
+\begin{DoxyCompactList}\small\item\em Prints message of the form \char`\"{}detail (var) = value\-\_\-of\-\_\-var\char`\"{} to the info stream, if {\ttfamily N\-D\-E\-B\-U\-G} is not defined. \end{DoxyCompactList}\item 
+\#define \hyperlink{debug_8hpp_a8ba1830eecd8be3040c57b0d98f0677b}{A\-N\-T\-L\-\_\-\-I\-N\-F\-O\-\_\-\-I\-F}(condition, message)
+\begin{DoxyCompactList}\small\item\em Prints {\ttfamily message} to the info stream, if {\ttfamily condition} evaluates to true and {\ttfamily N\-D\-E\-B\-U\-G} is not defined. \end{DoxyCompactList}\item 
+\#define \hyperlink{debug_8hpp_a814f73f9206a1e4b3f7510c94178b42f}{A\-N\-T\-L\-\_\-\-I\-N\-F\-O\-\_\-\-V\-A\-R\-\_\-\-I\-F}(condition, var)
+\begin{DoxyCompactList}\small\item\em Prints message of the form \char`\"{}var = value\-\_\-of\-\_\-var\char`\"{} to the info stream, if {\ttfamily N\-D\-E\-B\-U\-G} is not defined and {\ttfamily condition} evaluates to true. \end{DoxyCompactList}\item 
+\#define \hyperlink{debug_8hpp_a693033f75f5ff4f4617f7cc16705d41d}{A\-N\-T\-L\-\_\-\-I\-N\-F\-O\-\_\-\-V\-A\-R\-\_\-\-D\-E\-T\-A\-I\-L\-\_\-\-I\-F}(condition, var, detail)
+\begin{DoxyCompactList}\small\item\em Prints message of the form \char`\"{}detail (var) = value\-\_\-of\-\_\-var\char`\"{} to the info stream, if {\ttfamily N\-D\-E\-B\-U\-G} is not defined and {\ttfamily condition} evaluates to true. \end{DoxyCompactList}\item 
+\#define \hyperlink{debug_8hpp_a263a03e832a074a212812282ff1f3697}{A\-N\-T\-L\-\_\-\-E\-R\-R\-O\-R}(message)
+\begin{DoxyCompactList}\small\item\em Prints {\ttfamily message} to the error stream. \end{DoxyCompactList}\item 
+\#define \hyperlink{debug_8hpp_ab08b559a782eb00c94ade86154cdcb98}{A\-N\-T\-L\-\_\-\-F\-A\-T\-A\-L\-\_\-\-R\-C}(return\-Code, message)
+\begin{DoxyCompactList}\small\item\em Prints {\ttfamily message} to the error stream and exits the application with the given {\ttfamily return\-Code}. {\ttfamily return\-Code} must be an integer. \end{DoxyCompactList}\item 
+\hypertarget{debug_8hpp_afcfcb6b2e9f8b3d3c250801f7f4aa391}{\#define \hyperlink{debug_8hpp_afcfcb6b2e9f8b3d3c250801f7f4aa391}{A\-N\-T\-L\-\_\-\-F\-A\-T\-A\-L}(message)~\hyperlink{debug_8hpp_ab08b559a782eb00c94ade86154cdcb98}{A\-N\-T\-L\-\_\-\-F\-A\-T\-A\-L\-\_\-\-R\-C}(1, message)}\label{debug_8hpp_afcfcb6b2e9f8b3d3c250801f7f4aa391}
+
+\begin{DoxyCompactList}\small\item\em Prints {\ttfamily message} to the error stream and exits the application with the given {\ttfamily return\-Code}. {\ttfamily return\-Code} must be an integer. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{namespaceANTL_a53852c2a23ab8720f7a8aea56fef420f}{void {\bfseries A\-N\-T\-L\-::print\-\_\-binary\-\_\-expansion} (std\-::ostream \&os, const Z\-Z \&z)}\label{namespaceANTL_a53852c2a23ab8720f7a8aea56fef420f}
+
+\begin{DoxyCompactList}\small\item\em Print bits of {\ttfamily z} to {\ttfamily os}, from highest order to lowest order. \end{DoxyCompactList}\item 
+\hypertarget{namespaceANTL_a5393d8764495ab556cae21f77882f310}{void {\bfseries A\-N\-T\-L\-::print\-\_\-binary\-\_\-expansion} (std\-::ostream \&os, const R\-R \&r)}\label{namespaceANTL_a5393d8764495ab556cae21f77882f310}
+
+\begin{DoxyCompactList}\small\item\em Prints bits of {\ttfamily r} to {\ttfamily os}, from highest order to lowest order. \end{DoxyCompactList}\item 
+\hypertarget{namespaceANTL_abfa586c9822dc6698f32777192906123}{{\footnotesize template$<$class T $>$ }\\std\-::ostream \& {\bfseries A\-N\-T\-L\-::operator$<$$<$} (std\-::ostream \&os, const std\-::vector$<$ T $>$ \&vector)}\label{namespaceANTL_abfa586c9822dc6698f32777192906123}
+
+\begin{DoxyCompactList}\small\item\em Outputs an S\-T\-L vector in the form \mbox{[} v\-\_\-0 v\-\_\-1 ... v\-\_\-n \mbox{]}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Macros and functions useful for debugging. \begin{DoxyAuthor}{Author}
+John Lees-\/\-Miller You can turn off errors and \char`\"{}info\char`\"{} messages by defining {\ttfamily N\-D\-E\-B\-U\-G}. This is usually done in the makefile, and also disables C assertions. For gcc, you would do this by passing the {\ttfamily -\/\-D\-N\-D\-E\-B\-U\-G} option on the command line. 
+\end{DoxyAuthor}
+
+
+\subsection{Macro Definition Documentation}
+\hypertarget{debug_8hpp_a263a03e832a074a212812282ff1f3697}{\index{debug.\-hpp@{debug.\-hpp}!A\-N\-T\-L\-\_\-\-E\-R\-R\-O\-R@{A\-N\-T\-L\-\_\-\-E\-R\-R\-O\-R}}
+\index{A\-N\-T\-L\-\_\-\-E\-R\-R\-O\-R@{A\-N\-T\-L\-\_\-\-E\-R\-R\-O\-R}!debug.hpp@{debug.\-hpp}}
+\subsubsection[{A\-N\-T\-L\-\_\-\-E\-R\-R\-O\-R}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\-N\-T\-L\-\_\-\-E\-R\-R\-O\-R(
+\begin{DoxyParamCaption}
+\item[{}]{message}
+\end{DoxyParamCaption}
+)}}\label{debug_8hpp_a263a03e832a074a212812282ff1f3697}
+{\bfseries Value\-:}
+\begin{DoxyCode}
+ANTL\_BEGIN\_MACRO\_FUNCTION                       \(\backslash\)
+  ANTL::debug::error()                          \(\backslash\)
+    << \textcolor{stringliteral}{"**:"} << \_\_FILE\_\_ << \textcolor{stringliteral}{":"} << \_\_LINE\_\_ << \textcolor{stringliteral}{":"}          \(\backslash\)
+                           << \_\_func\_\_ << \textcolor{stringliteral}{": "} << message << std::endl; \hyperlink{common_8hpp_acb4b3218c4498189f6afd9fb235f7568}{\(\backslash\)}
+\hyperlink{common_8hpp_acb4b3218c4498189f6afd9fb235f7568}{  ANTL\_END\_MACRO\_FUNCTION}
+\end{DoxyCode}
+
+
+Prints {\ttfamily message} to the error stream. 
+
+Errors are always printed, regardless of whether {\ttfamily N\-D\-E\-B\-U\-G} is set. \hypertarget{debug_8hpp_ab08b559a782eb00c94ade86154cdcb98}{\index{debug.\-hpp@{debug.\-hpp}!A\-N\-T\-L\-\_\-\-F\-A\-T\-A\-L\-\_\-\-R\-C@{A\-N\-T\-L\-\_\-\-F\-A\-T\-A\-L\-\_\-\-R\-C}}
+\index{A\-N\-T\-L\-\_\-\-F\-A\-T\-A\-L\-\_\-\-R\-C@{A\-N\-T\-L\-\_\-\-F\-A\-T\-A\-L\-\_\-\-R\-C}!debug.hpp@{debug.\-hpp}}
+\subsubsection[{A\-N\-T\-L\-\_\-\-F\-A\-T\-A\-L\-\_\-\-R\-C}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\-N\-T\-L\-\_\-\-F\-A\-T\-A\-L\-\_\-\-R\-C(
+\begin{DoxyParamCaption}
+\item[{}]{return\-Code, }
+\item[{}]{message}
+\end{DoxyParamCaption}
+)}}\label{debug_8hpp_ab08b559a782eb00c94ade86154cdcb98}
+{\bfseries Value\-:}
+\begin{DoxyCode}
+\hyperlink{debug_8hpp_a263a03e832a074a212812282ff1f3697}{ANTL\_BEGIN\_MACRO\_FUNCTION           \(\backslash\)}
+\hyperlink{debug_8hpp_a263a03e832a074a212812282ff1f3697}{  ANTL\_ERROR}(message);              \(\backslash\)
+  std::exit(returnCode);            \hyperlink{common_8hpp_acb4b3218c4498189f6afd9fb235f7568}{\(\backslash\)}
+\hyperlink{common_8hpp_acb4b3218c4498189f6afd9fb235f7568}{  ANTL\_END\_MACRO\_FUNCTION}
+\end{DoxyCode}
+
+
+Prints {\ttfamily message} to the error stream and exits the application with the given {\ttfamily return\-Code}. {\ttfamily return\-Code} must be an integer. 
+
+\hypertarget{debug_8hpp_a0687f208677d5056208a0591e3729f93}{\index{debug.\-hpp@{debug.\-hpp}!A\-N\-T\-L\-\_\-\-I\-N\-F\-O@{A\-N\-T\-L\-\_\-\-I\-N\-F\-O}}
+\index{A\-N\-T\-L\-\_\-\-I\-N\-F\-O@{A\-N\-T\-L\-\_\-\-I\-N\-F\-O}!debug.hpp@{debug.\-hpp}}
+\subsubsection[{A\-N\-T\-L\-\_\-\-I\-N\-F\-O}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\-N\-T\-L\-\_\-\-I\-N\-F\-O(
+\begin{DoxyParamCaption}
+\item[{}]{message}
+\end{DoxyParamCaption}
+)}}\label{debug_8hpp_a0687f208677d5056208a0591e3729f93}
+{\bfseries Value\-:}
+\begin{DoxyCode}
+ANTL\_BEGIN\_MACRO\_FUNCTION                       \(\backslash\)
+  ANTL::debug::info()                           \(\backslash\)
+    << \textcolor{stringliteral}{"ii:"} << \_\_FILE\_\_ << \textcolor{stringliteral}{":"} << \_\_LINE\_\_ << \textcolor{stringliteral}{":"}          \(\backslash\)
+                           << \_\_func\_\_ << \textcolor{stringliteral}{": "} << message << std::endl; \hyperlink{common_8hpp_acb4b3218c4498189f6afd9fb235f7568}{\(\backslash\)}
+\hyperlink{common_8hpp_acb4b3218c4498189f6afd9fb235f7568}{  ANTL\_END\_MACRO\_FUNCTION}
+\end{DoxyCode}
+
+
+Prints {\ttfamily message} to the info stream, if {\ttfamily N\-D\-E\-B\-U\-G} is not defined. 
+
+\hypertarget{debug_8hpp_a8ba1830eecd8be3040c57b0d98f0677b}{\index{debug.\-hpp@{debug.\-hpp}!A\-N\-T\-L\-\_\-\-I\-N\-F\-O\-\_\-\-I\-F@{A\-N\-T\-L\-\_\-\-I\-N\-F\-O\-\_\-\-I\-F}}
+\index{A\-N\-T\-L\-\_\-\-I\-N\-F\-O\-\_\-\-I\-F@{A\-N\-T\-L\-\_\-\-I\-N\-F\-O\-\_\-\-I\-F}!debug.hpp@{debug.\-hpp}}
+\subsubsection[{A\-N\-T\-L\-\_\-\-I\-N\-F\-O\-\_\-\-I\-F}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\-N\-T\-L\-\_\-\-I\-N\-F\-O\-\_\-\-I\-F(
+\begin{DoxyParamCaption}
+\item[{}]{condition, }
+\item[{}]{message}
+\end{DoxyParamCaption}
+)}}\label{debug_8hpp_a8ba1830eecd8be3040c57b0d98f0677b}
+{\bfseries Value\-:}
+\begin{DoxyCode}
+ANTL\_BEGIN\_MACRO\_FUNCTION           \(\backslash\)
+  if (condition)                \hyperlink{debug_8hpp_a0687f208677d5056208a0591e3729f93}{\(\backslash\)}
+\hyperlink{debug_8hpp_a0687f208677d5056208a0591e3729f93}{    ANTL\_INFO}(message);                \hyperlink{common_8hpp_acb4b3218c4498189f6afd9fb235f7568}{\(\backslash\)}
+\hyperlink{common_8hpp_acb4b3218c4498189f6afd9fb235f7568}{  ANTL\_END\_MACRO\_FUNCTION}
+\end{DoxyCode}
+
+
+Prints {\ttfamily message} to the info stream, if {\ttfamily condition} evaluates to true and {\ttfamily N\-D\-E\-B\-U\-G} is not defined. 
+
+\hypertarget{debug_8hpp_a693033f75f5ff4f4617f7cc16705d41d}{\index{debug.\-hpp@{debug.\-hpp}!A\-N\-T\-L\-\_\-\-I\-N\-F\-O\-\_\-\-V\-A\-R\-\_\-\-D\-E\-T\-A\-I\-L\-\_\-\-I\-F@{A\-N\-T\-L\-\_\-\-I\-N\-F\-O\-\_\-\-V\-A\-R\-\_\-\-D\-E\-T\-A\-I\-L\-\_\-\-I\-F}}
+\index{A\-N\-T\-L\-\_\-\-I\-N\-F\-O\-\_\-\-V\-A\-R\-\_\-\-D\-E\-T\-A\-I\-L\-\_\-\-I\-F@{A\-N\-T\-L\-\_\-\-I\-N\-F\-O\-\_\-\-V\-A\-R\-\_\-\-D\-E\-T\-A\-I\-L\-\_\-\-I\-F}!debug.hpp@{debug.\-hpp}}
+\subsubsection[{A\-N\-T\-L\-\_\-\-I\-N\-F\-O\-\_\-\-V\-A\-R\-\_\-\-D\-E\-T\-A\-I\-L\-\_\-\-I\-F}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\-N\-T\-L\-\_\-\-I\-N\-F\-O\-\_\-\-V\-A\-R\-\_\-\-D\-E\-T\-A\-I\-L\-\_\-\-I\-F(
+\begin{DoxyParamCaption}
+\item[{}]{condition, }
+\item[{}]{var, }
+\item[{}]{detail}
+\end{DoxyParamCaption}
+)}}\label{debug_8hpp_a693033f75f5ff4f4617f7cc16705d41d}
+{\bfseries Value\-:}
+\begin{DoxyCode}
+ANTL\_BEGIN\_MACRO\_FUNCTION               \(\backslash\)
+  if (condition)                    \hyperlink{debug_8hpp_a39b560bc2a967ad895e900e41ac056bf}{\(\backslash\)}
+\hyperlink{debug_8hpp_a39b560bc2a967ad895e900e41ac056bf}{    ANTL\_INFO\_VAR\_DETAIL}(var, detail);          \hyperlink{common_8hpp_acb4b3218c4498189f6afd9fb235f7568}{\(\backslash\)}
+\hyperlink{common_8hpp_acb4b3218c4498189f6afd9fb235f7568}{  ANTL\_END\_MACRO\_FUNCTION}
+\end{DoxyCode}
+
+
+Prints message of the form \char`\"{}detail (var) = value\-\_\-of\-\_\-var\char`\"{} to the info stream, if {\ttfamily N\-D\-E\-B\-U\-G} is not defined and {\ttfamily condition} evaluates to true. 
+
+\hypertarget{debug_8hpp_a814f73f9206a1e4b3f7510c94178b42f}{\index{debug.\-hpp@{debug.\-hpp}!A\-N\-T\-L\-\_\-\-I\-N\-F\-O\-\_\-\-V\-A\-R\-\_\-\-I\-F@{A\-N\-T\-L\-\_\-\-I\-N\-F\-O\-\_\-\-V\-A\-R\-\_\-\-I\-F}}
+\index{A\-N\-T\-L\-\_\-\-I\-N\-F\-O\-\_\-\-V\-A\-R\-\_\-\-I\-F@{A\-N\-T\-L\-\_\-\-I\-N\-F\-O\-\_\-\-V\-A\-R\-\_\-\-I\-F}!debug.hpp@{debug.\-hpp}}
+\subsubsection[{A\-N\-T\-L\-\_\-\-I\-N\-F\-O\-\_\-\-V\-A\-R\-\_\-\-I\-F}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\-N\-T\-L\-\_\-\-I\-N\-F\-O\-\_\-\-V\-A\-R\-\_\-\-I\-F(
+\begin{DoxyParamCaption}
+\item[{}]{condition, }
+\item[{}]{var}
+\end{DoxyParamCaption}
+)}}\label{debug_8hpp_a814f73f9206a1e4b3f7510c94178b42f}
+{\bfseries Value\-:}
+\begin{DoxyCode}
+ANTL\_BEGIN\_MACRO\_FUNCTION           \(\backslash\)
+  if (condition)                \hyperlink{debug_8hpp_a047ff2684dc4a5e76810db4cbd23124b}{\(\backslash\)}
+\hyperlink{debug_8hpp_a047ff2684dc4a5e76810db4cbd23124b}{    ANTL\_INFO\_VAR}(var);                \hyperlink{common_8hpp_acb4b3218c4498189f6afd9fb235f7568}{\(\backslash\)}
+\hyperlink{common_8hpp_acb4b3218c4498189f6afd9fb235f7568}{  ANTL\_END\_MACRO\_FUNCTION}
+\end{DoxyCode}
+
+
+Prints message of the form \char`\"{}var = value\-\_\-of\-\_\-var\char`\"{} to the info stream, if {\ttfamily N\-D\-E\-B\-U\-G} is not defined and {\ttfamily condition} evaluates to true. 
+
+\hypertarget{debug_8hpp_ab76db8dd852cac8e993373ffbc61be36}{\index{debug.\-hpp@{debug.\-hpp}!A\-N\-T\-L\-\_\-\-T\-R\-A\-C\-E@{A\-N\-T\-L\-\_\-\-T\-R\-A\-C\-E}}
+\index{A\-N\-T\-L\-\_\-\-T\-R\-A\-C\-E@{A\-N\-T\-L\-\_\-\-T\-R\-A\-C\-E}!debug.hpp@{debug.\-hpp}}
+\subsubsection[{A\-N\-T\-L\-\_\-\-T\-R\-A\-C\-E}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\-N\-T\-L\-\_\-\-T\-R\-A\-C\-E(
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{debug_8hpp_ab76db8dd852cac8e993373ffbc61be36}
+{\bfseries Value\-:}
+\begin{DoxyCode}
+ANTL\_BEGIN\_MACRO\_FUNCTION                       \(\backslash\)
+  ANTL::debug::trace()                          \(\backslash\)
+    << \textcolor{stringliteral}{"@@:"} << \_\_FILE\_\_ << \textcolor{stringliteral}{":"} << \_\_LINE\_\_ << \textcolor{stringliteral}{":"}          \(\backslash\)
+                           << ANTL\_CURRENT\_METHOD\_NAME << std::endl; \hyperlink{common_8hpp_acb4b3218c4498189f6afd9fb235f7568}{\(\backslash\)}
+\hyperlink{common_8hpp_acb4b3218c4498189f6afd9fb235f7568}{  ANTL\_END\_MACRO\_FUNCTION}
+\end{DoxyCode}
+
+
+Prints the current method name to the trace stream, if {\ttfamily N\-D\-E\-B\-U\-G} is not defined. 
+
+\hypertarget{debug_8hpp_a7cb0bdb11717ce58fcef5dd19ee48e57}{\index{debug.\-hpp@{debug.\-hpp}!A\-N\-T\-L\-\_\-\-T\-R\-A\-C\-E\-\_\-\-A\-R\-G@{A\-N\-T\-L\-\_\-\-T\-R\-A\-C\-E\-\_\-\-A\-R\-G}}
+\index{A\-N\-T\-L\-\_\-\-T\-R\-A\-C\-E\-\_\-\-A\-R\-G@{A\-N\-T\-L\-\_\-\-T\-R\-A\-C\-E\-\_\-\-A\-R\-G}!debug.hpp@{debug.\-hpp}}
+\subsubsection[{A\-N\-T\-L\-\_\-\-T\-R\-A\-C\-E\-\_\-\-A\-R\-G}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\-N\-T\-L\-\_\-\-T\-R\-A\-C\-E\-\_\-\-A\-R\-G(
+\begin{DoxyParamCaption}
+\item[{}]{arg}
+\end{DoxyParamCaption}
+)}}\label{debug_8hpp_a7cb0bdb11717ce58fcef5dd19ee48e57}
+{\bfseries Value\-:}
+\begin{DoxyCode}
+ANTL\_BEGIN\_MACRO\_FUNCTION           \(\backslash\)
+  ANTL::debug::trace()              \(\backslash\)
+    << \textcolor{stringliteral}{"@@:\(\backslash\)t"} #arg \textcolor{stringliteral}{" = "} << arg << std::endl;  \hyperlink{common_8hpp_acb4b3218c4498189f6afd9fb235f7568}{\(\backslash\)}
+\hyperlink{common_8hpp_acb4b3218c4498189f6afd9fb235f7568}{  ANTL\_END\_MACRO\_FUNCTION}
+\end{DoxyCode}
+
+
+Prints message of the form \char`\"{}arg = value\-\_\-of\-\_\-arg\char`\"{} to the trace stream, if {\ttfamily N\-D\-E\-B\-U\-G} is not defined. 
+
+\hypertarget{debug_8hpp_ac7240bc2dc75f67050f7fe87cd74896b}{\index{debug.\-hpp@{debug.\-hpp}!A\-N\-T\-L\-\_\-\-T\-R\-A\-C\-E\-\_\-\-A\-R\-G\-\_\-\-D\-E\-T\-A\-I\-L@{A\-N\-T\-L\-\_\-\-T\-R\-A\-C\-E\-\_\-\-A\-R\-G\-\_\-\-D\-E\-T\-A\-I\-L}}
+\index{A\-N\-T\-L\-\_\-\-T\-R\-A\-C\-E\-\_\-\-A\-R\-G\-\_\-\-D\-E\-T\-A\-I\-L@{A\-N\-T\-L\-\_\-\-T\-R\-A\-C\-E\-\_\-\-A\-R\-G\-\_\-\-D\-E\-T\-A\-I\-L}!debug.hpp@{debug.\-hpp}}
+\subsubsection[{A\-N\-T\-L\-\_\-\-T\-R\-A\-C\-E\-\_\-\-A\-R\-G\-\_\-\-D\-E\-T\-A\-I\-L}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\-N\-T\-L\-\_\-\-T\-R\-A\-C\-E\-\_\-\-A\-R\-G\-\_\-\-D\-E\-T\-A\-I\-L(
+\begin{DoxyParamCaption}
+\item[{}]{arg, }
+\item[{}]{detail}
+\end{DoxyParamCaption}
+)}}\label{debug_8hpp_ac7240bc2dc75f67050f7fe87cd74896b}
+{\bfseries Value\-:}
+\begin{DoxyCode}
+ANTL\_BEGIN\_MACRO\_FUNCTION                       \(\backslash\)
+  ANTL::debug::trace()                          \(\backslash\)
+    << \textcolor{stringliteral}{"@@:\(\backslash\)t"} << detail << \textcolor{stringliteral}{" ("} #arg \textcolor{stringliteral}{") = "} << arg << std::endl;   \hyperlink{common_8hpp_acb4b3218c4498189f6afd9fb235f7568}{\(\backslash\)}
+\hyperlink{common_8hpp_acb4b3218c4498189f6afd9fb235f7568}{  ANTL\_END\_MACRO\_FUNCTION}
+\end{DoxyCode}
+
+
+Prints message of the form \char`\"{}detail (arg) = value\-\_\-of\-\_\-arg\char`\"{} to the trace stream, if {\ttfamily N\-D\-E\-B\-U\-G} is not defined. 
+

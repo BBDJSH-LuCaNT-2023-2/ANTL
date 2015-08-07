@@ -1,0 +1,16 @@
+#
+# File:  src/utilities/Makefile.dir
+# Author: John Lees-Miller (2005-06-06).
+# Version: $Header: /scrinium/ANTL/ANTL/src/Makefile.dir,v 1.5 2013/02/26 06:29:10 jacobs Exp $
+#
+# This is only a partial makefile, included by the root makefile.
+# It contains build rules only for files in this directory.
+# All paths must be relative to the location of the root makefile.
+#
+
+# Register programs with the root makefile.
+#PROGRAMS += 
+
+# Register sources with the root makefile.
+ANTL_SRC += src/common.cpp
+ANTL_SRC += src/debug.cpp

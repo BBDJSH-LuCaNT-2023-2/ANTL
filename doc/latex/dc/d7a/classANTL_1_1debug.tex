@@ -1,0 +1,58 @@
+\hypertarget{classANTL_1_1debug}{\section{A\-N\-T\-L\-:\-:debug Class Reference}
+\label{classANTL_1_1debug}\index{A\-N\-T\-L\-::debug@{A\-N\-T\-L\-::debug}}
+}
+
+
+Controls where debug output goes, and allows global enable/disable on debug output streams.  
+
+
+
+
+{\ttfamily \#include $<$debug.\-hpp$>$}
+
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classANTL_1_1debug_ad9eb51e0c1ed9eb02f0931b2ac684cfe}{static void \hyperlink{classANTL_1_1debug_ad9eb51e0c1ed9eb02f0931b2ac684cfe}{enable\-\_\-info} ()}\label{classANTL_1_1debug_ad9eb51e0c1ed9eb02f0931b2ac684cfe}
+
+\begin{DoxyCompactList}\small\item\em Info messages will be printed to the {\ttfamily \hyperlink{classANTL_1_1debug_a6c65903df2cccb3c77df6007e83d7f73}{info()}} stream. \end{DoxyCompactList}\item 
+\hypertarget{classANTL_1_1debug_a35f69ed1608a75d399615e13d91b7218}{static void \hyperlink{classANTL_1_1debug_a35f69ed1608a75d399615e13d91b7218}{enable\-\_\-trace} ()}\label{classANTL_1_1debug_a35f69ed1608a75d399615e13d91b7218}
+
+\begin{DoxyCompactList}\small\item\em Trace messages will be printed to the {\ttfamily \hyperlink{classANTL_1_1debug_a3334eff412a87eac62a8c49e940d6984}{trace()}} stream. \end{DoxyCompactList}\item 
+\hypertarget{classANTL_1_1debug_a24303c8feda88f7abd37bc82480b0a14}{static void \hyperlink{classANTL_1_1debug_a24303c8feda88f7abd37bc82480b0a14}{disable\-\_\-info} ()}\label{classANTL_1_1debug_a24303c8feda88f7abd37bc82480b0a14}
+
+\begin{DoxyCompactList}\small\item\em {\ttfamily \hyperlink{classANTL_1_1debug_a6c65903df2cccb3c77df6007e83d7f73}{info()}} will return a \char`\"{}null\char`\"{} stream that directs output to nowhere. \end{DoxyCompactList}\item 
+\hypertarget{classANTL_1_1debug_a5d9f7f4c40f07ffffddeeef347e043cc}{static void \hyperlink{classANTL_1_1debug_a5d9f7f4c40f07ffffddeeef347e043cc}{disable\-\_\-trace} ()}\label{classANTL_1_1debug_a5d9f7f4c40f07ffffddeeef347e043cc}
+
+\begin{DoxyCompactList}\small\item\em {\ttfamily \hyperlink{classANTL_1_1debug_a3334eff412a87eac62a8c49e940d6984}{trace()}} will return a \char`\"{}null\char`\"{} stream that directs output to nowhere. \end{DoxyCompactList}\item 
+\hypertarget{classANTL_1_1debug_ab97eb7d9f6c1296e7c0af1aac87910e3}{static void {\bfseries set\-\_\-error} (std\-::ostream \&os)}\label{classANTL_1_1debug_ab97eb7d9f6c1296e7c0af1aac87910e3}
+
+\item 
+\hypertarget{classANTL_1_1debug_a35a0594661bc0c4781970fdd6f692315}{static void {\bfseries set\-\_\-info} (std\-::ostream \&os)}\label{classANTL_1_1debug_a35a0594661bc0c4781970fdd6f692315}
+
+\item 
+\hypertarget{classANTL_1_1debug_a172232f73277a6f9e3571128046a8025}{static void {\bfseries set\-\_\-trace} (std\-::ostream \&os)}\label{classANTL_1_1debug_a172232f73277a6f9e3571128046a8025}
+
+\item 
+\hypertarget{classANTL_1_1debug_ad590185429107af447480cf2d66cd5cd}{static std\-::ostream \& \hyperlink{classANTL_1_1debug_ad590185429107af447480cf2d66cd5cd}{error} ()}\label{classANTL_1_1debug_ad590185429107af447480cf2d66cd5cd}
+
+\begin{DoxyCompactList}\small\item\em Gets the error stream. \end{DoxyCompactList}\item 
+\hypertarget{classANTL_1_1debug_a6c65903df2cccb3c77df6007e83d7f73}{static std\-::ostream \& \hyperlink{classANTL_1_1debug_a6c65903df2cccb3c77df6007e83d7f73}{info} ()}\label{classANTL_1_1debug_a6c65903df2cccb3c77df6007e83d7f73}
+
+\begin{DoxyCompactList}\small\item\em Gets the info stream, or a \char`\"{}null\char`\"{} stream if info is disabled. \end{DoxyCompactList}\item 
+\hypertarget{classANTL_1_1debug_a3334eff412a87eac62a8c49e940d6984}{static std\-::ostream \& \hyperlink{classANTL_1_1debug_a3334eff412a87eac62a8c49e940d6984}{trace} ()}\label{classANTL_1_1debug_a3334eff412a87eac62a8c49e940d6984}
+
+\begin{DoxyCompactList}\small\item\em Gets the trace stream, or a \char`\"{}null\char`\"{} stream if trace is disabled. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Controls where debug output goes, and allows global enable/disable on debug output streams. 
+
+You should use the macros defined in this file to generate debugging output. This way, it's easy to remove all the debug messages at compile time, by defining N\-D\-E\-B\-U\-G. You should only use this class directly when you want to configure debug output from a driver application.
+
+By default, {\ttfamily error} is {\ttfamily std\-::cerr}, and {\ttfamily pinfo} and {\ttfamily ptrace} are {\ttfamily std\-::cout}. 
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\-A\-N\-T\-L/\hyperlink{debug_8hpp}{debug.\-hpp}\item 
+src/\hyperlink{debug_8cpp}{debug.\-cpp}\end{DoxyCompactItemize}

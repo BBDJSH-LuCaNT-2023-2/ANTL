@@ -1,0 +1,75 @@
+\hypertarget{classExponentiation}{\section{Exponentiation$<$ T $>$ Class Template Reference}
+\label{classExponentiation}\index{Exponentiation$<$ T $>$@{Exponentiation$<$ T $>$}}
+}
+
+
+Virtual superclass for generic exponentiation.  
+
+
+
+
+{\ttfamily \#include $<$Exponentiation.\-hpp$>$}
+
+Inheritance diagram for Exponentiation$<$ T $>$\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{de/dd5/classExponentiation}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \hyperlink{classExponentiation_a6bb016d4ff587f16a5369ee70fe39936}{power} (T \&C, const T \&A, const Z\-Z \&n)=0
+\begin{DoxyCompactList}\small\item\em Computes A$^\wedge$n. Virtual method, to be overridden by concrete classes corresponding to different exponentiation methods. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$class T$>$class Exponentiation$<$ T $>$}
+
+Virtual superclass for generic exponentiation. 
+
+\begin{DoxyRemark}{Remarks}
+This virtual class defines a method for generic exponentiation. Particular exponentiation algorithms are defined and implemented in concrete subclasses. The base type is templated, and must have as a minimum the following functions defined\-:
+\begin{DoxyItemize}
+\item assign(\-T \&\-C, const T \&\-A)\-: sets C = A
+\item mul(\-T \&\-C, const T \&\-A, const T \&\-B)\-: computes C = A\-B
+\item sqr(\-T \&\-C, const T \&\-A)\-: computes C = A\-A Concrete subclasses may have further requirements (eg. a cube function) that are described in the documentation of each concrete class. 
+\end{DoxyItemize}
+\end{DoxyRemark}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classExponentiation_a6bb016d4ff587f16a5369ee70fe39936}{\index{Exponentiation@{Exponentiation}!power@{power}}
+\index{power@{power}!Exponentiation@{Exponentiation}}
+\subsubsection[{power}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ virtual void {\bf Exponentiation}$<$ T $>$\-::power (
+\begin{DoxyParamCaption}
+\item[{T \&}]{C, }
+\item[{const T \&}]{A, }
+\item[{const Z\-Z \&}]{n}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [pure virtual]}}}\label{classExponentiation_a6bb016d4ff587f16a5369ee70fe39936}
+
+
+Computes A$^\wedge$n. Virtual method, to be overridden by concrete classes corresponding to different exponentiation methods. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em C} & result of computing A$^\wedge$n \\
+\hline
+\mbox{\tt in}  & {\em A} & base for exponentiation \\
+\hline
+\mbox{\tt in}  & {\em n} & exponent\\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+n $>$= 0 
+\end{DoxyPrecond}
+
+
+Implemented in \hyperlink{classExponentiationNAF_a1d880c4c55d754fcf5e225c36e980c03}{Exponentiation\-N\-A\-F$<$ T $>$}, and \hyperlink{classExponentiationBinary_ab2743c957571da9b56a8369b1d00a176}{Exponentiation\-Binary$<$ T $>$}.
+
+
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+include/\-A\-N\-T\-L/\-Exponentiation/\hyperlink{Exponentiation_8hpp}{Exponentiation.\-hpp}\end{DoxyCompactItemize}

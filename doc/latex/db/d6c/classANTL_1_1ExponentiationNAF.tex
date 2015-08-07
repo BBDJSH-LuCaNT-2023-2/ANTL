@@ -1,0 +1,117 @@
+\hypertarget{classANTL_1_1ExponentiationNAF}{\section{A\-N\-T\-L\-:\-:Exponentiation\-N\-A\-F$<$ T $>$ Class Template Reference}
+\label{classANTL_1_1ExponentiationNAF}\index{A\-N\-T\-L\-::\-Exponentiation\-N\-A\-F$<$ T $>$@{A\-N\-T\-L\-::\-Exponentiation\-N\-A\-F$<$ T $>$}}
+}
+
+
+class for left-\/to-\/right N\-A\-F exponentiation  
+
+
+
+
+{\ttfamily \#include $<$Exponentiation\-N\-A\-F.\-hpp$>$}
+
+Inheritance diagram for A\-N\-T\-L\-:\-:Exponentiation\-N\-A\-F$<$ T $>$\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{db/d6c/classANTL_1_1ExponentiationNAF}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classANTL_1_1ExponentiationNAF_aa70b6e1083b3936ed0a234998624a188}{initialize} (const T \&A, const Z\-Z \&n)
+\begin{DoxyCompactList}\small\item\em Setup the class to compute A$^\wedge$n. Compute inverse of A and allocates a digit vector of size Num\-Bits(n)+1. \end{DoxyCompactList}\item 
+void \hyperlink{classANTL_1_1ExponentiationNAF_ae8d97318323ee8b3a888080d75f2cc39}{power} (T \&C, const T \&A, const Z\-Z \&n)
+\begin{DoxyCompactList}\small\item\em Computes A$^\wedge$n. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+vector$<$ short $>$ \hyperlink{classANTL_1_1ExponentiationNAF_a9cbe814c668d82453284afc1f662e3e2}{e}
+\item 
+T \hyperlink{classANTL_1_1ExponentiationNAF_a3daf8a194f65ea69e18882e03e2d9af7}{Ainv}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$class T$>$class A\-N\-T\-L\-::\-Exponentiation\-N\-A\-F$<$ T $>$}
+
+class for left-\/to-\/right N\-A\-F exponentiation 
+
+\begin{DoxyRemark}{Remarks}
+This concrete class defines a method for left-\/to-\/right non-\/adjacent form exponentiation. The method first computes the N\-A\-F representation of the exponent using the basic right-\/to-\/left method, and then applies it to the base left-\/to-\/right. The base type is templated, and must have the following functions defined\-:
+\begin{DoxyItemize}
+\item assign(\-T \&\-C, const T \&\-A)\-: sets C = A
+\item mul(\-T \&\-C, const T \&\-A, const T \&\-B)\-: computes C = A\-B
+\item sqr(\-T \&\-C, const T \&\-A)\-: computes C = A\-A
+\item inv(\-T \&\-C, const T \&\-A)\-: computes C = inverse of A 
+\end{DoxyItemize}
+\end{DoxyRemark}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classANTL_1_1ExponentiationNAF_aa70b6e1083b3936ed0a234998624a188}{\index{A\-N\-T\-L\-::\-Exponentiation\-N\-A\-F@{A\-N\-T\-L\-::\-Exponentiation\-N\-A\-F}!initialize@{initialize}}
+\index{initialize@{initialize}!ANTL::ExponentiationNAF@{A\-N\-T\-L\-::\-Exponentiation\-N\-A\-F}}
+\subsubsection[{initialize}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ void Exponentiation\-N\-A\-F\-::initialize (
+\begin{DoxyParamCaption}
+\item[{const T \&}]{A, }
+\item[{const Z\-Z \&}]{n}
+\end{DoxyParamCaption}
+)}}\label{classANTL_1_1ExponentiationNAF_aa70b6e1083b3936ed0a234998624a188}
+
+
+Setup the class to compute A$^\wedge$n. Compute inverse of A and allocates a digit vector of size Num\-Bits(n)+1. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em A} & base for exponentiation \\
+\hline
+\mbox{\tt in}  & {\em n} & exponent\\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+n $>$= 0 
+\end{DoxyPrecond}
+\hypertarget{classANTL_1_1ExponentiationNAF_ae8d97318323ee8b3a888080d75f2cc39}{\index{A\-N\-T\-L\-::\-Exponentiation\-N\-A\-F@{A\-N\-T\-L\-::\-Exponentiation\-N\-A\-F}!power@{power}}
+\index{power@{power}!ANTL::ExponentiationNAF@{A\-N\-T\-L\-::\-Exponentiation\-N\-A\-F}}
+\subsubsection[{power}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ void Exponentiation\-N\-A\-F\-::power (
+\begin{DoxyParamCaption}
+\item[{T \&}]{C, }
+\item[{const T \&}]{A, }
+\item[{const Z\-Z \&}]{n}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}}\label{classANTL_1_1ExponentiationNAF_ae8d97318323ee8b3a888080d75f2cc39}
+
+
+Computes A$^\wedge$n. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em C} & result of computing A$^\wedge$n using left-\/to-\/right N\-A\-F exponentiation \\
+\hline
+\mbox{\tt in}  & {\em A} & base for exponentiation \\
+\hline
+\mbox{\tt in}  & {\em n} & exponent\\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+n $>$= 0 
+\end{DoxyPrecond}
+
+
+Implements \hyperlink{classANTL_1_1Exponentiation_aad4e3be9ab770361f04a10a85d390622}{A\-N\-T\-L\-::\-Exponentiation$<$ T $>$}.
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classANTL_1_1ExponentiationNAF_a3daf8a194f65ea69e18882e03e2d9af7}{\index{A\-N\-T\-L\-::\-Exponentiation\-N\-A\-F@{A\-N\-T\-L\-::\-Exponentiation\-N\-A\-F}!Ainv@{Ainv}}
+\index{Ainv@{Ainv}!ANTL::ExponentiationNAF@{A\-N\-T\-L\-::\-Exponentiation\-N\-A\-F}}
+\subsubsection[{Ainv}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ T {\bf A\-N\-T\-L\-::\-Exponentiation\-N\-A\-F}$<$ T $>$\-::Ainv\hspace{0.3cm}{\ttfamily [protected]}}}\label{classANTL_1_1ExponentiationNAF_a3daf8a194f65ea69e18882e03e2d9af7}
+inverse of the base element \hypertarget{classANTL_1_1ExponentiationNAF_a9cbe814c668d82453284afc1f662e3e2}{\index{A\-N\-T\-L\-::\-Exponentiation\-N\-A\-F@{A\-N\-T\-L\-::\-Exponentiation\-N\-A\-F}!e@{e}}
+\index{e@{e}!ANTL::ExponentiationNAF@{A\-N\-T\-L\-::\-Exponentiation\-N\-A\-F}}
+\subsubsection[{e}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ vector$<$short$>$ {\bf A\-N\-T\-L\-::\-Exponentiation\-N\-A\-F}$<$ T $>$\-::e\hspace{0.3cm}{\ttfamily [protected]}}}\label{classANTL_1_1ExponentiationNAF_a9cbe814c668d82453284afc1f662e3e2}
+vector containing N\-A\-F expansion of exponent 
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\-A\-N\-T\-L/\-Exponentiation/\hyperlink{ExponentiationNAF_8hpp}{Exponentiation\-N\-A\-F.\-hpp}\item 
+src/\-Exponentiation/\hyperlink{ExponentiationNAF__impl_8hpp}{Exponentiation\-N\-A\-F\-\_\-impl.\-hpp}\end{DoxyCompactItemize}

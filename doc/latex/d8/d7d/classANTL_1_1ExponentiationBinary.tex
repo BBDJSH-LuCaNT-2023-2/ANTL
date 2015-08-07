@@ -1,0 +1,76 @@
+\hypertarget{classANTL_1_1ExponentiationBinary}{\section{A\-N\-T\-L\-:\-:Exponentiation\-Binary$<$ T $>$ Class Template Reference}
+\label{classANTL_1_1ExponentiationBinary}\index{A\-N\-T\-L\-::\-Exponentiation\-Binary$<$ T $>$@{A\-N\-T\-L\-::\-Exponentiation\-Binary$<$ T $>$}}
+}
+
+
+class for left-\/to-\/right binary exponentiation  
+
+
+
+
+{\ttfamily \#include $<$Exponentiation\-Binary.\-hpp$>$}
+
+Inheritance diagram for A\-N\-T\-L\-:\-:Exponentiation\-Binary$<$ T $>$\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d8/d7d/classANTL_1_1ExponentiationBinary}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classANTL_1_1ExponentiationBinary_a039ea9d52144229d0728d81060d43fc4}{power} (T \&C, const T \&A, const Z\-Z \&n)
+\begin{DoxyCompactList}\small\item\em Computes A$^\wedge$n using left-\/to-\/right binary exponentiation. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$class T$>$class A\-N\-T\-L\-::\-Exponentiation\-Binary$<$ T $>$}
+
+class for left-\/to-\/right binary exponentiation 
+
+\begin{DoxyRemark}{Remarks}
+This concrete class defines a method for standard left-\/to-\/right binary exponentiation. The base type is templated, and must have the following functions defined\-:
+\begin{DoxyItemize}
+\item assign(\-T \&\-C, const T \&\-A)\-: sets C = A
+\item mul(\-T \&\-C, const T \&\-A, const T \&\-B)\-: computes C = A\-B
+\item sqr(\-T \&\-C, const T \&\-A)\-: computes C = A\-A 
+\end{DoxyItemize}
+\end{DoxyRemark}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classANTL_1_1ExponentiationBinary_a039ea9d52144229d0728d81060d43fc4}{\index{A\-N\-T\-L\-::\-Exponentiation\-Binary@{A\-N\-T\-L\-::\-Exponentiation\-Binary}!power@{power}}
+\index{power@{power}!ANTL::ExponentiationBinary@{A\-N\-T\-L\-::\-Exponentiation\-Binary}}
+\subsubsection[{power}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ void Exponentiation\-Binary\-::power (
+\begin{DoxyParamCaption}
+\item[{T \&}]{C, }
+\item[{const T \&}]{A, }
+\item[{const Z\-Z \&}]{n}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}}\label{classANTL_1_1ExponentiationBinary_a039ea9d52144229d0728d81060d43fc4}
+
+
+Computes A$^\wedge$n using left-\/to-\/right binary exponentiation. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em C} & result of computing A$^\wedge$n \\
+\hline
+\mbox{\tt in}  & {\em A} & base for exponentiation \\
+\hline
+\mbox{\tt in}  & {\em n} & exponent\\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+n $>$= 0 
+\end{DoxyPrecond}
+
+
+Implements \hyperlink{classANTL_1_1Exponentiation_aad4e3be9ab770361f04a10a85d390622}{A\-N\-T\-L\-::\-Exponentiation$<$ T $>$}.
+
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\-A\-N\-T\-L/\-Exponentiation/\hyperlink{ExponentiationBinary_8hpp}{Exponentiation\-Binary.\-hpp}\item 
+src/\-Exponentiation/\hyperlink{ExponentiationBinary__impl_8hpp}{Exponentiation\-Binary\-\_\-impl.\-hpp}\end{DoxyCompactItemize}
