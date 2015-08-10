@@ -10,4 +10,3 @@
 
 # Register sources with the root makefile.
 APPL_SRC += appl/Tests/Exponentiation/zz_p_ExponentiationTest.cpp
-APPL_SRC += appl/Tests/Exponentiation/zz_p_DExponentiationTest.cpp

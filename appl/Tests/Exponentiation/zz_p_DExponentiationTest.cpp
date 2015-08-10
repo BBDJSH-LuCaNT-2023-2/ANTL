@@ -6,19 +6,16 @@
 
 #include <NTL/lzz_p.h>
 #include <ANTL/Exponentiation/ExponentiationBinary.hpp>
-#include <ANTL/Exponentiation/ExponentiationNAF.hpp>
-#include <ANTL/Exponentiation/ExponentiationL2R.hpp>
-#include <ANTL/Exponentiation/ExponentiationWNAF.hpp>
-
-
+#include <ANTL/DExponentiation/DExponentiationIL.hpp>
+#include <ANTL/DExponentiation/DExponentiationJSF.hpp>
 
 NTL_CLIENT
 using namespace ANTL;
 	
 int main (int argc, char **argv)
 {
-  zz_p a,b_bin,b_naf, b_l2r, b_wnaf;
-  ZZ n;
+  zz_p a,b,ca_bin,cb_bin,c_bin, c_il, c_jsf;
+  ZZ m,n;
 
   // use GF(1073741827) for these tests
   zz_p::init(1073741827);
@@ -28,40 +25,43 @@ int main (int argc, char **argv)
     random(a);
   } while (IsOne(a));
 
+  do {
+    random(b);
+  } while (IsOne(b));
 
   // generate random exponent of size 128 bits
+  RandomLen (m, 512);
   RandomLen (n, 512);
 
   cout << "Using:" << endl;
   cout << " p = " << zz_p::modulus() << endl;
   cout << " a = " << a << endl;
+  cout << " b = " << b << endl;
+  cout << " m = " << m << endl;
   cout << " n = " << n << endl;
 
   // initialize exponentiation classes
   ExponentiationBinary<zz_p> ebin;
-  ExponentiationNAF<zz_p> enaf;
-  ExponentiationL2R<zz_p> el2r;
-  ExponentiationWNAF<zz_p> ewnaf;
- 
-  // compute a^n with available methods
-  ebin.power(b_bin,a,n);
+  DExponentiationIL<zz_p> deil;
+  DExponentiationJSF<zz_p> djsf;
 
-  enaf.initialize(a,n);
-  enaf.power(b_naf,a,n);
+  // compute a^nb^m with available methods
+  ebin.power(ca_bin,a,m);
+  ebin.power(cb_bin,b,n);
+  mul(c_bin,ca_bin,cb_bin);
 
-  el2r.initialize(a);
-  el2r.power(b_l2r,a,n);
+  deil.initialize(a,b,m,n,5,5);
+  deil.power(c_il,a,b,m,n);
 
-  ewnaf.initialize(a,n,5);
-  ewnaf.power(b_wnaf,a,n);
- 
+  djsf.initialize(a,b,m,n);
+  djsf.power(c_jsf,a,b,m,n);
+
   // check and output results
-  cout << "a^n (binary) = " << b_bin << endl;
-  cout << "a^n (naf)    = " << b_naf << endl;
-  cout << "a^n (l2r)    = " << b_l2r << endl;
-  cout << "a^n (wnaf)   = " << b_wnaf << endl;
+  cout << "a^mb^n (naive) = " << c_bin << endl;
+  cout << "a^mb^n (interleaving)    = " << c_il << endl;
+  cout << "a^mb^n (joint sparse form) = " << c_jsf << endl;
 
-  if ((b_bin == b_naf) && (b_naf == b_l2r) && (b_wnaf == b_bin))
+  if ((c_bin == c_il) and (c_il == c_jsf))
     cout << "RESULTS MATCH!" << endl;
   else
     cout << "ERROR:  RESULTS DO NOT MATCH!" << endl;

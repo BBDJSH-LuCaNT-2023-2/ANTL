@@ -11,13 +11,21 @@
 #include <ANTL/Exponentiation/ExponentiationWNAF.hpp>
 
 
+void zz_p::cub(zz_p C, const zz_p A){
+          sqr(C,A);
+          mul(C,C,A);
+          }
+
+#include <ANTL/Exponentiation/ExponentiationSB3.hpp>
+
+
 
 NTL_CLIENT
 using namespace ANTL;
 	
 int main (int argc, char **argv)
 {
-  zz_p a,b_bin,b_naf, b_l2r, b_wnaf;
+  zz_p a,b_bin,b_naf, b_l2r, b_wnaf, b_sb3;
   ZZ n;
 
   // use GF(1073741827) for these tests
@@ -30,19 +38,27 @@ int main (int argc, char **argv)
 
 
   // generate random exponent of size 128 bits
-  RandomLen (n, 512);
+  RandomLen (n, 12);
 
   cout << "Using:" << endl;
   cout << " p = " << zz_p::modulus() << endl;
   cout << " a = " << a << endl;
   cout << " n = " << n << endl;
 
+  cout << "Cube Test: " << endl;
+
+  cub(b_sb3,a);
+  
+  cout << "a^3 = " << b_sb3 << endl;
+
+
   // initialize exponentiation classes
   ExponentiationBinary<zz_p> ebin;
   ExponentiationNAF<zz_p> enaf;
   ExponentiationL2R<zz_p> el2r;
   ExponentiationWNAF<zz_p> ewnaf;
- 
+  ExponentiationSB3<zz_p> esb3;
+
   // compute a^n with available methods
   ebin.power(b_bin,a,n);
 
@@ -55,13 +71,17 @@ int main (int argc, char **argv)
   ewnaf.initialize(a,n,5);
   ewnaf.power(b_wnaf,a,n);
  
+  esb3.initialize(a,n);
+  esb3.power(b_sb3,a,n);
+
   // check and output results
   cout << "a^n (binary) = " << b_bin << endl;
   cout << "a^n (naf)    = " << b_naf << endl;
   cout << "a^n (l2r)    = " << b_l2r << endl;
   cout << "a^n (wnaf)   = " << b_wnaf << endl;
+  cout << "a^n (sb3)    = " << b_sb3 << endl;
 
-  if ((b_bin == b_naf) && (b_naf == b_l2r) && (b_wnaf == b_bin))
+  if ((b_bin == b_naf) && (b_naf == b_l2r) && (b_wnaf == b_bin) && (b_sb3 == b_bin))
     cout << "RESULTS MATCH!" << endl;
   else
     cout << "ERROR:  RESULTS DO NOT MATCH!" << endl;
