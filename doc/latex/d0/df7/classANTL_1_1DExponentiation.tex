@@ -1,0 +1,81 @@
+\hypertarget{classANTL_1_1DExponentiation}{\section{A\-N\-T\-L\-:\-:D\-Exponentiation$<$ T $>$ Class Template Reference}
+\label{classANTL_1_1DExponentiation}\index{A\-N\-T\-L\-::\-D\-Exponentiation$<$ T $>$@{A\-N\-T\-L\-::\-D\-Exponentiation$<$ T $>$}}
+}
+
+
+Virtual superclass for generic double exponentiation.  
+
+
+
+
+{\ttfamily \#include $<$D\-Exponentiation.\-hpp$>$}
+
+Inheritance diagram for A\-N\-T\-L\-:\-:D\-Exponentiation$<$ T $>$\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d0/df7/classANTL_1_1DExponentiation}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \hyperlink{classANTL_1_1DExponentiation_a3c8c562a37b0d5d849ab1cfb3adfc73f}{power} (T \&C, const T \&A, const T \&B, const Z\-Z \&m, const Z\-Z \&n)=0
+\begin{DoxyCompactList}\small\item\em Computes A$^\wedge$m\-B$^\wedge$n. Virtual method, to be overridden by concrete classes corresponding to different exponentiation methods. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$class T$>$class A\-N\-T\-L\-::\-D\-Exponentiation$<$ T $>$}
+
+Virtual superclass for generic double exponentiation. 
+
+\begin{DoxyRemark}{Remarks}
+This virtual class defines a method for generic double exponentiation. Particular double exponentiation algorithms are defined and implemented in concrete subclasses. The base type is templated, and must have as a minimum the following functions defined\-:
+\begin{DoxyItemize}
+\item assign(\-T \&\-C, const T \&\-A)\-: sets C = A
+\item mul(\-T \&\-C, const T \&\-A, const T \&\-B)\-: computes C = A\-B
+\item sqr(\-T \&\-C, const T \&\-A)\-: computes C = A\-A Concrete subclasses may have further requirements (eg. a cube function) that are described in the documentation of each concrete class. 
+\end{DoxyItemize}
+\end{DoxyRemark}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classANTL_1_1DExponentiation_a3c8c562a37b0d5d849ab1cfb3adfc73f}{\index{A\-N\-T\-L\-::\-D\-Exponentiation@{A\-N\-T\-L\-::\-D\-Exponentiation}!power@{power}}
+\index{power@{power}!ANTL::DExponentiation@{A\-N\-T\-L\-::\-D\-Exponentiation}}
+\subsubsection[{power}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ virtual void {\bf A\-N\-T\-L\-::\-D\-Exponentiation}$<$ T $>$\-::power (
+\begin{DoxyParamCaption}
+\item[{T \&}]{C, }
+\item[{const T \&}]{A, }
+\item[{const T \&}]{B, }
+\item[{const Z\-Z \&}]{m, }
+\item[{const Z\-Z \&}]{n}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [pure virtual]}}}\label{classANTL_1_1DExponentiation_a3c8c562a37b0d5d849ab1cfb3adfc73f}
+
+
+Computes A$^\wedge$m\-B$^\wedge$n. Virtual method, to be overridden by concrete classes corresponding to different exponentiation methods. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em C} & result of computing A$^\wedge$m\-B$^\wedge$n \\
+\hline
+\mbox{\tt in}  & {\em A} & first base for exponentiation \\
+\hline
+\mbox{\tt in}  & {\em B} & second base for exponentiation \\
+\hline
+\mbox{\tt in}  & {\em m} & first exponent \\
+\hline
+\mbox{\tt in}  & {\em n} & second exponent\\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+m,n $>$= 0 
+\end{DoxyPrecond}
+
+
+Implemented in \hyperlink{classANTL_1_1DExponentiationIL_ae3f1e9fee3ffcee4e919b324195304d8}{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L$<$ T $>$}, and \hyperlink{classANTL_1_1DExponentiationJSF_a6feea3283cf55fe5f8aa3b0cf1f9cebe}{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F$<$ T $>$}.
+
+
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+include/\-A\-N\-T\-L/\-D\-Exponentiation/\hyperlink{DExponentiation_8hpp}{D\-Exponentiation.\-hpp}\end{DoxyCompactItemize}

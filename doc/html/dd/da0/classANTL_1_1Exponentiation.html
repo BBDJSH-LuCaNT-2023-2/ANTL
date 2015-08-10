@@ -46,6 +46,7 @@ var searchBox = new SearchBox("searchBox", "../../search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="../../index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="../../pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="../../annotated.html"><span>Classes</span></a></li>
       <li><a href="../../files.html"><span>Files</span></a></li>
       <li>
@@ -94,7 +95,7 @@ $(document).ready(function(){initNavTree('dd/da0/classANTL_1_1Exponentiation.htm
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Macros</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -123,7 +124,10 @@ Inheritance diagram for ANTL::Exponentiation&lt; T &gt;:</div>
   <img src="../../dd/da0/classANTL_1_1Exponentiation.png" usemap="#ANTL::Exponentiation&lt; T &gt;_map" alt=""/>
   <map id="ANTL::Exponentiation&lt; T &gt;_map" name="ANTL::Exponentiation&lt; T &gt;_map">
 <area href="../../d8/d7d/classANTL_1_1ExponentiationBinary.html" title="class for left-to-right binary exponentiation " alt="ANTL::ExponentiationBinary&lt; T &gt;" shape="rect" coords="0,56,200,80"/>
-<area href="../../db/d6c/classANTL_1_1ExponentiationNAF.html" title="class for left-to-right NAF exponentiation " alt="ANTL::ExponentiationNAF&lt; T &gt;" shape="rect" coords="210,56,410,80"/>
+<area href="../../d9/d9e/classANTL_1_1ExponentiationL2R.html" title="class for left-to-right NAF exponentiation with NAF representation also computed left-to-right ..." alt="ANTL::ExponentiationL2R&lt; T &gt;" shape="rect" coords="210,56,410,80"/>
+<area href="../../db/d6c/classANTL_1_1ExponentiationNAF.html" title="class for left-to-right NAF exponentiation " alt="ANTL::ExponentiationNAF&lt; T &gt;" shape="rect" coords="420,56,620,80"/>
+<area href="../../d8/dfc/classANTL_1_1ExponentiationSB3.html" title="class for left-to-right SB3 exponentiation " alt="ANTL::ExponentiationSB3&lt; T &gt;" shape="rect" coords="630,56,830,80"/>
+<area href="../../d3/d45/classANTL_1_1ExponentiationWNAF.html" title="class for left-to-right WNAF exponentiation " alt="ANTL::ExponentiationWNAF&lt; T &gt;" shape="rect" coords="840,56,1040,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -196,7 +200,7 @@ template&lt;class T &gt; </div>
 </dl>
 <dl class="section pre"><dt>Precondition</dt><dd>n &gt;= 0 </dd></dl>
 
-<p>Implemented in <a class="el" href="../../db/d6c/classANTL_1_1ExponentiationNAF.html#ae8d97318323ee8b3a888080d75f2cc39">ANTL::ExponentiationNAF&lt; T &gt;</a>, and <a class="el" href="../../d8/d7d/classANTL_1_1ExponentiationBinary.html#a039ea9d52144229d0728d81060d43fc4">ANTL::ExponentiationBinary&lt; T &gt;</a>.</p>
+<p>Implemented in <a class="el" href="../../d3/d45/classANTL_1_1ExponentiationWNAF.html#a63941859ba7c0118dadd33aa489a75c7">ANTL::ExponentiationWNAF&lt; T &gt;</a>, <a class="el" href="../../db/d6c/classANTL_1_1ExponentiationNAF.html#ae8d97318323ee8b3a888080d75f2cc39">ANTL::ExponentiationNAF&lt; T &gt;</a>, <a class="el" href="../../d8/dfc/classANTL_1_1ExponentiationSB3.html#ab985adba341a35c9931aefbd6c8730f5">ANTL::ExponentiationSB3&lt; T &gt;</a>, <a class="el" href="../../d9/d9e/classANTL_1_1ExponentiationL2R.html#a51b38eebbc47e08a4b2ddd1b7f68b313">ANTL::ExponentiationL2R&lt; T &gt;</a>, and <a class="el" href="../../d8/d7d/classANTL_1_1ExponentiationBinary.html#a039ea9d52144229d0728d81060d43fc4">ANTL::ExponentiationBinary&lt; T &gt;</a>.</p>
 
 </div>
 </div>

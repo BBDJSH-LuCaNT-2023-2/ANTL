@@ -1,0 +1,167 @@
+\hypertarget{classANTL_1_1DExponentiationIL}{\section{A\-N\-T\-L\-:\-:D\-Exponentiation\-I\-L$<$ T $>$ Class Template Reference}
+\label{classANTL_1_1DExponentiationIL}\index{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L$<$ T $>$@{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L$<$ T $>$}}
+}
+
+
+class for left-\/to-\/right interleaving double exponentiation  
+
+
+
+
+{\ttfamily \#include $<$D\-Exponentiation\-I\-L.\-hpp$>$}
+
+Inheritance diagram for A\-N\-T\-L\-:\-:D\-Exponentiation\-I\-L$<$ T $>$\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d5/d75/classANTL_1_1DExponentiationIL}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classANTL_1_1DExponentiationIL_aca114a667408c7058246b3c17890e82c}{initialize} (const T \&A, const T \&B, const Z\-Z \&m, const Z\-Z \&n, const short w0, const short w1)
+\begin{DoxyCompactList}\small\item\em Setup the class to compute A$^\wedge$m\-B$^\wedge$n. Computes necessary precomputed values of A and B and allocates a digit vector of size Num\-Bits(n)+1. \end{DoxyCompactList}\item 
+void \hyperlink{classANTL_1_1DExponentiationIL_ae3f1e9fee3ffcee4e919b324195304d8}{power} (T \&C, const T \&A, const T \&B, const Z\-Z \&m, const Z\-Z \&n)
+\begin{DoxyCompactList}\small\item\em Computes A$^\wedge$m\-B$^\wedge$n. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+vector$<$ short $>$ \hyperlink{classANTL_1_1DExponentiationIL_a74c7cd8f99ea1d74985b8792b4cd7df7}{em}
+\item 
+vector$<$ short $>$ \hyperlink{classANTL_1_1DExponentiationIL_abb28e5efa2941fa9a0b35644b7d45697}{en}
+\item 
+T $\ast$ \hyperlink{classANTL_1_1DExponentiationIL_a384794528ac65b531a5d6efccae95660}{precomp\-A}
+\item 
+T $\ast$ \hyperlink{classANTL_1_1DExponentiationIL_ab625cc0aeda76cadee38cfeaa853c4bc}{precomp\-A\-Inv}
+\item 
+T $\ast$ \hyperlink{classANTL_1_1DExponentiationIL_af58aee3d8912d02a730f54c208f36602}{precomp\-B}
+\item 
+T $\ast$ \hyperlink{classANTL_1_1DExponentiationIL_ab1f51eb99a5f501042ab1ee779e9e9f3}{precomp\-B\-Inv}
+\item 
+short \hyperlink{classANTL_1_1DExponentiationIL_ab658a1ad3e54814f114b4ebd2c7b63a1}{wm}
+\item 
+short \hyperlink{classANTL_1_1DExponentiationIL_a159d7e6f874fcb3223f4aa4b6f5b3f78}{wn}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$class T$>$class A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L$<$ T $>$}
+
+class for left-\/to-\/right interleaving double exponentiation 
+
+\begin{DoxyRemark}{Remarks}
+This concrete class defines a method for left-\/to-\/right interleaving double exponentiation. The method first computes the W\-N\-A\-F representation of the exponents using the basic right-\/to-\/left method, and then applies it to the bases left-\/to-\/right. The base type is templated, and must have the following functions defined\-:
+\begin{DoxyItemize}
+\item assign(\-T \&\-C, const T \&\-A)\-: sets C = A
+\item mul(\-T \&\-C, const T \&\-A, const T \&\-B)\-: computes C = A\-B
+\item sqr(\-T \&\-C, const T \&\-A)\-: computes C = A\-A
+\item inv(\-T \&\-C, const T \&\-A)\-: computes C = inverse of A 
+\end{DoxyItemize}
+\end{DoxyRemark}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classANTL_1_1DExponentiationIL_aca114a667408c7058246b3c17890e82c}{\index{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L@{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L}!initialize@{initialize}}
+\index{initialize@{initialize}!ANTL::DExponentiationIL@{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L}}
+\subsubsection[{initialize}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ void D\-Exponentiation\-I\-L\-::initialize (
+\begin{DoxyParamCaption}
+\item[{const T \&}]{A, }
+\item[{const T \&}]{B, }
+\item[{const Z\-Z \&}]{m, }
+\item[{const Z\-Z \&}]{n, }
+\item[{const short}]{w0, }
+\item[{const short}]{w1}
+\end{DoxyParamCaption}
+)}}\label{classANTL_1_1DExponentiationIL_aca114a667408c7058246b3c17890e82c}
+
+
+Setup the class to compute A$^\wedge$m\-B$^\wedge$n. Computes necessary precomputed values of A and B and allocates a digit vector of size Num\-Bits(n)+1. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em A} & first base for exponentiation \\
+\hline
+\mbox{\tt in}  & {\em B} & second base for exponentiation \\
+\hline
+\mbox{\tt in}  & {\em m} & first exponent \\
+\hline
+\mbox{\tt in}  & {\em n} & second exponent \\
+\hline
+\mbox{\tt in}  & {\em w0} & windowing width for m \\
+\hline
+\mbox{\tt in}  & {\em w1} & windowing width for n\\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+m,n $>$= 0 
+
+w0,w1 $>$= 2 
+\end{DoxyPrecond}
+\hypertarget{classANTL_1_1DExponentiationIL_ae3f1e9fee3ffcee4e919b324195304d8}{\index{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L@{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L}!power@{power}}
+\index{power@{power}!ANTL::DExponentiationIL@{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L}}
+\subsubsection[{power}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ void D\-Exponentiation\-I\-L\-::power (
+\begin{DoxyParamCaption}
+\item[{T \&}]{C, }
+\item[{const T \&}]{A, }
+\item[{const T \&}]{B, }
+\item[{const Z\-Z \&}]{m, }
+\item[{const Z\-Z \&}]{n}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}}\label{classANTL_1_1DExponentiationIL_ae3f1e9fee3ffcee4e919b324195304d8}
+
+
+Computes A$^\wedge$m\-B$^\wedge$n. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em C} & result of computing A$^\wedge$m$^\wedge$n using left-\/to-\/right interleaving double exponentiation \\
+\hline
+\mbox{\tt in}  & {\em A} & first base for exponentiation \\
+\hline
+\mbox{\tt in}  & {\em B} & second base for exponentiation \\
+\hline
+\mbox{\tt in}  & {\em m} & first exponent \\
+\hline
+\mbox{\tt in}  & {\em n} & second exponent\\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+n $>$= 0 
+\end{DoxyPrecond}
+
+
+Implements \hyperlink{classANTL_1_1DExponentiation_a3c8c562a37b0d5d849ab1cfb3adfc73f}{A\-N\-T\-L\-::\-D\-Exponentiation$<$ T $>$}.
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classANTL_1_1DExponentiationIL_a74c7cd8f99ea1d74985b8792b4cd7df7}{\index{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L@{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L}!em@{em}}
+\index{em@{em}!ANTL::DExponentiationIL@{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L}}
+\subsubsection[{em}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ vector$<$short$>$ {\bf A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L}$<$ T $>$\-::em\hspace{0.3cm}{\ttfamily [protected]}}}\label{classANTL_1_1DExponentiationIL_a74c7cd8f99ea1d74985b8792b4cd7df7}
+vector containing W\-N\-A\-F expansion of m \hypertarget{classANTL_1_1DExponentiationIL_abb28e5efa2941fa9a0b35644b7d45697}{\index{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L@{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L}!en@{en}}
+\index{en@{en}!ANTL::DExponentiationIL@{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L}}
+\subsubsection[{en}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ vector$<$short$>$ {\bf A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L}$<$ T $>$\-::en\hspace{0.3cm}{\ttfamily [protected]}}}\label{classANTL_1_1DExponentiationIL_abb28e5efa2941fa9a0b35644b7d45697}
+vector containing W\-N\-A\-F expansion of n \hypertarget{classANTL_1_1DExponentiationIL_a384794528ac65b531a5d6efccae95660}{\index{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L@{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L}!precomp\-A@{precomp\-A}}
+\index{precomp\-A@{precomp\-A}!ANTL::DExponentiationIL@{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L}}
+\subsubsection[{precomp\-A}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ T$\ast$ {\bf A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L}$<$ T $>$\-::precomp\-A\hspace{0.3cm}{\ttfamily [protected]}}}\label{classANTL_1_1DExponentiationIL_a384794528ac65b531a5d6efccae95660}
+array containing precomputed values, computed from A \hypertarget{classANTL_1_1DExponentiationIL_ab625cc0aeda76cadee38cfeaa853c4bc}{\index{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L@{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L}!precomp\-A\-Inv@{precomp\-A\-Inv}}
+\index{precomp\-A\-Inv@{precomp\-A\-Inv}!ANTL::DExponentiationIL@{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L}}
+\subsubsection[{precomp\-A\-Inv}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ T$\ast$ {\bf A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L}$<$ T $>$\-::precomp\-A\-Inv\hspace{0.3cm}{\ttfamily [protected]}}}\label{classANTL_1_1DExponentiationIL_ab625cc0aeda76cadee38cfeaa853c4bc}
+array containing the inverses of the values in precomp\-A \hypertarget{classANTL_1_1DExponentiationIL_af58aee3d8912d02a730f54c208f36602}{\index{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L@{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L}!precomp\-B@{precomp\-B}}
+\index{precomp\-B@{precomp\-B}!ANTL::DExponentiationIL@{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L}}
+\subsubsection[{precomp\-B}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ T$\ast$ {\bf A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L}$<$ T $>$\-::precomp\-B\hspace{0.3cm}{\ttfamily [protected]}}}\label{classANTL_1_1DExponentiationIL_af58aee3d8912d02a730f54c208f36602}
+array containing the precomputed values, computed from B \hypertarget{classANTL_1_1DExponentiationIL_ab1f51eb99a5f501042ab1ee779e9e9f3}{\index{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L@{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L}!precomp\-B\-Inv@{precomp\-B\-Inv}}
+\index{precomp\-B\-Inv@{precomp\-B\-Inv}!ANTL::DExponentiationIL@{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L}}
+\subsubsection[{precomp\-B\-Inv}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ T$\ast$ {\bf A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L}$<$ T $>$\-::precomp\-B\-Inv\hspace{0.3cm}{\ttfamily [protected]}}}\label{classANTL_1_1DExponentiationIL_ab1f51eb99a5f501042ab1ee779e9e9f3}
+array containing the inverse of the values in precomp\-B \hypertarget{classANTL_1_1DExponentiationIL_ab658a1ad3e54814f114b4ebd2c7b63a1}{\index{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L@{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L}!wm@{wm}}
+\index{wm@{wm}!ANTL::DExponentiationIL@{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L}}
+\subsubsection[{wm}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ short {\bf A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L}$<$ T $>$\-::wm\hspace{0.3cm}{\ttfamily [protected]}}}\label{classANTL_1_1DExponentiationIL_ab658a1ad3e54814f114b4ebd2c7b63a1}
+width of W\-N\-A\-F representation of m \hypertarget{classANTL_1_1DExponentiationIL_a159d7e6f874fcb3223f4aa4b6f5b3f78}{\index{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L@{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L}!wn@{wn}}
+\index{wn@{wn}!ANTL::DExponentiationIL@{A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L}}
+\subsubsection[{wn}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ short {\bf A\-N\-T\-L\-::\-D\-Exponentiation\-I\-L}$<$ T $>$\-::wn\hspace{0.3cm}{\ttfamily [protected]}}}\label{classANTL_1_1DExponentiationIL_a159d7e6f874fcb3223f4aa4b6f5b3f78}
+width of W\-N\-A\-F representation of n 
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\-A\-N\-T\-L/\-D\-Exponentiation/D\-Exponentiation\-I\-L.\-hpp\item 
+src/\-D\-Exponentiation/\hyperlink{DExponentiationIL__impl_8hpp}{D\-Exponentiation\-I\-L\-\_\-impl.\-hpp}\end{DoxyCompactItemize}

@@ -1,6 +1,7 @@
 var NAVTREE =
 [
   [ "ANTL", "index.html", [
+    [ "README", "d0/d30/md_README.html", null ],
     [ "Classes", null, [
       [ "Class List", "annotated.html", "annotated" ],
       [ "Class Index", "classes.html", null ],
@@ -23,7 +24,8 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-".html"
+".html",
+"dd/da0/classANTL_1_1Exponentiation.html#a85f483eb31cb13023a0b7f22b5e1d22c"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

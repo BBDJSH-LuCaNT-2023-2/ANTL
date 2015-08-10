@@ -1,0 +1,11 @@
+To build\-:
+
+1) Edit the C\-O\-N\-F\-I\-G file\-:
+\begin{DoxyItemize}
+\item S\-O\-F\-T\-W\-A\-R\-E\-\_\-\-I\-N\-C and S\-O\-F\-T\-W\-A\-R\-E\-\_\-\-L\-I\-B should point to the directories where the inlude files and, respectively, libraries of G\-M\-P and N\-T\-L are installed
+\item update the C\-F\-L\-A\-G\-S to whatever works best for the type of machine you are building this on. I find it best to copy the ones that G\-M\-P selects automatically which building it.
+\end{DoxyItemize}
+
+2) make appl, to build the libarary and the applications in appl
+
+3) doxygen A\-N\-T\-Ldoc-\/config, to build the documentation in doc 

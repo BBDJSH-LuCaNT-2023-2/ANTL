@@ -1,0 +1,159 @@
+\hypertarget{classANTL_1_1DExponentiationJSF}{\section{A\-N\-T\-L\-:\-:D\-Exponentiation\-J\-S\-F$<$ T $>$ Class Template Reference}
+\label{classANTL_1_1DExponentiationJSF}\index{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F$<$ T $>$@{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F$<$ T $>$}}
+}
+
+
+class for left-\/to-\/right J\-S\-F double exponentiation  
+
+
+
+
+{\ttfamily \#include $<$D\-Exponentiation\-J\-S\-F.\-hpp$>$}
+
+Inheritance diagram for A\-N\-T\-L\-:\-:D\-Exponentiation\-J\-S\-F$<$ T $>$\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d9/d81/classANTL_1_1DExponentiationJSF}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classANTL_1_1DExponentiationJSF_a5b8470104a966d52fe263b6d250afe83}{initialize} (const T \&A, const T \&B, const Z\-Z \&m, const Z\-Z \&n)
+\begin{DoxyCompactList}\small\item\em Setup the class to compute A$^\wedge$m\-B$^\wedge$n. Computes necessary precomputed values of A and B and allocates a digit vector of size Num\-Bits(n)+1. \end{DoxyCompactList}\item 
+void \hyperlink{classANTL_1_1DExponentiationJSF_a6feea3283cf55fe5f8aa3b0cf1f9cebe}{power} (T \&C, const T \&A, const T \&B, const Z\-Z \&m, const Z\-Z \&n)
+\begin{DoxyCompactList}\small\item\em Computes A$^\wedge$m\-B$^\wedge$n. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+vector$<$ short $>$ \hyperlink{classANTL_1_1DExponentiationJSF_a5d89a984840cab1ed1308e3c39ae6896}{em}
+\item 
+vector$<$ short $>$ \hyperlink{classANTL_1_1DExponentiationJSF_af7f5f0fc2cc41ee18f988b430930fec4}{en}
+\item 
+T \hyperlink{classANTL_1_1DExponentiationJSF_a74e6f753c656dd8ca7b113597dcb405f}{A\-Inv}
+\item 
+T \hyperlink{classANTL_1_1DExponentiationJSF_afe3234f9976953b1c3484d680e8a6799}{B\-Inv}
+\item 
+T \hyperlink{classANTL_1_1DExponentiationJSF_a76d1d64d21b9353c39f03febbdede159}{A\-B}
+\item 
+T \hyperlink{classANTL_1_1DExponentiationJSF_adf4d906e0790f0fa2090ff64dd43a0ca}{A\-B\-Inv}
+\item 
+T \hyperlink{classANTL_1_1DExponentiationJSF_a9056653402c022e724fe79243ee714a2}{A\-Inv\-B}
+\item 
+T \hyperlink{classANTL_1_1DExponentiationJSF_ab93d0817494fa5b21b96b2b7bf7e6870}{A\-Inv\-B\-Inv}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$class T$>$class A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F$<$ T $>$}
+
+class for left-\/to-\/right J\-S\-F double exponentiation 
+
+\begin{DoxyRemark}{Remarks}
+This concrete class defines a method for left-\/to-\/right joint sparse form double exponentiation. The method first computes the joint sparse form of the exponents using the basic right-\/to-\/left method, and then applies it to the bases left-\/to-\/right. The base type is templated, and must have the following functions defined\-:
+\begin{DoxyItemize}
+\item assign(\-T \&\-C, const T \&\-A)\-: sets C = A
+\item mul(\-T \&\-C, const T \&\-A, const T \&\-B)\-: computes C = A\-B
+\item sqr(\-T \&\-C, const T \&\-A)\-: computes C = A\-A
+\item inv(\-T \&\-C, const T \&\-A)\-: computes C = inverse of A 
+\end{DoxyItemize}
+\end{DoxyRemark}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classANTL_1_1DExponentiationJSF_a5b8470104a966d52fe263b6d250afe83}{\index{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F@{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F}!initialize@{initialize}}
+\index{initialize@{initialize}!ANTL::DExponentiationJSF@{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F}}
+\subsubsection[{initialize}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ void D\-Exponentiation\-J\-S\-F\-::initialize (
+\begin{DoxyParamCaption}
+\item[{const T \&}]{A, }
+\item[{const T \&}]{B, }
+\item[{const Z\-Z \&}]{m, }
+\item[{const Z\-Z \&}]{n}
+\end{DoxyParamCaption}
+)}}\label{classANTL_1_1DExponentiationJSF_a5b8470104a966d52fe263b6d250afe83}
+
+
+Setup the class to compute A$^\wedge$m\-B$^\wedge$n. Computes necessary precomputed values of A and B and allocates a digit vector of size Num\-Bits(n)+1. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em A} & first base for exponentiation \\
+\hline
+\mbox{\tt in}  & {\em B} & second base for exponentiation \\
+\hline
+\mbox{\tt in}  & {\em m} & first exponent \\
+\hline
+\mbox{\tt in}  & {\em n} & second exponent\\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+m,n $>$= 0 
+\end{DoxyPrecond}
+\hypertarget{classANTL_1_1DExponentiationJSF_a6feea3283cf55fe5f8aa3b0cf1f9cebe}{\index{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F@{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F}!power@{power}}
+\index{power@{power}!ANTL::DExponentiationJSF@{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F}}
+\subsubsection[{power}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ void D\-Exponentiation\-J\-S\-F\-::power (
+\begin{DoxyParamCaption}
+\item[{T \&}]{C, }
+\item[{const T \&}]{A, }
+\item[{const T \&}]{B, }
+\item[{const Z\-Z \&}]{m, }
+\item[{const Z\-Z \&}]{n}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}}\label{classANTL_1_1DExponentiationJSF_a6feea3283cf55fe5f8aa3b0cf1f9cebe}
+
+
+Computes A$^\wedge$m\-B$^\wedge$n. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em C} & result of computing A$^\wedge$m$^\wedge$n using left-\/to-\/right J\-S\-F double exponentiation \\
+\hline
+\mbox{\tt in}  & {\em A} & first base for exponentiation \\
+\hline
+\mbox{\tt in}  & {\em B} & second base for exponentiation \\
+\hline
+\mbox{\tt in}  & {\em m} & first exponent \\
+\hline
+\mbox{\tt in}  & {\em n} & second exponent\\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+n $>$= 0 
+\end{DoxyPrecond}
+
+
+Implements \hyperlink{classANTL_1_1DExponentiation_a3c8c562a37b0d5d849ab1cfb3adfc73f}{A\-N\-T\-L\-::\-D\-Exponentiation$<$ T $>$}.
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classANTL_1_1DExponentiationJSF_a76d1d64d21b9353c39f03febbdede159}{\index{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F@{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F}!A\-B@{A\-B}}
+\index{A\-B@{A\-B}!ANTL::DExponentiationJSF@{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F}}
+\subsubsection[{A\-B}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ T {\bf A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F}$<$ T $>$\-::A\-B\hspace{0.3cm}{\ttfamily [protected]}}}\label{classANTL_1_1DExponentiationJSF_a76d1d64d21b9353c39f03febbdede159}
+templated class containing the product of A and B \hypertarget{classANTL_1_1DExponentiationJSF_adf4d906e0790f0fa2090ff64dd43a0ca}{\index{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F@{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F}!A\-B\-Inv@{A\-B\-Inv}}
+\index{A\-B\-Inv@{A\-B\-Inv}!ANTL::DExponentiationJSF@{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F}}
+\subsubsection[{A\-B\-Inv}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ T {\bf A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F}$<$ T $>$\-::A\-B\-Inv\hspace{0.3cm}{\ttfamily [protected]}}}\label{classANTL_1_1DExponentiationJSF_adf4d906e0790f0fa2090ff64dd43a0ca}
+templated class containing the product of A and B\-Inv \hypertarget{classANTL_1_1DExponentiationJSF_a74e6f753c656dd8ca7b113597dcb405f}{\index{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F@{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F}!A\-Inv@{A\-Inv}}
+\index{A\-Inv@{A\-Inv}!ANTL::DExponentiationJSF@{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F}}
+\subsubsection[{A\-Inv}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ T {\bf A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F}$<$ T $>$\-::A\-Inv\hspace{0.3cm}{\ttfamily [protected]}}}\label{classANTL_1_1DExponentiationJSF_a74e6f753c656dd8ca7b113597dcb405f}
+templated class containing the inverse of A \hypertarget{classANTL_1_1DExponentiationJSF_a9056653402c022e724fe79243ee714a2}{\index{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F@{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F}!A\-Inv\-B@{A\-Inv\-B}}
+\index{A\-Inv\-B@{A\-Inv\-B}!ANTL::DExponentiationJSF@{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F}}
+\subsubsection[{A\-Inv\-B}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ T {\bf A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F}$<$ T $>$\-::A\-Inv\-B\hspace{0.3cm}{\ttfamily [protected]}}}\label{classANTL_1_1DExponentiationJSF_a9056653402c022e724fe79243ee714a2}
+templated class containing the product of A\-Inv and B \hypertarget{classANTL_1_1DExponentiationJSF_ab93d0817494fa5b21b96b2b7bf7e6870}{\index{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F@{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F}!A\-Inv\-B\-Inv@{A\-Inv\-B\-Inv}}
+\index{A\-Inv\-B\-Inv@{A\-Inv\-B\-Inv}!ANTL::DExponentiationJSF@{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F}}
+\subsubsection[{A\-Inv\-B\-Inv}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ T {\bf A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F}$<$ T $>$\-::A\-Inv\-B\-Inv\hspace{0.3cm}{\ttfamily [protected]}}}\label{classANTL_1_1DExponentiationJSF_ab93d0817494fa5b21b96b2b7bf7e6870}
+templated class containing the product of A\-Inv and B\-Inv \hypertarget{classANTL_1_1DExponentiationJSF_afe3234f9976953b1c3484d680e8a6799}{\index{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F@{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F}!B\-Inv@{B\-Inv}}
+\index{B\-Inv@{B\-Inv}!ANTL::DExponentiationJSF@{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F}}
+\subsubsection[{B\-Inv}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ T {\bf A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F}$<$ T $>$\-::B\-Inv\hspace{0.3cm}{\ttfamily [protected]}}}\label{classANTL_1_1DExponentiationJSF_afe3234f9976953b1c3484d680e8a6799}
+templated class containing the inverse of B \hypertarget{classANTL_1_1DExponentiationJSF_a5d89a984840cab1ed1308e3c39ae6896}{\index{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F@{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F}!em@{em}}
+\index{em@{em}!ANTL::DExponentiationJSF@{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F}}
+\subsubsection[{em}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ vector$<$short$>$ {\bf A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F}$<$ T $>$\-::em\hspace{0.3cm}{\ttfamily [protected]}}}\label{classANTL_1_1DExponentiationJSF_a5d89a984840cab1ed1308e3c39ae6896}
+vector containing a N\-A\-F expansion of m \hypertarget{classANTL_1_1DExponentiationJSF_af7f5f0fc2cc41ee18f988b430930fec4}{\index{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F@{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F}!en@{en}}
+\index{en@{en}!ANTL::DExponentiationJSF@{A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F}}
+\subsubsection[{en}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ vector$<$short$>$ {\bf A\-N\-T\-L\-::\-D\-Exponentiation\-J\-S\-F}$<$ T $>$\-::en\hspace{0.3cm}{\ttfamily [protected]}}}\label{classANTL_1_1DExponentiationJSF_af7f5f0fc2cc41ee18f988b430930fec4}
+vector containing a N\-A\-F expansion of n 
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\-A\-N\-T\-L/\-D\-Exponentiation/\hyperlink{DExponentiationJSF_8hpp}{D\-Exponentiation\-J\-S\-F.\-hpp}\item 
+src/\-D\-Exponentiation/\hyperlink{DExponentiationJSF__impl_8hpp}{D\-Exponentiation\-J\-S\-F\-\_\-impl.\-hpp}\end{DoxyCompactItemize}

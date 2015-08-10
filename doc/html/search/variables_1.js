@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['e',['e',['../db/d6c/classANTL_1_1ExponentiationNAF.html#a9cbe814c668d82453284afc1f662e3e2',1,'ANTL::ExponentiationNAF']]]
+  ['binv',['BInv',['../d9/d81/classANTL_1_1DExponentiationJSF.html#afe3234f9976953b1c3484d680e8a6799',1,'ANTL::DExponentiationJSF']]]
 ];

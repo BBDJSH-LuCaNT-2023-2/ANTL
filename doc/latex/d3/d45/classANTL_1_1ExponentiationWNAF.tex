@@ -1,0 +1,132 @@
+\hypertarget{classANTL_1_1ExponentiationWNAF}{\section{A\-N\-T\-L\-:\-:Exponentiation\-W\-N\-A\-F$<$ T $>$ Class Template Reference}
+\label{classANTL_1_1ExponentiationWNAF}\index{A\-N\-T\-L\-::\-Exponentiation\-W\-N\-A\-F$<$ T $>$@{A\-N\-T\-L\-::\-Exponentiation\-W\-N\-A\-F$<$ T $>$}}
+}
+
+
+class for left-\/to-\/right W\-N\-A\-F exponentiation  
+
+
+
+
+{\ttfamily \#include $<$Exponentiation\-W\-N\-A\-F.\-hpp$>$}
+
+Inheritance diagram for A\-N\-T\-L\-:\-:Exponentiation\-W\-N\-A\-F$<$ T $>$\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d3/d45/classANTL_1_1ExponentiationWNAF}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classANTL_1_1ExponentiationWNAF_a4e34446d4c8859f2fdf35b1b983e2029}{initialize} (const T \&A, const Z\-Z \&n, const short \hyperlink{classANTL_1_1ExponentiationWNAF_aeeeaf680db26d52f56783a6a5a761066}{w})
+\begin{DoxyCompactList}\small\item\em Setup the class to compute A$^\wedge$n. Computes necessary precomputed values of A and allocates a digit vector of size Num\-Bits(n)+1. \end{DoxyCompactList}\item 
+void \hyperlink{classANTL_1_1ExponentiationWNAF_a63941859ba7c0118dadd33aa489a75c7}{power} (T \&C, const T \&A, const Z\-Z \&n)
+\begin{DoxyCompactList}\small\item\em Computes A$^\wedge$n. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+vector$<$ short $>$ \hyperlink{classANTL_1_1ExponentiationWNAF_af0a23c1341f752e8f36ba56b38d9d33b}{e}
+\item 
+T $\ast$ \hyperlink{classANTL_1_1ExponentiationWNAF_a8d2b1e59c758d66f2e8a1bc0d2cb3f50}{precomp}
+\item 
+T $\ast$ \hyperlink{classANTL_1_1ExponentiationWNAF_aebe9720da10b933ec0fc19f510ca18bc}{precomp\-Inv}
+\item 
+short \hyperlink{classANTL_1_1ExponentiationWNAF_aeeeaf680db26d52f56783a6a5a761066}{w}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$class T$>$class A\-N\-T\-L\-::\-Exponentiation\-W\-N\-A\-F$<$ T $>$}
+
+class for left-\/to-\/right W\-N\-A\-F exponentiation 
+
+\begin{DoxyRemark}{Remarks}
+This concrete class defines a method for left-\/to-\/right windowed non-\/adjacent form exponentiation. The method first computes the W\-N\-A\-F representation of the exponent using the basic right-\/to-\/left method, and then applies it to the base left-\/to-\/right. The base type is templated, and must have the following functions defined\-:
+\begin{DoxyItemize}
+\item assign(\-T \&\-C, const T \&\-A)\-: sets C = A
+\item mul(\-T \&\-C, const T \&\-A, const T \&\-B)\-: computes C = A\-B
+\item sqr(\-T \&\-C, const T \&\-A)\-: computes C = A\-A
+\item inv(\-T \&\-C, const T \&\-A)\-: computes C = inverse of A 
+\end{DoxyItemize}
+\end{DoxyRemark}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classANTL_1_1ExponentiationWNAF_a4e34446d4c8859f2fdf35b1b983e2029}{\index{A\-N\-T\-L\-::\-Exponentiation\-W\-N\-A\-F@{A\-N\-T\-L\-::\-Exponentiation\-W\-N\-A\-F}!initialize@{initialize}}
+\index{initialize@{initialize}!ANTL::ExponentiationWNAF@{A\-N\-T\-L\-::\-Exponentiation\-W\-N\-A\-F}}
+\subsubsection[{initialize}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ void Exponentiation\-W\-N\-A\-F\-::initialize (
+\begin{DoxyParamCaption}
+\item[{const T \&}]{A, }
+\item[{const Z\-Z \&}]{n, }
+\item[{const short}]{w}
+\end{DoxyParamCaption}
+)}}\label{classANTL_1_1ExponentiationWNAF_a4e34446d4c8859f2fdf35b1b983e2029}
+
+
+Setup the class to compute A$^\wedge$n. Computes necessary precomputed values of A and allocates a digit vector of size Num\-Bits(n)+1. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em A} & base for exponentiation \\
+\hline
+\mbox{\tt in}  & {\em n} & exponent \\
+\hline
+\mbox{\tt in}  & {\em w} & windowing width\\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+n $>$= 0 
+
+w $>$= 2 
+\end{DoxyPrecond}
+\hypertarget{classANTL_1_1ExponentiationWNAF_a63941859ba7c0118dadd33aa489a75c7}{\index{A\-N\-T\-L\-::\-Exponentiation\-W\-N\-A\-F@{A\-N\-T\-L\-::\-Exponentiation\-W\-N\-A\-F}!power@{power}}
+\index{power@{power}!ANTL::ExponentiationWNAF@{A\-N\-T\-L\-::\-Exponentiation\-W\-N\-A\-F}}
+\subsubsection[{power}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ void Exponentiation\-W\-N\-A\-F\-::power (
+\begin{DoxyParamCaption}
+\item[{T \&}]{C, }
+\item[{const T \&}]{A, }
+\item[{const Z\-Z \&}]{n}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}}\label{classANTL_1_1ExponentiationWNAF_a63941859ba7c0118dadd33aa489a75c7}
+
+
+Computes A$^\wedge$n. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em C} & result of computing A$^\wedge$n using left-\/to-\/right W\-N\-A\-F exponentiation \\
+\hline
+\mbox{\tt in}  & {\em A} & base for exponentiation \\
+\hline
+\mbox{\tt in}  & {\em n} & exponent\\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+n $>$= 0 
+\end{DoxyPrecond}
+
+
+Implements \hyperlink{classANTL_1_1Exponentiation_aad4e3be9ab770361f04a10a85d390622}{A\-N\-T\-L\-::\-Exponentiation$<$ T $>$}.
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classANTL_1_1ExponentiationWNAF_af0a23c1341f752e8f36ba56b38d9d33b}{\index{A\-N\-T\-L\-::\-Exponentiation\-W\-N\-A\-F@{A\-N\-T\-L\-::\-Exponentiation\-W\-N\-A\-F}!e@{e}}
+\index{e@{e}!ANTL::ExponentiationWNAF@{A\-N\-T\-L\-::\-Exponentiation\-W\-N\-A\-F}}
+\subsubsection[{e}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ vector$<$short$>$ {\bf A\-N\-T\-L\-::\-Exponentiation\-W\-N\-A\-F}$<$ T $>$\-::e\hspace{0.3cm}{\ttfamily [protected]}}}\label{classANTL_1_1ExponentiationWNAF_af0a23c1341f752e8f36ba56b38d9d33b}
+vector containing W\-N\-A\-F expansion of exponent \hypertarget{classANTL_1_1ExponentiationWNAF_a8d2b1e59c758d66f2e8a1bc0d2cb3f50}{\index{A\-N\-T\-L\-::\-Exponentiation\-W\-N\-A\-F@{A\-N\-T\-L\-::\-Exponentiation\-W\-N\-A\-F}!precomp@{precomp}}
+\index{precomp@{precomp}!ANTL::ExponentiationWNAF@{A\-N\-T\-L\-::\-Exponentiation\-W\-N\-A\-F}}
+\subsubsection[{precomp}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ T$\ast$ {\bf A\-N\-T\-L\-::\-Exponentiation\-W\-N\-A\-F}$<$ T $>$\-::precomp\hspace{0.3cm}{\ttfamily [protected]}}}\label{classANTL_1_1ExponentiationWNAF_a8d2b1e59c758d66f2e8a1bc0d2cb3f50}
+array containing precomputed values used for W\-N\-A\-F \hypertarget{classANTL_1_1ExponentiationWNAF_aebe9720da10b933ec0fc19f510ca18bc}{\index{A\-N\-T\-L\-::\-Exponentiation\-W\-N\-A\-F@{A\-N\-T\-L\-::\-Exponentiation\-W\-N\-A\-F}!precomp\-Inv@{precomp\-Inv}}
+\index{precomp\-Inv@{precomp\-Inv}!ANTL::ExponentiationWNAF@{A\-N\-T\-L\-::\-Exponentiation\-W\-N\-A\-F}}
+\subsubsection[{precomp\-Inv}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ T$\ast$ {\bf A\-N\-T\-L\-::\-Exponentiation\-W\-N\-A\-F}$<$ T $>$\-::precomp\-Inv\hspace{0.3cm}{\ttfamily [protected]}}}\label{classANTL_1_1ExponentiationWNAF_aebe9720da10b933ec0fc19f510ca18bc}
+array containing the inverses of the values in precomp \hypertarget{classANTL_1_1ExponentiationWNAF_aeeeaf680db26d52f56783a6a5a761066}{\index{A\-N\-T\-L\-::\-Exponentiation\-W\-N\-A\-F@{A\-N\-T\-L\-::\-Exponentiation\-W\-N\-A\-F}!w@{w}}
+\index{w@{w}!ANTL::ExponentiationWNAF@{A\-N\-T\-L\-::\-Exponentiation\-W\-N\-A\-F}}
+\subsubsection[{w}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ short {\bf A\-N\-T\-L\-::\-Exponentiation\-W\-N\-A\-F}$<$ T $>$\-::w\hspace{0.3cm}{\ttfamily [protected]}}}\label{classANTL_1_1ExponentiationWNAF_aeeeaf680db26d52f56783a6a5a761066}
+width of W\-N\-A\-F representation 
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\-A\-N\-T\-L/\-Exponentiation/\hyperlink{ExponentiationWNAF_8hpp}{Exponentiation\-W\-N\-A\-F.\-hpp}\item 
+src/\-Exponentiation/\hyperlink{ExponentiationWNAF__impl_8hpp}{Exponentiation\-W\-N\-A\-F\-\_\-impl.\-hpp}\end{DoxyCompactItemize}
