@@ -1,5 +1,5 @@
 #
-# File:  src/Makefile.dir
+# File:  src/XGCD/Makefile.dir
 # Author: John Lees-Miller (2005-06-06).
 #
 # This is only a partial makefile, included by the root makefile.
@@ -11,7 +11,8 @@
 #PROGRAMS += 
 
 # Register sources with the root makefile.
-ANTL_SRC += src/common.cpp
-ANTL_SRC += src/debug.cpp
-ANTL_SRC += src/thresholds.cpp
-ANTL_SRC += src/utilities.cpp
+ANTL_SRC += src/XGCD/hxgcd.cpp
+ANTL_SRC += src/XGCD/xgcd.cpp
+ANTL_SRC += src/XGCD/xgcd_iter.cpp
+ANTL_SRC += src/XGCD/xgcd_plain.cpp
+ANTL_SRC += src/XGCD/xgcd_pseudo.cpp

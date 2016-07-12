@@ -1,5 +1,5 @@
 #
-# File:  src/Makefile.dir
+# File:  src/Quadratic/Cube/Makefile.dir
 # Author: John Lees-Miller (2005-06-06).
 #
 # This is only a partial makefile, included by the root makefile.
@@ -11,7 +11,7 @@
 #PROGRAMS += 
 
 # Register sources with the root makefile.
-ANTL_SRC += src/common.cpp
-ANTL_SRC += src/debug.cpp
-ANTL_SRC += src/thresholds.cpp
-ANTL_SRC += src/utilities.cpp
+ANTL_SRC += src/Quadratic/Cube/qo_cube_plain_GF2EX.cpp
+ANTL_SRC += src/Quadratic/Cube/qo_cube_plain_ZZ.cpp
+ANTL_SRC += src/Quadratic/Cube/qo_nucube_GF2EX.cpp
+ANTL_SRC += src/Quadratic/Cube/qo_nucube_ZZ.cpp

@@ -1,0 +1,21 @@
+#
+# File:  src/Quadratic/Reduce/Makefile.dir
+# Author: John Lees-Miller (2005-06-06).
+#
+# This is only a partial makefile, included by the root makefile.
+# It contains build rules only for files in this directory.
+# All paths must be relative to the location of the root makefile.
+#
+
+# Register programs with the root makefile.
+#PROGRAMS += 
+
+# Register sources with the root makefile.
+ANTL_SRC += src/Quadratic/Reduce/qo_reduce_fast_allrecs_fancy_GF2EX.cpp
+ANTL_SRC += src/Quadratic/Reduce/qo_reduce_fast_allrecs_GF2EX.cpp
+ANTL_SRC += src/Quadratic/Reduce/qo_reduce_fast_alt_a_GF2EX.cpp
+ANTL_SRC += src/Quadratic/Reduce/qo_reduce_fast_GF2EX.cpp
+ANTL_SRC += src/Quadratic/Reduce/qo_reduce_fast_ZZ.cpp
+ANTL_SRC += src/Quadratic/Reduce/qo_reduce_fast_recs_GF2EX.cpp
+ANTL_SRC += src/Quadratic/Reduce/qo_reduce_plain_GF2EX.cpp
+ANTL_SRC += src/Quadratic/Reduce/qo_reduce_plain_ZZ.cpp
