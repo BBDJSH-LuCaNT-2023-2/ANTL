@@ -38,11 +38,11 @@ ExponentiationSB3<T>::power (T &C, const T &A, const ZZ & n)
       }
       e.push_back(ei);
       sub(ex,ex,ei);
-      cout << ei;
+      //cout << ei;
      div(ex,ex,3);
     }
-  cout << endl;
-  // compute C = A^n from left-to-right using NAF digits in e
+  //cout << endl;
+  // compute C = A^n from left-to-right using SB3 digits in e
   assign(C,A);
   for (register long j = e.size()-2; j >= 0; --j)
     {
