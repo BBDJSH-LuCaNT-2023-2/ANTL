@@ -59,3 +59,14 @@ Makefile.in
 /missing
 /stamp-h1
 
+
+
+#
+# Eclipse data
+#
+
+/.cproject
+/.externalToolBuilders/
+/.project
+/.settings/
+
