@@ -1,0 +1,335 @@
+/**
+ * @file MultiExponentiationPippenger_impl.hpp
+ * @author Reginald Lybbert
+ * @brief class for Pippenger's Multi-exponentiation Algorithm, as described in
+ * "Pippenger's Multiproduct and Multiexponentiation Algorithms"; Ryan Henry; 2010
+ * 
+ *   cacr.uwaterloo.ca/techreports/2010/cacr2010-26.pdf
+ */
+
+#include<algorithm>
+#include<math.h>
+
+using namespace ANTL;
+
+
+
+template< class T >
+void
+MultiExponentiationPippenger<T>::decompose( vector<T> &x_prime, vector<vector<long> > &y_prime,
+                                              const vector<T> &x, const vector<vector<ZZ> > &y, const long r, const long b ){
+    x_prime.clear();
+    x_prime.resize(r*x.size());
+    for(long i = 0; i < x.size(); i++){
+        for(long j = 0; j < r; j++){
+            if(j = 0){
+                assign(x_prime[r*i],x[i]);
+            }else{
+                assign(x_prime[r*i + j],x_prime[r*i + j - 1]);
+            for(long k = 0; k < b; k++){
+                sqr(x_prime[r*i + j],x_prime[r*i+j]);
+            }
+        }
+    }
+
+    y_prime.clear();
+    y_prime.resize(r*y.size());
+    for(long i = 0; i < y.size(); i++){
+        for(long j = 0; j < y[i].size(); j++){     //we require y[i].size() = x.size()
+            for(long k = 0; k < r; k++){
+                for(long l = 0; l < b; l++){
+                    if(bit(y[i][j],k*b + l) == 1){
+                       y_prime[i*b + j].push_back(j*r+k)
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+template< class T >
+void
+MultiExponentiationPippenger<T>::combine( vector<T> &C, const vector<T> &x, const long &r){
+
+        C.clear();
+        C.resize(x.len()/r);
+        long q = -1;
+	for(long i = 0; i < x.len(); i++){
+            if(i%r == 0){
+               q++;
+               assign(C[q],x[i]);
+            }else{
+               sqr(C[q],C[q]);
+               mul(C[q],C[q],x[i]);
+            }
+        }
+}
+
+
+
+template< class T >
+void
+MultiExponentiationPippenger<T>::multiprod( vector<T> &C, const vector<T> &x, const vector<vector<long> > &y){
+
+  long ell, c;
+  vector<long> alpha,beta;
+  getParams(ell,c,alpha,beta,x,y);
+  computeMultiProd(C,i,ell,c,alpha,beta,x,y);
+}
+
+
+template< class T >
+void
+MultiExponentiationPippenger<T>::getParams( long &ell, long &c, vector<long> &alpha, vector<long> &beta, 
+                                              const vector<T> &x, const vector<vector<long> > &y){
+
+    ell = 0;       //temporary values...
+    c = 2;
+    alpha.clear();
+    beta.clear();
+
+}
+
+
+template< class T >
+void
+MultiExponentiationPippenger<T>::computeMultiProd( vector<T> &C, const long &i, const long &ell, const long &c, const vector<long> &alpha, 
+                                                    const vector<long> &beta, const vector<T> &x, const vector<vector<long> > &y){
+
+  vector<T> x_prime,x_doubleprime;
+  vector<vector<long> > y_prime,y_doubleprime;
+  if(i == ell){
+     naiveMultiply(C,x,y);
+  }else if(i == 0){
+     inputPartition(x_prime,y_prime,x,y,c);
+     computeMultiProd(C,1,ell,c,alpha,beta,x_prime,y_prime);
+  }else if(i%2 == 1){
+     outputClump(y_prime,y_doubleprime,x,y,alpha[i],beta[i]);
+     computeMultiProd(x_doubleprime,i+1,ell,c,alpha,beta,x,y_prime);
+     x_doubleprime.insert(x_doubleprime.begin(),x.begin(),x.end());
+     multiprod(C,x_doubleprime, y_doubleprime);
+  }else{
+     inputClump(x_prime,y_prime,x,y,alpha[i],beta[i]);
+     computeMultiProd(C,i+1,ell,c,alpha,beta,x_prime,y_prime);
+  }
+}
+
+
+template< class T >
+void
+MultiExponentiationPippenger<T>::inputPartition(vector<T> &x_prime, vector<vector<long> > &y_prime, const vector<T> &x,
+                                                      const vector<vector<long> > &y, const long &c){
+
+   x_prime.clear();
+   y_prime.clear();
+   y_prime.resize(y.size());
+   long numOfPartitions = (long) ceil(((double) x.size())/c);
+   vector<T> P_i, X_i;
+   vector<vector<long> > Y_i;
+   long new_index = 0;
+   long indices[(1 << c)];   //think of this as a hash table under the perfect hash: [a,b,c] goes to 2^a+2^b+2^c
+   long indicesIndex;
+   vector<long> y_test;
+   for(int i = 0; i < numOfPartitions; i++){
+      fill_n(indices, (1<<c), -1);
+      P_i.clear();
+      X_i.clear();
+      Y_i.clear();
+      for(int ic = i*c, ic < min((i+1)*c,x.size()),i++){
+          P_i.push_back(x[ic]);
+      }
+      for(int y_index = 0; y_index < y.size(); y_index++){
+         indicesIndex = 0;
+         y_test.clear();
+         for(int inner_y_index = 0; inner_y_index < y[y_index].size(); inner_y_index++){ 
+             if(y[y_index][inner_y_index] >= i*c && y[y_index][inner_y_index] < (i+1)*c){
+                 y_test.push_back(y[y_index][inner_y_index] - i*c);
+                 indicesIndex += (1 << y_test.back());
+             }
+         }
+         if(indices[indicesIndex] == -1){
+             Y_i.push_back(y_test);
+             indices[indicesIndex] = new_index;
+             new_index++;
+         }
+         y_prime[y_index].push_back(indices[indicesIndex]);          
+      }
+    
+      multiprod(X_i,P_i,Y_i);
+    
+      for(long t = 0; t < X_i.size(); t++){ 
+          x_prime.push_back(X_i[t]);
+      }
+   }
+
+}
+
+template< class T >
+void
+MultiExponentiationPippenger<T>::outputClump(vector<vector<long> > &y_prime, vector<vector<long> > &y_doubleprime, const vector<T> &x, 
+                                                       const vector<vector<long> > &y, const long alpha, const long beta){
+
+   long numOfPartitions = (long) ceil(((double) y.size())/alpha);
+   long clumpCounter; //counts up to beta to find clumps
+   vector<long>::iterator it;  //temporary iterator
+   long indicesIndex;
+   vector<long> singles;
+   long currIndex = 0;
+   long indices[1<<beta];
+
+   for(long i = 0; i < numOfPartitions; i++){
+
+       for(int x_index = 0; x_index < x.size(); x++){
+           clumpCounter = 0;
+           indicesIndex = 0;
+           fill_n(indices,(1<<beta),-1);
+           for(int y_index = i*alpha; y_index < i*alpha + min((i+1)*alpha,x.size()); y_index++);  //look through partition i
+               it = find(y[y_index].begin(),y[y_index].end(),x_index);
+               if(it != y[y_index].end()){
+                    clumpCounter++;
+                    indicesIndex += (1 << (y_index - i*alpha));
+                    singles.push_back(y_index)
+                    if(clumpCounter == beta){
+                        if(indices[indicesIndex] == -1){
+                            indices[indicesIndex] = currIndex;
+                            currIndex++;
+                            y_prime.resize(currIndex);
+                            for(new_index = 0; new_index < singles.size(); new_index++){
+                                y_doubleprime[singles[new_index]].push_back(currIndex + x.size());
+                            }
+                        }
+                        singles.clear();
+                        y_prime[indices[indicesIndex]].push_back(x_index);                       
+                    }
+               }
+            }
+            for(new_index = 0; new_index < singles.size(); new_index++){
+                y_doubleprime[singles[new_index]].push_back(x_index);
+            }
+       } 
+    }
+}
+
+
+template< class T >
+void
+MultiExponentiationPippenger<T>::inputClump(vector<T> &x_prime, vector<vector<long> > &y_prime, const vector<T> &x,
+                                               const vector<vector<long> > &y, const long alpha, const long beta){
+
+   x_prime.clear();
+   y_prime.clear();
+   y_prime.resize(y.size());
+
+   vector<T> x_doubleprime; //for clumps, output of recursive call
+   vector<T> P_i; //a partition, input of recursive call
+   vector<long> x_doubleprimeIndices; //where to insert each element of x_doubleprime into x_prime;
+   long numOfPartitions = (long) ceil(((double) x.size())/alpha);
+   long currIndex = 0; //the x-prime index for the next clump or single found
+   long inner_y_index; //the index we are currently looking at in y[y_index]
+   long indices[(1 << alpha)];   //think of this as a hash table under the perfect hash: [a,b,c] goes to 2^a+2^b+2^c
+   long indicesIndex;    //variable to store a hash value in
+   long tempClumpSize;   //temporary variable to build clumps with
+   vector<long> y_test;  //vector to be hashed, before being added to Y_i
+   vector<vector<long> > Y_i; //description of clumps, to be used as input for recursive call
+   for(long i = 0; i < numOfPartitions; i++){
+      fill_n(indices, (1<<alpha), -1);
+      P_i.clear();
+      x_doubleprime.clear();
+      x_doubleprimeIndices.clear();
+      Y_i.clear();
+      for(int ic = i*alpha, ic < min((i+1)*alpha,x.size()),i++){   //build the partition
+          P_i.push_back(x[ic]);
+      }   
+    
+      for(int y_index = 0; y_index < y.size(); y++){
+          inner_y_index = 0;
+          while(inner_y_index < y[y_index].size()){
+              tempClumpSize = 0;
+              y_test.clear();
+              while(tempClumpSize < beta && inner_y_index < y[y_index].size()){
+                  if(y[y_index][inner_y_index] > i*alpha && y[y_index][inner_y_index] < (i+1)*alpha){
+                      y_test.push_back(y[y_index][inner_y_index] - i*alpha)
+                      indicesIndex += (1 << y_test.back());
+                      tempClumpSize++;
+                  }
+                  inner_y_index++;
+              }
+              if(tempClumpSize == beta){
+                  if(indices[indicesIndex] == -1){
+                      indices[indicesIndex] = currIndex;
+                      Y_i.push_back(y_test);
+                      x_prime.resize(currIndex);
+                      x_doubleprimeIndices.push_back(currIndex);
+                      currIndex++;
+                  }
+                  y_prime[y_index].push_back(indices[indicesIndex]);
+              }else{
+                  for(long temp = 0; temp < y_test.size(); temp++){
+                      if(indices[(1<<y_test[temp])] == -1){
+                          indices[(1<<y_test[temp])] = currIndex;
+                          x_prime.resize(currIndex);
+                          assign(x_prime[currIndex],P_i[y_test[temp]])
+                          currIndex++;
+                      }
+                      y_prime[y_index].push_back(indices[(1<<y_test[temp])]);
+                  }
+              }   
+          }
+      }
+
+      multiprod(x_doubleprime,P_i,Y_i);
+
+      for(long temp = 0; temp < x_doubleprime.size(); temp++){
+          assign(x_prime[x_doubleprimeIndices(temp)],x_doubleprime[temp]);
+      }
+   } 
+
+}
+
+
+template< class T >
+void
+MultiExponentiationPippenger<T>::naiveMultiply(vector<T> &C, const vector<T> &x, const vector<vector<long> > &y){
+
+  C.clear();
+  T y_i;
+  for(vector<vector<long> >::const_iterator S_i = y.begin(); S_i != y.end(); S_i++){
+      id(y_i);
+      for(vector<long>::const_iterator x_j = (*S_i).begin(); x_j != (*S_j).end(); x_j++){
+          mul(y_i,y_i,x[(*x_j)]);
+      } 
+      C.push_back(y_i);
+  }
+}
+
+
+template< class T >
+void
+MultiExponentiationPippenger<T>::power(vector<T> &C, const vector<T> &A, const vector<vector<ZZ> > &n){
+ 
+  ZZ k;
+  ZZ e;
+  k = 0;
+  for(vector<vector<ZZ> >::const_iterator y_i = n.begin(); y_i != n.end(); y_i++){
+      e = *max_element((*y_i).begin(), (*y_i).end());
+      if(e > k){
+          k = e;
+      }
+  }
+
+  long a,b;
+  a = (long) ceil(sqrt( ((double) x.size())*numBits(k+1)/y.size()));
+  b = (long) ceil(sqrt( ((double) y.size())*numBits(k+1)/x.size()));
+  vector<T> x_prime, x_doubleprime;
+  vector<vector<long> > y_prime,y_doubleprime;
+  if(y.size() >= x.size()){
+      decompose(x_prime,y_prime,A,n,a,b);
+      multiprod(x_doubleprime,x_prime,y_prime);
+      combine(C,x_doubleprime,a);
+  }else{
+      decompose(x_prime,y_prime,A,n,b,a);
+      multiprod(x_doubleprime,x_prime,y_prime);
+      combine(C,x_doubleprime,b);
+  }
+}
