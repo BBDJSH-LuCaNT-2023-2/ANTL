@@ -6,9 +6,6 @@
 
 using namespace ANTL;
 
-//
-// compute A^n using standard left-to-right binary method
-//
 template < class T > 
 void
 ExponentiationBinary<T>::power (T &C, const T &A, const ZZ & n)

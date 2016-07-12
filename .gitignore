@@ -32,6 +32,8 @@
 *.out
 *.app
 
+# dependency lists
+*.d
 
 
 #
