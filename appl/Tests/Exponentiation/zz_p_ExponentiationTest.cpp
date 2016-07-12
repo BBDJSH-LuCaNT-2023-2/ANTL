@@ -9,6 +9,7 @@
 #include <ANTL/Exponentiation/ExponentiationNAF.hpp>
 #include <ANTL/Exponentiation/ExponentiationL2R.hpp>
 #include <ANTL/Exponentiation/ExponentiationWNAF.hpp>
+#include <ANTL/Exponentiation/ExponentiationYao.hpp>
 
 
 
@@ -17,19 +18,19 @@ using namespace ANTL;
 	
 int main (int argc, char **argv)
 {
-  zz_p a,b_bin,b_naf, b_l2r, b_wnaf;
+  zz_p a,b_bin,b_naf, b_l2r, b_wnaf, b_yao;
   ZZ n;
 
   // use GF(1073741827) for these tests
   zz_p::init(1073741827);
 
-  // set base to be a random value in GF(5)
+  // set base to be a random value in GF(1073741827)
   do {
     random(a);
   } while (IsOne(a));
 
 
-  // generate random exponent of size 128 bits
+  // generate random exponent of size 512 bits
   RandomLen (n, 512);
 
   cout << "Using:" << endl;
@@ -42,6 +43,7 @@ int main (int argc, char **argv)
   ExponentiationNAF<zz_p> enaf;
   ExponentiationL2R<zz_p> el2r;
   ExponentiationWNAF<zz_p> ewnaf;
+  ExponentiationYao<zz_p> eyao;
  
   // compute a^n with available methods
   ebin.power(b_bin,a,n);
@@ -54,15 +56,21 @@ int main (int argc, char **argv)
 
   ewnaf.initialize(a,n,5);
   ewnaf.power(b_wnaf,a,n);
+
+  eyao.power(b_yao,a,n);
  
   // check and output results
   cout << "a^n (binary) = " << b_bin << endl;
   cout << "a^n (naf)    = " << b_naf << endl;
   cout << "a^n (l2r)    = " << b_l2r << endl;
   cout << "a^n (wnaf)   = " << b_wnaf << endl;
+  cout << "a^n (byao)   = " << b_yao << endl;
 
-  if ((b_bin == b_naf) && (b_naf == b_l2r) && (b_wnaf == b_bin))
+  if ((b_bin == b_naf) && (b_naf == b_l2r) && (b_wnaf == b_bin) && (b_bin == b_yao))
     cout << "RESULTS MATCH!" << endl;
   else
+  {
     cout << "ERROR:  RESULTS DO NOT MATCH!" << endl;
+    exit(1);
+  }
 }
