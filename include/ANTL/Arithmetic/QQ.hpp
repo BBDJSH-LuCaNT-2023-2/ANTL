@@ -49,17 +49,19 @@ namespace ANTL
     bool
     IsEqual (const T & n, const QQ<T> & x);
 
-  template<class T>
-    bool
-    operator ==<T> (const QQ<T> & x, const QQ<T> & y);
+
 
   template<class T>
     bool
-    operator ==<T> (const QQ<T> & x, const T & n);
+    operator == (const QQ<T> & x, const QQ<T> & y);
 
   template<class T>
     bool
-    operator ==<T> (const T & n, const QQ<T> & x);
+    operator == (const QQ<T> & x, const T & n);
+
+  template<class T>
+    bool
+    operator == (const T & n, const QQ<T> & x);
 
   template<class T>
     bool
@@ -67,11 +69,11 @@ namespace ANTL
 
   template<class T>
     bool
-    operator !=<T> (const QQ<T> & x, const T & n);
+    operator != (const QQ<T> & x, const T & n);
 
   template<class T>
     bool
-    operator !=<T> (const T & n, const QQ<T> & x);
+    operator != (const T & n, const QQ<T> & x);
 
   template<class T>
     void
@@ -230,8 +232,12 @@ namespace ANTL
 	    ::divide (a, a, g);
 	    ::divide (d, d, g);
 	  }
-
-	MakeMonic (d);
+        //make monic
+        if (!::IsOne(LeadCoeff(d)))
+        {
+          NTL::div(a, a, LeadCoeff(d));
+          NTL::div(d, d, LeadCoeff(d));
+        }
       }
 
     public:
@@ -460,7 +466,7 @@ namespace ANTL
       bool
       isInteger () const
       {
-	return IsOne (d);
+	return ::IsOne (d);
       }
 
       /**
@@ -471,7 +477,7 @@ namespace ANTL
       bool
       isEqual (const QQ<T> & x)
       {
-	return (a == x.a && d = x.d);
+	return (a == x.a && d == x.d);
       }
 
       /**
@@ -482,7 +488,7 @@ namespace ANTL
       bool
       isEqual (const T & n)
       {
-	return (a == n && IsOne (d));
+	return (a == n && ::IsOne (d));
       }
 
       /**
@@ -492,7 +498,7 @@ namespace ANTL
       friend bool
       IsEqual (const QQ<T> & x, const QQ<T> & y)
       {
-	return (x.a == y.a && x.d = y.d);
+	return (x.a == y.a && x.d == y.d);
       }
 
       /**
@@ -504,7 +510,7 @@ namespace ANTL
       friend bool
       IsEqual (const QQ<T> & x, const T & n)
       {
-	return (x.a == n && IsOne (x.d));
+	return (x.a == n && ::IsOne (x.d));
       }
 
       /**
@@ -516,7 +522,7 @@ namespace ANTL
       friend bool
       IsEqual (const T & n, const QQ<T> & x)
       {
-	return (x.a == n && IsOne (x.d));
+	return (x.a == n && ::IsOne (x.d));
       }
 
       /**
@@ -526,9 +532,9 @@ namespace ANTL
        * @return True if x is equal to y
        */
       friend bool
-      operator ==<T> (const QQ<T> & x, const QQ<T> & y)
+      operator == (const QQ<T> & x, const QQ<T> & y)
       {
-	return (x.a == y.a && x.d = y.d);
+	return (x.a == y.a && x.d == y.d);
       }
 
       /**
@@ -538,9 +544,9 @@ namespace ANTL
        * @return True if x is equal to n
        */
       friend bool
-      operator ==<T> (const QQ<T> & x, const T & n)
+      operator == (const QQ<T> & x, const T & n)
       {
-	return (x.a == n && IsOne (x.d));
+	return (x.a == n && ::IsOne (x.d));
       }
 
       /**
@@ -550,9 +556,9 @@ namespace ANTL
        * @return True if x is equal to n
        */
       friend bool
-      operator ==<T> (const T & n, const QQ<T> & x)
+      operator == (const T & n, const QQ<T> & x)
       {
-	return (x.a == n && IsOne (x.d));
+	return (x.a == n && ::IsOne (x.d));
       }
 
       /**
@@ -561,6 +567,7 @@ namespace ANTL
        * @param[in] y QQ to compare
        * @return True if x is not equal to y
        */
+
       friend bool
       operator != (const QQ<T> & x, const QQ<T> & y)
       {
@@ -576,7 +583,7 @@ namespace ANTL
       friend bool
       operator != (const QQ<T> & x, const T & n)
       {
-	return (x.a != n || !IsOne (x.d));
+	return (x.a != n || !::IsOne (x.d));
       }
 
       /**
@@ -588,7 +595,7 @@ namespace ANTL
       friend bool
       operator != (const T & n, const QQ<T> & x)
       {
-	return (x.a != n || !IsOne (x.d));
+	return (x.a != n || !::IsOne (x.d));
       }
 
       /**
@@ -610,9 +617,11 @@ namespace ANTL
       void
       invert ()
       {
+
 	temp = d;
 	d = a;
 	a = temp;
+        normalize();
       }
 
       /**
@@ -625,6 +634,7 @@ namespace ANTL
       {
 	z.a = x.d;
 	z.d = x.a;
+        z.normalize();
       }
 
       /**
@@ -658,6 +668,7 @@ namespace ANTL
 	  }
       }
 
+
       /**
        * @brief Computes the sum of x and n (a constant)
        * @param[out] z = x + n
@@ -669,7 +680,7 @@ namespace ANTL
       {
 	if (x.isZero ())
 	  z.assign (n);
-	else if (IsZero (n))
+	else if (::IsZero (n))
 	  z.assign (x);
 	else
 	  {
@@ -678,12 +689,13 @@ namespace ANTL
 	    //         x.d
 
 	    ::mul (temp, x.d, n);
-	    ::add (z.a, z.a, temp);
+	    ::add (z.a, x.a, temp);
 	    z.d = x.d;
 	    z.normalize ();
 	  }
 
       }
+
 
       /**
        * @brief Computes the sum of x and n (a constant)
@@ -696,7 +708,7 @@ namespace ANTL
       {
 	if (x.isZero ())
 	  z.assign (n);
-	else if (IsZero (n))
+	else if (::IsZero (n))
 	  z.assign (x);
 	else
 	  {
@@ -705,7 +717,7 @@ namespace ANTL
 	    //         x.d
 
 	    ::mul (temp, x.d, n);
-	    ::add (z.a, z.a, temp);
+	    ::add (z.a, x.a, temp);
 	    z.d = x.d;
 	    z.normalize ();
 	  }
@@ -760,7 +772,7 @@ namespace ANTL
 	    z.assign (n);
 	    z.negate ();
 	  }
-	else if (IsZero (n))
+	else if (::IsZero (n))
 	  z.assign (x);
 	else
 	  {
@@ -769,7 +781,7 @@ namespace ANTL
 	    //         x.d
 
 	    ::mul (temp, x.d, n);
-	    ::sub (z.a, z.a, temp);
+	    ::sub (z.a, x.a, temp);
 	    z.d = x.d;
 	    z.normalize ();
 	  }
@@ -777,7 +789,7 @@ namespace ANTL
 
       /**
        * @brief Computes the difference of x and n (a constant)
-       * @param[out] z = x - n
+       * @param[out] z = n - x
        * @param[in] n first term (a constant)
        * @param[in] x second term
        */
@@ -787,18 +799,20 @@ namespace ANTL
 	if (x.isZero ())
 	  {
 	    z.assign (n);
-	    z.negate ();
 	  }
-	else if (IsZero (n))
+	else if (::IsZero (n))
+         {
 	  z.assign (x);
+          z.negate();
+         }
 	else
 	  {
-	    //     x.a - x.d * n
+	    //     x.d * n - x.a
 	    // z = -------------
 	    //         x.d
 
 	    ::mul (temp, x.d, n);
-	    ::sub (z.a, z.a, temp);
+	    ::sub (z.a, temp, x.a);
 	    z.d = x.d;
 	    z.normalize ();
 	  }
@@ -912,7 +926,7 @@ namespace ANTL
 	::mul (newA, newA, x.a);
 
 	::sqr (newD, x.d);
-	::mul (newD, x.d);
+	::mul (newD, newD, x.d);
 
 	z.a = newA;
 	z.d = newD;
@@ -1083,7 +1097,7 @@ namespace ANTL
        **/
 
       friend std::istream &
-      operator>><T> (std::istream & in, QQ<T> & x)
+      operator>> (std::istream & in, QQ<T> & x)
       {
 	char c;
 
@@ -1139,21 +1153,56 @@ namespace ANTL
       }
 
       friend std::ostream &
-      operator<<<T> (std::ostream & out, const QQ<T> & x)
+      operator<< (std::ostream & out, const QQ<T> & x)
       {
 	out << "(" << x.a << "," << x.d << ")";
 	return out;
       }
     };
 
+  //static member initializations
+  template<class T>
+  T QQ<T>::temp;
+
+  template<class T>
+  T QQ<T>::newA;
+
+  template<class T>
+  T QQ<T>::newD;
+
+
   // Partial specializations
   template<>
     void
-    QQ<long>::normalize ();
+    QQ<long>::normalize (){
+    
+       long g = GCD(this->a, this->d);
+       if(g > 1){
+           this->a /= g;
+           this->d /= g;
+       }
+       if(this->d < 0){
+          this->a = -this->a;
+          this->d = -this->d;
+       }
+    };
 
   template<>
     void
-    QQ<ZZ>::normalize ();
+    QQ<ZZ>::normalize (){
+
+       ZZ g = GCD(this->a, this->d);
+       if(g > 1){
+           this->a /= g;
+           this->d /= g;
+       }
+       if(this->d < 0){
+          this->a = -this->a;
+          this->d = -this->d;
+       }
+    };
+
+
 } // ANTL
 
 #endif // ANTL_QQ_H

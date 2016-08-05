@@ -50,7 +50,7 @@ int main (int argc, char **argv)
 
 
   // generate random exponent of size 512 bits
-  RandomLen (n, 51);
+  RandomLen (n, 512);
 
   cout << "Using:" << endl;
   cout << " p = " << zz_p::modulus() << endl;

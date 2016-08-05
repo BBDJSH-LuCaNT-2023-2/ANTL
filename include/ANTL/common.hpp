@@ -88,6 +88,28 @@ namespace NTL {
   template < class T >
   inline void assign(T &C, const T &A) { C = A; }
 
+
+  // procedural arithmetic operations for standard types, to increase compatibility with NTL
+  inline void add ( long &C, const long &A, const long &B )     { C = A + B; }
+  inline void add ( float &C, const float &A, const float &B )     { C = A + B; }
+  inline void add ( double &C, const double &A, const double &B )     { C = A + B; }
+
+  inline void sub ( long &C, const long &A, const long &B )     { C = A - B; }
+  inline void sub ( float &C, const float &A, const float &B )     { C = A - B; }
+  inline void sub ( double &C, const double &A, const double &B )     { C = A - B; }
+
+  inline void mul ( long &C, const long &A, const long &B )     { C = A * B; }
+  inline void mul ( float &C, const float &A, const float &B )     { C = A * B; }
+  inline void mul ( double &C, const double &A, const double &B )     { C = A * B; }
+
+  inline void div ( long &C, const long &A, const long &B )     { C = A / B; }
+  inline void div ( float &C, const float &A, const float &B )     { C = A / B; }
+  inline void div ( double &C, const double &A, const double &B )     { C = A / B; }
+
+  inline void sqr ( long &C, const long &A)     { C = A * A; }
+  inline void sqr ( float &C, const float &A)     { C = A * A; }
+  inline void sqr ( double &C, const double &A)     { C = A * A; } 
+
 }
 
 namespace ANTL {

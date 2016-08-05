@@ -40,6 +40,7 @@ MFLAGS += -DMPICH_IGNORE_CXX_SEEK -DPARALLEL #MPI Stuff
 # These paths are relative to the location of this Makefile.
 # 
 DIRS := appl/Tests/Exponentiation
+DIRS += appl/Tests/Arithmetic
 DIRS += src
 DIRS += src/Arithmetic
 #DIRS += src/Quadratic
