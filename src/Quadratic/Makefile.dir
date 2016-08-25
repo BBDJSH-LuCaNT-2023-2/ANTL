@@ -1,0 +1,22 @@
+#
+# File:  src/Quadratic/Multiply/Makefile.dir
+# Author: John Lees-Miller (2005-06-06).
+#
+# This is only a partial makefile, included by the root makefile.
+# It contains build rules only for files in this directory.
+# All paths must be relative to the location of the root makefile.
+#
+
+# Register programs with the root makefile.
+#PROGRAMS += 
+
+# Register sources with the root makefile.
+ANTL_SRC += src/Quadratic/QuadraticOrder_long.cpp
+ANTL_SRC += src/Quadratic/QuadraticOrder_ZZ.cpp
+ANTL_SRC += src/Quadratic/QuadraticOrder_GF2EX.cpp
+ANTL_SRC += src/Quadratic/QuadraticNumber_long.cpp
+ANTL_SRC += src/Quadratic/QuadraticNumber_ZZ.cpp
+ANTL_SRC += src/Quadratic/QuadraticNumber_GF2EX.cpp
+ANTL_SRC += src/Quadratic/QuadraticIdealBase_long.cpp
+ANTL_SRC += src/Quadratic/QuadraticIdealBase_ZZ.cpp
+ANTL_SRC += src/Quadratic/QuadraticIdealBase_GF2EX.cpp
