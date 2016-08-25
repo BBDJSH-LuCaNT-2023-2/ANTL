@@ -1,442 +1,13 @@
 /**
- * @file QuadraticNumber.hpp
+ * @file QuadraticNumber_impl.hpp
  * @author Michael Jacobson
- * @brief element of an order in a quadratic number field or hyperelliptic function field
+ * @remarks Generic implementation of QuadraticNumber functions.
  */
 
-#ifndef ANTL_QUADRATIC_NUMBER_H
-#define ANTL_QUADRATIC_NUMBER_H
+#include <ANTL/Quadratic/QuadraticNumber.hpp>
 
-#include <ANTL/common.hpp>
-#include <ANTL/Arithmetic/QQ.hpp>
-#include <ANTL/Quadratic/QuadraticOrder.hpp>
-
-namespace ANTL
-{
-  // Forward Declarations
-  template<class T>
-    class QuadraticNumber;
-
-  template < class T >
-  class QuadraticOrder;
-
-  template<class T>
-    void
-    clear (QuadraticNumber<T> & x);
-
-  template<class T>
-    void
-    set (QuadraticNumber<T> & x);
-
-  template<class T>
-    void
-    assign (QuadraticNumber<T> & z, const QuadraticNumber<T> & x);
-
-  template<class T>
-    bool
-    IsZero (const QuadraticNumber<T>& x);
-
-  template<class T>
-    bool
-    IsOne (const QuadraticNumber<T>& x);
-
-  template<class T>
-    bool
-    IsEqual (const QuadraticNumber<T> & x, const QuadraticNumber<T> & y);
-
-  template<class T>
-    bool
-    IsEqual (const QuadraticNumber<T> & x, const T & n);
-
-  template<class T>
-    bool
-    IsEqual (const T & n, const QuadraticNumber<T> & x);
-
-  template<class T>
-    bool
-    IsEqual (const QuadraticNumber<T> & x, const QQ<T> & n);
-
-  template<class T>
-    bool
-    IsEqual (const QQ<T> & n, const QuadraticNumber<T> & x);
-
-  template<class T>
-    bool
-    operator == (const QuadraticNumber<T> & x, const QuadraticNumber<T> & y);
-
-  template<class T>
-    bool
-    operator == (const QuadraticNumber<T> & x, const T & n);
-
-  template<class T>
-    bool
-    operator == (const T & n, const QuadraticNumber<T> & x);
-
-  template<class T>
-    bool
-    operator == (const QuadraticNumber<T> & x, const QQ<T> & q);
-
-  template<class T>
-    bool
-    operator == (const QQ<T> & q, const QuadraticNumber<T> & x);
-
-  template<class T>
-    bool
-    operator != (const QuadraticNumber<T> & x, const QuadraticNumber<T> & y);
-
-  template<class T>
-    bool
-    operator != (const QuadraticNumber<T> & x, const T & n);
-
-  template<class T>
-    bool
-    operator != (const T & n, const QuadraticNumber<T> & x);
-
-  template<class T>
-    bool
-    operator != (const QuadraticNumber<T> & x, const QQ<T> & q);
-
-  template<class T>
-    bool
-    operator != (const QQ<T> & q, const QuadraticNumber<T> & x);
-
-  template<class T>
-    void
-    conjugate (QuadraticNumber<T> & x, const QuadraticNumber<T> & y);
-
-  template<class T>
-    void
-    inv (QuadraticNumber<T> & x, const QuadraticNumber<T> & y);
-
-  template<class T>
-    void
-    add (QuadraticNumber<T> & z, const QuadraticNumber<T> & x,
-	 const QuadraticNumber<T> & y);
-
-  template<class T>
-    void
-    add (QuadraticNumber<T> & z, const QuadraticNumber<T> & x, const T & n);
-
-  template<class T>
-    void
-    add (QuadraticNumber<T> & z, const QuadraticNumber<T> & x, const QQ<T> & q);
-
-  template<class T>
-    void
-    sub (QuadraticNumber<T> & z, const QuadraticNumber<T> & x,
-	 const QuadraticNumber<T> & y);
-
-  template<class T>
-    void
-    sub (QuadraticNumber<T> & z, const QuadraticNumber<T> & x, const T & n);
-
-  template<class T>
-    void
-    sub (QuadraticNumber<T> & z, const QuadraticNumber<T> & x, const QQ<T> & q);
-
-  template<class T>
-    void
-    mul (QuadraticNumber<T> & z, const QuadraticNumber<T> & x,
-	 const QuadraticNumber<T> & y);
-
-  template<class T>
-    void
-    mul (QuadraticNumber<T> & z, const QuadraticNumber<T> & x, const T & n);
-
-  template<class T>
-    void
-    mul (QuadraticNumber<T> & z, const QuadraticNumber<T> & x, const QQ<T> & q);
-
-  template<class T>
-    void
-    div (QuadraticNumber<T> & z, const QuadraticNumber<T> & x,
-	 const QuadraticNumber<T> & y);
-
-  template<class T>
-    void
-    div (QuadraticNumber<T> & z, const QuadraticNumber<T> & x, const T & n);
-
-  template<class T>
-    void
-    div (QuadraticNumber<T> & z, const QuadraticNumber<T> & x, const QQ<T> & q);
-
-  template<class T>
-    void
-    sqr (QuadraticNumber<T> & z, const QuadraticNumber<T> & x);
-
-  template<class T>
-    void
-    cube (QuadraticNumber<T> & z, const QuadraticNumber<T> & x);
-
-  template<class T>
-    QuadraticNumber<T>
-    operator - (const QuadraticNumber<T> & x);
-
-  template<class T>
-    QuadraticNumber<T>
-    operator + (const QuadraticNumber<T> & x, const QuadraticNumber<T> & y);
-
-  template<class T>
-    QuadraticNumber<T>
-    operator + (const QuadraticNumber<T> & x, const T & n);
-
-  template<class T>
-    QuadraticNumber<T>
-    operator + (const QuadraticNumber<T> & x, const QQ<T> & q);
-
-  template<class T>
-    QuadraticNumber<T>
-    operator - (const QuadraticNumber<T> & x, const QuadraticNumber<T> & b);
-
-  template<class T>
-    QuadraticNumber<T>
-    operator - (const QuadraticNumber<T> & x, const T & n);
-
-  template<class T>
-    QuadraticNumber<T>
-    operator - (const QuadraticNumber<T> & x, const QQ<T> & q);
-
-  template<class T>
-    QuadraticNumber<T>
-    operator * (const QuadraticNumber<T> & x, const QuadraticNumber<T> & y);
-
-  template<class T>
-    QuadraticNumber<T>
-    operator * (const QuadraticNumber<T> & x, const T & n);
-
-  template<class T>
-    QuadraticNumber<T>
-    operator * (const QuadraticNumber<T> & x, const QQ<T> & q);
-
-  template<class T>
-    QuadraticNumber<T>
-    operator / (const QuadraticNumber<T> & x, const QuadraticNumber<T> & y);
-
-  template<class T>
-    QuadraticNumber<T>
-    operator / (const QuadraticNumber<T> & x, const T & n);
-
-  template<class T>
-    QuadraticNumber<T>
-    operator / (const QuadraticNumber<T> & x, const QQ<T> & q);
-
-  template<class T>
-    std::istream &
-    operator>> (std::istream & in, QuadraticNumber<T> & x);
-
-  template<class T>
-    std::ostream &
-    operator<< (std::ostream & out, const QuadraticNumber<T> & x);
-
-
-
-  /**
-   * @brief element of an order in a quadratic number field or hyperelliptic function field
-   * @remarks A quadratic number is an element of an order in Q(rho) where rho is a root of an irreducible quadratic
-   * polynomial with coefficients of type T is represented as
-   *        (a + b \rho)/d
-   * where a,b,d \in T.
-   *
-   * Instances of QuadraticNumber are all normalized to satisfy the following properties:
-   *  - gcd(a,b,d) == 1.
-   *  - if T is a numerical type (i.e. the element belongs to an order in a quadratic number field), then
-   *    d is positive.
-   *  - If T is a polynomial type (i.e. the element belongs to an order in a hyperelliptic function field), then
-   *    - d is monic
-   *    - a is monic when deg(a) > deg(b)+g, and b is monic when deg(a) <= deg(b)+g
-   *    where g is the genus of the function field.
-   *
-   * A QuadraticNumber must be initialized with an existing QuadraticOrder, indicating which order it belongs to.
-   * This order is fixed throughout the lifetime of the instance.
-   *
-   * Currently, the following template parameters T are instantiated:
-   *    base types:
-   *       long --- order in quadratic number field (word sized D)
-   *    NTL:
-   *       ZZ --- order in a quadratic number field (arbitrary sized D)
-   *       ZZ_pX --- hyperelliptic function field over Fp (char <> 2)
-   *       ZZ_pEX --- hyperelliptic function field over Fq (char <> 2)
-   *       zz_pX --- hyperelliptic function field over Fp (char <> 2, p < 2^64)
-   *       zz_pEX --- hyperelliptic function field over Fq (char <> 2, p < 2^64)
-   *       GF2EX --- hyperelliptic function field (char = 2)
-   */
-  template<class T>
-    class QuadraticNumber
-    {
-    private:
-      QuadraticOrder<T> *QO; /**< order to which the QuadraticNumber belongs */
-      T a, b, d; /**< coefficients of the QuadraticNumber */
-
-      static T newA,newB,newD,temp;	// temporary variables for arithmetic operations
-
-      void
-      normalize ()
-      {
-	// remove common factors
-	T g = GCD(GCD(a,b),d);
-	if (!::IsOne(g)) {
-	    ::div(a,a,g);
-	    ::div(b,b,g);
-	    ::div(d,d,g);
-	}
-
-	// normalize leading coefficients
-	MakeMonic(d);
-	if (deg(a) > (deg(b) + QO->getGenus()))
-	  MakeMonic(a);
-	else
-	  MakeMonic(b);
-      }
-
-
-    public:
-      /**
-       * @brief Initializes a zero QuadraticNumber in the given QuadraticOrder
-       * @param[in] inQO the QuadraticOrder to which this instance belongs
-       */
-      QuadraticNumber (QuadraticOrder<T> & inQO)
-      {
-	QO = &inQO;
-	::clear (a);
-	::clear (b);
-	::set (d);
-      }
-
-      /**
-       * @brief Copy constructor
-       * @param[in] n the constant to copy
-       */
-      QuadraticNumber (QuadraticOrder<T> & inQO, T & n)
-      {
-	QO = &inQO;
-	a = n;
-	::clear(b);
-	::set(d);
-      }
-
-      /**
-       * @brief Copy constructor
-       * @param[in] q the rational number or function to copy
-       */
-      QuadraticNumber (QuadraticOrder<T> & inQO, QQ<T> & q)
-      {
-	QO = &inQO;
-	a = q.getNumerator();
-	::clear(b);
-	d = q.getDenominator();
-      }
-
-       /**
-       * @brief Copy constructor
-       * @param[in] x the QuadraticNumber to copy
-       */
-      QuadraticNumber (QuadraticNumber<T> & x)
-      {
-	QO = x.QO;
-	a = x.a;
-	b = x.b;
-	d = x.d;
-      }
-
-      ~QuadraticNumber ()
-      {
-      }
-
-
-
-      /**
-       * Accessor methods
-       */
-
-      const T &
-      get_a () const
-      {
-	return a;
-      }
-
-      const T &
-      get_b () const
-      {
-	return b;
-      }
-
-      const T &
-      get_d () const
-      {
-	return d;
-      }
-
-      QuadraticOrder<T> *
-      getQO () const
-      {
-	return QO;
-      }
-
-      /**
-       * @brief Computes the norm of this QuadraticNumber
-       * @return the norm as a QQ (rational number or function)
-       */
-      QQ<T> &
-      getNorm () const
-      {
-	QQ<T> q;
-
-	::sqr(newA,a);
-	::sqr(temp,b);
-	::mul(temp,temp,QO->getDiscriminant());
-	::sub(newA,newA,temp);
-
-	::sqr(newD,d);
-
-	q.assign(newA,newD);
-	return q;
-      }
-
-      /**
-       * @brief Computes the trace of this QuadraticNumber
-       * @return the trace as a QQ (rational number or function)
-       */
-      QQ<T> &
-      getTrace () const
-      {
-	QQ<T> q;
-
-	::add(newA,a,a);
-	q.assign(newA,d);
-	return q;
-      }
-
-
-      /**
-       *  Assignments and mutator methods.  Note that the QO value may not be changed.
-       **/
-
-      void
-      set_a (const T & inA)
-      {
-	a = inA;
-	normalize ();
-      }
-
-      void
-      set_b (const T & inB)
-      {
-	b = inB;
-	normalize ();
-      }
-
-      void
-      set_d (const T & inD)
-      {
-	d = inD;
-	normalize ();
-      }
-
-      /**
-       * @brief Sets z to zero
-       * @param[out] z QuadraticNumber to be set to zero
-       */
-      friend void
+template < class T >
+void
       clear (QuadraticNumber<T> & z)
       {
 	::clear (z.a);
@@ -444,11 +15,8 @@ namespace ANTL
 	::set (z.d);
       }
 
-      /**
-       * @brief Sets z to one
-       * @param[out] z QuadraticNumber to be set to one
-       */
-      friend void
+template < class T >
+void
       set (QuadraticNumber<T> & z)
       {
 	::set (z.a);
@@ -456,54 +24,8 @@ namespace ANTL
 	::set (z.d);
       }
 
-      /**
-       * @brief Sets this QuadraticNumber equal to x
-       * @param[in] x value to give the QuadraticNumber
-       * @pre this QuadraticNumber and x must belong to the same QuadraticOrder
-       */
-      void
-      assign (const QuadraticNumber<T> & x)
-      {
-	if (QO != x.QO)
-	  {
-	    // TODO:  THROW AN EXCEPTION!!!
-	  }
-	a = x.a;
-	b = x.b;
-	d = x.d;
-      }
-
-      /**
-       * @brief Sets this QuadraticNumber equal to n
-       * @param[in] n value to give the QuadraticNumber
-       */
-      void
-      assign (const T & n)
-      {
-	a = n;
-	::clear (b);
-	::set (d);
-      }
-
-      /**
-       * @brief Sets this QuadraticNumber equal to q
-       * @param[in] q value to give the QuadraticNumber
-       */
-      void
-      assign (const QQ<T> & q)
-      {
-	a = q.getNumerator ();
-	::clear (b);
-	d = q.getDenominator ();
-      }
-
-      /**
-       * @brief Sets the QuadraticNumber z equal to x
-       * @param[out] z result of assignment
-       * @param[in] x value to be assigned
-       * @pre z and x must belong to the same QuadraticOrder
-       */
-      friend void
+template < class T >
+void
       assign (QuadraticNumber<T> & z, const QuadraticNumber<T> & x)
       {
 	if (z.QO != x.QO)
@@ -516,299 +38,123 @@ namespace ANTL
 	z.d = x.d;
       }
 
-      /**
-       * @brief Assignment operator
-       * @param[in] x value to give the QuadraticNumber
-       */
-      const QuadraticNumber<T> &
-      operator= (const QuadraticNumber<T> & x)
-      {
-	this->assign (x);
-	return *this;
 
-      }
-
-
-
-      /**
-       * Comparison methods
-       **/
-
-      /**
-       * @brief Tests whether this QuadraticNumber is equal to zero
-       * @return True if the QuadraticNumber is zero
-       */
-      bool
-      isZero () const
-      {
-	return (::IsZero (a) && ::IsZero (b) && ::IsOne (d));
-      }
-      ;
-
-      /**
-       * @brief Tests whether this QuadraticNumber is equal to one
-       * @return True if the QuadraticNumber is one
-       */
-      bool
-      isOne () const
-      {
-	return (::IsOne (a) && ::IsZero (b) && ::IsOne (d));
-      }
-
-      /**
-       * @brief Tests whether x is equal to zero
-       * @param[in] x QuadraticNumber to test
-       * @return True if x is zero
-       */
-      friend bool
+template < class T >
+bool
       IsZero (const QuadraticNumber<T> & x)
       {
 	return (::IsZero (x.a) && ::IsZero (x.b) && ::IsOne (x.d));
       }
 
-      /**
-       * @brief Tests whether x is equal to one
-       * @param[in] x QuadraticNumber to test
-       * @return True if x is one
-       */
-      friend bool
+template < class T >
+bool
       IsOne (const QuadraticNumber<T> & x)
       {
 	return (::IsOne (x.a) && ::IsZero (x.b) && ::IsOne (x.d));
       }
 
-      /**
-       * @brief Determines whether this QuadraticNumber is integral (norm is an integer)
-       * @return true if this is integral
-       */
-      bool
-      isIntegral () const
-      {
-	return IsInteger(getNorm());
-      }
 
-      /**
-       * @brief Determines whether this QuadraticNumber is a unit
-       * @return true if this is a unit (norm = 1)
-       */
-      bool
-      isUnit () const
-      {
-	// Note that in the function field case, the normalization we have imposed implies that if this is
-	// a unit, then the norm will be equal to 1 (not just a constant)
-
-	return deg(getNorm()) == 0;
-      }
-
-      /**
-       * @brief Tests whether this QuadraticNumber is equal to y
-       * @param[in] y QuadraticNumber to compare
-       * @return True if the QuadraticNumber is equal to y
-       */
-      bool
-      isEqual (const QuadraticNumber<T> & x)
-      {
-	return (QO == x.QO && a == x.a && b = x.b && d = x.d);
-      }
-
-      /**
-       * @brief Tests whether this QuadraticNumber is equal to n
-       * @param[in] n constant to compare
-       * @return True if the QuadraticNumber is equal to n
-       */
-      bool
-      isEqual (const T & n)
-      {
-	return (a == n && IsZero (b) && IsOne (d));
-      }
-
-      /**
-       * @brief Tests whether this QuadraticNumber is equal to q
-       * @param[in] q rational number or function to compare
-       * @return True if the QuadraticNumber is equal to q
-       */
-      bool
-      isEqual (const QQ<T> & q)
-      {
-	return (a == q.getNumerator () && IsZero (b) && d == q.getDenominator ());
-      }
-
-      /**
-       * @brief Tests whether x is equal to y
-       * @param[in] x QuadraticNumber to compare
-       * @param[in] y QuadraticNumber to compare
-       * @return True if x is equal to y
-       */
-      friend bool
+template < class T >
+bool
       IsEqual (const QuadraticNumber<T> & x, const QuadraticNumber<T> & y)
       {
 	return (x.QO == y.QO && x.a == y.a && x.b = y.b && x.d = y.d);
       }
 
-      /**
-       * @brief Tests whether x is equal to x
-       * @param[in] x QuadraticNumber to compare
-       * @param[in] n constant to compare
-       * @return True if x is equal to n
-       */
-      friend bool
+template < class T >
+bool
       IsEqual (const QuadraticNumber<T> & x, const T & n)
       {
 	return (x.a == n && IsZero (x.b) && IsOne (x.d));
       }
 
-      /**
-       * @brief Tests whether x is equal to n
-       * @param[in] n constant to compare
-       * @param[in] x QuadraticNumber to compare
-       * @return True if x is equal to n
-       */
-      friend bool
+template < class T >
+bool
       IsEqual (const T & n, const QuadraticNumber<T> & x)
       {
 	return (x.a == n && IsZero (x.b) && IsOne (x.d));
       }
 
-      /**
-       * @brief Tests whether x is equal to q
-       * @param[in] x QuadraticNumber to compare
-       * @param[in] q rational number or function to compare
-       * @return True if x is equal to q
-       */
-      friend bool
+template < class T >
+bool
       IsEqual (const QuadraticNumber<T> & x, const QQ<T> & q)
       {
 	return (x.a == q.getNumerator () && IsZero (x.b) && x.d == q.getDenominator ());
       }
 
-      /**
-       * @brief Tests whether x is equal to q
-       * @param[in] q rational number or function to compare
-       * @param[in] x QuadraticNumber to compare
-       * @return True if x is equal to q
-       */
-      friend bool
+template < class T >
+bool
       IsEqual (const QQ<T> & q, const QuadraticNumber<T> & x)
       {
 	return (x.a == q.getNumerator () && IsZero (x.b) && x.d == q.getDenominator ());
       }
 
-      /**
-       * @brief Equality test operator
-       * @param[in] x QuadraticNumber to compare
-       * @param[in] y QuadraticNumber to compare
-       * @return True if x is equal to y
-       */
-      friend bool
+template < class T >
+bool
       operator == (const QuadraticNumber<T> & x,
-		      const QuadraticNumber<T> & y)
+		   const QuadraticNumber<T> & y)
       {
 	return (x.QO == y.QO && x.a == y.a && x.b = y.b && x.d = y.d);
       }
 
-      /**
-       * @brief Equality test operator
-       * @param[in] x QuadraticNumber to compare
-       * @param[in] n constant to compare
-       * @return True if x is equal to n
-       */
-      friend bool
+template < class T >
+bool
       operator == (const QuadraticNumber<T> & x, const T & n)
       {
 	return (x.a == n && IsZero (x.b) && IsOne (x.d));
       }
 
-      /**
-       * @brief Equality test operator
-       * @param[in] n constant to compare
-       * @param[in] x QuadraticNumber to compare
-       * @return True if x is equal to n
-       */
-      friend bool
+template < class T >
+bool
       operator == (const T & n, const QuadraticNumber<T> & x)
       {
 	return (x.a == n && IsZero (x.b) && IsOne (x.d));
       }
 
-      /**
-       * @brief Equality test operator
-       * @param[in] x QuadraticNumber to compare
-       * @param[in] q rational number or function to compare
-       * @return True if x is equal to q
-       */
-      friend bool
+template < class T >
+bool
       operator == (const QuadraticNumber<T> & x, const QQ<T> & q)
       {
 	return (x.a == q.getNumerator () && IsZero (x.b) && x.d == q.getDenominator ());
       }
 
-      /**
-       * @brief Equality test operator
-       * @param[in] q rational number or function to compare
-       * @param[in] x QuadraticNumber to compare
-       * @return True if x is equal to q
-       */
-      friend bool
+template < class T >
+bool
       operator == (const QQ<T> & q, const QuadraticNumber<T> & x)
       {
 	return (x.a == q.getNumerator () && IsZero (x.b) && x.d == q.getDenominator ());
       }
 
-      /**
-       * @brief Inequality test operator
-       * @param[in] x QuadraticNumber to compare
-       * @param[in] y QuadraticNumber to compare
-       * @return True if x is not equal to y
-       */
-      friend bool
+template < class T >
+bool
       operator != (const QuadraticNumber<T> & x, const QuadraticNumber<T> & y)
       {
 	return !(x == y);
       }
 
-      /**
-       * @brief Inequality test operator
-       * @param[in] x QuadraticNumber to compare
-       * @param[in] n constant to compare
-       * @return True if x is not equal to n
-       */
-      friend bool
+template < class T >
+bool
       operator != (const QuadraticNumber<T> & x, const T & n)
       {
 	return !(x == n);
       }
 
-      /**
-       * @brief Inequality test operator
-       * @param[in] n constant to compare
-       * @param[in] x QuadraticNumber to compare
-       * @return True if x is not equal to n
-       */
-      friend bool
+template < class T >
+bool
       operator != (const T & n, const QuadraticNumber<T> & x)
       {
 	return !(x == n);
       }
 
-      /**
-       * @brief Inequality test operator
-       * @param[in] x QuadraticNumber to compare
-       * @param[in] q rational number or function to compare
-       * @return True if x is not equal to q
-       */
-      friend bool
+template < class T >
+bool
       operator != (const QuadraticNumber<T> & x, const QQ<T> & q)
       {
 	return !(x == q);
       }
 
-      /**
-       * @brief Inequality test operator
-       * @param[in] q rational number or function to compare
-       * @param[in] x QuadraticNumber to compare
-       * @return True if x is not equal to q
-       */
-      friend bool
+template < class T >
+bool
       operator != (const QQ<T> & q, const QuadraticNumber<T> & x)
       {
 	return !(x == q);
@@ -816,52 +162,7 @@ namespace ANTL
 
 
 
-      /**
-       * Arithmetic operations
-       **/
-
-      /**
-       * @brief Negates the QuadraticNumber
-       */
-      void
-      negate ()
-      {
-	a = -a;
-	b = -b;
-	normalize();
-      }
-
-      /**
-       * @brief Inverts the QuadraticNumber
-       */
-      void
-      invert ()
-      {
-	// ((a + b rho) / d)^-1 = (ad - bd rho) / (a^2 - b^2 Delta)
-	::mul(newA,a,d);
-
-	::mul(newB,b,d);
-
-	::sqr(newD,a);
-	::sqr(temp,b);
-	::mul(temp,temp,QO->getDiscriminant());
-	::sub(newD,newD,temp);
-
-	a = newA;
-	b = -newB;
-	d = newD;
-
-	normalize ();
-      }
-
-
-
-      /**
-       * @brief Sets the QuadraticNumber z equal to the conjugate of x
-       * @param[out] z conjugate of x
-       * @param[in] x value to be conjugated
-       * @pre z and x must belong to the same QuadraticOrder
-       */
+template < class 
       friend void
       conjugate (QuadraticNumber<T> & z, const QuadraticNumber<T> & x)
       {
@@ -1557,7 +858,7 @@ namespace ANTL
        **/
 
       friend std::istream &
-      operator>> (std::istream & in, QuadraticNumber<T> & x)
+      operator>><T> (std::istream & in, QuadraticNumber<T> & x)
       {
 	    char c;
 
@@ -1619,7 +920,7 @@ namespace ANTL
       }
 
       friend std::ostream &
-      operator<< (std::ostream & out, const QuadraticNumber<T> & x)
+      operator<<<T> (std::ostream & out, const QuadraticNumber<T> & x)
       {
 	    out << "(" << x.a << "," << x.b << "," << x.d << ", " << x.QO->getDiscriminant() << ")";
 	    return out;
@@ -1656,9 +957,14 @@ namespace ANTL
     QQ<GF2EX> &
     QuadraticNumber<GF2EX>::getTrace () const;
 
-} // ANTL
+  template<>
+    bool
+    QuadraticNumber<ZZ>::isUnit () const;
 
-// Unspecialized template definitions.
-//#include "../src/Quadratic/QuadraticNumber_impl.hpp"
+  template<>
+    bool
+    QuadraticNumber<long>::isUnit () const;
+
+} // ANTL
 
 #endif // ANTL_QUADRATIC_NUMBER_H

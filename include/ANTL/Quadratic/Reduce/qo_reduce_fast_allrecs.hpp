@@ -9,8 +9,8 @@
 #ifndef QO_REDUCE_FAST_ALLRECS_H
 #define QO_REDUCE_FAST_ALLRECS_H
 
-#include <Quadratic/QuadraticIdealBase.hpp>
-#include <Quadratic/Reduce/qo_reduce.hpp>
+#include <ANTL/Quadratic/QuadraticIdealBase.hpp>
+#include <ANTL/Quadratic/Reduce/qo_reduce.hpp>
 
 NTL_CLIENT
 

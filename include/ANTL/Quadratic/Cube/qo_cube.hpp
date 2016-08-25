@@ -14,9 +14,9 @@
 #include <NTL/lzz_pEX.h>
 #include <NTL/ZZ.h>
 
-#include <Quadratic/QuadraticIdealBase.hpp>
-#include <XGCD/xgcd.hpp>
-#include <Arithmetic/mul_exact.hpp>
+#include <ANTL/Quadratic/QuadraticIdealBase.hpp>
+#include <ANTL/XGCD/xgcd.hpp>
+#include <ANTL/Arithmetic/mul_exact.hpp>
 
 #define CUBE_CANTOR 0
 #define CUBE_NUCOMP 1

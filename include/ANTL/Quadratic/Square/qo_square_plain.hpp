@@ -7,8 +7,8 @@
 #ifndef QO_SQUARE_PLAIN_H
 #define QO_SQUARE_PLAIN_H
 
-#include <Quadratic/QuadraticIdealBase.hpp>
-#include <Quadratic/Square/qo_square.hpp>
+#include <ANTL/Quadratic/QuadraticIdealBase.hpp>
+#include <ANTL/Quadratic/Square/qo_square.hpp>
 
 NTL_CLIENT
 

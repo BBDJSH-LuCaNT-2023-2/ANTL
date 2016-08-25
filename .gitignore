@@ -70,3 +70,10 @@ Makefile.in
 /.project
 /.settings/
 
+
+
+#
+# Emancs backup files
+#
+
+*~

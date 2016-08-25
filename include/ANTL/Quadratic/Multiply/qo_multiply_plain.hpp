@@ -7,8 +7,8 @@
 #ifndef QO_MULTIPLY_PLAIN_H
 #define QO_MULTIPLY_PLAIN_H
 
-#include <Quadratic/QuadraticIdealBase.hpp>
-#include <Quadratic/Multiply/qo_multiply.hpp>
+#include <ANTL/Quadratic/QuadraticIdealBase.hpp>
+#include <ANTL/Quadratic/Multiply/qo_multiply.hpp>
 
 NTL_CLIENT
 

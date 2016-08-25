@@ -9,8 +9,8 @@
 #ifndef QO_NUCUBE_H
 #define QO_NUCUBE_H
 
-#include <Quadratic/QuadraticIdealBase.hpp>
-#include <Quadratic/Cube/qo_cube.hpp>
+#include <ANTL/Quadratic/QuadraticIdealBase.hpp>
+#include <ANTL/Quadratic/Cube/qo_cube.hpp>
 
 NTL_CLIENT
 
@@ -39,7 +39,7 @@ protected:
   //
   // nucube
   //
-  void cube(qo<T> & C, const QuadraticIdealBase<T> & A);
+  void cube(QuadraticIdealBase<T> & C, const QuadraticIdealBase<T> & A);
 };
 
 

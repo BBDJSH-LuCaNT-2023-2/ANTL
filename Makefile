@@ -43,11 +43,11 @@ DIRS := appl/Tests/Exponentiation
 DIRS += appl/Tests/Arithmetic
 DIRS += src
 DIRS += src/Arithmetic
-#DIRS += src/Quadratic
-#DIRS += src/Quadratic/Cube
-#DIRS += src/Quadratic/Multiply
-#DIRS += src/Quadratic/Reduce
-#DIRS += src/Quadratic/Square
+DIRS += src/Quadratic
+DIRS += src/Quadratic/Cube
+DIRS += src/Quadratic/Multiply
+DIRS += src/Quadratic/Reduce
+DIRS += src/Quadratic/Square
 DIRS += src/XGCD
 
 ##

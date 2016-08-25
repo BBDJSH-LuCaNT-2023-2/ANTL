@@ -9,8 +9,8 @@
 #ifndef QO_NUDUPL_H
 #define QO_NUDUPL_H
 
-#include <Quadratic/QuadraticIdealBase.hpp>
-#include <Quadratic/Square/qo_square.hpp>
+#include <ANTL/Quadratic/QuadraticIdealBase.hpp>
+#include <ANTL/Quadratic/Square/qo_square.hpp>
 
 NTL_CLIENT
 
