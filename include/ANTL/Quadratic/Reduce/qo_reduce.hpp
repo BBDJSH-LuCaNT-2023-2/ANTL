@@ -46,7 +46,7 @@ public:
   //
   // Initialize field invariants
   //
-  void init(T Din, T hin, long gin=0) {
+  void init(const T & Din, const T & hin, long gin=0) {
     if (is_init) {
       Delta.kill();
       hx.kill();

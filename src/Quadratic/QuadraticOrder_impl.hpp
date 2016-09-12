@@ -173,20 +173,18 @@ namespace ANTL
   }
 
 
-
   /*
   //
-  // randomize_imag
+  // randomImaginaryOrder
   //
   // Task:
   //      generates a random imaginary order
   //
 
-  template < class T > void
-  QuadraticOrder < T >::randomize_imag (long size, bool prime)
+  template < class T >
+  QuadraticOrder<T> & randomImaginaryOrder (long size, bool prime)
   {
     // select a random discriminant with given genus
-
     T disc;
 
     do
@@ -195,20 +193,22 @@ namespace ANTL
 	MakeMonic (disc);
       }
     while (deg (disc) != (2 * size + 1) || !DetIrredTest (disc));
-    assign (disc);
+
+    return new QuadraticOrder<T>(disc);
   }
 
 
 
   //
-  // randomize_unusual
+  // randomUnusualOrder
   //
   // Task:
   //      generates a random imaginary order
   //
 
-  template < class T > void
-  QuadraticOrder <T>::randomize_unusual (long size, bool prime)
+  template < class T >
+  QuadraticOrder<T> &
+  randomUnusualOrder (long size, bool prime)
   {
     // select a random discriminant with given genus
 
@@ -220,21 +220,22 @@ namespace ANTL
 	MakeMonic (disc);
       }
     while (deg (disc) != (2 * size + 2) || test_Dcoeff(disc));
-    assign (disc);
+
+    return new QuadraticOrder<T>(disc);
   }
 
 
 
   //
-  // randomize_real
+  // randomRealOrder
   //
   // Task:
   //      generates a random real order
   //
 
-  template < class T > void
-  QuadraticOrder <
-    T >::randomize_real (long size, bool prime)
+  template < class T >
+  QuadraticOrder<T> &
+  randomRealOrder (long size, bool prime)
   {
     // select a random discriminant with given genus
 
@@ -246,12 +247,14 @@ namespace ANTL
 	MakeMonic (disc);
       }
     while (deg (disc) != (2 * size + 2) || !DetIrredTest (disc));
-    assign (disc);
+
+    return new QuadraticOrder<T>(disc);
   }
+*/
 
 
 
-
+  /*
   //
   // QuadraticOrder<T>::use_Lfunction_tables(H)
   //

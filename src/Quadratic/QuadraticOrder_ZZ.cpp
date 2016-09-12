@@ -17,7 +17,6 @@ namespace ANTL
 
     if (m4 == 0 || m4 == 1) {
       ZZ rD = SqrRoot (abs (D));
-      if (D > 0) {
         if (rD * rD != abs (D)) {
           // assign new values
           Delta = D;
@@ -34,7 +33,6 @@ namespace ANTL
           Lfunc.init(Delta,QUADRATIC_MODE);
 	  */
 	}
-      }
     }
   }
 
@@ -81,22 +79,21 @@ namespace ANTL
   }
 
 
-
   /*
   //
-  // randomize_imag
+  // randomImaginaryOrder
   //
   // Task:
   //      generates a random imaginary order
   //
 
   template <>
-  void QuadraticOrder < ZZ >::randomize_imag (long size, bool prime)
+  QuadraticOrder<ZZ> & randomImaginaryOrder (long size, bool prime)
   {
     // select a random discriminant with given genus
 
     long m4 = RandomWord () % 2;
-    ZZ disc, p;
+    ZZ disc, rD, p;
 
     do
       {
@@ -118,40 +115,44 @@ namespace ANTL
 	else
 	  disc = RandomLen_ZZ (size);
 	disc = -abs (disc);
+  
+        rD = SqrRoot (abs (disc));
       }
-    while (!assign (disc));
+    while (rD * rD == abs (disc));
+
+    return new QuadraticOrder<ZZ>(disc);
   }
 
 
 
   //
-  // randomize_unusual
+  // randomUnusualOrder
   //
   // Task:
   //      generates a random real order
   //
 
   template <>
-  void QuadraticOrder < ZZ >::randomize_unusual (long size, bool prime)
+  QuadraticOrder<ZZ> & randomUnusualOrder (long size, bool prime)
   {
   }
 
 
 
   //
-  // randomize_real
+  // randomRealOrder
   //
   // Task:
   //      generates a random real order
   //
 
   template <>
-  void QuadraticOrder < ZZ >::randomize_real (long size, bool prime)
+  QuadraticOrder<ZZ> & randomRealOrder (long size, bool prime)
   {
     // select a random discriminant with given genus
 
     long m4 = RandomWord () % 2;
-    ZZ disc,p;
+    ZZ disc,rd,p;
 
     do
       {
@@ -173,13 +174,18 @@ namespace ANTL
 	else
 	  disc = RandomLen_ZZ (size);
 	disc = abs (disc);
-      }
-    while (!assign (disc));
+
+        rD = SqrRoot (disc);
+      } 
+    while (rD * rD == disc);
+
+    return new QuadraticOrder<ZZ>(disc);
   }
+*/
 
 
 
-
+  /*
   //
   // QuadraticOrder<ZZ>::use_Lfunction_tables(H)
   //

@@ -31,7 +31,7 @@ protected:
  public:
   ~qo_reduce_fast() {};
 
-  void init(T Din, T hin, long gin=0) {
+  void init(const T & Din, const T & hin, long gin=0) {
     qo_reduce<T>::init(Din,hin,gin);
   };
 
@@ -43,8 +43,12 @@ protected:
 // Declare specialized methods
 //
 
-template <> void qo_reduce_fast<ZZ>::init(ZZ Din, ZZ hin, long gin);
+template <> void qo_reduce_fast<ZZ>::init(const ZZ & Din, const ZZ & hin, long gin);
 template <> void qo_reduce_fast<ZZ>::reduce(QuadraticIdealBase<ZZ> & A);
+
+template <> void qo_reduce_fast<long>::init(const long & Din, const long & hin, long gin);
+template <> void qo_reduce_fast<long>::reduce(QuadraticIdealBase<long> & A);
+
 template <> void qo_reduce_fast<GF2EX>::reduce(QuadraticIdealBase<GF2EX> & A);
 
 

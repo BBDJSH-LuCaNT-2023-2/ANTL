@@ -13,5 +13,7 @@
 # Register sources with the root makefile.
 ANTL_SRC += src/Quadratic/Cube/qo_cube_plain_GF2EX.cpp
 ANTL_SRC += src/Quadratic/Cube/qo_cube_plain_ZZ.cpp
+ANTL_SRC += src/Quadratic/Cube/qo_cube_plain_long.cpp
 ANTL_SRC += src/Quadratic/Cube/qo_nucube_GF2EX.cpp
 ANTL_SRC += src/Quadratic/Cube/qo_nucube_ZZ.cpp
+ANTL_SRC += src/Quadratic/Cube/qo_nucube_long.cpp

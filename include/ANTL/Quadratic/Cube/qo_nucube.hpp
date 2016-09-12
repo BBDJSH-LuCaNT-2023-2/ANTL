@@ -32,7 +32,7 @@ protected:
  public:
   ~qo_nucube() { };
 
-  void init(T Din, T hin, long gin=0) {
+  void init(const T & Din, const T & hin, long gin=0) {
     qo_cube<T>::init(Din,hin,gin);
   };
 
@@ -47,8 +47,12 @@ protected:
 // Declare specialized methods
 //
 
-template <> void qo_nucube<ZZ>::init(ZZ Din, ZZ hin, long gin);
+template <> void qo_nucube<ZZ>::init(const ZZ & Din, const ZZ & hin, long gin);
 template <> void qo_nucube<ZZ>::cube(QuadraticIdealBase<ZZ> & C, const QuadraticIdealBase<ZZ> & A);
+
+template <> void qo_nucube<long>::init(const long & Din, const long & hin, long gin);
+template <> void qo_nucube<long>::cube(QuadraticIdealBase<long> & C, const QuadraticIdealBase<long> & A);
+
 template <> void qo_nucube<GF2EX>::cube(QuadraticIdealBase<GF2EX> & C, const QuadraticIdealBase<GF2EX> & A);
 
 

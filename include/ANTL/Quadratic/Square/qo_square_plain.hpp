@@ -38,6 +38,7 @@ template < class T > class qo_square_plain : public qo_square<T>
 //
 
 template <> void qo_square_plain<ZZ>::square(QuadraticIdealBase<ZZ> & C, const QuadraticIdealBase<ZZ> & A);
+template <> void qo_square_plain<long>::square(QuadraticIdealBase<long> & C, const QuadraticIdealBase<long> & A);
 template <> void qo_square_plain<GF2EX>::square(QuadraticIdealBase<GF2EX> & C, const QuadraticIdealBase<GF2EX> & A);
 
 

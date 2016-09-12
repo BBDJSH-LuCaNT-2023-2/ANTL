@@ -10,10 +10,10 @@
 
 template <>
 void 
-qo_nucube<ZZ>::init(ZZ Din, ZZ hin, long gin)
+qo_nucube<ZZ>::init(const ZZ & Din, const ZZ & hin, long gin)
 {
   qo_cube<ZZ>::init(Din,hin,0);
-  SQRT_DELTA = FloorToZZ(sqrt(abs(to_RR(Delta))));
+  SQRT_DELTA = FloorToZZ(sqrt(abs(to_RR(Din))));
 }
 
 

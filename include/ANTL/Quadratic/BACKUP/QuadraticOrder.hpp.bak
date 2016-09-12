@@ -9,13 +9,14 @@
 
 #include <vector>
 #include <NTL/ZZ.h>
+#include <NTL/RR.h>
+//#include <mpfi.h>
 
 // arithmetic classes
 //#include <ANTL/Quadratic/QuadraticIdealBase.hpp>
 
 #include <ANTL/Quadratic/Reduce/qo_reduce.hpp>
-#include <ANTL/Quadratic/Reduce/qo_reduce_plain_imag.hpp>
-#include <ANTL/Quadratic/Reduce/qo_reduce_plain_real.hpp>
+#include <ANTL/Quadratic/Reduce/qo_reduce_plain.hpp>
 //#include <ANTL/Quadratic/Reduce/qo_reduce_fast.hpp>
 
 #include <ANTL/Quadratic/Multiply/qo_multiply.hpp>
@@ -51,16 +52,14 @@ namespace ANTL {
 
   template < class T > class QuadraticOrder;
 
-  /*
   template < class T >
-  QuadraticOrder<T> & randomImaginaryOrder(int size, bool prime);
+  QuadraticOrder<T> randomImaginaryOrder(int size, bool prime = false);
 
   template < class T >
-  QuadraticOrder<T> & randomUnusualOrder(int size, bool prime);
+  QuadraticOrder<T> randomUnusualOrder(int size, bool prime = false);
 
   template < class T >
-  QuadraticOrder<T> & randomRealOrder(int size, bool prime);
-  */
+  QuadraticOrder<T> randomRealOrder(int size, bool prime = false);
 
   template < class T >
   bool operator == (const QuadraticOrder < T > &QO1, const QuadraticOrder < T > &QO2);
@@ -128,7 +127,7 @@ namespace ANTL {
     // reduction
     qo_reduce<T> *red_best;
     qo_reduce_plain<T> red_plain;
-    qo_reduce_fast<T> red_fast;
+    //    qo_reduce_fast<T> red_fast;
 
     // multiplication
     qo_multiply<T> *mul_best;
@@ -206,11 +205,10 @@ namespace ANTL {
     // random order
     //
 
-    /*
-    friend QuadraticOrder<T> & randomImaginaryOrder(long size, bool prime);
-    friend QuadraticOrder<T> & randomUnusualOrder(long size, bool prime);
-    friend QuadraticOrder<T> & randomRealOrder(long size, bool prime);
-    */
+    friend QuadraticOrder<T> randomImaginaryOrder<T> (long size, bool prime = false);
+    friend QuadraticOrder<T> randomUnusualOrder<T> (long size, bool prime = false);
+    friend QuadraticOrder<T> randomRealOrder<T> (long size, bool prime = false);
+
 
 
     //
@@ -415,6 +413,30 @@ namespace ANTL {
   };
 
 
+  /*
+#define LIST_SIZE_QUADRATIC  10000000
+#define INT_SIZE_QUADRATIC    5000005
+  */
+
+  /**
+   * @brief compute a list of imaginary quadratic discriminants with
+   * L <= |D| <=H
+   */
+
+  /*
+  void get_Dlist_imag(const ZZ & L, const ZZ & H, vector<ZZ> & Dlist, int init=0);
+  void get_Dlist_imag(const long & L, const long & H, vector<long> & Dlist, int init=0);
+  */
+
+  /**
+   * @brief compute a list of real quadratic discriminants with
+   * L <= D <=H
+   */
+  /*
+  void get_Dlist_real(const ZZ & L, const ZZ & H, vector<ZZ> & Dlist, int init=0);
+  void get_Dlist_real(const long & L, const long & H, vector<long> & Dlist, int init=0);
+  */
+
 
   /*
   template <> bool QuadraticOrder<GF2EX,ZZ,ZZ,RR>::assign (const GF2EX & newf);
@@ -501,24 +523,17 @@ class QuadraticOrder<long> : public QuadraticOrder<long, long, double, double> {
 */  
 
 
+  /*
   template <> bool QuadraticOrder<GF2EX>::IsEqual (const QuadraticOrder<GF2EX> &QO) const;
   template <> bool QuadraticOrder<GF2EX>::IsImaginary () const;
   template <> bool QuadraticOrder<GF2EX>::IsReal () const;
-  //  template <> QuadraticOrder<GF2EX> & randomImaginaryOrder<GF2EX> (long size, bool prime);
-  //  template <> QuadraticOrder<GF2EX> & randomUnusualOrder<GF2EX> (long size, bool prime);
-  //  template <> QuadraticOrder<GF2EX> & randomRealOrder<GF2EX> (long size, bool prime);
-
-  template <> bool QuadraticOrder<ZZ>::IsImaginary () const;
-  template <> bool QuadraticOrder<ZZ>::IsReal () const;
-  //  template <> QuadraticOrder<ZZ> & randomImaginaryOrder<ZZ> (long size, bool prime);
-  //  template <> QuadraticOrder<ZZ> & randomUnusualOrder<ZZ> (long size, bool prime);
-  //  template <> QuadraticOrder<ZZ> & randomRealOrder<ZZ> (long size, bool prime);
 
   template <> bool QuadraticOrder<long>::IsImaginary () const;
   template <> bool QuadraticOrder<long>::IsReal () const;
-  //  template <> QuadraticOrder<long> & randomImaginaryOrder<long> (long size, bool prime);
-  //  template <> QuadraticOrder<long> & randomUnusualOrder<long> (long size, bool prime);
-  //  template <> QuadraticOrder<long> & randomRealOrder<long> (long size, bool prime);
+
+  template <> bool QuadraticOrder<ZZ>::IsImaginary () const;
+  template <> bool QuadraticOrder<ZZ>::IsReal () const;
+  */
 
 } // ANTL
 

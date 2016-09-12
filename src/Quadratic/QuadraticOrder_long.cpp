@@ -14,7 +14,6 @@ namespace ANTL
     long m4 = D & 3;
     if (m4 == 0 || m4 == 1) {
       long rD = SqrRoot (labs (D));
-      if (D > 0) {
         if (rD * rD != labs (D)) {
           // assign new values
           Delta = D;
@@ -32,7 +31,6 @@ namespace ANTL
 	  Lfunc.init(Delta,QUADRATIC_MODE);
 	  */
 	}
-      }
     }
   }
 
@@ -81,22 +79,20 @@ namespace ANTL
 
 
 
-
   /*
   //
-  // randomize_imag
+  // randomImaginaryOrder
   //
   // Task:
   //      generates a random imaginary order
   //
 
   template <>
-  void QuadraticOrder<long> randomImaginaryOrder (long size, bool prime)
+  QuadraticOrder<long> & randomImaginaryOrder (long size, bool prime)
   {
     // select a random discriminant with given genus
-
     long m4 = RandomWord () & 1;
-    long disc;
+    long disc,rD;
     ZZ zdisc;
 
     do
@@ -113,39 +109,43 @@ namespace ANTL
 	else
 	  zdisc = RandomLen_ZZ (size);
 	conv (disc, -abs (zdisc));
+
+        rD = SqrRoot (labs (disc));
       }
-    while (!assign (disc));
+    while (rD * rD == labs (disc));
+
+    return new QuadraticOrder<long>(disc);
   }
 
 
   //
-  // randomize_unusual
+  // randomUnusualOrder
   //
   // Task:
   //      generates a random real order
   //
 
   template <>
-  void QuadraticOrder<long> randomUnusualOrder (long size, bool prime)
+  QuadraticOrder<long> & randomUnusualOrder (long size, bool prime)
   {
   }
 
 
 
   //
-  // randomize_real
+  // randomRealOrder
   //
   // Task:
   //      generates a random real order
   //
 
   template <>
-  void QuadraticOrder<long> randomRealOrder (long size, bool prime)
+  QuadraticOrder<long> & randomRealOrder (long size, bool prime)
   {
     // select a random discriminant with given genus
 
     long m4 = RandomWord () & 1;
-    long disc;
+    long disc,rD;
     ZZ zdisc;
 
     do
@@ -162,8 +162,12 @@ namespace ANTL
 	else
 	  zdisc = RandomLen_ZZ (size);
 	conv (disc, abs (zdisc));
+
+        rD = SqrRoot (labs (disc));
       }
-    while (!assign (disc));
+    while (rD * rD == labs (disc));
+
+    return new QuadraticOrder<long>(disc);
   }
   */
 

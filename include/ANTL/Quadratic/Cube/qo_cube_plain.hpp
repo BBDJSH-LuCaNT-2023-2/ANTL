@@ -38,6 +38,7 @@ template < class T > class qo_cube_plain : public qo_cube<T>
 //
 
 template <> void qo_cube_plain<ZZ>::cube(QuadraticIdealBase<ZZ> & C, const QuadraticIdealBase<ZZ> & A);
+template <> void qo_cube_plain<long>::cube(QuadraticIdealBase<long> & C, const QuadraticIdealBase<long> & A);
 template <> void qo_cube_plain<GF2EX>::cube(QuadraticIdealBase<GF2EX> & C, const QuadraticIdealBase<GF2EX> & A);
 
 

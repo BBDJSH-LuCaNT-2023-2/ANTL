@@ -10,7 +10,7 @@
 
 template <>
 void 
-qo_nudupl<ZZ>::init(ZZ Din, ZZ hin, long gin)
+qo_nudupl<ZZ>::init(const ZZ & Din, const ZZ & hin, long gin)
 {
   qo_square<ZZ>::init(Din,hin,0);
   NC_BOUND = FloorToZZ(sqrt(sqrt(abs(to_RR(Delta)))));

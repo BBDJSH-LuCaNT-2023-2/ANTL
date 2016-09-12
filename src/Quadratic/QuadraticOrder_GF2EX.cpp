@@ -129,14 +129,14 @@ namespace ANTL
 
   /*
   //
-  // randomize_imag
+  // randomImaginaryOrder
   //
   // Task:
   //      generates a random imaginary order
   //
 
   template <>
-  void QuadraticOrder < GF2EX >::randomize_imag (long size, bool prime)
+    QuadraticOrder<GF2EX> & randomImaginaryOrder (long size, bool prime)
   {
     // select a random discriminant with given genus
 
@@ -157,20 +157,21 @@ namespace ANTL
 	MakeMonic (newh);
       }
     while (deg (newh) < 1 || !DetIrredTest (newh));
-    assign (disc, newh);
+
+    return new QuadraticOrder<GF2EX>(disc,newh);
   }
 
 
 
   //
-  // randomize_real
+  // randomUnusualOrder
   //
   // Task:
   //      generates a random real order
   //
 
   template <>
-  void QuadraticOrder < GF2EX >::randomize_unusual (long size, bool prime)
+    QuadraticOrder<GF2EX> & randomUnusualOrderual (long size, bool prime)
   {
     // select a random discriminant with given genus
 
@@ -194,21 +195,21 @@ namespace ANTL
       }
     while (!SqrRoot (RD, newh, disc) || test_Dcoeff(disc,newh));
 
-    assign (disc, newh);
+    return new QuadraticOrder<GF2EX>(disc,newh);
   }
 
 
 
   //
   //
-  // randomize_real
+  // randomRealOrder
   //
   // Task:
   //      generates a random real order
   //
 
   template <>
-  void QuadraticOrder < GF2EX >::randomize_real (long size, bool prime)
+    QuadraticOrder<GF2EX> & randomRealOrder (long size, bool prime)
   {
     // select a random discriminant with given genus
 
@@ -232,10 +233,13 @@ namespace ANTL
       }
     while (!SqrRoot (RD, newh, disc));
 
-    assign (disc, newh);
+    return new QuadraticOrder<GF2EX>(disc,newh);
   }
+*/
 
 
+
+/*
   //
   // QuadraticOrder<GF2EX>::use_Lfunction_tables(H)
   //

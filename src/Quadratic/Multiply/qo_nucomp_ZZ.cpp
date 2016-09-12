@@ -10,7 +10,7 @@
 
 template <>
 void 
-qo_nucomp<ZZ>::init(ZZ Din, ZZ hin, long gin)
+qo_nucomp<ZZ>::init(const ZZ & Din, const ZZ & hin, long gin)
 {
   qo_multiply<ZZ>::init(Din,hin,0);
   NC_BOUND = FloorToZZ(sqrt(sqrt(abs(to_RR(Delta)))));

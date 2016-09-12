@@ -10,7 +10,7 @@
 
 template <>
 void 
-qo_reduce_fast<ZZ>::init(ZZ Din, ZZ hin, long gin)
+qo_reduce_fast<ZZ>::init(const ZZ & Din, const ZZ & hin, long gin)
 {
   qo_reduce<ZZ>::init(Din,hin,0);
   SQRT_DELTA = FloorToZZ(sqrt(abs(to_RR(Delta))));

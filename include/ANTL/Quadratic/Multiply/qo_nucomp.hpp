@@ -31,7 +31,7 @@ protected:
  public:
   ~qo_nucomp() { };
 
-  void init(T Din, T hin, long gin=0) {
+  void init(const T & Din, const T & hin, long gin=0) {
     qo_multiply<T>::init(Din,hin,gin);
   };
 
@@ -50,8 +50,12 @@ protected:
 // Declare specialized methods
 //
 
-template <> void qo_nucomp<ZZ>::init(ZZ Din, ZZ hin, long gin);
+template <> void qo_nucomp<ZZ>::init(const ZZ & Din, const ZZ & hin, long gin);
 template <> void qo_nucomp<ZZ>::multiply(QuadraticIdealBase<ZZ> & C, const QuadraticIdealBase<ZZ> & A, const QuadraticIdealBase<ZZ> & B);
+
+template <> void qo_nucomp<long>::init(const long & Din, const long & hin, long gin);
+template <> void qo_nucomp<long>::multiply(QuadraticIdealBase<long> & C, const QuadraticIdealBase<long> & A, const QuadraticIdealBase<long> & B);
+
 template <> void qo_nucomp<GF2EX>::multiply(QuadraticIdealBase<GF2EX> & C, const QuadraticIdealBase<GF2EX> & A, const QuadraticIdealBase<GF2EX> & B);
 
 

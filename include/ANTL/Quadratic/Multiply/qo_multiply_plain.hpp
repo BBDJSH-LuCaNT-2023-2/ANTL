@@ -39,6 +39,8 @@ template < class T > class qo_multiply_plain : public qo_multiply<T>
 
 template <> void qo_multiply_plain<ZZ>::multiply(QuadraticIdealBase<ZZ> & C, const QuadraticIdealBase<ZZ> & A, const QuadraticIdealBase<ZZ> & B);
 
+template <> void qo_multiply_plain<long>::multiply(QuadraticIdealBase<long> & C, const QuadraticIdealBase<long> & A, const QuadraticIdealBase<long> & B);
+
 template <> void qo_multiply_plain<GF2EX>::multiply(QuadraticIdealBase<GF2EX> & C, const QuadraticIdealBase<GF2EX> & A, const QuadraticIdealBase<GF2EX> & B);
 
 
