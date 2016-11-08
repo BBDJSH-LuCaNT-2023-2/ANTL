@@ -13,7 +13,7 @@
 
 template < class T > 
 void 
-qo_reduce_plain<T>::reduce(QuadraticIdealBase<T> & A)
+qo_reduce_plain_real<T>::reduce(QuadraticIdealBase<T> & A)
 {
   T a, b, c, na, nb, q, r, a2, temp;
 

@@ -31,11 +31,13 @@ template < class T > class qo_cube_mulsqr : public qo_cube<T>
   //
   // cubing via square and multiply
   //
-  void cube(QuadraticIdealBase<T> & C, const QuadraticIdealBase<T> & A) {
-    QuadraticIdealBase<T> CC(*A.get_QO());
-    sqr(CC,A);
-    mul(C,CC,A);
-  };
+  void cube(QuadraticIdealBase<T> & C, const QuadraticIdealBase<T> & A); //{
+//    QuadraticIdealBase<T> CC(*A.get_QO());
+//    sqr(CC,A);
+//    mul(C,CC,A);
+//  };
 };
+
+#include <../src/Quadratic/Cube/qo_cube_mulsqr_impl.hpp>
 
 #endif // guard

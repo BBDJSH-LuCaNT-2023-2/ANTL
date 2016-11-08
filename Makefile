@@ -41,6 +41,7 @@ MFLAGS += -DMPICH_IGNORE_CXX_SEEK -DPARALLEL #MPI Stuff
 # 
 DIRS := appl/Tests/Exponentiation
 DIRS += appl/Tests/Arithmetic
+DIRS += appl/Tests/Quadratic
 DIRS += src
 DIRS += src/Arithmetic
 DIRS += src/Quadratic

@@ -15,13 +15,13 @@ namespace ANTL
   //
 
   template <> 
-  QuadraticOrder<GF2EX>(const GF2EX & newf)
+  QuadraticOrder<GF2EX>::QuadraticOrder(const GF2EX & newf)
   {
   }
 
 
   template <>
-  QuadraticOrder<GF2EX>(const GF2EX & newf, const GF2EX & newh)
+  QuadraticOrder<GF2EX>::QuadraticOrder(const GF2EX & newf, const GF2EX & newh)
   {
     // degree must be >= 3
     if (deg (newf) >= 3) {
@@ -59,7 +59,7 @@ namespace ANTL
        return false;
       */
   }
-
+  }
 
 
   //

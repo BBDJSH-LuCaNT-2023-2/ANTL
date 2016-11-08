@@ -8,7 +8,7 @@
 namespace ANTL
 {
   template <>
-  QuadraticOrder<ZZ>(const ZZ & D)
+  QuadraticOrder<ZZ>::QuadraticOrder(const ZZ & D)
   {
     // test whether D is a valid discriminant
     long m4 = rem(D,4);

@@ -127,7 +127,7 @@ namespace ANTL {
 
     // reduction
     qo_reduce<T> *red_best;
-    qo_reduce_plain<T> red_plain;
+    //qo_reduce_plain<T> red_plain;     //Note that qo_reduce_plain is not a class, but there are separate classes for real and imag  -RL
     qo_reduce_fast<T> red_fast;
 
     // multiplication
@@ -405,10 +405,10 @@ namespace ANTL {
     // input/output
     //
 
-    /*
+    
     void read_from_file (std::istream & in);
     void write_to_file (std::ostream & out) const;
-    */
+    
 
     friend std::istream & operator >> <T> (std::istream & in, QuadraticOrder < T > &QO);
     friend std::ostream & operator << <T> (std::ostream & out, const QuadraticOrder < T > &QO);
