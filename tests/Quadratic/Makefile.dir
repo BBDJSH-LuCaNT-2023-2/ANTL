@@ -1,0 +1,12 @@
+#
+# File:  appl/Quadratic/Makefile.dir
+# Author: Reginald Lybbert (2016-09-16)
+# Version: $Id$
+#
+# This is only a partial makefile, included by the root makefile.
+# It contains build rules only for files in this directory.
+# All paths must be relative to the location of the root makefile.
+#
+
+# Register sources with the root makefile.
+APPL_SRC += appl/Tests/Quadratic/QuadraticOrder_ZZ_Tests.cpp
