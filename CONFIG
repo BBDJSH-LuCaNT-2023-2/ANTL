@@ -9,10 +9,10 @@
 #   - NOSEED: uses fixed seed for RNG (reproduceable results)
 #
 
-SOFTWARE_INC=
-SOFTWARE_LIB=
-#SOFTWARE_INC=-I/usr/local/include
-#SOFTWARE_LIB=-L/usr/local/include
+#SOFTWARE_INC=
+#SOFTWARE_LIB=
+SOFTWARE_INC=-I/usr/local/include
+SOFTWARE_LIB=-L/usr/local/lib
 #SOFTWARE_INC=	-I$(HOME)/Software/include
 #SOFTWARE_LIB=	-L$(HOME)/Software/lib
 

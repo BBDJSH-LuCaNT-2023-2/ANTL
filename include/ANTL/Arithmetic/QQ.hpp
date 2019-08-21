@@ -1,14 +1,14 @@
 /**
  * @file QQ.hpp
  * @author Jonathan Hammell / Michael Jacobson
- * @brief template rational number class.  The numerator and denominator are always 
+ * @brief template rational number class.  The numerator and denominator are always
  * stored in lowest terms.
  */
 
 #ifndef ANTL_QQ_H
 #define ANTL_QQ_H
 
-#include <ANTL/common.hpp>
+#include "../common.hpp"
 
 namespace ANTL
 {
@@ -1173,9 +1173,9 @@ namespace ANTL
 
   // Partial specializations
   template<>
-    void
+    inline void
     QQ<long>::normalize (){
-    
+
        long g = GCD(this->a, this->d);
        if(g > 1){
            this->a /= g;
@@ -1188,7 +1188,7 @@ namespace ANTL
     };
 
   template<>
-    void
+    inline void
     QQ<ZZ>::normalize (){
 
        ZZ g = GCD(this->a, this->d);
@@ -1206,4 +1206,3 @@ namespace ANTL
 } // ANTL
 
 #endif // ANTL_QQ_H
-

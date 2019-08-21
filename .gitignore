@@ -69,7 +69,12 @@ Makefile.in
 /.externalToolBuilders/
 /.project
 /.settings/
-
+html*
+latex*
+../../.gitignore
+../../CONFIG
+../../Makefile
+progress-log
 
 
 #

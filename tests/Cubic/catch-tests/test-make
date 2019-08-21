@@ -1,0 +1,10 @@
+main: testingMain.o cnf-test
+
+cnf-test: cnf-test.cpp testingMain.o ../catch.hpp ../../../include/ANTL/Cubic/GeneralTemplateFunctions.hpp
+	g++ -o 010-TestCase -I/c/include testingMain.o cnf-test.cpp -L/c/lib -lntl -lgmp -lm
+
+#voronoiTest: testingMain.o testVoronoi.cpp catch.hpp voronoi/primaryHeader.h voronoi/routines.o voronoi/voronoiBasis.o
+#	g++ -Wall -o 020-TestCase -I/c/include testVoronoi.cpp testingMain.o voronoi/routines.o voronoi/voronoiBasis.o -L/c/lib -lntl -lgmp -lm
+
+testingMain.o: testingMain.cpp
+	g++ -Wall -c testingMain.cpp -L/c/lib -lntl -lgmp -lm -lpthread
