@@ -5,6 +5,22 @@
 template<typename Type, typename PType>
 class MultiplyStrategyWilliams : public IdealMultiplicationStrategy<Type, PType> {
 
+public:
+
+void multiply(CubicIdeal<Type> &C, const CubicIdeal<Type> &A, const CubicIdeal<Type> &B){
+  std::cout <<"Williams multiply" << std::endl;
+}
+
+
+
+protected:
+
+
+
+
+
+private:
+
 Type AMatrix1;
 Type AMatrix2;
 
@@ -15,6 +31,8 @@ genSet: Type[3][9];   //This is unavoidable since C_3 is the gcd(c_1, ... c_9)
 
 // at this point I think it is possible to determine the product basis without
 // introducing any further variables.
+
+
 
 
 }

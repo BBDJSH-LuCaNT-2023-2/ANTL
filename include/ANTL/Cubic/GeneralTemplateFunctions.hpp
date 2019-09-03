@@ -2,8 +2,9 @@
 #define GENERAL_TEMPLATE_FUNCTIONS_HPP
 
 #include <boost/math/tools/polynomial.hpp>
+#include "../Arithmetic/QQ.hpp"
 
-
+using namespace ANTL;
 using boost::math::tools::polynomial;
 
 
@@ -11,6 +12,7 @@ using boost::math::tools::polynomial;
 const double eps=1e-14;
 const double PI = 3.141592653589793;
 const	double TwoPi = 6.28318530717958648;
+const double DOUBLE_TOL = 0.0000001;
 
 template<typename PP>
 static PP _root3 ( PP x );
@@ -80,25 +82,25 @@ int SolveP3(PP* x,PP a,PP b,PP c){
   	PP A;
     PP B;
   	if (r2 <= (q3 + eps)) {//<<-- FIXED!
-  		PP t=r/sqrt(q3);
+  		PP t=r/ANTL::sqrt(q3);
   		if( t<-1) t=-1;
   		if( t> 1) t= 1;
           t=acos(t);
-          a/=3; q=-2*sqrt(q);
+          a/=3; q=-2*ANTL::sqrt(q);
           x[0]=q*cos(t/3)-a;
           x[1]=q*cos((t+TwoPi)/3)-a;
           x[2]=q*cos((t-TwoPi)/3)-a;
           return(3);
       } else {
           //A =-pow(fabs(r)+sqrt(r2-q3),1./3);
-          A =-root3<PP>(fabs(r)+sqrt(r2-q3));
+          A =-root3<PP>(fabs(r)+ANTL::sqrt(r2-q3));
   		if( r<0 ) A=-A;
   		B = (A==0? 0 : q/A);
 
   		a/=3;
   		x[0] =(A+B)-a;
           x[1] =-0.5*(A+B)-a;
-          x[2] = 0.5*sqrt(3.)*(A-B);
+          x[2] = 0.5*ANTL::sqrt(3.0)*(A-B);
   		if(fabs(x[2])<eps) { x[2]=x[1]; return(2); }
           return(1);
       }

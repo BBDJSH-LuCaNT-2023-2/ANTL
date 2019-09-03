@@ -2,7 +2,7 @@
 #define ANTL_IDEAL_MULTIPLICATION_STRATEGY_HPP
 
 // strategy class for ideal multiplications
-
+//#include "../CubicIdeal.hpp"
 
 template<typename Type, typename PType>
 class IdealMultiplicationStrategy {
@@ -12,10 +12,11 @@ public:
 
     // this method should do some checking to ensure that the ideals are in the same order
 
-    //this will be a virtual function which is instantiated in subclasses
-    // different subclasses shall implement distinct methods
 
-//virtual void multiply(CubicIdeal<Type> &C, const CubicIdeal<Type> &A, const CubicIdeal<Type> &B) = 0;
+
+//this will be a virtual function which is instantiated in subclasses
+// different subclasses shall implement distinct methods
+//virtual void multiply(CubicIdeal<Type,PType> &C, const CubicIdeal<Type,PType> &A, const CubicIdeal<Type,PType> &B) = 0;
 
 
 

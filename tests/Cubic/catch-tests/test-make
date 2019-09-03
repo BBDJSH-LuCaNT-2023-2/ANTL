@@ -1,7 +1,11 @@
-main: testingMain.o cnf-test
+main: testingMain.o test-cnf test-element
 
-cnf-test: cnf-test.cpp testingMain.o ../catch.hpp ../../../include/ANTL/Cubic/GeneralTemplateFunctions.hpp
-	g++ -o 010-TestCase -I/c/include testingMain.o cnf-test.cpp -L/c/lib -lntl -lgmp -lm
+test-cnf: test-cnf.cpp testingMain.o ../catch.hpp ../../../include/ANTL/Cubic/GeneralTemplateFunctions.hpp
+	g++ -o 010-TestCase -I/c/include testingMain.o test-cnf.cpp -L/usr/local/lib -lntl -lgmp -lm -lpthread
+
+test-element: ../catch.hpp test-element.cpp testingMain.o
+	g++ -o 020-TestCase -I/c/include testingMain.o test-element.cpp -L/usr/local/lib -lntl -lgmp -lm -lpthread
+
 
 #voronoiTest: testingMain.o testVoronoi.cpp catch.hpp voronoi/primaryHeader.h voronoi/routines.o voronoi/voronoiBasis.o
 #	g++ -Wall -o 020-TestCase -I/c/include testVoronoi.cpp testingMain.o voronoi/routines.o voronoi/voronoiBasis.o -L/c/lib -lntl -lgmp -lm

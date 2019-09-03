@@ -1,10 +1,9 @@
 #ifndef ANTL_CUBIC_ELEMENTNF_H
 #define ANTL_CUBIC_ELEMENTNF_H
 
-#include "CubicOrder.hpp"
 #include "CubicOrderNF.hpp"
 #include "CubicElement.hpp"
-#include <boost/multiprecision/gmp.hpp>
+
 
 //forward declaration
 //template<typename Type, typename PType>
@@ -12,7 +11,8 @@
 #include "../Arithmetic/QQ.hpp"
 using namespace ANTL;
 
-
+template<typename Type, typename PType>
+class CubicOrderNF;
 
 template <typename Type, typename PType>
 class CubicElementNF : public CubicElement<Type, PType>{
@@ -26,8 +26,8 @@ public:
 * @param _coefficients Values of the representation of the elemnent in terms of an integral basis
 * @param denominator  Common denominator of the coefficients
 */
-CubicElementNF(const CubicOrderNF<Type, PType> * cnfo, const Type _coefficients[3], const Type & denom);
-
+CubicElementNF(const CubicOrderNF<Type, PType> * cnfo, const Type _coefficients[3], const Type & _denom);
+CubicElementNF(const CubicOrderNF<Type, PType> * cnfo, const Type U, const Type X, const Type Y, const Type & _denom);
 //void norm(ANTL::QQ<Type> & newVal);
 void trace(ANTL::QQ<Type> & newVal);
 void inverse(CubicElementNF<Type,PType> & newVal){};
@@ -37,42 +37,6 @@ void inverse(CubicElementNF<Type,PType> & newVal){};
 */
 bool is_zero() const;
 
-/**
-* @brief Checks if this CubicElement is equal to B
-* @ param[in] B a CubicElementNF
-*/
-bool is_equal(const CubicElementNF <Type, PType> & B);
-
-
-/**
-* @brief Sets this CubicElementNF equal to C
-* Note that there is a friend version too
-* @pre this CubicElementNF and C must be in the same CubicOrder
-*/
-void assign(const CubicElementNF<Type,PType> & C);
-//
-
-/**
- * @brief Sets this CubicElementNF equal to n
- * @param[in] n value to give the CubicElementNF
- */
-void assign(const Type & n){
-  this->u = n;
-  ::clear(this->x);
-  ::clear(this->y);
-  ::set(this->denom);
-}
-
-/**
- * @brief Sets this CubicElementNF equal to r
- * @param[in] r value to give the CubicElementNF
- */
-void assign(const QQ<Type> & r){
-  this->u = r.getNumerator();
-  ::clear(this->x);
-  ::clear(this->y);
-  this->denom = r.getDenominator();
-}
 
 
 
@@ -84,7 +48,7 @@ protected:
 * @brief Should put the coefficients and denominator of this CubicElementNF into
 * lowest terms. Note that this is called normalize() in the quadratic library, consider changing it.
 */
-void reduce();
+void normalize();
 
 private:
 
@@ -116,6 +80,26 @@ friend void assign (CubicElement <T,PT> & A, const CubicElement <T,PT> & B);
 */
 template <typename T, typename PT>
 friend void mul (CubicElementNF <T,PT> & A, const CubicElementNF <T,PT> & B, const CubicElementNF <T,PT> & C);
+
+/**
+* @brief Compute product of B and alpha (an integer constant)
+* @param[out] A = B * alpha
+* @param[in] B first term
+* @param[in] alpha second term (constant)
+* @pre A, B should belong to the same CubicOrder
+*/
+template <typename T, typename PT>
+friend void mul (CubicElementNF <T,PT> & A, const CubicElementNF <T,PT> & B, const T & alpha);
+
+/**
+* @brief Compute product of B and alpha (rational number)
+* @param[out] A = B * alpha
+* @param[in] B first term
+* @param[in] alpha second term (rational number)
+* @pre A, B should belong to the same CubicOrder
+*/
+template <typename T, typename PT>
+friend void mul (CubicElementNF <T,PT> & A, const CubicElementNF <T,PT> & B, const QQ<T> & alpha);
 
 
 /**
@@ -156,7 +140,7 @@ friend void add (CubicElementNF <T,PT> & A, const CubicElementNF <T,PT> & B, con
 * @pre A, B, C should belong to the same CubicOrder
 */
 template <typename T, typename PT>
-friend void sub (CubicElement <T,PT> & A, const CubicElement <T,PT> & B, const CubicElement <T,PT>& C);
+friend void sub (CubicElementNF <T,PT> & A, const CubicElementNF <T,PT> & B, const CubicElementNF <T,PT>& C);
 
 /**
 * @brief Compute difference of B and alpha (an integer  constant)
@@ -166,7 +150,7 @@ friend void sub (CubicElement <T,PT> & A, const CubicElement <T,PT> & B, const C
 * @pre A, B should belong to the same CubicOrder
 */
 template <typename T, typename PT>
-friend void sub (CubicElement <T,PT> & A, const CubicElement <T,PT> & B, const T & alpha);
+friend void sub (CubicElementNF <T,PT> & A, const CubicElementNF <T,PT> & B, const T & alpha);
 
 /**
 * @brief Compute difference of B and alpha (rational number)
@@ -176,7 +160,7 @@ friend void sub (CubicElement <T,PT> & A, const CubicElement <T,PT> & B, const T
 * @pre A, B should belong to the same CubicOrder
 */
 template <typename T, typename PT>
-friend void sub (CubicElement <T,PT> & A, const CubicElement <T,PT> & B, const QQ<T> & alpha);
+friend void sub (CubicElementNF <T,PT> & A, const CubicElementNF <T,PT> & B, const QQ<T> & alpha);
 
 
 /* We can't divide in the ring of integers, but I want to be able to invert field elements?
@@ -203,6 +187,8 @@ friend void sqr (CubicElement <T,PT> & A, const CubicElement <T,PT> & B);
 */
 template <typename T, typename PT>
 friend void cube (CubicElement <T,PT> & A, const CubicElement <T,PT> & B);
+
+
 };// close class def
 
 

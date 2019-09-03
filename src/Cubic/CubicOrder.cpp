@@ -8,6 +8,7 @@
 template <typename Type, typename PType>
 CubicOrder<Type, PType> :: CubicOrder(polynomial<Type> const &poly) {
     defining_IBCF = poly;
+    //mul_method = mulstrat;
 
 
 

@@ -14,6 +14,7 @@
 #include "GeneralTemplateFunctions.hpp"
 #include "CubicOrder.hpp"
 #include <boost/math/tools/polynomial.hpp>
+#include <boost/multiprecision/gmp.hpp>
 #include "../common.hpp"
 
 
@@ -27,7 +28,7 @@ class GlobalCubicField {
 
 public:
 
-  //accessor functions (functional)
+  //****************** accessor functions (functional) ***********************//
 
   /** Returns the basis */
   Type get_discriminant(){return discriminant;}
@@ -37,8 +38,9 @@ public:
   * where K is the field, and P is the definingPolynomial
   */
   long get_equation_order(){return equationOrder;}
-  CubicOrder<Type, PType>* get_maximal_order(){return maximalOrder;}
   polynomial<Type>* get_defining_polynomial(){return &definingPolynomial;}
+  CubicOrder<Type, PType>* get_maximal_order(){return maximalOrder;}
+
 
 
   // constructors

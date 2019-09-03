@@ -29,7 +29,7 @@ using std::endl;
 NTL_CLIENT
 
 int main(){
-  //testing boost qvm
+
   boost::qvm::mat<mpf_float_100,3,3> Matty = {{1,2,3,4,5,6,7,8,9}};
   boost::qvm::mat<double,3,3> Matilda = {{0,0,1,0,1,0,1,0,0}};
   boost::qvm::inverse(Matilda);
@@ -65,17 +65,25 @@ int main(){
   const CubicOrderNF<long, double> * odie_point = &Odie;
   long a = 0;
   //cout << ANTL::mul(a, 4L,5L) << endl;
-  long ellie_coeffs[3] = {1,3,2};
+  long ellie_coeffs[3] = {3,6,9};
   long elias_coeffs[3] = {1,0,0};
   long elmira_coeffs[3] = {3,3,3};
-  CubicElementNF<long, double> Ellie( odie_point,  ellie_coeffs, 1);
+  CubicElementNF<long, double> Ellie( odie_point,  ellie_coeffs, 3);
   CubicElementNF<long, double> Elias( odie_point,  elias_coeffs, 1);
   CubicElementNF<long, double> Elmira( odie_point,  elmira_coeffs, 1);
+  cout << "Ellie reduced:" << Ellie.get_u() << " " << Ellie.get_x() << " " << Ellie.get_y() << endl;
   mul(Ellie, Elias, Elmira);
   cout << "Ellie Values:" << Ellie.get_u() << " " << Ellie.get_x() << " " << Ellie.get_y() << endl;
   Ellie.trace(rholder);
   cout << "Ellie trace: "<< rholder.getNumerator()<< endl; add(Ellie, Elias, 100L);
   Ellie.assign(Elias);
+
+  cout << "see below" << endl;
+  assign(Elmira, Ellie);
+  std::cout << (Elmira.get_order()->is_equal( (*Ellie.get_order()) ) ) << std::endl;
+  cout << "see above" << endl;
+  cout << "Elmira Values:" << Elmira.get_u() << " " << Elmira.get_x() << " " << Elmira.get_y() << endl;
+
   std::complex<double> z1 = (1.0l, 1.0);
   std::complex<NTL::RR> z2 = (RR(1.0), RR(1.0));
   cout << dedekindEta(z1, 0) << endl;

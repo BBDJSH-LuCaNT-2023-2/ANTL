@@ -1,10 +1,7 @@
 #ifndef ANTL_REAL_CUBIC_NUMBER_FIELD_H
 #define ANTL_REAL_CUBIC_NUMBER_FIELD_H
 
-#include <NTL/ZZX.h>
-#include "GlobalCubicField.hpp"
 #include "CubicNumberField.hpp"
-#include "GeneralTemplateFunctions.hpp"
 
 
 template <typename Type, typename PType>
@@ -23,7 +20,12 @@ public:
 protected:
   void set_roots();
 
-  virtual void set_integral_basis();  // override
+  /**
+  * @brief Function which computes the canonical integral basis {1, a*rho1, a*rho^2 +b}
+  * @pre The assumption is that the definingPolynomial has equation order 1,
+  * otherwise we get the integral basis for some sub-order.
+  */
+  void set_integral_basis();  // override
 private:
 
   PType roots[3];

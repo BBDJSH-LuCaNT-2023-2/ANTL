@@ -2,7 +2,6 @@
 #define ANTL_REAL_CUBIC_NUMBER_FIELD_CPP
 
 
-#include <NTL/ZZX.h>
 #include "../../include/ANTL/Cubic/RealCubicNumberField.hpp"
 
 
@@ -22,6 +21,7 @@ RealCubicNumberField<Type, PType> :: RealCubicNumberField( polynomial<Type> cons
       throw std::exception();
     }
     set_roots();
+    set_integral_basis();
 
 }
 
@@ -38,7 +38,7 @@ void RealCubicNumberField<Type, PType> ::  set_roots(){
   PType c1 = this->definingPolynomial[0]/this->definingPolynomial[3];
 
   int root_type = SolveP3<PType>(this->roots, a1,b1,c1);
-  if (abs(roots[0])-1.0 <= 0){
+  if (ANTL::abs(roots[0])-PType(1.0) <= PType(0)){
     roots_swap_position(this->roots[0], this->roots[1]);
   }
 };

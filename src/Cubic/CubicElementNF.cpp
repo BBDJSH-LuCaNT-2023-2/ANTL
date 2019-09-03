@@ -2,6 +2,7 @@
 #define ANTL_CUBIC_ELEMENTNF_CPP
 
 #include "../../include/ANTL/Cubic/CubicElementNF.hpp"
+#include "../../include/ANTL/common.hpp"
 
 
 template class CubicElementNF<long, double>;
@@ -12,10 +13,15 @@ Type CubicElementNF<Type, PType>::temp2;
 
 
 template <typename Type, typename PType>
-CubicElementNF<Type, PType> :: CubicElementNF(const CubicOrderNF<Type, PType> * cnfo, const Type _coefficients[3], const Type & denom)
-  : CubicElement<Type,PType>::CubicElement(cnfo, _coefficients, denom){
+CubicElementNF<Type, PType> :: CubicElementNF(const CubicOrderNF<Type, PType> * cnfo, const Type _coefficients[3], const Type & _denom)
+  : CubicElement<Type,PType>::CubicElement(cnfo, _coefficients, _denom){
 
-    reduce();
+    //normalize();
+  }
+template <typename Type, typename PType>
+CubicElementNF<Type, PType> :: CubicElementNF(const CubicOrderNF<Type, PType> * cnfo, const Type U, const Type X, const Type Y, const Type & _denom)
+  : CubicElement<Type,PType>::CubicElement(cnfo, U,X,Y, _denom){
+    //normalize();
   }
 
 /*
@@ -106,20 +112,8 @@ bool CubicElementNF<Type, PType> :: is_zero() const {
   return (this->u ==Type(0)) && (this->x ==Type(0)) && (this->y == Type(0));
 }
 
-template <typename Type, typename PType>
-bool CubicElementNF<Type, PType> :: is_equal(const CubicElementNF <Type, PType> & B){
-  return ( ( (this->my_order)->is_equal(*B.my_order) ) && (this->u == B.u) && (this->x == B.x) && (this->y == B.y)&& (this->denom == B.denom));
-}
 
 
-template <typename Type, typename PType>
-void CubicElementNF<Type, PType> :: assign(const CubicElementNF<Type,PType> & C){
-  this->u = C.u;
-  this->x = C.x;
-  this->y = C.y;
-  this->denom = C.denom;
-
-}
 
 
 
@@ -129,14 +123,15 @@ void CubicElementNF<Type, PType> :: assign(const CubicElementNF<Type,PType> & C)
 
 template <typename T, typename PT>
 void assign (CubicElement <T,PT> & A, const CubicElement <T,PT> & B){
-  if (!(A.my_order.is_equal(B.my_order)) ){
+
+  if (!(A.get_order()->is_equal( (*B.get_order()) ) ) ){
     std::cout << "Orders are not equal, throw exception" << std::endl;
   }
   else{
-    A.u = B.u;
-    A.x = B.x;
-    A.y = B.y;
-    A.denom = B.denom;
+    A.get_u() = B.get_u();
+    A.get_x() = B.get_x();
+    A.get_y() = B.get_y();
+    A.get_denom() = B.get_denom();
   }
 }
 /****** Operations *******/
@@ -151,7 +146,7 @@ void add (CubicElementNF <T,PT> & A, const CubicElementNF <T,PT> & B, const Cubi
   //                                                    B.denom * C.denom
   //
 
-  if (!( B.my_order->is_equal( *(C.my_order) ) ) ){
+  if (!( B.my_order->is_equal( *(C.my_order) ) ) || !( B.my_order->is_equal( *(A.my_order) ) ) ){
     std::cout << "element orders are not the same. Throw exception" << std::endl;
   }
 
@@ -166,21 +161,27 @@ void add (CubicElementNF <T,PT> & A, const CubicElementNF <T,PT> & B, const Cubi
     mul(CubicElement<T,PT>::temp, C.u, B.denom);
     add(A.u, A.u, CubicElement<T,PT>::temp);
 
-    mul(A.x, B.x, C.denom); // u1*d2
+    mul(A.x, B.x, C.denom); // x1*d2
     mul(CubicElement<T,PT>::temp, C.x, B.denom);
     add(A.x, A.x, CubicElement<T,PT>::temp);
 
-    mul(A.y, B.y, C.denom); // u1*d2
+    mul(A.y, B.y, C.denom); // y1*d2
     mul(CubicElement<T,PT>::temp, C.y, B.denom);
     add(A.y, A.y, CubicElement<T,PT>::temp);
 
-    A.reduce();
+    mul(A.denom, B.denom, C.denom); // A.denom = d1*d2
+    A.normalize();
   }
 }
 
 /* Add a constant integer to the Cubic Number A */
 template <typename T, typename PT>
 void add (CubicElementNF <T,PT> & A, const CubicElementNF <T,PT> & B, const T & alpha){
+
+  // exception catch
+  if (!(A.get_order()->is_equal( (*B.get_order()) ) ) ){
+    std::cout << "order mismatch, throw exception" << std::endl;
+  }
 
   if (B.is_zero()){
     A.u = alpha;
@@ -198,13 +199,13 @@ void add (CubicElementNF <T,PT> & A, const CubicElementNF <T,PT> & B, const T & 
     A.x = B.x;
     A.y = B.y;
     A.denom = B.denom;
-    A.reduce();
+    A.normalize();
   }
 }
 
 template <typename T, typename PT>
 void add (CubicElementNF <T,PT> & A, const CubicElementNF <T,PT> & B, const QQ<T> & alpha){
-  if (!A.my_order.is_equal(B.my_order)){
+  if (!(A.get_order()->is_equal( (*B.get_order()) ) ) ){
     std::cout << "order mismatch, throw exception" << std::endl;
   }
 
@@ -215,9 +216,11 @@ void add (CubicElementNF <T,PT> & A, const CubicElementNF <T,PT> & B, const QQ<T
     A.assign(B);
   }
   else{
+    // (u + xrho1 + yrho2)/d + q/r
+    // (ur + qd + rx*rho1 + ry*rho2)/dr
     mul(CubicElement<T,PT>::newU, B.u, alpha.getDenominator());
     mul(CubicElement<T,PT>::temp, alpha.getNumerator(), B.denom);
-    add(CubicElement<T,PT>::newU, CubicElement<T,PT>::newA, CubicElement<T,PT>::temp);
+    add(CubicElement<T,PT>::newU, CubicElement<T,PT>::newU, CubicElement<T,PT>::temp);
 
     mul(CubicElement<T,PT>::newX, B.x, alpha.getDenominator());
     mul(CubicElement<T,PT>::newY, B.y, alpha.getDenominator());
@@ -228,7 +231,7 @@ void add (CubicElementNF <T,PT> & A, const CubicElementNF <T,PT> & B, const QQ<T
     A.y = CubicElement<T,PT>::newY;
     A.denom = CubicElement<T,PT>::temp;
 
-    A.reduce();
+    A.normalize();
 
   }
 }
@@ -239,7 +242,7 @@ template <typename T, typename PT>
 void mul (CubicElementNF <T,PT> & A, const CubicElementNF <T,PT> & B, const CubicElementNF <T,PT> & C){
 
 
-  // COmpute Y
+  // COmpute U
   mul(CubicElement<T,PT>::newU, C.x,B.y);                                                           // x_2* y_1
   mul(CubicElement<T,PT>::temp, C.y, B.x);                                                          // x_1* y_2
   add(CubicElement<T,PT>::newU, CubicElement<T,PT>::newU, CubicElementNF<T, PT>::temp);             // x_2* y_1 + x_1* y_2
@@ -250,8 +253,8 @@ void mul (CubicElementNF <T,PT> & A, const CubicElementNF <T,PT> & B, const Cubi
   add(CubicElement<T,PT>::newU, CubicElement<T,PT>::newU, CubicElement<T,PT>::temp);                // u1*u2 - ad*(x2*y_1 + x_1*y_2)
 
   mul(CubicElement<T,PT>::temp, C.y, B.y);                                                          // y1*y2
-  mul(CubicElement<T,PT>::temp, CubicElement<T,PT>::temp, (A.my_order)->defining_IBCF[3]);          // d*y1*y2
-  mul(CubicElement<T,PT>::temp, CubicElement<T,PT>::temp, (A.my_order)->defining_IBCF[1]);          // b*d*y1*y2
+  mul(CubicElement<T,PT>::temp, CubicElement<T,PT>::temp, (A.my_order)->defining_IBCF[0]);          // d*y1*y2
+  mul(CubicElement<T,PT>::temp, CubicElement<T,PT>::temp, (A.my_order)->defining_IBCF[2]);          // b*d*y1*y2
 
   sub(CubicElement<T,PT>::newU, CubicElement<T,PT>::newU, CubicElement<T,PT>::temp);                // u1*u2 - ad*(x2*y_1 + x_1*y_2) - b*d*y1*y2
   //mul(temp, temp, );
@@ -260,33 +263,33 @@ void mul (CubicElementNF <T,PT> & A, const CubicElementNF <T,PT> & B, const Cubi
   mul(CubicElement<T,PT>::newX, B.x,C.y);                                                           // x1*y2
   mul(CubicElement<T,PT>::temp, C.x,B.y);                                                           // x2*y1
   add(CubicElement<T,PT>::newX, CubicElement<T,PT>::newX,CubicElement<T,PT>::temp);                 // x1*y2 + x2*y1
-  mul(CubicElement<T,PT>::newX, CubicElement<T,PT>::newX, -(A.my_order)->defining_IBCF[2]);         // -c*(x1*y2 + x2*y1)
+  mul(CubicElement<T,PT>::newX, CubicElement<T,PT>::newX, -(A.my_order)->defining_IBCF[1]);         // -c*(x1*y2 + x2*y1)
 
   mul(CubicElement<T,PT>::temp, B.u, C.x);                                                          // u1*x2
   add(CubicElement<T,PT>::newX, CubicElement<T,PT>::newX, CubicElement<T,PT>::temp);                // u1*x2 -c*(x1*y2 + x2*y1)
 
   mul(CubicElement<T,PT>::temp, B.x, C.u);                                                          // u2*x1
-  add(CubicElement<T,PT>::newX, CubicElement<T,PT>::newU, CubicElement<T,PT>::temp);                // u1*x2 + u2*x1 -c*(x1*y2 + x2*y1)
+  add(CubicElement<T,PT>::newX, CubicElement<T,PT>::newX, CubicElement<T,PT>::temp);                // u1*x2 + u2*x1 -c*(x1*y2 + x2*y1)
 
   mul(CubicElement<T,PT>::temp, C.x, B.x);                                                          // x1*x2
-  mul(CubicElement<T,PT>::temp, CubicElement<T,PT>::temp, (A.my_order)->defining_IBCF[1]);          // b*x1*x2
+  mul(CubicElement<T,PT>::temp, CubicElement<T,PT>::temp, (A.my_order)->defining_IBCF[2]);          // b*x1*x2
   sub(CubicElement<T,PT>::newX, CubicElement<T,PT>::newX, CubicElement<T,PT>::temp);                // u1*x2 + u2*x1 -b*x1*x2 - c*(x1*y2 + x2*y1)
 
   mul(CubicElement<T,PT>::temp, C.y, B.y);                                                          // y1*y2
-  mul(CubicElement<T,PT>::temp, CubicElement<T,PT>::temp, (A.my_order)->defining_IBCF[3]);          // d*y1*y2
+  mul(CubicElement<T,PT>::temp, CubicElement<T,PT>::temp, (A.my_order)->defining_IBCF[0]);          // d*y1*y2
   sub(CubicElement<T,PT>::newX, CubicElement<T,PT>::newX, CubicElement<T,PT>::temp);                // u1*x2 + u2*x1 -b*x1*x2 - c*(x1*y2 + x2*y1) - d*y1*y2
 
-  // Compute X
+  // Compute Y
   mul(CubicElement<T,PT>::newY, B.u,C.y);                                                           // u1*y2
   mul(CubicElement<T,PT>::temp, C.u,B.y);                                                           // u2*y1
   add(CubicElement<T,PT>::newY, CubicElement<T,PT>::newY,CubicElement<T,PT>::temp);                 // u1*y2 + u2*y1
 
   mul(CubicElement<T,PT>::temp, C.x, B.x);                                                          // x1*x2
-  mul(CubicElement<T,PT>::temp, CubicElement<T,PT>::temp, (A.my_order)->defining_IBCF[0]);          // a*x1*x2
+  mul(CubicElement<T,PT>::temp, CubicElement<T,PT>::temp, (A.my_order)->defining_IBCF[3]);          // a*x1*x2
   add(CubicElement<T,PT>::newY, CubicElement<T,PT>::newY, CubicElement<T,PT>::temp);                // u1*y2 + u2*y1 + a*x1*x2
 
   mul(CubicElement<T,PT>::temp, C.y, B.y);                                                          // y1*y2
-  mul(CubicElement<T,PT>::temp, CubicElement<T,PT>::temp, (A.my_order)->defining_IBCF[2]);          // c*y1*y2
+  mul(CubicElement<T,PT>::temp, CubicElement<T,PT>::temp, (A.my_order)->defining_IBCF[1]);          // c*y1*y2
   sub(CubicElement<T,PT>::newY, CubicElement<T,PT>::newY, CubicElement<T,PT>::temp);                // u1*y2 + u2*y1 + a*x1*x2 - c*y1*y2
 
 
@@ -296,16 +299,69 @@ void mul (CubicElementNF <T,PT> & A, const CubicElementNF <T,PT> & B, const Cubi
   A.x = CubicElement<T,PT>::newX;
   A.y = CubicElement<T,PT>::newY;
 
-  A.reduce();
+  A.normalize();
 
 }
 
-template <typename T, typename PT>
-void sub (CubicElement <T,PT> & A, const CubicElement <T,PT> & B, const CubicElement <T,PT> & C){
-  if (!( (B.get_order())->is_equal( *(C.get_order())))){
-    std::cout << "element orders are not the same. Throw exception" << std::endl;
 
+/* multiply a constant integer with the Cubic Number B */
+template <typename T, typename PT>
+void mul (CubicElementNF <T,PT> & A, const CubicElementNF <T,PT> & B, const T & alpha){
+  if (!( B.my_order->is_equal( *(A.my_order) ) ) ){
+    std::cout << "element orders are not the same. Throw exception" << std::endl;
   }
+  if (B.is_zero() || IsZero(alpha)){
+    ::clear(A.u);
+    ::clear(A.x);
+    ::clear(A.y);
+    ::set(A.denom);
+  }
+  else if(IsOne(alpha)){
+    A.assign(B);
+  }
+  else{
+    mul(A.u, B.u, alpha);
+    mul(A.x, B.x, alpha);
+    mul(A.y, B.y, alpha);
+
+    A.denom = B.denom;
+    A.normalize();
+  }
+}
+
+
+/* multiply a constant rational number with the Cubic Number B */
+template <typename T, typename PT>
+void mul (CubicElementNF <T,PT> & A, const CubicElementNF <T,PT> & B, const QQ<T> & alpha){
+  if (!( B.my_order->is_equal( *(A.my_order) ) ) ){
+    std::cout << "element orders are not the same. Throw exception" << std::endl;
+  }
+  if (B.is_zero() || IsZero(alpha)){
+    ::clear(A.u);
+    ::clear(A.x);
+    ::clear(A.y);
+    ::set(A.denom);
+  }
+  else if(IsOne(alpha)){
+    A.assign(B);
+  }
+  else{
+    mul(A.u, B.u, alpha.getNumerator());
+    mul(A.x, B.x, alpha.getNumerator());
+    mul(A.y, B.y, alpha.getNumerator());
+
+    mul(A.denom, B.denom, alpha.getDenominator());
+    A.normalize();
+  }
+}
+
+template <typename T, typename PT>
+void sub (CubicElementNF <T,PT> & A, const CubicElementNF <T,PT> & B, const CubicElementNF <T,PT> & C){
+
+  if (!( B.my_order->is_equal( *(C.my_order) ) ) || !( B.my_order->is_equal( *(A.my_order) ) ) ){
+    std::cout << "element orders are not the same. Throw exception" << std::endl;
+  }
+
   else{
     mul(A.u, B.u, C.denom); // u1*d2
     mul(CubicElement<T,PT>::temp, C.u, B.denom);
@@ -319,14 +375,17 @@ void sub (CubicElement <T,PT> & A, const CubicElement <T,PT> & B, const CubicEle
     mul(CubicElement<T,PT>::temp, C.y, B.denom);
     sub(A.y, A.y, CubicElement<T,PT>::temp);
 
-    A.reduce();
+    mul(A.denom, B.denom, C.denom);
+    A.normalize();
   }
 }
 
-/* Sub a constant integer to the Cubic Number A */
+/* Subtract a constant integer from the Cubic Number B */
 template <typename T, typename PT>
-void sub (CubicElement <T,PT> & A, const CubicElement <T,PT> & B, const T & alpha){
-
+void sub (CubicElementNF <T,PT> & A, const CubicElementNF <T,PT> & B, const T & alpha){
+  if (!( B.my_order->is_equal( *(A.my_order) ) ) ){
+    std::cout << "element orders are not the same. Throw exception" << std::endl;
+  }
   if (B.is_zero()){
     A.u = -alpha;
     ::clear(A.x);
@@ -343,14 +402,14 @@ void sub (CubicElement <T,PT> & A, const CubicElement <T,PT> & B, const T & alph
     A.x = B.x;
     A.y = B.y;
     A.denom = B.denom;
-    A.reduce();
+    A.normalize();
   }
 }
 
 template <typename T, typename PT>
-void sub (CubicElement <T,PT> & A, const CubicElement <T,PT> & B, const QQ<T> & alpha){
-  if (!A.my_order.is_equal(B.my_order)){
-    std::cout << "order mismatch, throw exception" << std::endl;
+void sub (CubicElementNF <T,PT> & A, const CubicElementNF <T,PT> & B, const QQ<T> & alpha){
+  if (!( B.my_order->is_equal( *(A.my_order) ) ) ){
+    std::cout << "element orders are not the same. Throw exception" << std::endl;
   }
 
   if ( B.is_zero() ){
@@ -362,7 +421,7 @@ void sub (CubicElement <T,PT> & A, const CubicElement <T,PT> & B, const QQ<T> & 
   else{
     mul(CubicElement<T,PT>::newU, B.u, alpha.getDenominator());
     mul(CubicElement<T,PT>::temp, alpha.getNumerator(), B.denom);
-    add(CubicElement<T,PT>::newU, CubicElement<T,PT>::newA, CubicElement<T,PT>::temp);
+    sub(CubicElement<T,PT>::newU, CubicElement<T,PT>::newU, CubicElement<T,PT>::temp);
 
     mul(CubicElement<T,PT>::newX, B.x, alpha.getDenominator());
     mul(CubicElement<T,PT>::newY, B.y, alpha.getDenominator());
@@ -373,7 +432,7 @@ void sub (CubicElement <T,PT> & A, const CubicElement <T,PT> & B, const QQ<T> & 
     A.y = CubicElement<T,PT>::newY;
     A.denom = CubicElement<T,PT>::temp;
 
-    A.reduce();
+    A.normalize();
 
   }
 }
@@ -390,11 +449,18 @@ void divide (CubicElement <Type,PType> & A, const CubicElement <Type,PType> & B,
 
 template <typename Type, typename PType>
 void power (CubicElement <Type,PType> & A, const CubicElement <Type,PType> & B, const NTL::ZZ & p){
-
 }
+
 template <typename Type, typename PType>
-void CubicElementNF<Type, PType> :: reduce(){
-  std::cout << "implement reduction" << std::endl;
+void CubicElementNF<Type, PType> :: normalize(){
+  Type g = GCD(GCD(GCD(this->u,this->x),this->y), this->denom);
+  if (!::IsOne(g)) {
+    NTL::div(this->u,this->u,g);
+    NTL::div(this->x,this->x,g);
+    NTL::div(this->y,this->y,g);
+    NTL::div(this->denom,this->denom,g);
+}
+
 }
 
 

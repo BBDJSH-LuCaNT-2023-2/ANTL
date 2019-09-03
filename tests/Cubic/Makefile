@@ -1,5 +1,5 @@
-main:  generalFunctions.o cubicTestMain.o GlobalCubicField.o CubicNumberField.o RealCubicNumberField.o ComplexCubicNumberField.o CubicOrder.o CubicOrderNF.o CubicElement.o CubicElementNF.o #QQ.o common.o debug.o
-	g++ -g -o testFile -O2 -I/c/include generalFunctions.o cubicTestMain.o GlobalCubicField.o CubicNumberField.o RealCubicNumberField.o ComplexCubicNumberField.o CubicOrder.o CubicOrderNF.o CubicElement.o CubicElementNF.o -L/c/lib -lntl -lgmp -lm -lpthread
+main:  generalFunctions.o cubicTestMain.o GlobalCubicField.o CubicNumberField.o RealCubicNumberField.o ComplexCubicNumberField.o CubicOrder.o CubicOrderNF.o CubicElement.o CubicElementNF.o CubicIdeal.o#QQ.o common.o debug.o
+	g++ -g -o testFile -O2 -I/c/include generalFunctions.o cubicTestMain.o GlobalCubicField.o CubicNumberField.o RealCubicNumberField.o ComplexCubicNumberField.o CubicOrder.o CubicOrderNF.o CubicElement.o CubicElementNF.o CubicIdeal.o -L/c/lib -lntl -lgmp -lm -lpthread
 
 cubicTestMain.o: cubicTestMain.cpp ../../include/ANTL/Cubic/CubicNumberField.hpp ../../include/ANTL/Cubic/ComplexCubicNumberField.hpp ../../include/ANTL/Cubic/RealCubicNumberField.hpp
 	g++ -g -c -O2 -I/c/include cubicTestMain.cpp -L/c/lib -lntl -lgmp -lm -lpthread
@@ -34,9 +34,12 @@ CubicElement.o: ../../src/Cubic/CubicElement.cpp ../../include/ANTL/Cubic/CubicE
 CubicElementNF.o: ../../src/Cubic/CubicElementNF.cpp ../../include/ANTL/Cubic/CubicElementNF.hpp ../../include/ANTL/Cubic/CubicElement.hpp #include/ANTL/Arithmetic/QQ.hpp
 		g++ -g -c -O2 -I/c/include ../../src/Cubic/CubicElementNF.cpp -L/c/lib -lntl -lgmp -lm -lpthread
 
+CubicIdeal.o: ../../src/Cubic/CubicIdeal.cpp ../../include/ANTL/Cubic/CubicIdeal.hpp
+		g++ -g -c -O2 -I/c/include ../../src/Cubic/CubicIdeal.cpp -L/c/lib -lntl -lgmp -lm -lpthread
+
 
 objects = cubicTestMain.o generalFunctions.o GlobalCubicField.o CubicNumberField.o\
 					RealCubicNumberField.o ComplexCubicNumberField.o CubicOrder.o CubicOrderNF.o \
-					CubicElement.o CubicElementNF.o
+					CubicElement.o CubicElementNF.o CubicIdeal.o
 clean:
-	rm $(objects) 
+	rm $(objects)

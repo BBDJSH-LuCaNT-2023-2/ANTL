@@ -2,7 +2,6 @@
 #define ANTL_CUBIC_NUMBER_FIELD_CPP
 
 
-#include <NTL/ZZX.h>
 #include "../../include/ANTL/Cubic/CubicNumberField.hpp"
 
 using NTL::ZZX;

@@ -2,7 +2,6 @@
 #define ANTL_CUBIC_NUMBER_FIELD_H
 
 
-#include <NTL/ZZX.h>
 #include "GlobalCubicField.hpp"
 //#include "RealCubicNumberField.hpp"
 

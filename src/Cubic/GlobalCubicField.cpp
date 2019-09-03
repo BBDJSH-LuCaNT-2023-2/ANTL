@@ -2,7 +2,7 @@
 #define ANTL_GLOBAL_CUBIC_FIELD_CPP
 
 #include "../../include/ANTL/Cubic/GlobalCubicField.hpp"
-#include <boost/multiprecision/gmp.hpp>
+
 
 using boost::multiprecision::mpf_float_100;
 

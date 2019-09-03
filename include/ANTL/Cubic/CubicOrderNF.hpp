@@ -1,15 +1,17 @@
 #ifndef ANTL_CUBIC_ORDER_NF_H
 #define ANTL_CUBIC_ORDER_NF_H
 
-
-#include <NTL/ZZX.h>
-#include <boost/math/tools/polynomial.hpp>
-
 #include "CubicOrder.hpp"
-#include "GeneralTemplateFunctions.hpp"
-#include "Multiplication/IdealMultiplicationStrategy.hpp"
-using boost::math::tools::polynomial;
+//#include "Multiplication/IdealMultiplicationStrategy.hpp"
 
+
+using boost::math::tools::polynomial;
+using namespace ANTL;
+
+
+// forward declaration
+template<typename Type, typename PType>
+class CubicOrder;
 
 template <typename Type, typename PType>
 class CubicOrderNF : public CubicOrder<Type, PType>{
@@ -20,19 +22,25 @@ public:
 
 // Class methods
 
-// constructor
+/**
+* @brief Constructor which requires a defining polynomial as well as a multiplication strategy
+* @param A cubic polynomial, a pointer to a IdealMultiplicationStrategy object
+*/
+//CubicOrderNF<Type,PType> (polynomial<Type> const &poly, IdealMultiplicationStrategy<Type, PType> * mulstrat);
 CubicOrderNF<Type,PType> (polynomial<Type> const &poly);
 
 
-
 bool is_equal(const CubicOrder<Type, PType> &CO2) const;
-
+void roots_swap_position(int p1, int p2);
 
 int splitting_type(int p);
 
+
+void set_mul_strategy();
+
 /********************** friend functions **********************/
 template <typename T, typename PT>
-friend bool is_equal(const CubicOrder<T, PT> &CO1, const CubicOrder<T, PT> &CO2);
+friend bool is_equal(const CubicOrderNF<T, PT> &CO1, const CubicOrderNF<T, PT> &CO2);
 
 
 protected:
@@ -48,8 +56,10 @@ Type mul_table[3][3];
 
 std::vector<PType> fundamentalUnits;
 
-IdealMultiplicationStrategy<Type, PType> * mul_method;
+void set_roots();
 
+
+// do I even need this?
 void set_mul_table();
 
 void set_integral_basis();

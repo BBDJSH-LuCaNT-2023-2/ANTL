@@ -2,7 +2,6 @@
 #define ANTL_COMPLEX_CUBIC_NUMBER_FIELD_CPP
 
 
-#include <NTL/ZZX.h>
 #include "../../include/ANTL/Cubic/ComplexCubicNumberField.hpp"
 
 
@@ -21,6 +20,9 @@ ComplexCubicNumberField<Type, PType> :: ComplexCubicNumberField( polynomial<Type
       std::cout << "Error, ComplexCubicNF input must be a polynomial with negative discriminant," << std::endl;
       throw std::exception();
     }
+
+    set_roots();
+    set_integral_basis();
 }
 
 template <typename Type, typename PType>
