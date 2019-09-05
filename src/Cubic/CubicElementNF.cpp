@@ -437,14 +437,47 @@ void sub (CubicElementNF <T,PT> & A, const CubicElementNF <T,PT> & B, const QQ<T
   }
 }
 
+template <typename T, typename PT>
+void div (CubicElementNF <T,PT> & A, const CubicElementNF <T,PT> & B, const T & alpha){
 
+  if (IsZero(alpha)){
+    std::cout << "Attempting to divide by zero. You just broke math.";
+    throw std::exception();
+  }
+  else if (IsOne(alpha)){
+    A.assign(B);
+  }
+  else{
+    mul(A.denom, B.denom, alpha);
+    A.u = B.u;
+    A.x = B.x;
+    A.u = B.y;
+    A.normalize();
+  }
+}
 
-
+template <typename T, typename PT>
+void div (CubicElementNF <T,PT> & A, const CubicElementNF <T,PT> & B, const QQ<T> & alpha){
+  if (IsZero(alpha)){
+    std::cout << "Attempting to divide by zero. You just broke math.";
+    throw std::exception();
+  }
+  else if (IsOne(alpha)){
+    A.assign(B);
+  }
+  else{
+    mul(A.denom, B.denom, alpha.getNumerator());
+    mul(A.u, B.u, alpha.getDenominator());
+    mul(A.x, B.x, alpha.getDenominator());
+    mul(A.y, B.y, alpha.getDenominator());
+    A.normalize();
+  }
+}
 
 
 template <typename Type, typename PType>
-void divide (CubicElement <Type,PType> & A, const CubicElement <Type,PType> & B, const CubicElement <Type,PType> & C){
-
+void div (CubicElement <Type,PType> & A, const CubicElement <Type,PType> & B, const CubicElement <Type,PType> & C){
+  std::cout << "unimplemented" << std::endl;
 }
 
 template <typename Type, typename PType>

@@ -163,6 +163,34 @@ template <typename T, typename PT>
 friend void sub (CubicElementNF <T,PT> & A, const CubicElementNF <T,PT> & B, const QQ<T> & alpha);
 
 
+/**
+* @brief Compute quotient B / C where B,C are both cubic elements. Not yet implemented
+* @param[out] A = B / Ca
+* @param[in] B first term
+* @param[in] C second term
+* @pre A, B, C should belong to the same CubicOrder
+*/
+template <typename T, typename PT>
+friend void div (CubicElementNF <T,PT> & A, const CubicElementNF <T,PT> & B, const CubicElementNF <T,PT> & C);
+/**
+* @brief Compute quotient of B by alpha (an integer constant)
+* @param[out] A = B / alpha
+* @param[in] B first term
+* @param[in] alpha second term (constant)
+* @pre A, B should belong to the same CubicOrder
+*/
+template <typename T, typename PT>
+friend void div (CubicElementNF <T,PT> & A, const CubicElementNF <T,PT> & B, const T & alpha);
+
+/**
+* @brief Compute quotient of B and alpha (a rational number)
+* @param[out] A = B / alpha
+* @param[in] B first term
+* @param[in] alpha second term (rational number)
+* @pre A, B should belong to the same CubicOrder
+*/
+template <typename T, typename PT>
+friend void div (CubicElementNF <T,PT> & A, const CubicElementNF <T,PT> & B, const QQ<T> & alpha);
 /* We can't divide in the ring of integers, but I want to be able to invert field elements?
 template <typename T, typename PT>
 friend void divide (CubicElement <T,PT> & A, const CubicElement <T,PT> & B, const CubicElement <T,PT>& C);

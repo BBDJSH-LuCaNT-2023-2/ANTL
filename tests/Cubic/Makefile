@@ -1,4 +1,4 @@
-main:  generalFunctions.o cubicTestMain.o GlobalCubicField.o CubicNumberField.o RealCubicNumberField.o ComplexCubicNumberField.o CubicOrder.o CubicOrderNF.o CubicElement.o CubicElementNF.o CubicIdeal.o#QQ.o common.o debug.o
+main:  generalFunctions.o cubicTestMain.o GlobalCubicField.o CubicNumberField.o RealCubicNumberField.o ComplexCubicNumberField.o CubicOrder.o CubicOrderNF.o CubicElement.o CubicElementNF.o CubicIdeal.o MultiplyStrategyWilliams.o#QQ.o common.o debug.o
 	g++ -g -o testFile -O2 -I/c/include generalFunctions.o cubicTestMain.o GlobalCubicField.o CubicNumberField.o RealCubicNumberField.o ComplexCubicNumberField.o CubicOrder.o CubicOrderNF.o CubicElement.o CubicElementNF.o CubicIdeal.o -L/c/lib -lntl -lgmp -lm -lpthread
 
 cubicTestMain.o: cubicTestMain.cpp ../../include/ANTL/Cubic/CubicNumberField.hpp ../../include/ANTL/Cubic/ComplexCubicNumberField.hpp ../../include/ANTL/Cubic/RealCubicNumberField.hpp
@@ -37,9 +37,11 @@ CubicElementNF.o: ../../src/Cubic/CubicElementNF.cpp ../../include/ANTL/Cubic/Cu
 CubicIdeal.o: ../../src/Cubic/CubicIdeal.cpp ../../include/ANTL/Cubic/CubicIdeal.hpp
 		g++ -g -c -O2 -I/c/include ../../src/Cubic/CubicIdeal.cpp -L/c/lib -lntl -lgmp -lm -lpthread
 
+MultiplyStrategyWilliams.o: ../../src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp ../../include/ANTL/Cubic/Multiplication/MultiplyStrategyWilliams.hpp
+		g++ -g -c -O2 -I/c/include ../../src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp -L/c/lib -lntl -lgmp -lm -lpthread
 
 objects = cubicTestMain.o generalFunctions.o GlobalCubicField.o CubicNumberField.o\
 					RealCubicNumberField.o ComplexCubicNumberField.o CubicOrder.o CubicOrderNF.o \
-					CubicElement.o CubicElementNF.o CubicIdeal.o
+					CubicElement.o CubicElementNF.o CubicIdeal.o MultiplyStrategyWilliams.o
 clean:
 	rm $(objects)

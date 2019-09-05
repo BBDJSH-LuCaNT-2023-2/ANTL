@@ -23,6 +23,9 @@ using boost::math::tools::polynomial;
 template<typename Type, typename PType>
 class CubicElementNF;
 
+template<typename Type, typename PType>
+class IdealMultiplicationStrategy;
+
 template <typename Type, typename PType>
 class CubicOrder {
 
