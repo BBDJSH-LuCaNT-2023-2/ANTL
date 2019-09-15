@@ -4,7 +4,7 @@
  * @remark specialized implementations of XGCD variations with pseudo-division
  */
 
-#include <ANTL/XGCD/xgcd_pseudo.hpp>
+#include "../../include/ANTL/XGCD/xgcd_pseudo.hpp"
 
 //
 // XGCD with one inversion
@@ -110,7 +110,7 @@ void XGCD_PARTIAL_PSEUDO(ZZ_pEX & R2, ZZ_pEX & R1, ZZ_pEX & C2, ZZ_pEX & C1, lon
 
 
 
-void 
+void
 XGCD_PARTIAL_PSEUDO(GF2EX & R2, GF2EX & R1, GF2EX & C2, GF2EX & C1, long bound)
 {
   GF2E d,z;
@@ -208,7 +208,7 @@ void XGCD_PARTIAL_REDUCE_PSEUDO(ZZ_pEX & R2, ZZ_pEX & R1, ZZ_pEX & B2, ZZ_pEX & 
 
 
 
-void 
+void
 XGCD_PARTIAL_REDUCE_PSEUDO(GF2EX & R2, GF2EX & R1, GF2EX & B2, GF2EX & B1, long bound, bool even)
 {
   GF2E d,z;

@@ -5,16 +5,18 @@
 
 
 
+// *********************** Public method definitions
+
 template <typename Type, typename PType>
 CubicOrderNF<Type, PType> :: CubicOrderNF( polynomial<Type> const &poly)
   : CubicOrder<Type,PType>::CubicOrder(poly)  {
 
     this->discriminant = discriminant_bcf(poly);
 
-
     set_roots();
     set_integral_basis();
     set_mul_table();
+
 }
 
 
@@ -23,6 +25,7 @@ bool CubicOrderNF<Type, PType> :: is_equal(const CubicOrder<Type, PType> &CO2) c
 
   return (this->defining_IBCF[0] == CO2.get_IBCF()[0] && this->defining_IBCF[1] == CO2.get_IBCF()[1] && this->defining_IBCF[2] == CO2.get_IBCF()[2] && this->defining_IBCF[3] == CO2.get_IBCF()[3]);
 }
+
 
 template <typename Type, typename PType>
 void CubicOrderNF<Type, PType> ::  roots_swap_position(int p1, int p2){
@@ -37,13 +40,24 @@ void CubicOrderNF<Type, PType> ::  roots_swap_position(int p1, int p2){
   }
 };
 
+template <typename Type, typename PType>
+void CubicOrderNF<Type, PType> :: mul(CubicIdealNF<Type,PType> & A, const CubicIdealNF<Type,PType> & B, const CubicIdealNF<Type,PType> & C){
+  if (!(A.get_order()->is_equal( (*B.get_order()) ) ) || (!(A.get_order()->is_equal( (*this) ) ) )){
+    std::cout << "Order mismatch in ideal mul" << std::endl;
+  }
+  (this->mul_method)->multiply(A,B,C);
+}
 
+
+
+
+// *********************Protected member methods
 template <typename Type, typename PType>
 void CubicOrderNF<Type, PType> :: set_roots(){
   int type = SolveP3<PType>(this->root_list, PType(this->defining_IBCF[2]/this->defining_IBCF[3]),
     PType(this->defining_IBCF[1]/this->defining_IBCF[3]), PType(this->defining_IBCF[0]/this->defining_IBCF[3]) );
 
-  if (ANTL::abs(this->root_list[0])-PType(1.0) <= PType(0)){
+  if ( (this->discriminant > 0) &&(ANTL::abs(this->root_list[0])-PType(1.0) <= PType(0))){
     roots_swap_position(this->root_list[0], this->root_list[1]);
   }
 }
@@ -65,20 +79,23 @@ void CubicOrderNF<Type, PType> :: set_mul_table( ){
   NTL::mul(mul_table[0][2], -this->defining_IBCF[2],this->defining_IBCF[0] );   // -bd
   mul_table[1][2] = -this->defining_IBCF[0] ;                                   // -d
   mul_table[2][2] = -this->defining_IBCF[1] ;                                   // -c
-  std::cout << mul_table[2][0] << mul_table[2][1] << mul_table[2][2]<< std::endl;
+  //std::cout << mul_table[2][0] << mul_table[2][1] << mul_table[2][2]<< std::endl;
 }
 
+
 template <typename Type, typename PType>
-void CubicOrderNF<Type, PType> :: set_integral_basis( ){
+void CubicOrderNF<Type, PType> :: set_integral_basis(){
 
   // rho1 = a*delta
-  mul(this->rho1, this->root_list[0], this->defining_IBCF[3]);
+  NTL::mul(this->rho1, this->root_list[0], PType(this->defining_IBCF[3]) );
 
   // rho2 = a*delta + b
   add(this->rho2, this->rho1, this->defining_IBCF[2]);
   // rho2 = a*delta*delta + b*delta
-  mul(this->rho2, this->rho2, this->root_list[0]);
+  NTL::mul(this->rho2, this->rho2, this->root_list[0]);
+
 }
+
 
 template <typename Type, typename PType>
 void CubicOrderNF<Type, PType> :: set_class_number( ){
@@ -86,11 +103,13 @@ void CubicOrderNF<Type, PType> :: set_class_number( ){
     std::cout << "set class number"<< std::endl;
 }
 
+
 template <typename Type, typename PType>
 void CubicOrderNF<Type, PType> :: set_class_group( ){
 
     std::cout << "set class group"<< std::endl;
 }
+
 
 template <typename Type, typename PType>
 void CubicOrderNF<Type, PType> :: set_regulator( ){
@@ -98,6 +117,8 @@ void CubicOrderNF<Type, PType> :: set_regulator( ){
 
 }
 
+
+// ***********************Friend function definitions
 template <typename T, typename PT>
 bool is_equal(const CubicOrderNF<T, PT> &CO1, const CubicOrderNF<T, PT> &CO2) {
   return (

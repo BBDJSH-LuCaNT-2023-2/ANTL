@@ -2,6 +2,7 @@
 #define ANTL_CUBIC_ELEMENT_H
 
 #include "CubicOrder.hpp"
+
 #include <boost/multiprecision/gmp.hpp>
 using namespace NTL;
 //#include "../Arithmetic/QQ.hpp"
@@ -18,6 +19,13 @@ public:
 /***************** member variables **********************/
 
 /***************** member functions **********************/
+
+/**
+* @brief Default Constructor
+*/
+CubicElement(){
+
+};
 
 CubicElement(const CubicOrder<Type,PType> * cnfo, const Type _coefficients[3], const Type & _denom){
 
@@ -59,7 +67,9 @@ inline Type get_u () const {return u;}
 inline Type get_x () const {return x;}
 inline Type get_y () const {return y;}
 
-
+inline void set_order(const CubicOrder<Type, PType> * ord){
+  my_order = ord;
+}
 /******calculator functions****/
 //these should calculate and set into the provided variable the specified value
 

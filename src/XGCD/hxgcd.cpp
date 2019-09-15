@@ -1,14 +1,14 @@
 /**
  * @file hxgcd.cpp
  * @author Laurent Imbert
- * @remark 
+ * @remark
  */
 
 
 // NOT SURE THESE FUNCTIONS ARE EVER CALLED!!!!
 
-#include <ANTL/XGCD/hxgcd.hpp>
-#include <ANTL/XGCD/xgcd_iter.hpp>
+#include "../../include/ANTL/XGCD/hxgcd.hpp"
+#include "../../include/ANTL/XGCD/xgcd_iter.hpp"
 
 template <>
 void HXGCD(ZZ_pX& G, ZZ_pX& U, ZZ_pX& V, const ZZ_pX& A, const ZZ_pX& B)
@@ -60,7 +60,7 @@ void HXGCD_PARTIAL(GF2EX & R2, GF2EX & R1, GF2EX & C2, GF2EX & C1, long bound)
 
 
 //
-// Partial Euclidean algorithm (for fast reduce) with revised termination for 
+// Partial Euclidean algorithm (for fast reduce) with revised termination for
 // polynomial types
 //
 

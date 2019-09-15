@@ -2,7 +2,7 @@
  * @file xgcd_plain.hpp
  * @author Michael Jacobson
  *
- * @brief Routines for extended Euclidean algorithm, extended Euclidean algorithm 
+ * @brief Routines for extended Euclidean algorithm, extended Euclidean algorithm
  * computing only one of the Bezout coefficients (XGCD_LEFT), and partial extended
  * Euclidean algorithm that terminates when the remainder gets below a given threshold
  * (XGCD_PARTIAL and XGCD_PARTIAL_REDUCE). The main functions are:
@@ -17,12 +17,12 @@
  *   - XGCD_PARTIAL_PLAIN: extended Euclidean algorithm terminated when the size of
  *     a remainder goes below the given threshold.  Uses partial extended Euclid for
  *     polynomials.
- * 
- *   - XGCD_PARTIAL_REDUCE_PLAIN: same as XGCD_PARTIAL_NTL, with an extra parameter for 
- *     revised termination condition for ideal reduction algorithm 
+ *
+ *   - XGCD_PARTIAL_REDUCE_PLAIN: same as XGCD_PARTIAL_NTL, with an extra parameter for
+ *     revised termination condition for ideal reduction algorithm
  *     (polynomial types only)
  *
- * These functions use a basic version of the extended Eulidean algorithm, but modified when 
+ * These functions use a basic version of the extended Eulidean algorithm, but modified when
  * possible (i.e., whenever the half gcd method is not used) to compute only one of
  * the two coefficients.
  *
@@ -33,7 +33,7 @@
 #define XGCD_PLAIN_H
 
 
-#include <ANTL/utilities.hpp>
+#include "../utilities.hpp"
 
 // We use the NTL namespace everywhere. Rather than have a using directive in
 // every file, we just put it here, for convenience and clarity.
@@ -86,6 +86,6 @@ void XGCD_PARTIAL_REDUCE_PLAIN(GF2EX & R2, GF2EX & R1, GF2EX & B2, GF2EX & B1, l
 
 
 // Unspecialized template definitions.
-#include "../src/XGCD/xgcd_plain_impl.hpp"
+#include "../../../src/XGCD/xgcd_plain_impl.hpp"
 
 #endif // guard

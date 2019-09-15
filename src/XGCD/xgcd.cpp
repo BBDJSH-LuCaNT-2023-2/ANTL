@@ -1,12 +1,12 @@
 /**
  * @file xgcd.cpp
  * @author Michael Jacobson
- * @remark specialized implementations of XGCD_LEFT, XGCD_PARTIAL, and 
+ * @remark specialized implementations of XGCD_LEFT, XGCD_PARTIAL, and
  * XGCD_PARTIAL_REDUCE
  */
 
-#include <ANTL/XGCD/xgcd.hpp>
-#include <ANTL/XGCD/hxgcd.hpp>
+#include "../../include/ANTL/XGCD/xgcd.hpp"
+#include "../../include/ANTL/XGCD/hxgcd.hpp"
 
 //
 // XGCD_LEFT functions
@@ -26,18 +26,18 @@ void XGCD_LEFT(ZZ & G, ZZ & X, const ZZ & A, const ZZ & B)
 //
 
 
-// Partial Euchlidean algorithm 
-// Lehmer's version for comuting GCD (for Book's version of NUCOMP, NUDUPL, 
+// Partial Euchlidean algorithm
+// Lehmer's version for comuting GCD (for Book's version of NUCOMP, NUDUPL,
 //   and NUCUBE algorithm )
-// 
-/* 
+//
+/*
    Input:  R2 = R_{-1} , R1 = R_{0}, bound
-    - R_i is the R - sequence from "Solving the Pell Equation" 
+    - R_i is the R - sequence from "Solving the Pell Equation"
       ( R_i = R_{i-2}-q_i R_{i-1} )
     - R1 is reduced modulo R2
-   Output: R2 = R_{i-1}, R1 = R_i, C2 = C_{i-1}, C1 = C_i, 
+   Output: R2 = R_{i-1}, R1 = R_i, C2 = C_{i-1}, C1 = C_i,
     - R_i = 0 or R_i <= bound < R_{i-1}
-    - C_i sequence from "Solving the Pell Equation" defined as 
+    - C_i sequence from "Solving the Pell Equation" defined as
       C_{-1}=0, C_{1}=-1  C_i=C_{i-2}-q_i C_{i-1}
    Loop invariant:  abs(C2*R1 - C1*R2) = R_{-1}
 */
@@ -68,19 +68,19 @@ void XGCD_PARTIAL(ZZ & R2, ZZ & R1, ZZ & C2, ZZ & C1, const ZZ & bound) {
     RightShift(r, R2, T);      conv (rr2, r);
     RightShift(r, R1, T);      conv (rr1, r);
     RightShift(r, bound, T);   conv(bb, r);
-      
+
     A2 = 0;  A1 = 1;
     B2 = 1;  B1 = 0;
     i=0;
-      
+
     // Euclidean Steps (single precision)
     while ( rr1 != 0  && rr1 > bb ) {
-      qq = rr2 / rr1; 
+      qq = rr2 / rr1;
 
       Tr = rr2 - qq*rr1;
       TA = A2 - qq*A1;
       TB = B2 - qq*B1;
-	
+
       if ( i&1 ) {
 	if ( (Tr < -TB) || ( rr1 - Tr < TA - A1 ) ) break;
       } else {
@@ -93,14 +93,14 @@ void XGCD_PARTIAL(ZZ & R2, ZZ & R1, ZZ & C2, ZZ & C1, const ZZ & bound) {
 
       i++;
     }
-      
+
     if (i == 0) {
       // multiprecsion step
       DivRem(q,R2,R2,R1);
       swap(R2,R1);
 
       MulSubFrom(C2,C1,q); swap(C2,C1);
-    } 
+    }
     else {
       // recombination
       // r = u*B2 + v*A2;  v = u*B1 + v*A1; u = r;
@@ -113,7 +113,7 @@ void XGCD_PARTIAL(ZZ & R2, ZZ & R1, ZZ & C2, ZZ & C1, const ZZ & bound) {
       mul(r, C2, B2); MulAddTo(r, C1, A2);
       mul(C1, C1, A1); MulAddTo(C1, C2, B1);
       C2 = r;
-	
+
       if (R1 < 0) { NTL::negate(C1, C1); NTL::negate(R1, R1); }
       if (R2 < 0) { NTL::negate(C2, C2); NTL::negate(R2, R2); }
     }
@@ -157,7 +157,7 @@ void XGCD_PARTIAL(GF2EX & R2, GF2EX & R1, GF2EX & C2, GF2EX & C1, long bound)
 
 
 //
-// Partial Euclidean algorithm (for fast reduce) with revised termination for 
+// Partial Euclidean algorithm (for fast reduce) with revised termination for
 // polynomial types
 //
 

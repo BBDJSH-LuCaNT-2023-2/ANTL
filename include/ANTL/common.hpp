@@ -24,14 +24,14 @@ NTL_CLIENT
 
 /**
  * @brief Suggested beginning of the definition of a function-like macro.
- * 
+ *
  * This helps to prevent heisenbugs caused by macros that have tricky semantics
  * when placed in, say, an if-block. The optimizer strips out the do-while.
  */
 #define ANTL_BEGIN_MACRO_FUNCTION	do {
 
 /**
- * @brief Used to close a macro definition started with \c ANTL_BEGIN_MACRO. 
+ * @brief Used to close a macro definition started with \c ANTL_BEGIN_MACRO.
  */
 #define ANTL_END_MACRO_FUNCTION		} while(0)
 
@@ -108,7 +108,7 @@ namespace NTL {
 
   inline void sqr ( long &C, const long &A)     { C = A * A; }
   inline void sqr ( float &C, const float &A)     { C = A * A; }
-  inline void sqr ( double &C, const double &A)     { C = A * A; } 
+  inline void sqr ( double &C, const double &A)     { C = A * A; }
 
 }
 

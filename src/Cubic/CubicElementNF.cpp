@@ -4,13 +4,21 @@
 #include "../../include/ANTL/Cubic/CubicElementNF.hpp"
 #include "../../include/ANTL/common.hpp"
 
-
+// Forward declaration of template specialization
 template class CubicElementNF<long, double>;
 // static member definitions
 
 template<typename Type, typename PType>
 Type CubicElementNF<Type, PType>::temp2;
 
+
+template<typename Type, typename PType>
+CubicElementNF<Type, PType>::CubicElementNF(){
+  ::set(this->denom);
+  ::clear(this->u);
+  ::clear(this->x);
+  ::clear(this->y);
+};
 
 template <typename Type, typename PType>
 CubicElementNF<Type, PType> :: CubicElementNF(const CubicOrderNF<Type, PType> * cnfo, const Type _coefficients[3], const Type & _denom)

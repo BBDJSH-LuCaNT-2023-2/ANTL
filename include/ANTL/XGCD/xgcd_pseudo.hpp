@@ -10,7 +10,7 @@
  *
  *   - XGCD_PARTIAL_PSEUDO: same as XGCD_PARTIAL, but uses pseudodivision so
  *     so that only one field inverse is required (poly types)
- * 
+ *
  *   - XGCD_PARTIAL_REDUCE_PSEUDO: same as XGCD_PARTIAL_PSEUDO, plus extra
  *     parameter for termination condition for reduction algorithm
  *
@@ -20,8 +20,10 @@
 #ifndef XGCD_PSEUDO_H
 #define XGCD_PSEUDO_H
 
-#include <ANTL/utilities.hpp>
-#include <ANTL/Arithmetic/pseudodiv.hpp>
+//#include <ANTL/utilities.hpp>
+//#include <ANTL/Arithmetic/pseudodiv.hpp>
+#include "../utilities.hpp"
+#include "../Arithmetic/pseudodiv.hpp"
 
 
 // We use the NTL namespace everywhere. Rather than have a using directive in
@@ -68,6 +70,6 @@ void XGCD_PARTIAL_REDUCE_PSEUDO(GF2EX & R2, GF2EX & R1, GF2EX & B2, GF2EX & B1, 
 
 
 // Unspecialized template definitions.
-#include "../src/XGCD/xgcd_pseudo_impl.hpp"
+#include "../../../src/XGCD/xgcd_pseudo_impl.hpp"
 
 #endif // guard

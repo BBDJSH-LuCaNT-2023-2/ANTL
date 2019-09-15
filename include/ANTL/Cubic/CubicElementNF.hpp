@@ -1,9 +1,9 @@
 #ifndef ANTL_CUBIC_ELEMENTNF_H
 #define ANTL_CUBIC_ELEMENTNF_H
 
-#include "CubicOrderNF.hpp"
-#include "CubicElement.hpp"
 
+#include "CubicElement.hpp"
+#include "CubicOrderNF.hpp"
 
 //forward declaration
 //template<typename Type, typename PType>
@@ -14,14 +14,20 @@ using namespace ANTL;
 template<typename Type, typename PType>
 class CubicOrderNF;
 
+
 template <typename Type, typename PType>
 class CubicElementNF : public CubicElement<Type, PType>{
 
+
 public:
 
+  /** Default constructor: I wanted this to be private,
+  * but IdealMultiplicationStrategy needs it */
+  CubicElementNF();
 
 
-/** Constructor which takes in all relevant values (order, coefficients, denominator)
+/**
+* @brief Constructor which takes in all relevant values (order, coefficients, denominator)
 * @param cnfo pointer to the CubicOrderNF which the element belongs
 * @param _coefficients Values of the representation of the elemnent in terms of an integral basis
 * @param denominator  Common denominator of the coefficients
@@ -51,12 +57,11 @@ protected:
 void normalize();
 
 private:
-
 static Type temp2;
 
 
-/** Default constructor is private so it cannot be used */
-CubicElementNF();
+
+
 
 
 /************************** friend functions ********************************/

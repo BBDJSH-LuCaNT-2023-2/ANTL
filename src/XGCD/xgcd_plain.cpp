@@ -1,11 +1,11 @@
 /**
  * @file xgcd_plain.cpp
  * @author Michael Jacobson
- * @remark specialized implementations of XGCD_LEFT_PLAIN, XGCD_PARTIAL_PLAIN, and 
+ * @remark specialized implementations of XGCD_LEFT_PLAIN, XGCD_PARTIAL_PLAIN, and
  * XGCD_PARTIAL_REDUCE_PLAIN
  */
 
-#include <ANTL/XGCD/xgcd_plain.hpp>
+#include "../../include/ANTL/XGCD/xgcd_plain.hpp"
 
 //
 // XGCD_PLAIN
@@ -87,7 +87,7 @@ void XGCD_LEFT_PLAIN(ZZ_pEX & G, ZZ_pEX & X, const ZZ_pEX & A, const ZZ_pEX & B)
 // no flag for GF2EX version
 //  - Assumes that R1 is reduced modulo R2
 
-void 
+void
 XGCD_PARTIAL_PLAIN(GF2EX & R2, GF2EX & R1, GF2EX & C2, GF2EX & C1, long bound)
 {
 #ifdef TRACE_XGCD
@@ -114,7 +114,7 @@ XGCD_PARTIAL_PLAIN(GF2EX & R2, GF2EX & R1, GF2EX & C2, GF2EX & C1, long bound)
 
 
 
-void 
+void
 XGCD_PARTIAL_REDUCE_PLAIN(GF2EX & R2, GF2EX & R1, GF2EX & B2, GF2EX & B1, long bound, bool even)
 {
 #ifdef TRACE_XGCD

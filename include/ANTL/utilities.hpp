@@ -42,7 +42,7 @@ NTL_CLIENT
  * @fn get_poly_modq
  * Computes a polynomial mod q corresponding to the integer X (q-adic
  * representation of X).
- * 
+ *
  * @param p Reference to an instance of GF2EX to hold the newly
  * created polynomial.
  * @param X The integer to create the polynomial from.
@@ -144,9 +144,10 @@ long ressol (GF2EX & x, const GF2EX & h, const GF2EX & f, const GF2EX & p);
  * @brief Useful routines for access to the size of a finite field
  */
 
+/*
 template <class> ZZ CARDINALITY(void);
 
-template <> inline ZZ CARDINALITY < ZZ > (void) {
+template <> inline ZZ NTLCARDINALITY < ZZ > (void) {
   return to_ZZ(0);
 }
 
@@ -189,9 +190,9 @@ template <> inline ZZ CARDINALITY < GF2E > (void) {
 template <> inline ZZ CARDINALITY < GF2EX > (void) {
   return GF2E::cardinality ();
 }
-
+*/
 
 // Unspecialized template definitions.
-#include "../src/utilities_impl.hpp"
+#include "../../src/utilities_impl.hpp"
 
 #endif // guard

@@ -1,11 +1,11 @@
 /**
  * @file xgcd_iter.cpp
  * @author Michael Jacobson
- * @remark specialized implementations of XGCD, XGCD_LEFT_ITER, XGCD_PARTIAL_ITER, and 
+ * @remark specialized implementations of XGCD, XGCD_LEFT_ITER, XGCD_PARTIAL_ITER, and
  * XGCD_PARTIAL_REDUCE_ITER
  */
 
-#include <ANTL/XGCD/xgcd_iter.hpp>
+#include "../../include/ANTL/XGCD/xgcd_iter.hpp"
 
 //
 // Partial Euclidean algorithm (for NUCOMP)
@@ -22,7 +22,7 @@ void XGCD_PARTIAL_ITER(GF2EX & R2, GF2EX & R1, GF2EX & C2, GF2EX & C1, long boun
 
 
 //
-// Partial Euclidean algorithm (for fast reduce) with revised termination for 
+// Partial Euclidean algorithm (for fast reduce) with revised termination for
 // polynomial types
 //
 

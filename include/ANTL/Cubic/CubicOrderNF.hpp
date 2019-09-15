@@ -12,6 +12,17 @@ using namespace ANTL;
 // forward declaration
 template<typename Type, typename PType>
 class CubicOrder;
+template<typename Type, typename PType>
+class CubicElement;
+template<typename Type, typename PType>
+class CubicElementNF;
+template<typename Type, typename PType>
+class CubicIdeal;
+template<typename Type, typename PType>
+class CubicIdealNF;
+template<typename Type, typename PType>
+class IdealMultiplicationStrategy;
+
 
 template <typename Type, typename PType>
 class CubicOrderNF : public CubicOrder<Type, PType>{
@@ -31,12 +42,22 @@ CubicOrderNF<Type,PType> (polynomial<Type> const &poly);
 
 
 bool is_equal(const CubicOrder<Type, PType> &CO2) const;
+
 void roots_swap_position(int p1, int p2);
 
 int splitting_type(int p);
 
+/**
+* @brief Method for setting the IdealMultiplicationStrategy
+* @param A pointer to a concrete strategy (subclass of IdealMultiplicationStrategy)
+*/
+inline void set_mul_strategy(IdealMultiplicationStrategy<Type,PType> * mstrat){
+  this->mul_method = mstrat;
+};
 
-void set_mul_strategy();
+
+void mul(CubicIdealNF<Type,PType> & A, const CubicIdealNF<Type,PType> & B, const CubicIdealNF<Type,PType> & C);
+
 
 /********************** friend functions **********************/
 template <typename T, typename PT>
@@ -45,7 +66,7 @@ friend bool is_equal(const CubicOrderNF<T, PT> &CO1, const CubicOrderNF<T, PT> &
 
 protected:
 
-// Class variables
+// Class variables    REQUIRE(ord2.is_equal(Rufio) == true);
 
 
 // Each column of mulTable represents the product of two canonical basis elements in terms of the
@@ -69,6 +90,7 @@ void set_class_number();
 void set_class_group();
 
 void set_regulator();
+
 private:
 
 

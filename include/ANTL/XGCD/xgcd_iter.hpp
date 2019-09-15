@@ -12,12 +12,12 @@
 
  *   - XGCD_PARTIAL_ITER: extended Euclidean algorithm terminated when the size of
  *     a remainder goes below the given threshold.
- * 
- *   - XGCD_PARTIAL_REDUCE_ITER: same as XGCD_PARTIAL_ITER, with an extra parameter 
- *     for revised termination condition for ideal reduction algorithm 
+ *
+ *   - XGCD_PARTIAL_REDUCE_ITER: same as XGCD_PARTIAL_ITER, with an extra parameter
+ *     for revised termination condition for ideal reduction algorithm
  *     (polynomial types only)
  *
- * These functions use an iterative method, either XGCD_*_NTL or XGCD_*_PSEUDO, 
+ * These functions use an iterative method, either XGCD_*_NTL or XGCD_*_PSEUDO,
  * depending on the thresholds in qir_tune.cpp.
  *
  * Only defined for polynomial base types.
@@ -25,12 +25,16 @@
 
 #ifndef XGCD_ITER_H
 #define XGCD_ITER_H
-
+/*
 #include <ANTL/utilities.hpp>
 #include <ANTL/thresholds.hpp>
 #include <ANTL/XGCD/xgcd_plain.hpp>
 #include <ANTL/XGCD/xgcd_pseudo.hpp>
-
+*/
+#include "../utilities.hpp"
+#include "../thresholds.hpp"
+#include "xgcd_plain.hpp"
+#include "xgcd_pseudo.hpp"
 
 
 //
@@ -79,6 +83,6 @@ void XGCD_PARTIAL_REDUCE_ITER(GF2EX & R2, GF2EX & R1, GF2EX & B2, GF2EX & B1, lo
 
 
 // Unspecialized template definitions.
-#include "../src/XGCD/xgcd_iter_impl.hpp"
+#include "../../../src/XGCD/xgcd_iter_impl.hpp"
 
 #endif // guard

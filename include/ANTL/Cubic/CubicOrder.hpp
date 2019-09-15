@@ -10,19 +10,18 @@
 
 #include <NTL/RR.h>
 #include <NTL/ZZX.h>
-#include "../Arithmetic/QQ.hpp"
 #include <boost/math/tools/polynomial.hpp>
 #include <boost/multiprecision/gmp.hpp>
+#include "../Arithmetic/QQ.hpp"
 #include "../common.hpp"
-
 #include "GeneralTemplateFunctions.hpp"
 #include "Multiplication/IdealMultiplicationStrategy.hpp"
+
 using boost::math::tools::polynomial;
 
 // forward declaration
 template<typename Type, typename PType>
 class CubicElementNF;
-
 template<typename Type, typename PType>
 class IdealMultiplicationStrategy;
 
@@ -43,9 +42,11 @@ CubicOrder(polynomial<Type> const &poly);
 // Accessor methods
 boost::math::tools::polynomial<Type> get_IBCF() const {return defining_IBCF;}
 Type get_discriminant() const {return discriminant;}
-Type get_rho1() const {return rho1;}
-Type get_rho2() const {return rho2;}
+PType get_rho1() const {return rho1;}
+PType get_rho2() const {return rho2;}
 long get_index() const {return index;}
+
+PType get_root1() const {return root_list[0];}
 
 Type get_class_number();
 PType get_regulator();
@@ -83,7 +84,7 @@ PType root_list[3];
 Type discriminant;
 
 // 2nd and 3rd elements of the integral basis
-Type rho1, rho2;
+PType rho1, rho2;
 
 long index; // The number f such that disc(O) = f^2 * Delta, Delta = field discriminant
 
