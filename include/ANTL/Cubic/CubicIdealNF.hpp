@@ -50,8 +50,26 @@ inline const CubicElementNF<Type, PType> * get_gen3() const {return &gen3;}
 inline const Type get_denom () const {return denom;}
 
 
+
+void assign(const CubicElementNF<Type, PType> g3, const CubicElementNF<Type, PType> g2, const CubicElementNF<Type, PType> g1);
+void assign(const Type U1, const Type X1, const Type Y1, const Type D1,
+const Type U2, const Type X2, const Type Y2, const Type D2,
+const Type U3, const Type X3, const Type Y3, const Type D3);
 //
 //Type norm();
+
+
+bool is_integral(){
+  return IsOne(this->denom);
+};
+
+/**
+* @brief this function checks whether two ideals are the same by comparing their
+* lattices
+*/
+bool is_equal(const CubicIdeal<Type, PType> & B);
+
+
 bool is_equivalent(const CubicIdeal<Type, PType> & B);
 Type norm();
 /**
@@ -77,6 +95,13 @@ void reduce();
 
 /**
 * @brief function to change the basis into canonical form. Not yet implemented
+*
+* Important note: To take into account fractional ideals, the assumed state of the
+* ideal is as (1/sigma)*J, where sigma is minimal and J is an integral ideal
+* Proceed to operate on L1, the 1-lattice corresponding to I,
+* L1 = sigma * L2, where L2 corresponds to J
+* In hindsight, maybe this isnt as complicated as all that. It's basically
+* Find the HNF of J
 */
 void become_canonical();
 
@@ -105,7 +130,7 @@ protected:
 
   // a Z basis for the ideal, should be of size 3
   // The representation will always be as 3 integral elements all over a common denominator
-  Type ci_temp;
+  static Type ci_temp, ci_temp2, ci_temp3;
   CubicElementNF<Type, PType> gen1;
   CubicElementNF<Type, PType> gen2;
   CubicElementNF<Type, PType> gen3;
