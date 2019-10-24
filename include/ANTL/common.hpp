@@ -110,6 +110,8 @@ namespace NTL {
   inline void sqr ( float &C, const float &A)     { C = A * A; }
   inline void sqr ( double &C, const double &A)     { C = A * A; }
 
+  inline void power(double &C, double &A, double &E) { C= std::pow(A,E); }
+  inline void power(float &C, float &A, float &E) { C= std::pow(A,E); }
 }
 
 namespace ANTL {
@@ -121,7 +123,7 @@ namespace ANTL {
 
   //
   // cmath-like methods, for completeness.
-  // Most of these exist because of problems where gcc doesn't find the
+  // Most of thezse exist because of problems where gcc doesn't find the
   // cmath methods, presumably because of namespace issues).
   //
   inline float sqrt(float x) { return (float)std::sqrt((double)x); }

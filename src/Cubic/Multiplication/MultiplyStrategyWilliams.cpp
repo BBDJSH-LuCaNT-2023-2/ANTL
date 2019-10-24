@@ -4,6 +4,8 @@
 #include "../../../include/ANTL/Cubic/Multiplication/MultiplyStrategyWilliams.hpp"
 
 
+
+
 template<typename Type, typename PType>
 MultiplyStrategyWilliams<Type, PType> :: MultiplyStrategyWilliams(){
 
@@ -11,9 +13,9 @@ MultiplyStrategyWilliams<Type, PType> :: MultiplyStrategyWilliams(){
 
 
 template<typename Type, typename PType>
-void MultiplyStrategyWilliams<Type, PType> :: multiply(CubicIdealNF<Type,PType>  &A, const CubicIdealNF<Type,PType>  &B, const CubicIdealNF<Type,PType> &C){
+void MultiplyStrategyWilliams<Type, PType> :: multiply(CubicIdeal<Type,PType>  &A, const CubicIdeal<Type,PType>  &B, const CubicIdeal<Type,PType> &C){
   mul_holder.set_order(A.get_order());
-
+  this->my_order = A.get_order();
 
   //////////////////////////////////////////////////////////////////////////////
   //                                                                          //
@@ -21,50 +23,133 @@ void MultiplyStrategyWilliams<Type, PType> :: multiply(CubicIdealNF<Type,PType> 
   //                                                                          //
   //////////////////////////////////////////////////////////////////////////////
 
+
+  this->column_mul(
+    this->gen_set[0][0],this->gen_set[1][0],this->gen_set[2][0],
+    B.coeff_matrix[0][0],B.coeff_matrix[1][0], B.coeff_matrix[2][0],
+    C.coeff_matrix[0][0],C.coeff_matrix[1][0], C.coeff_matrix[2][0]
+  );
+  //std::cout << "gen1" << std::endl;
+  //std::cout << this->gen_set[0][0] << std::endl;
+  //std::cout << this->gen_set[1][0] << std::endl;
+  //std::cout << this->gen_set[2][0] << std::endl;
+
+  /*
   mul(this->mul_holder, *B.get_gen1(),*C.get_gen1());
   this->gen_set[0][0] = this->mul_holder.get_u();
   this->gen_set[1][0] = this->mul_holder.get_x();
   this->gen_set[2][0] = this->mul_holder.get_y();
+*/
+  this->column_mul(
+    this->gen_set[0][1],this->gen_set[1][1],this->gen_set[2][1],
+    B.coeff_matrix[0][0],B.coeff_matrix[1][0], B.coeff_matrix[2][0],
+    C.coeff_matrix[0][1],C.coeff_matrix[1][1], C.coeff_matrix[2][1]
+  );
 
+  /*
   mul(this->mul_holder, *B.get_gen1(),*C.get_gen2());
   this->gen_set[0][1] = this->mul_holder.get_u();
   this->gen_set[1][1] = this->mul_holder.get_x();
   this->gen_set[2][1] = this->mul_holder.get_y();
+  */
 
+  this->column_mul(
+    this->gen_set[0][2],this->gen_set[1][2],this->gen_set[2][2],
+    B.coeff_matrix[0][0],B.coeff_matrix[1][0], B.coeff_matrix[2][0],
+    C.coeff_matrix[0][2],C.coeff_matrix[1][2], C.coeff_matrix[2][2]
+  );
+
+  /*
   mul(this->mul_holder, *B.get_gen1(),*C.get_gen3());
   this->gen_set[0][2] = this->mul_holder.get_u();
   this->gen_set[1][2] = this->mul_holder.get_x();
   this->gen_set[2][2] = this->mul_holder.get_y();
+  */
 
+  this->column_mul(
+    this->gen_set[0][3],this->gen_set[1][3],this->gen_set[2][3],
+    B.coeff_matrix[0][1],B.coeff_matrix[1][1], B.coeff_matrix[2][1],
+    C.coeff_matrix[0][0],C.coeff_matrix[1][0], C.coeff_matrix[2][0]
+  );
+
+  /*
   mul(this->mul_holder, *B.get_gen2(),*C.get_gen1());
   this->gen_set[0][3] = this->mul_holder.get_u();
   this->gen_set[1][3] = this->mul_holder.get_x();
   this->gen_set[2][3] = this->mul_holder.get_y();
+  */
+  this->column_mul(
+    this->gen_set[0][4],this->gen_set[1][4],this->gen_set[2][4],
+    B.coeff_matrix[0][1],B.coeff_matrix[1][1], B.coeff_matrix[2][1],
+    C.coeff_matrix[0][1],C.coeff_matrix[1][1], C.coeff_matrix[2][1]
+  );
+
+    /*
   mul(this->mul_holder, *B.get_gen2(),*C.get_gen2());
   this->gen_set[0][4] = this->mul_holder.get_u();
   this->gen_set[1][4] = this->mul_holder.get_x();
   this->gen_set[2][4] = this->mul_holder.get_y();
+  */
+  this->column_mul(
+    this->gen_set[0][5],this->gen_set[1][5],this->gen_set[2][5],
+    B.coeff_matrix[0][1],B.coeff_matrix[1][1], B.coeff_matrix[2][1],
+    C.coeff_matrix[0][2],C.coeff_matrix[1][2], C.coeff_matrix[2][2]
+  );
+
+  /*
   mul(this->mul_holder, *B.get_gen2(),*C.get_gen3());
   this->gen_set[0][5] = this->mul_holder.get_u();
   this->gen_set[1][5] = this->mul_holder.get_x();
   this->gen_set[2][5] = this->mul_holder.get_y();
+  */
 
+  this->column_mul(
+    this->gen_set[0][6],this->gen_set[1][6],this->gen_set[2][6],
+    B.coeff_matrix[0][2],B.coeff_matrix[1][2], B.coeff_matrix[2][2],
+    C.coeff_matrix[0][0],C.coeff_matrix[1][0], C.coeff_matrix[2][0]
+  );
 
+  /*
   mul(this->mul_holder, *B.get_gen3(),*C.get_gen1());
   this->gen_set[0][6] = this->mul_holder.get_u();
   this->gen_set[1][6] = this->mul_holder.get_x();
   this->gen_set[2][6] = this->mul_holder.get_y();
+  */
+
+
+  this->column_mul(
+    this->gen_set[0][7],this->gen_set[1][7],this->gen_set[2][7],
+    B.coeff_matrix[0][2],B.coeff_matrix[1][2], B.coeff_matrix[2][2],
+    C.coeff_matrix[0][1],C.coeff_matrix[1][1], C.coeff_matrix[2][1]
+  );
+
+  /*
   mul(this->mul_holder, *B.get_gen3(),*C.get_gen2());
   this->gen_set[0][7] = this->mul_holder.get_u();
   this->gen_set[1][7] = this->mul_holder.get_x();
   this->gen_set[2][7] = this->mul_holder.get_y();
+  */
+
+  this->column_mul(
+    this->gen_set[0][8],this->gen_set[1][8],this->gen_set[2][8],
+    B.coeff_matrix[0][2],B.coeff_matrix[1][2], B.coeff_matrix[2][2],
+    C.coeff_matrix[0][2],C.coeff_matrix[1][2], C.coeff_matrix[2][2]
+  );
+
+  // test comments
+  //std::cout << "genset" << std::endl;
+  //std::cout << this->gen_set[0][0] << " " << this->gen_set[0][1]<< " " << this->gen_set[0][2]<< " " << this->gen_set[0][3]<< " " << this->gen_set[0][4]<< " " << this->gen_set[0][5]<< " " << this->gen_set[0][6]<< " " << this->gen_set[0][7]<< " "  << this->gen_set[0][8] << std::endl;
+  //std::cout << this->gen_set[1][0] << " " << this->gen_set[1][1]<< " " << this->gen_set[1][2]<< " " << this->gen_set[1][3]<< " " << this->gen_set[1][4]<< " " << this->gen_set[1][5]<< " " << this->gen_set[1][6]<< " " << this->gen_set[1][7] << " " << this->gen_set[1][8] << std::endl;
+  //std::cout << this->gen_set[2][0] << " " << this->gen_set[2][1]<< " " << this->gen_set[2][2]<< " " << this->gen_set[2][3]<< " " << this->gen_set[2][4]<< " " << this->gen_set[2][5]<< " " << this->gen_set[2][6]<< " " << this->gen_set[2][7] << " " << this->gen_set[2][8] << std::endl;
+
+  /*
   mul(this->mul_holder, *B.get_gen3(),*C.get_gen3());
   this->gen_set[0][8] = this->mul_holder.get_u();
   this->gen_set[1][8] = this->mul_holder.get_x();
   this->gen_set[2][8] = this->mul_holder.get_y();
-
+  */
   mul(this->denom, B.get_denom(), C.get_denom());
-
+  cout << "mul: denom "<<this->denom << endl;
 
   //////////////////////////////////////////////////////////////////////////////
   //                                                                          //
@@ -85,9 +170,13 @@ void MultiplyStrategyWilliams<Type, PType> :: multiply(CubicIdealNF<Type,PType> 
 
     // update previous coefficients
     for (int j = 0; j<i; ++j){
-      mul(x_vector[i], x_vector[i], bezout1);
+      mul(x_vector[j], x_vector[j], bezout1);
+
     }
   }
+
+
+
 
 
   //////////////////////////////////////////////////////////////////////////////
@@ -96,8 +185,8 @@ void MultiplyStrategyWilliams<Type, PType> :: multiply(CubicIdealNF<Type,PType> 
   //                                                                          //
   //////////////////////////////////////////////////////////////////////////////
 
-  ::clear(product_basis[0][2]);
-  ::clear(product_basis[1][2]);
+  ::clear(this->product_basis[0][2]);
+  ::clear(this->product_basis[1][2]);
 
   for (int i = 0; i < 9; ++i){
     mul(bezout1, x_vector[i], gen_set[1][i]);
@@ -140,7 +229,7 @@ void MultiplyStrategyWilliams<Type, PType> :: multiply(CubicIdealNF<Type,PType> 
 
     // update previous coefficients
     for (int j = 0; j<i; ++j){
-      mul(x_vector[i], x_vector[i], bezout1);
+      mul(x_vector[j], x_vector[j], bezout1);
     }
   }
 
@@ -182,8 +271,8 @@ void MultiplyStrategyWilliams<Type, PType> :: multiply(CubicIdealNF<Type,PType> 
   A.assign(this->product_basis[0][0],this->product_basis[1][0],this->product_basis[2][0], this->denom,
   this->product_basis[0][1],this->product_basis[1][1],this->product_basis[2][1], this->denom,
   this->product_basis[0][2],this->product_basis[1][2],this->product_basis[2][2], this->denom);
-} // close function mul
 
+} // close function mul
 
 
 

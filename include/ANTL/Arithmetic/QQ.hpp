@@ -244,7 +244,7 @@ namespace ANTL
       QQ ()
       {
 	::clear (a);
-	::set (d);
+	NTL::set (d);
       }
 
       /**
@@ -264,7 +264,7 @@ namespace ANTL
       QQ (const T& x)
       {
 	a = x;
-	::set (d);
+	NTL::set (d);
       }
 
       /**
@@ -352,7 +352,7 @@ namespace ANTL
       clear (QQ<T> & z)
       {
 	::clear (z.a);
-	::set (z.d);
+	NTL::set (z.d);
       }
 
       /**
@@ -362,8 +362,8 @@ namespace ANTL
       friend void
       set (QQ<T> & z)
       {
-	::set (z.a);
-	::set (z.d);
+	NTL::set (z.a);
+	NTL::set (z.d);
       }
 
       /**
@@ -385,7 +385,7 @@ namespace ANTL
       assign (const T & n)
       {
 	a = n;
-	::set (d);
+	NTL::set (d);
       }
 
       /**

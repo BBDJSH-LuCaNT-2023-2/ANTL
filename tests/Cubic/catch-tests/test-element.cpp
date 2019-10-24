@@ -4,8 +4,8 @@
 #include <cmath>
 #include <ctime>
 #include <boost/math/tools/polynomial.hpp>
-#include "../../../include/ANTL/Cubic/CubicOrderNF.hpp"
-#include "../../../include/ANTL/Cubic/CubicElementNF.hpp"
+#include "../../../include/ANTL/Cubic/CubicOrder.hpp"
+#include "../../../include/ANTL/Cubic/CubicElement.hpp"
 #include "../../../include/ANTL/Arithmetic/QQ.hpp"
 // For floating point arithmetic error tolerance
 
@@ -23,12 +23,12 @@ const double DOUBLE_TOLERANCE = 0.0000001;
 long coffee[3] = {1,2,3};
 
 boost::math::tools::polynomial<long> poly1{{-1,-3,1,1}};
-CubicOrderNF<long, double> Rufio(poly1);
+CubicOrder<long, double> Rufio(poly1);
 
 
 TEST_CASE("CubicElement getter functions"){
-  CubicElementNF<long, double> Ellie (&Rufio, coffee, 7);
-  CubicElementNF<long, double> Est (&Rufio, coffee, 7);
+  CubicElement<long, double> Ellie (&Rufio, coffee, 7);
+  CubicElement<long, double> Est (&Rufio, coffee, 7);
   // This will be the constructor, the getters, and the assign function
   REQUIRE(Est.get_denom() == 7);
   REQUIRE(Est.get_u() == 1);
@@ -38,7 +38,7 @@ TEST_CASE("CubicElement getter functions"){
 
   SECTION("Reassignment and is zero"){
     long tea[3] = {0,0,0};
-    CubicElementNF<long, double> Elias (&Rufio, tea, 1);
+    CubicElement<long, double> Elias (&Rufio, tea, 1);
     Ellie.assign(Elias);
 
     REQUIRE(Ellie.get_u() == 0);
@@ -86,11 +86,11 @@ TEST_CASE("Trace Function"){
     QQ<long> rn1(coffee[0], denny);
     mul(rn1, rn1, 3);
 
-    CubicElementNF<long, double> Est (&Rufio, coffee, 1);
+    CubicElement<long, double> Est (&Rufio, coffee, 1);
     Est.trace(tempQ);
     REQUIRE(tempQ.isEqual((3*coffee[0])) );
 
-    CubicElementNF<long, double> Ellie (&Rufio, coffee, denny);
+    CubicElement<long, double> Ellie (&Rufio, coffee, denny);
     Ellie.trace(tempQ);
     REQUIRE(rn1.isEqual(tempQ));
   }
@@ -98,7 +98,7 @@ TEST_CASE("Trace Function"){
   SECTION("Trace of an arbitrary cubic number"){
     coffee[1] = std::rand() % 1000;
     coffee[2] = std::rand() % 1000;
-    CubicElementNF<long, double>Ellie (&Rufio, coffee, bottom);
+    CubicElement<long, double>Ellie (&Rufio, coffee, bottom);
 
     Ellie.trace(tempQ);
 
@@ -108,9 +108,9 @@ TEST_CASE("Trace Function"){
 }
 
 TEST_CASE("Addition"){
-  CubicElementNF<long, double> Ellie (&Rufio, 2,2,2, 3);
-  CubicElementNF<long, double> Est (&Rufio, 5, 1,112, 2);
-  CubicElementNF<long, double> Erika (&Rufio, 0,0, 0, 5);
+  CubicElement<long, double> Ellie (&Rufio, 2,2,2, 3);
+  CubicElement<long, double> Est (&Rufio, 5, 1,112, 2);
+  CubicElement<long, double> Erika (&Rufio, 0,0, 0, 5);
   QQ<long> tempQ(0, 2);
   SECTION("Add a constant"){
     add(Erika,Ellie, 0L);
@@ -150,9 +150,9 @@ TEST_CASE("Addition"){
 }
 
 TEST_CASE("Subtraction"){
-  CubicElementNF<long, double> Ellie (&Rufio, 2,2,2, 3);
-  CubicElementNF<long, double> Est (&Rufio, 5, 1,112, 2);
-  CubicElementNF<long, double> Erika (&Rufio, 0,0, 0, 5);
+  CubicElement<long, double> Ellie (&Rufio, 2,2,2, 3);
+  CubicElement<long, double> Est (&Rufio, 5, 1,112, 2);
+  CubicElement<long, double> Erika (&Rufio, 0,0, 0, 5);
   QQ<long> tempQ(0, 2);
   SECTION("Subtract a constant"){
     sub(Erika,Ellie, 0L);
@@ -192,9 +192,9 @@ TEST_CASE("Subtraction"){
 }
 
 TEST_CASE("Multiplication"){
-  CubicElementNF<long, double> Ellie (&Rufio, 2,2,2, 3);
-  CubicElementNF<long, double> Est (&Rufio, 1, 0,0, 5);
-  CubicElementNF<long, double> Erika (&Rufio, 0,0, 0, 5);
+  CubicElement<long, double> Ellie (&Rufio, 2,2,2, 3);
+  CubicElement<long, double> Est (&Rufio, 1, 0,0, 5);
+  CubicElement<long, double> Erika (&Rufio, 0,0, 0, 5);
   QQ<long> tempQ(0, 2);
 
   SECTION("Mul by a constant"){

@@ -4,8 +4,8 @@
 #include <cmath>
 #include <ctime>
 #include <boost/math/tools/polynomial.hpp>
-#include "../../../include/ANTL/Cubic/CubicOrderNF.hpp"
-#include "../../../include/ANTL/Cubic/CubicElementNF.hpp"
+#include "../../../include/ANTL/Cubic/CubicOrder.hpp"
+#include "../../../include/ANTL/Cubic/CubicElement.hpp"
 #include "../../../include/ANTL/Arithmetic/QQ.hpp"
 
 #include "../catch.hpp"
@@ -18,7 +18,7 @@ const double DOUBLE_TOLERANCE = 0.0000001;
 
 
 boost::math::tools::polynomial<long> poly1{{4,1,1,1}};
-CubicOrderNF<long, double> Rufio(poly1);
+CubicOrder<long, double> Rufio(poly1);
 
 
 TEST_CASE("Double: Cubic Order accessor functions"){
@@ -30,8 +30,8 @@ TEST_CASE("Double: Cubic Order accessor functions"){
   SECTION("equal tests"){
     boost::math::tools::polynomial<long> poly2{{4,1,1,1}};
     boost::math::tools::polynomial<long> poly3{{1,3,2,1}};
-    CubicOrderNF<long, double> ord2(poly2);
-    CubicOrderNF<long, double> ord3(poly3);
+    CubicOrder<long, double> ord2(poly2);
+    CubicOrder<long, double> ord3(poly3);
 
     REQUIRE(Rufio.is_equal(ord2)==true);
     REQUIRE(ord2.is_equal(Rufio) == true);
@@ -44,7 +44,7 @@ TEST_CASE("Double: Cubic Order accessor functions"){
 
   SECTION("root swapping"){
     boost::math::tools::polynomial<long> poly4{{-1,-3,1,1}};
-    CubicOrderNF<long, double> ord4(poly4);
+    CubicOrder<long, double> ord4(poly4);
 
     REQUIRE(ord4.get_root1() - (-2.170086) < DOUBLE_TOLERANCE);
     ord4.roots_swap_position(1,2);
@@ -55,7 +55,7 @@ TEST_CASE("Double: Cubic Order accessor functions"){
   }
 
   SECTION("Ideal Multiplying"){
-    
+
   }
 }
 

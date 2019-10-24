@@ -2,22 +2,16 @@
 #define ANTL_IDEAL_MULTIPLICATION_STRATEGY_HPP
 
 // strategy class for ideal multiplications
-#include "../CubicOrderNF.hpp"
-//#include "../CubicElement.hpp"
-//#include "../CubicIdeal.hpp"
-//#include "../CubicIdealNF.hpp"
+#include "../CubicOrder.hpp"
 
-#include "../../XGCD/xgcd_plain.hpp"
 
 // forward declaration
 template<typename Type, typename PType>
-class CubicOrderNF;
-//template<typename Type, typename PType>
-//class CubicElement;
-//template<typename Type, typename PType>
-//class CubicElementNF;
+class CubicOrder;
 template<typename Type, typename PType>
-class CubicIdealNF;
+class CubicElement;
+template<typename Type, typename PType>
+class CubicIdeal;
 
 
 template<typename Type, typename PType>
@@ -26,7 +20,7 @@ class IdealMultiplicationStrategy {
 public:
 
   ~IdealMultiplicationStrategy(){
-    delete my_order;
+
   };
     // this method should do some checking to ensure that the ideals are in the same order
 
@@ -34,21 +28,26 @@ public:
 
 //this will be a virtual function which is instantiated in subclasses
 // different subclasses shall implement distinct methods
-virtual void multiply(CubicIdealNF<Type,PType> &C, const CubicIdealNF<Type,PType> &A, const CubicIdealNF<Type,PType> &B) = 0;
+virtual void multiply(CubicIdeal<Type,PType> &A, const CubicIdeal<Type,PType> &B, const CubicIdeal<Type,PType> &C) = 0;
 
 
-int testmember = 123;
 protected:
 
-const CubicOrderNF<Type, PType> * my_order;
+const CubicOrder<Type, PType> * my_order = NULL;
 // variables to hold the product of two ideals as an integral 3 by 3 matrix along with a denominator.
 Type product_basis[3][3];
-Type denom;
+Type multemp, denom;
 
+
+// multiplies ideal basis elements internally
+void column_mul(Type & out1, Type & out2, Type & out3, const Type & u1, const Type & x1, const Type & y1,
+const Type & u2, const Type & x2, const Type & y2);
 private:
 
 
 
 }; //end class def
+
+#include "../../../../src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp"
 
 #endif // include guard
