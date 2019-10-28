@@ -9,7 +9,7 @@ void VoronoiMethods<Type, PType>::make_prepared(CubicIdeal<Type, PType> & ideal1
 
       // Step 1:
       // Check if xi_mu is negative, flip the first row if it is
-      if (plattice[0][0] < 0){
+      if (plattice[0][0] < to<PType>(0)){
 
           plattice[0][0] = -plattice[0][0];
           plattice[1][0] = -plattice[1][0];
@@ -19,7 +19,7 @@ void VoronoiMethods<Type, PType>::make_prepared(CubicIdeal<Type, PType> & ideal1
       }
 
       // Check if xi_nu is negative, flip the second row if it is
-      if (plattice[0][1] < 0){
+      if (plattice[0][1] < to<PType>(0)){
 
           plattice[0][1] = -plattice[0][1];
           plattice[1][1] = -plattice[1][1];
@@ -29,7 +29,9 @@ void VoronoiMethods<Type, PType>::make_prepared(CubicIdeal<Type, PType> & ideal1
       }
 
       // STEP 2
-      if ( (ANTL::abs(plattice[1][0]) <= 0.5) || (ANTL::abs(plattice[1][1]) <= 0.5)
+      abs(this->alpha2, plattice[1][0]);
+      abs(this->alpha1, plattice[1][1]);
+      if ( (this->alpha2 <= to<PType>(0.5)) || (this->alpha1 <= to<PType>(0.5))
          || ((plattice[1][0])*(plattice[1][1]) >= 0) ) {
 
            #ifdef DEBUG
@@ -41,7 +43,11 @@ void VoronoiMethods<Type, PType>::make_prepared(CubicIdeal<Type, PType> & ideal1
           //computing a bound for the number of CF iterations
 
           //This picks the correct value for r, stores it in rR
-          this->rR = Type(ceil(ANTL::sqrt( ANTL::abs(PType(ideal1.coeff_matrix[1][1])/PType(ideal1.coeff_matrix[2][2]))  )));
+          div(this->alpha0, to<PType>(ideal1.coeff_matrix[1][1]), to<PType>(ideal1.coeff_matrix[2][2]) );
+          abs(this->alpha0, this->alpha0);
+          SqrRoot( this->alpha0 ,  this->alpha0);
+          //this->rR = Type(ceil(ANTL::sqrt( ANTL::abs(to<PType>(ideal1.coeff_matrix[1][1])/to<PType>(ideal1.coeff_matrix[2][2]))  )));
+          this->rR = to<Type>(ceil( this->alpha0));
 
           if ( this->rR < ( (ideal1.coeff_matrix[0][0]) / (ideal1.coeff_matrix[2][2]) +1) ){
             this->rR =  (ideal1.coeff_matrix[0][0])/(ideal1.coeff_matrix[2][2]) +1;
@@ -63,8 +69,8 @@ void VoronoiMethods<Type, PType>::make_prepared(CubicIdeal<Type, PType> & ideal1
           do {
             // At this point, the p
               ++m;
-              this->a1 = Type(floor(this->alpha0));
-              this->alpha1 = 1/(this->alpha0 - PType(this->a1));
+              this->a1 = to<Type>((floor(this->alpha0)));
+              this->alpha1 = to<PType>(1)/(this->alpha0 - to<PType>(this->a1));
               this->pNext = this->a1*this->pm1 + this->pm;  //(m+1)th
               this->qNext = this->a1*this->qm1 + this->qm; //(m+1)th
 
@@ -81,10 +87,10 @@ void VoronoiMethods<Type, PType>::make_prepared(CubicIdeal<Type, PType> & ideal1
 
       //STEP 6. Transformation by [  pm1   -pm]
       //                          [ -qm1    qm]
-          this->temp_pb[0][0] = PType(this->pm1)*plattice[0][0] - PType(this->qm1)*plattice[0][1];
-          this->temp_pb[1][0] = PType(this->pm1)*plattice[1][0] - PType(this->qm1)*plattice[1][1];
-          this->temp_pb[0][1] =  PType(this->qm)*plattice[0][1] -  PType(this->pm)*plattice[0][0];
-          this->temp_pb[1][1] =  PType(this->qm)*plattice[1][1] -  PType(this->pm)*plattice[1][0];
+          this->temp_pb[0][0] = to<PType>(this->pm1)*plattice[0][0] - to<PType>(this->qm1)*plattice[0][1];
+          this->temp_pb[1][0] = to<PType>(this->pm1)*plattice[1][0] - to<PType>(this->qm1)*plattice[1][1];
+          this->temp_pb[0][1] =  to<PType>(this->qm)*plattice[0][1] -  to<PType>(this->pm)*plattice[0][0];
+          this->temp_pb[1][1] =  to<PType>(this->qm)*plattice[1][1] -  to<PType>(this->pm)*plattice[1][0];
           plattice[0][0] =this->temp_pb[0][0];
           plattice[1][0] =this->temp_pb[1][0];
           plattice[0][1] =this->temp_pb[0][1];
@@ -110,7 +116,9 @@ void VoronoiMethods<Type, PType>::make_prepared(CubicIdeal<Type, PType> & ideal1
       //std::cout <<  plattice[1][0] << "  " << plattice[1][1] <<  std::endl;
 
       //STEP 7
-      if ( !( ANTL::abs(plattice[1][0]) < 0.5 && ANTL::abs(plattice[1][1]) > 0.5 ) ){
+      abs(this->alpha2, plattice[1][0] );
+      abs(this->alpha1, plattice[1][1] );
+      if ( !( this->alpha2 < to<PType>(0.5) && this->alpha1 > to<PType>(0.5) ) ){
           #ifdef DEBUG
           std::cout << "becomePrepared: Enter step 8,9,10" << std::endl;
           #endif
@@ -119,12 +127,12 @@ void VoronoiMethods<Type, PType>::make_prepared(CubicIdeal<Type, PType> & ideal1
           this->pminus = 0;
           this->alpha0 = - (plattice[1][1]) / plattice[1][0];
           //std::cout << "initial alpha " << alpha0<< std::endl;
-          this->E = 2* ANTL::abs(plattice[1][0]);
+          mul(this->E, PType(2), this->alpha2);
 
           do {
               ++m;
-              this->a1 = Type(floor(this->alpha0));        //a_(m+2)
-              this->alpha1 = 1/(this->alpha0 - PType(this->a1));  //alpha_(m+3)
+              this->a1 = to<Type>(floor(this->alpha0));        //a_(m+2)
+              this->alpha1 = 1/(this->alpha0 - to<PType>(this->a1));  //alpha_(m+3)
               this->pNext = this->a1*this->pm1 + this->pm;              //p_(m+2)
               this->qNext = this->a1*this->qm1 + this->qm;              //q_(m+2)
 
@@ -141,15 +149,19 @@ void VoronoiMethods<Type, PType>::make_prepared(CubicIdeal<Type, PType> & ideal1
               this->alpha0 = this->alpha1;                  // alpha_(m+3)
               //std::cout <<  "becomePrepared:: m: " << m << "  p_m: " << pminus <<  "  p_(m+1): " << pm << " alpha0 " << alpha0<<std::endl;
               //std::cout <<  "becomePrepared:: m: " << m << "  q_m: " << qminus <<  "  q_(m+1): " << qm <<std::endl;
-          }while( !( PType(this->qm1) > E ) );
+          }while( !( to<PType>(this->qm1) > E ) );
           if (m == -2){
             //std::cout << "ERROR: SCF ended on first round" << std::endl;
           }
 
           //std::cout << "CF step ended with q_{m+2} = " << qm1 << " which is larger than " << E << std::endl;
           //when this loop breaks, pminus = m, pm is m+1, and pm1 is m+2th position
-
-          if( ANTL::abs(PType(pminus)*plattice[1][0] + PType(qminus)*plattice[1][1])>0.5 ){
+          mul(this->alpha2, to<PType>(pminus),plattice[1][0]);
+          mul(this->alpha1, to<PType>(qminus),plattice[1][1]);
+          add(this->alpha2, this->alpha2, this->alpha1);
+          abs(this->alpha2, this->alpha2);
+          // if( abs(to<PType>(pminus)*plattice[1][0] + to<PType>(qminus)*plattice[1][1]) > to<PType>(0.5) ){
+          if( this->alpha2 > to<PType>(0.5) ){
             //std::cout << "Transform matrix" << std::endl;
             //std::cout <<  this->pm << "  " << this->pminus  <<  std::endl;
             //std::cout <<  this->qm << "  " << this->qminus <<  std::endl;
@@ -157,10 +169,10 @@ void VoronoiMethods<Type, PType>::make_prepared(CubicIdeal<Type, PType> & ideal1
             #ifdef DEBUG
             std::cout << "becomePrepared: step 10: first transform" << std::endl;
             #endif
-            this->temp_pb[0][0] = PType(this->pm)*plattice[0][0] + PType(this->qm)*plattice[0][1];
-            this->temp_pb[1][0] = PType(this->pm)*plattice[1][0] + PType(this->qm)*plattice[1][1];
-            this->temp_pb[0][1] = PType(this->pminus)*plattice[0][0] +  PType(this->qminus)*plattice[0][1];
-            this->temp_pb[1][1] = PType(this->pminus)*plattice[1][0] +  PType(this->qminus)*plattice[1][1];
+            this->temp_pb[0][0] = to<PType>(this->pm)*plattice[0][0] + to<PType>(this->qm)*plattice[0][1];
+            this->temp_pb[1][0] = to<PType>(this->pm)*plattice[1][0] + to<PType>(this->qm)*plattice[1][1];
+            this->temp_pb[0][1] = to<PType>(this->pminus)*plattice[0][0] +  to<PType>(this->qminus)*plattice[0][1];
+            this->temp_pb[1][1] = to<PType>(this->pminus)*plattice[1][0] +  to<PType>(this->qminus)*plattice[1][1];
 
             plattice[0][0] = this->temp_pb[0][0];
             plattice[1][0] = this->temp_pb[1][0];
@@ -187,10 +199,10 @@ void VoronoiMethods<Type, PType>::make_prepared(CubicIdeal<Type, PType> & ideal1
             #ifdef DEBUG
             std::cout << "becomePrepared: Step10 second transform" << std::endl;
             #endif
-            this->temp_pb[0][0] = PType(pminus)*plattice[0][0] + PType(qminus)*plattice[0][1];
-            this->temp_pb[1][0] = PType(pminus)*plattice[1][0] + PType(qminus)*plattice[1][1];
-            this->temp_pb[0][1] = PType(pBefore)*plattice[0][0] +  PType(qBefore)*plattice[0][1];
-            this->temp_pb[1][1] = PType(pBefore)*plattice[1][0] +  PType(qBefore)*plattice[1][1];
+            this->temp_pb[0][0] = to<PType>(pminus)*plattice[0][0] + to<PType>(qminus)*plattice[0][1];
+            this->temp_pb[1][0] = to<PType>(pminus)*plattice[1][0] + to<PType>(qminus)*plattice[1][1];
+            this->temp_pb[0][1] = to<PType>(pBefore)*plattice[0][0] +  to<PType>(qBefore)*plattice[0][1];
+            this->temp_pb[1][1] = to<PType>(pBefore)*plattice[1][0] +  to<PType>(qBefore)*plattice[1][1];
 
             plattice[0][0] = this->temp_pb[0][0];
             plattice[1][0] = this->temp_pb[1][0];
@@ -224,11 +236,11 @@ void VoronoiMethods<Type, PType>::make_prepared(CubicIdeal<Type, PType> & ideal1
       //std::cout <<  ideal1.coeff_matrix[2][0] << "  " << ideal1.coeff_matrix[2][1] << "  " << ideal1.coeff_matrix[2][2] << std::endl;
 
       // Step 11
-      this->dummy1 = Type(floor( plattice[0][1]/plattice[0][0] ));
+      this->dummy1 = to<Type>(floor( plattice[0][1]/plattice[0][0] ));
 
 
-      plattice[0][1] -= PType(this->dummy1)*plattice[0][0];
-      plattice[1][1] -= PType(this->dummy1)*plattice[1][0];
+      plattice[0][1] -= to<PType>(this->dummy1)*plattice[0][0];
+      plattice[1][1] -= to<PType>(this->dummy1)*plattice[1][0];
 
       ideal1.coeff_matrix[0][2] -= this->dummy1*ideal1.coeff_matrix[0][1];
       ideal1.coeff_matrix[1][2] -= this->dummy1*ideal1.coeff_matrix[1][1];

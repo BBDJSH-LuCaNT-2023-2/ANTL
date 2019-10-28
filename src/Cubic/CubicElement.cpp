@@ -107,11 +107,11 @@ template <typename Type, typename PType>
 void CubicElement<Type, PType> :: get_real_value(PType & newVal) {
 
 
-    mul(newVal, this->x, this->get_order()->get_rho1());
-    add(newVal, newVal, this->u);
-    mul(this->precise_temp, this->y, this->get_order()->get_rho2());
+    mul(newVal, to<PType>(this->x), this->get_order()->get_rho1());
+    add(newVal, newVal, to<PType>(this->u));
+    mul(this->precise_temp, to<PType>(this->y), this->get_order()->get_rho2());
     add(newVal, newVal, this->precise_temp);
-    div(newVal, newVal, this->get_denom());
+    div(newVal, newVal, to<PType>(this->get_denom()) );
 
 
 };

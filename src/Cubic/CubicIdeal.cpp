@@ -97,9 +97,9 @@ void CubicIdeal<Type,PType> :: puncture(int i, PType & xi, PType & eta){
   gen.assign(this->coeff_matrix[0][i], this->coeff_matrix[1][i], this->coeff_matrix[2][i], this->coeff_matrix[0][0]);
 
   gen.get_real_value(xi);
-  mul(xi, xi, PType(3));
+  mul(xi, xi, to<PType>(3));
   gen.trace( this->rational_temp);
-  div(this->p_temp, rational_temp.getNumerator(), rational_temp.getDenominator());
+  div(this->p_temp, to<PType>(rational_temp.getNumerator()), to<PType>(rational_temp.getDenominator()) );
   sub(xi, xi, this->p_temp);
   mul(xi, xi, 0.5);
   // now compute eta
@@ -494,22 +494,17 @@ bool is_equal(CubicIdeal<T,PT> & A, CubicIdeal <T,PT> & B){
     B.make_canonical();
 
     // store the values e_1 and e_2 in static variables
-    A.ci_temp = ANTL::abs(A.coeff_matrix[1][1] * A.coeff_matrix[2][2]
-                  - A.coeff_matrix[1][2] * A.coeff_matrix[2][1]);
-    A.ci_temp2 = ANTL::abs(B.coeff_matrix[1][1] * B.coeff_matrix[2][2]
-                  - B.coeff_matrix[1][2] * B.coeff_matrix[2][1]);
-/*
-    std::cout << "Lattice Invariants: " << A.coeff_matrix[0][0] <<  " " <<A.coeff_matrix[1][1] << " " << (A.coeff_matrix[2][2]) << " "
-              << A.coeff_matrix[1][2] << " " << A.coeff_matrix[0][1] << " " << A.coeff_matrix[0][2] <<
-              "\n" <<
-      (A.coeff_matrix[1][2]%A.coeff_matrix[1][1]) << (A.coeff_matrix[0][1]%A.coeff_matrix[0][0]) <<
-      (A.coeff_matrix[0][2] - B2.coefficientMatrix[0][1])%A.coeff_matrix[0][0] << std::endl;
+    mul(A.ci_temp,  A.coeff_matrix[1][1], A.coeff_matrix[2][2]);
+    mul(A.ci_temp3, A.coeff_matrix[1][2], A.coeff_matrix[2][1]);
+    sub(A.ci_temp,  A.ci_temp, A.ci_temp3);
+    abs(A.ci_temp,  A.ci_temp);
+    // A.ci_temp = abs(A.coeff_matrix[1][1] * A.coeff_matrix[2][2] - A.coeff_matrix[1][2] * A.coeff_matrix[2][1]);
+    mul(A.ci_temp2, B.coeff_matrix[1][1], B.coeff_matrix[2][2]);
+    mul(A.ci_temp3, B.coeff_matrix[1][2], B.coeff_matrix[2][1]);
+    sub(A.ci_temp2, A.ci_temp2, A.ci_temp3);
+    abs(A.ci_temp2, A.ci_temp2);
+    //A.ci_temp2 = abs(B.coeff_matrix[1][1] * B.coeff_matrix[2][2] - B.coeff_matrix[1][2] * B.coeff_matrix[2][1]);
 
-      std::cout << "Lattice Invariants: " << B.coeff_matrix[0][0] <<  " " <<B.coeff_matrix[1][1] << " " << (B.coeff_matrix[2][2]) << " "
-                << B.coeff_matrix[1][2] << " " << B.coeff_matrix[0][1] << " " << B2.coefficientMatrix[0][1] << "\n" <<
-      (B.coeff_matrix[1][2]%A.coeff_matrix[1][1]) << (B.coeff_matrix[0][1]%A.coeff_matrix[0][0]) <<
-      ( ((A.coeff_matrix[1][2] - B.coeff_matrix[1][2]) / A.coeff_matrix[1][1] )*A.coeff_matrix[0][1]) % A.coeff_matrix[0][0] << std::endl;
-*/
 
     if (   ( A.coeff_matrix[0][0] != B.coeff_matrix[0][0]   )             // matching sigma values
         || ( A.ci_temp != A.ci_temp2 )                            // e values match
@@ -518,6 +513,7 @@ bool is_equal(CubicIdeal<T,PT> & A, CubicIdeal <T,PT> & B){
         std::cout << "first equality check fails" << std::endl;
         return false;
     }//close if clause
+
     else if (
          (  ( (A.coeff_matrix[1][2] - B.coeff_matrix[1][2]) % A.coeff_matrix[1][1] ) != 0  )
 //      || ( (A.coeff_matrix[0][1]%A.coeff_matrix[0][0]) != (B.coeff_matrix[0][1] % A.coeff_matrix[0][0]) )

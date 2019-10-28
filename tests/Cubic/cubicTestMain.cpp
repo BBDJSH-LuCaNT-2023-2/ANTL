@@ -29,6 +29,7 @@
 using namespace NTL;
 using namespace ANTL;
 using NTL::ZZ;
+using NTL::RR;
 using namespace boost::multiprecision;
 using boost::math::tools::polynomial;
 using boost::multiprecision::mpf_float;
@@ -73,9 +74,9 @@ int main(){
 
 
   long ibcf[4] = {2,1,1,1};
-  polynomial<ZZ> test_poly1{ {to_ZZ(ibcf[3]), to_ZZ(ibcf[2]),to_ZZ(ibcf[1]), to_ZZ(ibcf[0])} };
-  CubicOrder<ZZ, double> * co_point; co_point = CubicOrder<ZZ, double>::make_order(test_poly);
-  CubicOrder<ZZ, double> * Odie = co_point;
+  polynomial<mpz_int> test_poly{ {(ibcf[3]), (ibcf[2]),(ibcf[1]), (ibcf[0])} };
+  CubicOrder<long, double> * co_point; co_point = CubicOrder<long, double>::make_order(test_poly);
+  CubicOrder<long, double> * Odie = co_point;
 
   cout << "rho1:  " << Odie->get_rho1() << "     rho2:  " << Odie->get_rho2() << endl;
   cout << " root1 " << Odie->get_root1() << " root2 " << Odie->get_root2() << " root3 " << Odie->get_root3() << std::endl;
@@ -83,9 +84,9 @@ int main(){
   cout << "----------------------------------------" << endl;
 
   double val;
-  //Odie->get_fund_unit(0)->get_real_value(val);
-  //std::cout << "Fundamental Units " << std::endl;
-  //std::cout << Odie->get_fund_unit(0)->get_u() << " " << Odie->get_fund_unit(0)->get_x() << " " << Odie->get_fund_unit(0)->get_y() << " Reg: "<< ANTL::log(val) << std::endl;
+  Odie->get_fund_unit(0)->get_real_value(val);
+  std::cout << "Fundamental Units " << std::endl;
+  std::cout << Odie->get_fund_unit(0)->get_u() << " " << Odie->get_fund_unit(0)->get_x() << " " << Odie->get_fund_unit(0)->get_y() << " Reg: "<< ANTL::log(val) << std::endl;
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
@@ -113,7 +114,7 @@ int main(){
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
-  polynomial<mpz_int> * testptr = &test_poly;
+  //polynomial<mpz_int> * testptr = &test_poly;
 
 
 
@@ -129,6 +130,8 @@ int main(){
 
   //CubicOrder<long, double> * odie_ptr = &Odie;
 
+
+/*
   long number1[3] = {1,0,0};
   long number2[3] = {0,1,0};
   long number3[3] = {0,0,1};
@@ -158,6 +161,7 @@ int main(){
 
   CubicIdeal<long, double> Ideal1(Odie, Ellie, Elias, Elmira);
   double punc_lat[2][2];
+  */
   //Ideal1.make_prepared();
   //Ideal1.make_voronoi_basis();
 

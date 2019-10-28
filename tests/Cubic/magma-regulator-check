@@ -1,0 +1,76 @@
+// Magma code for checking the cubic Regulator:
+
+// Establish a polynomial ring over the rationals, and initialize ComplexField
+P<x> := PolynomialRing(Rationals()); C<i> := ComplexField();
+
+// Define a vector of coefficients, and create a cubic polynomial
+coeffs := [1, 4, -2, -2];
+p := coeffs[1]*x^3 + coeffs[2]*x^2 + coeffs[3]*x + coeffs[4]; p;
+
+// Obtain roots over C
+roots := Roots(p, C);
+
+// Define number field using p, and compute its discriminant
+K:= NumberField(p);
+Discriminant(K);
+
+// Compute Regulator
+"Regulator is " * Sprint(Regulator(K));
+
+
+// sometimes, we need the conjugate basis elements, the code below compute all of them
+rho2 := coeffs[1]*roots[1][1]*roots[1][1] + coeffs[2]*roots[1][1];
+rho2p := coeffs[1]*roots[2][1]*roots[2][1] + coeffs[2]*roots[2][1];
+rho2pp := coeffs[1]*roots[3][1]*roots[3][1] + coeffs[2]*roots[3][1];
+rho1 := coeffs[1]*roots[1][1];
+rho1p := coeffs[1]*roots[2][1];
+rho1pp := coeffs[1]*roots[3][1];
+
+// The code below lets us define an element as well as the conjugates, computing the real values
+el := [0,1,0];
+g:=    el[1] + el[2]*rho1 + el[3]*rho2;
+gp :=  el[1] + el[2]*rho1p + el[3]*rho2p;
+gpp := el[1] + el[2]*rho1pp + el[3]*rho2pp;
+g;
+(3*g - (g+ gp + gpp))*0.5;
+Sprint(rho1p)
+rho2;
+
+// puncture related values
+eta:= (gp-gpp)/(2*i);eta;
+zeta := (gp+gpp)/2; zeta;
+eta^2+zeta^2
+
+
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+// Basic example of working with matrix
+
+// Define a matrix over Q explicitly
+M:= Matrix(RationalField(),3,
+[0,-3,-6,
+ 0, -3,-3,
+ 1, 0, -3]);
+M;
+
+M1 := Matrix(RationalField(), 3,3, [-25, 6, -123, 43, -66, -37, -2, 43, -23]   );
+M1;
+M1 := M1/33;      // division by a constant
+Determinant(M1);  // compute determinant
+M2:= (M1^-1); M2; // simple operations
+M1*M2;
+
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+
+// working with orders, finding indices etc
+
+E:= EquationOrder(K);
+O := MaximalOrder(K);
+Index(O,E);
+
+
+
+
+////////////////////////
+////////////////////////

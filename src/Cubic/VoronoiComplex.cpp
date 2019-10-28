@@ -35,28 +35,29 @@ void VoronoiComplex<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> &
       // This is circumvented by observing delta'-delta'' = 2*Im(delta')*i
       gammaMatrix[0][1] =  ideal1.get_order()->get_rho1();                                             // rho1
 
-      mul(gammaMatrix[1][1], PType(ideal1.get_order()->get_coeff(3)), ideal1.get_order()->get_root3() );  // a*Im(delta')
-      //gammaMatrix[1][1] = ( PType(ideal1.get_order()->get_coeff(3))*ideal1.get_order()->get_root3() );    // a*Im(delta')
+      mul(gammaMatrix[1][1], to<PType>(ideal1.get_order()->get_coeff(3)), ideal1.get_order()->get_root3() );  // a*Im(delta')
+      //gammaMatrix[1][1] = ( to<PType>(ideal1.get_order()->get_coeff(3))*ideal1.get_order()->get_root3() );    // a*Im(delta')
 
       NTL::clear(gammaMatrix[2][1]);
       sub(gammaMatrix[2][1],gammaMatrix[2][1], ideal1.get_order()->get_rho1());
-      sub(gammaMatrix[2][1],gammaMatrix[2][1], PType(ideal1.get_order()->get_coeff(2)));
-      div(gammaMatrix[2][1], 2);
-      //gammaMatrix[2][1] = -(ideal1.get_order()->get_rho1() + PType(ideal1.get_order()->get_coeff(2)))/2; // -(rho1 + b)/2
+      sub(gammaMatrix[2][1],gammaMatrix[2][1], to<PType>(ideal1.get_order()->get_coeff(2)));
+
+      div(gammaMatrix[2][1], gammaMatrix[2][1], to<PType>(2));
+      //gammaMatrix[2][1] = -(ideal1.get_order()->get_rho1() + to<PType>(ideal1.get_order()->get_coeff(2)))/2; // -(rho1 + b)/2
       gammaMatrix[0][2] =  ideal1.get_order()->get_rho2();                                             // rho2
 
       NTL::clear(gammaMatrix[1][2]);                                                                  // 0
-      sub(gammaMatrix[1][2], gammaMatrix[1][2], PType(ideal1.get_order()->get_coeff(3)));             // -a
+      sub(gammaMatrix[1][2], gammaMatrix[1][2], to<PType>(ideal1.get_order()->get_coeff(3)));             // -a
       mul(gammaMatrix[1][2], gammaMatrix[1][2], ideal1.get_order()->get_root1());                     // -a*delta
       mul(gammaMatrix[1][2], gammaMatrix[1][2], ideal1.get_order()->get_root3());                     // -a*delta* im(delta')
-      //gammaMatrix[1][2] = -(PType(ideal1.get_order()->get_coeff(3))*(ideal1.get_order()->get_root1())*(ideal1.get_order()->get_root3()) );
+      //gammaMatrix[1][2] = -(to<PType>(ideal1.get_order()->get_coeff(3))*(ideal1.get_order()->get_root1())*(ideal1.get_order()->get_root3()) );
 
       NTL::clear(gammaMatrix[2][2]);
-      sub(gammaMatrix[2][2], gammaMatrix[2][2], PType(ideal1.get_order()->get_coeff(1)));             // -c
+      sub(gammaMatrix[2][2], gammaMatrix[2][2], to<PType>(ideal1.get_order()->get_coeff(1)));             // -c
       mul(gammaMatrix[2][2],gammaMatrix[2][2],2);                                                     //-2c
       sub(gammaMatrix[2][2],gammaMatrix[2][2], ideal1.get_order()->get_rho2());                       // -rho2 -2c
       div(gammaMatrix[2][2],gammaMatrix[2][2],2);                                                     // -(rho2 + 2c)/2
-      //gammaMatrix[2][2] = -(ideal1.get_order()->get_rho2() + 2*PType(ideal1.get_order()->get_coeff(1)))/2;  // -(rho2 + 2c)/2
+      //gammaMatrix[2][2] = -(ideal1.get_order()->get_rho2() + 2*to<PType>(ideal1.get_order()->get_coeff(1)))/2;  // -(rho2 + 2c)/2
 
       //std::cout << "gammaMatrix: " << std::endl;
       //std::cout <<  gammaMatrix[0][0] << "  " << gammaMatrix[0][1] << "  " << gammaMatrix[0][2]<< std::endl;
@@ -104,16 +105,16 @@ void VoronoiComplex<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> &
       std::cout << "VoronoiBasis: Resulting Puncture Lattice:" << std::endl;
       std::cout <<  ideal1.p_lat[0][0] << "  " << ideal1.p_lat[0][1] <<  std::endl;
       std::cout <<  ideal1.p_lat[1][0] << "  " << ideal1.p_lat[1][1] <<  std::endl;
-      std::cout << ( PType(ideal1.coeff_matrix[0][1])
-                    + PType(ideal1.coeff_matrix[1][1]) *ideal1.get_order()->get_rho1()
-                    + PType(ideal1.coeff_matrix[2][1])*ideal1.get_order()->get_rho2())/PType(ideal1.coeff_matrix[0][0]) << std::endl;
-      std::cout << ( PType(ideal1.coeff_matrix[0][2])
-                    + PType(ideal1.coeff_matrix[1][2]) *(ideal1.get_order()->get_rho1())
-                    + PType(ideal1.coeff_matrix[2][2])*ideal1.get_order()->get_rho2())/PType(ideal1.coeff_matrix[0][0]) << std::endl;
+      std::cout << ( to<PType>(ideal1.coeff_matrix[0][1])
+                    + to<PType>(ideal1.coeff_matrix[1][1]) *ideal1.get_order()->get_rho1()
+                    + to<PType>(ideal1.coeff_matrix[2][1])*ideal1.get_order()->get_rho2())/to<PType>(ideal1.coeff_matrix[0][0]) << std::endl;
+      std::cout << ( to<PType>(ideal1.coeff_matrix[0][2])
+                    + to<PType>(ideal1.coeff_matrix[1][2]) *(ideal1.get_order()->get_rho1())
+                    + to<PType>(ideal1.coeff_matrix[2][2])*ideal1.get_order()->get_rho2())/to<PType>(ideal1.coeff_matrix[0][0]) << std::endl;
 
 
 
-      // Step 4, formation of the matrix F whose columns are basis reps of
+      // Step 4, formation ofto<Type>( the matrix F whose columns are basis reps of
       //  phi, psi, phi-psi, phi+psi, 2phi+psi
 
       //  These are referred to as omega_i,
@@ -154,20 +155,18 @@ void VoronoiComplex<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> &
       //
       ///////////////////////////////////////////////////////////////////////////
 
-      // This is the method suggested by Hambleton and Williams, found on page 390
+      // This is the method suggested by Hambleton and Williams, found on page 388
       // I don't actually believe I've implemented the condition correctly.
+      abs(this->alpha2, to<PType>(ideal1.get_order()->get_discriminant()) );
+      div(this->alpha1, to<PType>(4), to<PType>(3));
+      pow(this->alpha1, this->alpha2, this->alpha1);
 
-      this->alpha2 = PType(ideal1.get_order()->get_discriminant());
-      div(this->alpha1, PType(4), PType(3));
+          if (this->alpha2 > to<Type>(16384) ){
 
-
-      NTL::power(this->alpha2, this->alpha2, this->alpha1);
-          if (ANTL::abs(ideal1.get_order()->get_discriminant()) > 16384 ){
-
-              this->pm = Type(ceil(PType(213)*this->alpha2 ));
-              //this->pm = Type(ceil(PType(213)*power(PType(ideal1.get_order()->get_discriminant()),4/3) ));  // pm is playing the role of I in the text
-              Irho1 = Type(floor(PType(this->pm) * ideal1.get_order()->get_rho1()));
-              Irho2 = Type(floor(PType(this->pm)* ideal1.get_order()->get_rho2()));
+              this->pm = to<Type>(ceil(to<PType>(213)*this->alpha1 ));
+              //this->pm = to<Type>(ceil(to<PType>(213)*power(to<PType>(ideal1.get_order()->get_discriminant()),4/3) ));  // pm is playing the role of I in the text
+              Irho1 = to<Type>(floor(to<PType>(this->pm) * ideal1.get_order()->get_rho1()));
+              Irho2 = to<Type>(floor(to<PType>(this->pm)* ideal1.get_order()->get_rho2()));
 
               for (int i = 0; i <5; ++i){
                 // if omega_i = (u + x*rho1 + y*rho2)/sigma
@@ -201,13 +200,13 @@ void VoronoiComplex<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> &
 
               //std::cout << (0.5*( 3*realEmbedding(elementHolder,ideal1.coeff_matrix[0][0])
               //              -cubicTrace(elementHolder, ideal1.coeff_matrix[0][0]))
-              //              -realEmbedding(elementHolder,ideal1.coeff_matrix[0][0]) )*PType(ideal1.coeff_matrix[0][0])
+              //              -realEmbedding(elementHolder,ideal1.coeff_matrix[0][0]) )*to<PType>(ideal1.coeff_matrix[0][0])
               //              << std::endl;
               //QQ<Type> myrational;
 
               this->placeholder.trace(ideal1.rational_temp);                            // store the trace in dummy1
 
-              div(this->alpha2, ideal1.rational_temp.getN(), ideal1.rational_temp.getD());
+              div(this->alpha2, to<PType>(ideal1.rational_temp.getN()), to<PType>(ideal1.rational_temp.getD()) );
 
               this->placeholder.get_real_value(this->alpha0);
 
@@ -215,11 +214,11 @@ void VoronoiComplex<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> &
               //std::cout <<  "Value of -zeta" << i << "     " << (-0.5 *(this->alpha2
               //  -this->alpha0)) << std::endl;
               //std::cout << "Nearest integer (multiplied by denominator):      " << round (-0.5 *(this->alpha2
-              //    -this->alpha0))*PType(ideal1.coeff_matrix[0][0]) << std::endl;
+              //    -this->alpha0))*to<PType>(ideal1.coeff_matrix[0][0]) << std::endl;
 
-              this->omegaMatrix[0][i] += Type(
+              this->omegaMatrix[0][i] += to<Type>(
                 round ( -0.5 *(this->alpha2
-                      -this->alpha0))*PType(ideal1.coeff_matrix[0][0]) );
+                      -this->alpha0))*to<PType>(ideal1.coeff_matrix[0][0]) );
 
 
             }
@@ -232,7 +231,7 @@ void VoronoiComplex<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> &
 
   //        std::cout << "Output the arithemtic matrices of the candidates:" << std::endl;
   //        NMatrix candidateArith;
-  //        LargeNumber fakedenom = Type(1);
+  //        LargeNumber fakedenom = to<Type>(1);
   //        LargeNumber secondOmega;
   //        for (int i = 0; i < 5; ++i){
   //            candidateArith = arithmeticMatrix(omegaMatrix[0][i],omegaMatrix[1][i],omegaMatrix[2][i], fakedenom);
@@ -240,7 +239,7 @@ void VoronoiComplex<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> &
   //            std::cout << candidateArith.mat[1][0]<< " " << candidateArith.mat[1][1] << " " <<  candidateArith.mat[1][2]<< " " << std::endl;
   //            std::cout << candidateArith.mat[2][0]<< " " << candidateArith.mat[2][1] << " " <<  candidateArith.mat[2][2]<< " " << std::endl;
   //            std::cout << "-------------------" << std::endl;
-  //            secondOmega = omegaMatrix[0][i]-Type(1);
+  //            secondOmega = omegaMatrix[0][i]-to<Type>(1);
   //            candidateArith = arithmeticMatrix(secondOmega,omegaMatrix[1][i],omegaMatrix[2][i], fakedenom);
   //            std::cout << candidateArith.mat[0][0]<< " " << candidateArith.mat[0][1] << " " <<  candidateArith.mat[0][2]<< " " << std::endl;
   //            std::cout << candidateArith.mat[1][0]<< " " << candidateArith.mat[1][1] << " " <<  candidateArith.mat[1][2]<< " " << std::endl;
@@ -288,9 +287,9 @@ void VoronoiComplex<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> &
   //std::cout << "Fbar Matrix: " << std::endl;
           for (int j = 0 ; j <5; ++j){
               for(int i = 0; i < 3; ++i){
-                  Fbar[i][j] = (gammaMatrix[i][0]*PType(this->omegaMatrix[0][j])
-                              + gammaMatrix[i][1]*PType(this->omegaMatrix[1][j])
-                              + gammaMatrix[i][2]*PType(this->omegaMatrix[2][j]))/PType(ideal1.coeff_matrix[0][0]);
+                  Fbar[i][j] = (gammaMatrix[i][0]*to<PType>(this->omegaMatrix[0][j])
+                              + gammaMatrix[i][1]*to<PType>(this->omegaMatrix[1][j])
+                              + gammaMatrix[i][2]*to<PType>(this->omegaMatrix[2][j]))/to<PType>(ideal1.coeff_matrix[0][0]);
 
               }
           }
@@ -301,7 +300,8 @@ void VoronoiComplex<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> &
   std::cout << "log values " << std::endl;
   for (int k =0; k < 5; k++){
     if (Fbar[0][k] > 0)
-      std::cout << k << " " << ANTL::log(Fbar[0][k]) << std::endl;
+      log(this->alpha1, Fbar[0][k]);
+      std::cout << k << " " << this->alpha1 << std::endl;
   }
 
           std::cout << "t = zeta^2 + eta^2" << std::endl;
@@ -338,8 +338,9 @@ void VoronoiComplex<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> &
         // Elimination of puncture candidates
         //
         //////////////////////////////////////////////////////////////////////////
-
-          if (ideal1.p_lat[1][1] < ANTL::sqrt(PType(3))/2){
+          div(this->alpha2, to<PType>(3), to<PType>(2));
+          SqrRoot(this->alpha2, this->alpha2);
+          if (ideal1.p_lat[1][1] < this->alpha2 ){
               this->omegaDecision[4]= false;
               this->omegaDecision[3]= false;
               std::cout << "We've ruled out the last two candidates" << std::endl;
@@ -422,13 +423,13 @@ void VoronoiComplex<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> &
 
 
               // If (omega_index)-1 lies in C, this is the adjacent min
-              if ( gammaMatrix[0][0] < PType(1) ){
+              if ( gammaMatrix[0][0] < to<PType>(1) ){
                   s = 1;   //this will be value 's' from step 10.c
 
                   break; //exit the do while, we've found the adjacent min.
               }
               // if the above is false, but omega_index lies in C, then there's some work to do.
-              else if ( (gammaMatrix[0][0] + 2*Fbar[2][index] -1) < PType(1)) {
+              else if ( (gammaMatrix[0][0] + 2*Fbar[2][index] -1) < to<PType>(1)) {
                   s = 0;
 
                   // For the remaining indices j, check if the remaining omega_j-1

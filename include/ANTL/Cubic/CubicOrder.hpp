@@ -11,6 +11,7 @@
 #include <string>
 #include <NTL/RR.h>
 #include <NTL/ZZX.h>
+#include <NTL/ZZ.h>
 #include <boost/math/tools/polynomial.hpp>
 #include <boost/multiprecision/gmp.hpp>
 #include "../Arithmetic/QQ.hpp"
@@ -24,7 +25,7 @@
 #include "VoronoiComplex.hpp"
 #include "VoronoiReal.hpp"
 using boost::math::tools::polynomial;
-
+using NTL::abs;
 // forward declaration
 template<typename Type, typename PType>
 class CubicElement;

@@ -87,21 +87,21 @@ void VoronoiReal<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> & id
           // [ -floor(phi') -1)] / s
           ideal1.get_order()->get_real_value(this->alpha2, ideal1.coeff_matrix[0][1],ideal1.coeff_matrix[1][1],ideal1.coeff_matrix[2][1], ideal1.coeff_matrix[0][0], 1);
           ideal1.coeff_matrix[0][1] = ideal1.coeff_matrix[0][1]
-            - ideal1.coeff_matrix[0][0]*Type(floor(this->alpha2)) - ideal1.coeff_matrix[0][0];
+            - ideal1.coeff_matrix[0][0]*to<Type>(floor(this->alpha2)) - ideal1.coeff_matrix[0][0];
 
           ideal1.get_order()->get_real_value(this->alpha2, ideal1.coeff_matrix[0][2],ideal1.coeff_matrix[1][2],ideal1.coeff_matrix[2][2], ideal1.coeff_matrix[0][0], 2);
           ideal1.coeff_matrix[0][2] = ideal1.coeff_matrix[0][2]
-            - ideal1.coeff_matrix[0][0]*Type(floor(this->alpha2))- ideal1.coeff_matrix[0][0];
+            - ideal1.coeff_matrix[0][0]*to<Type>(floor(this->alpha2))- ideal1.coeff_matrix[0][0];
       }else{
         //std::cout << "VoronoiBasis: Step 4 option 2 " << std::endl;
 
         ideal1.get_order()->get_real_value(this->alpha2, ideal1.coeff_matrix[0][1],ideal1.coeff_matrix[1][1],ideal1.coeff_matrix[2][1], ideal1.coeff_matrix[0][0], 2);
         ideal1.coeff_matrix[0][1] = ideal1.coeff_matrix[0][1]
-          - ideal1.coeff_matrix[0][0]*Type(floor(this->alpha2)) - ideal1.coeff_matrix[0][0];
+          - ideal1.coeff_matrix[0][0]*to<Type>(floor(this->alpha2)) - ideal1.coeff_matrix[0][0];
 
         ideal1.get_order()->get_real_value(this->alpha2, ideal1.coeff_matrix[0][2],ideal1.coeff_matrix[1][2],ideal1.coeff_matrix[2][2], ideal1.coeff_matrix[0][0], 1);
         ideal1.coeff_matrix[0][2] = ideal1.coeff_matrix[0][2]
-          - ideal1.coeff_matrix[0][0]*Type(floor(this->alpha2)) - ideal1.coeff_matrix[0][0];
+          - ideal1.coeff_matrix[0][0]*to<Type>(floor(this->alpha2)) - ideal1.coeff_matrix[0][0];
       }
       //std::cout << "VoronoiBasis: After Step 4" << std::endl;
       //std::cout <<  ideal1.coeff_matrix[0][1] << "  " << ideal1.coeff_matrix[0][2] <<  std::endl;
@@ -145,15 +145,21 @@ void VoronoiReal<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> & id
       //////////////////////////////////////////////////////////
 
       // Step 6 indicates an equality involving the quantity A of the Hessian.
-      // Given by b^2-4ac
-      sqr(this->alpha2, ideal1.get_order()->get_coeff(2));
-      sqr(this->alpha1, ideal1.coeff_matrix[0][0] );
-      if((ideal1.p_lat[0][1] >1) ||
-        (this->alpha2 - 3*ideal1.get_order()->get_coeff(3)*ideal1.get_order()->get_coeff(1)) > ((49/4.0)*this->alpha1) || (ideal1.coeff_matrix[0][0] == 1) ){
+      // Given by b^2-3ac
+      sqr(this->alpha2, to<PType>(ideal1.get_order()->get_coeff(2))) ;
+      mul(this->alpha1, to<PType>(ideal1.get_order()->get_coeff(3)), to<PType>(ideal1.get_order()->get_coeff(1) ));
+      mul(this->alpha1, this->alpha1, to<PType>(3) );
+      sub(this->alpha2, this->alpha2, this->alpha1);      //b^2-3ac
+
+      sqr(this->alpha1, to<PType>(ideal1.coeff_matrix[0][0]) );
+      mul(this->alpha1, this->alpha1, to<PType>(49) );
+      div(this->alpha1, this->alpha1, to<PType>(4) );
+      if((ideal1.p_lat[0][1] >to<PType>(1)) ||
+        ( this->alpha2 > ((49/4.0)*this->alpha1)) || IsOne(ideal1.coeff_matrix[0][0]) ){
           this->omegaDecision[3] = false;
           this->omegaDecision[4] = false;
       }
-      else if (ideal1.p_lat[0][1] > 0.5){
+      else if (ideal1.p_lat[0][1] > PType(0.5)){
           this->omegaDecision[4] = false;
       }
       #ifdef DEBUG
@@ -164,23 +170,25 @@ void VoronoiReal<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> & id
       //        Step 7: Further eliminations                  //
       //                                                      //
       //////////////////////////////////////////////////////////
-      if (ANTL::abs(ideal1.p_lat[1][1]) > (1 + 2*ANTL::abs(ideal1.p_lat[1][0]) ) ){
+      abs(this->alpha1, ideal1.p_lat[1][1]);
+      abs(this->alpha2, ideal1.p_lat[1][0]);
+      if (this->alpha1 > (1 + 2*this->alpha2 ) ){
           this->omegaDecision[1] = false;
           this->omegaDecision[2] = false;
           this->omegaDecision[3] = false;
           this->omegaDecision[4] = false;
       }
-      else if (ANTL::abs(ideal1.p_lat[1][1]) > (1 + ANTL::abs(ideal1.p_lat[1][0]) ) ){
+      else if (this->alpha1 > (1 + this->alpha2 ) ){
           this->omegaDecision[1] = false;
           this->omegaDecision[2] = false;
           this->omegaDecision[3] = false;
 
       }
-      else if (ANTL::abs(ideal1.p_lat[1][1]) > 1 ){
+      else if (this->alpha1 > 1 ){
           this->omegaDecision[1] = false;
           this->omegaDecision[2] = false;
       }
-      else if (ANTL::abs(ideal1.p_lat[1][1]) > (1 - ANTL::abs(ideal1.p_lat[1][0]) ) ){
+      else if (this->alpha1 > (1 - this->alpha2 ) ){
           this->omegaDecision[2] = false;
           //std::cout << "T = 1,2,4,5" << "\n";
       }
@@ -201,10 +209,11 @@ void VoronoiReal<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> & id
 
         ideal1.get_order()->get_real_value(this->alpha1,  this->omegaMatrix[0][i], this->omegaMatrix[1][i], this->omegaMatrix[2][i], ideal1.coeff_matrix[0][0], 1);
         ideal1.get_order()->get_real_value(this->alpha2, this->omegaMatrix[0][i], this->omegaMatrix[1][i], this->omegaMatrix[2][i], ideal1.coeff_matrix[0][0], 2);
-
-          if ( this->omegaDecision[i]
-               && ( ANTL::abs(  floor(this->alpha1) - floor(this->alpha2)  ) > 1 )
-             ) // close if clause
+        floor(this->alpha1, this->alpha1);
+        floor(this->alpha2, this->alpha2);
+        sub(this->alpha1, this->alpha1, this->alpha2);
+        abs(this->alpha1, this->alpha1);
+          if ( this->omegaDecision[i] && ( this->alpha1  > to<PType>(1) ))
              {
                 this->omegaDecision[i] = false;
              }
@@ -228,31 +237,32 @@ void VoronoiReal<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> & id
           if (this->omegaDecision[2]){
                   ideal1.get_order()->get_real_value(this->alpha2,  this->omegaMatrix[0][2], this->omegaMatrix[1][2], this->omegaMatrix[2][2], ideal1.coeff_matrix[0][0], p1);
                   this->omegaMatrix[0][2] = this->omegaMatrix[0][2]
-                      - ideal1.coeff_matrix[0][0] - Type(floor(this->alpha2))*ideal1.coeff_matrix[0][0];
+                      - ideal1.coeff_matrix[0][0] - to<Type>(floor(this->alpha2))*ideal1.coeff_matrix[0][0];
           }
           if (this->omegaDecision[3]){
                   ideal1.get_order()->get_real_value(this->alpha2,  this->omegaMatrix[0][3], this->omegaMatrix[1][3], this->omegaMatrix[2][3], ideal1.coeff_matrix[0][0], p2);
                   this->omegaMatrix[0][3] = this->omegaMatrix[0][3]
-                      - ideal1.coeff_matrix[0][0] - Type(floor(this->alpha2))*ideal1.coeff_matrix[0][0];
+                      - ideal1.coeff_matrix[0][0] - to<Type>(floor(this->alpha2))*ideal1.coeff_matrix[0][0];
           }
-          if (this->omegaDecision[4] && (ANTL::abs(ideal1.p_lat[1][1]) > 1)){
+          abs(this->alpha1,ideal1.p_lat[1][1] );
+          if (this->omegaDecision[4] && (this->alpha1 > to<PType>(1))){
                   ideal1.get_order()->get_real_value(this->alpha2,  this->omegaMatrix[0][4], this->omegaMatrix[1][4], this->omegaMatrix[2][4], ideal1.coeff_matrix[0][0], p2);
                   this->omegaMatrix[0][4] = this->omegaMatrix[0][4]
-                      - ideal1.coeff_matrix[0][0] - Type(floor(this->alpha2))*ideal1.coeff_matrix[0][0];
+                      - ideal1.coeff_matrix[0][0] - to<Type>(floor(this->alpha2))*ideal1.coeff_matrix[0][0];
           }
 
 //      else if (ideal1.p_lat[1][0] > 0){
 //        if (this->omegaDecision[2]){
 //                this->omegaMatrix[0][2] = this->omegaMatrix[0][2]
-//                    - ideal1.coeff_matrix[0][0] - Type(floor(NumericalConjugate(2, this->omegaMatrix[0][2], this->omegaMatrix[1][2], this->omegaMatrix[2][2], ideal1.coeff_matrix[0][0])))*ideal1.coeff_matrix[0][0];
+//                    - ideal1.coeff_matrix[0][0] - to<Type>(floor(NumericalConjugate(2, this->omegaMatrix[0][2], this->omegaMatrix[1][2], this->omegaMatrix[2][2], ideal1.coeff_matrix[0][0])))*ideal1.coeff_matrix[0][0];
 //        }
 //        if (this->omegaDecision[3]){
 //                this->omegaMatrix[0][3] = this->omegaMatrix[0][3]
-//                    - ideal1.coeff_matrix[0][0] - Type(floor(NumericalConjugate(1, this->omegaMatrix[0][3], this->omegaMatrix[1][3], this->omegaMatrix[2][3], ideal1.coeff_matrix[0][0])))*ideal1.coeff_matrix[0][0];
+//                    - ideal1.coeff_matrix[0][0] - to<Type>(floor(NumericalConjugate(1, this->omegaMatrix[0][3], this->omegaMatrix[1][3], this->omegaMatrix[2][3], ideal1.coeff_matrix[0][0])))*ideal1.coeff_matrix[0][0];
 //        }
 //        if (this->omegaDecision[4] && (ANTL::abs(ideal1.p_lat[1][1]) > 1)){
 //                this->omegaMatrix[0][4] = this->omegaMatrix[0][4]
-//                    - ideal1.coeff_matrix[0][0] - Type(floor(NumericalConjugate(1, this->omegaMatrix[0][4], this->omegaMatrix[1][4], this->omegaMatrix[2][4], ideal1.coeff_matrix[0][0])))*ideal1.coeff_matrix[0][0];
+//                    - ideal1.coeff_matrix[0][0] - to<Type>(floor(NumericalConjugate(1, this->omegaMatrix[0][4], this->omegaMatrix[1][4], this->omegaMatrix[2][4], ideal1.coeff_matrix[0][0])))*ideal1.coeff_matrix[0][0];
 //        }
 //      }
       //std::cout <<  NumericalConjugate(0, this->omegaMatrix[0][0], this->omegaMatrix[1][0], this->omegaMatrix[2][0], ideal1.coeff_matrix[0][0]) << std::endl;

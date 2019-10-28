@@ -8,16 +8,16 @@
 template <typename Type, typename PType>
 void CubicOrderReal<Type, PType> :: compute_conjugate_elements(){
 
-  mul(this->conjugate_bases[0][0],(this->defining_IBCF)[3], this->root_list[1]);      // a*delta'
+  mul(this->conjugate_bases[0][0],to<PType>((this->defining_IBCF)[3]), this->root_list[1]);      // a*delta'
 
-  this->conjugate_bases[0][1] = this->conjugate_bases[0][0];                              // a*delta'
-  add(this->conjugate_bases[0][1],this->conjugate_bases[0][1],(this->defining_IBCF)[2]); // a*delta' + b
-  mul(this->conjugate_bases[0][1], this->conjugate_bases[0][1], this->root_list[1]);                    // a*delta'^2 + b*delta'
+  this->conjugate_bases[0][1] = this->conjugate_bases[0][0];                                          // a*delta'
+  add(this->conjugate_bases[0][1],this->conjugate_bases[0][1],to<PType>((this->defining_IBCF)[2]) );  // a*delta' + b
+  mul(this->conjugate_bases[0][1], this->conjugate_bases[0][1], this->root_list[1]);                  // a*delta'^2 + b*delta'
 
 
-  mul(this->conjugate_bases[1][0],(this->defining_IBCF)[3], this->root_list[2]);      // a*delta''
+  mul(this->conjugate_bases[1][0],to<PType>((this->defining_IBCF)[3]), this->root_list[2]);      // a*delta''
   this->conjugate_bases[1][1] = this->conjugate_bases[1][0];                              // a*delta''
-  add(this->conjugate_bases[1][1],this->conjugate_bases[1][1],(this->defining_IBCF)[2]); // a*delta'' + b
+  add(this->conjugate_bases[1][1],this->conjugate_bases[1][1], to<PType>( (this->defining_IBCF)[2]) ); // a*delta'' + b
   mul(this->conjugate_bases[1][1], this->conjugate_bases[1][1], this->root_list[2]);                    // a*delta''^2 + b*delta''
 }
 
@@ -26,20 +26,20 @@ void CubicOrderReal<Type, PType> :: get_real_value(PType & newVal, Type &U, Type
 
     if (this->is_real() && (conj != 0)){
        --conj;
-       mul(newVal, PType(X), this->get_conjugate_bases(conj,0));  // x*rho1'
+       mul(newVal, to<PType>(X), this->get_conjugate_bases(conj,0));  // x*rho1'
 
-       add(newVal, newVal, PType(U));
-       mul(this->order_temp, PType(Y), this->get_conjugate_bases(conj,1)); // y* rho2'
+       add(newVal, newVal, to<PType>(U));
+       mul(this->order_temp, to<PType>(Y), this->get_conjugate_bases(conj,1)); // y* rho2'
        add(newVal, newVal, this->order_temp);
     }
     else{
-      mul(newVal, PType(X), this->get_rho1());
-      add(newVal, newVal, PType(U));
-      mul(this->order_temp, PType(Y), this->get_rho2());
+      mul(newVal, to<PType>(X), this->get_rho1());
+      add(newVal, newVal, to<PType>(U));
+      mul(this->order_temp, to<PType>(Y), this->get_rho2());
       add(newVal, newVal, this->order_temp);
     }
 
-    div(newVal, newVal, PType(D));
+    div(newVal, newVal, to<PType>(D));
 
 }
 

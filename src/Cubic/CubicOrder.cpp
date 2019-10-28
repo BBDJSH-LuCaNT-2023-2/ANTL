@@ -104,11 +104,11 @@ void CubicOrder<Type, PType> ::  roots_swap_position(int p1, int p2){
 template <typename Type, typename PType>
 void CubicOrder<Type, PType> :: get_real_value(PType & newVal, Type & U, Type & X, Type & Y, Type & D, int conj) {
     std::cout << "using CubicOrders real function" << std::endl;
-    NTL::mul(newVal, PType(X), this->get_rho1());
-    NTL::add(newVal, newVal, PType(U));
-    NTL::mul(this->order_temp, PType(Y), this->get_rho2());
+    NTL::mul(newVal, to<PType>(X), this->get_rho1());
+    NTL::add(newVal, newVal, to<PType>(U));
+    NTL::mul(this->order_temp, to<PType>(Y), this->get_rho2());
     NTL::add(newVal, newVal, this->order_temp);
-    NTL::div(newVal, newVal, PType(D));
+    NTL::div(newVal, newVal, to<PType>(D));
 
 
 }
@@ -118,10 +118,9 @@ void CubicOrder<Type, PType> :: get_real_value(PType & newVal, Type & U, Type & 
 // *********************Protected member methods  *************************** //
 template <typename Type, typename PType>
 void CubicOrder<Type, PType> :: set_roots(){
-  int type = SolveP3<PType>(this->root_list, PType(this->defining_IBCF[2]/this->defining_IBCF[3]),
-    PType(this->defining_IBCF[1]/this->defining_IBCF[3]), PType(this->defining_IBCF[0]/this->defining_IBCF[3]) );
+  int type = cardano<Type, PType>(this->defining_IBCF ,this->root_list );
 
-  if ( (this->discriminant > 0) &&(ANTL::abs(this->root_list[0])-PType(1.0) <= PType(0))){
+  if ( (this->discriminant > 0) &&(ANTL::abs(this->root_list[0])-to<PType>(1.0) <= to<PType>(0))){
     roots_swap_position(this->root_list[0], this->root_list[1]);
   }
 }
@@ -151,10 +150,10 @@ template <typename Type, typename PType>
 void CubicOrder<Type, PType> :: set_integral_basis(){
 
   // rho1 = a*delta
-  NTL::mul(this->rho1, this->root_list[0], PType(this->defining_IBCF[3]) );
+  NTL::mul(this->rho1, this->root_list[0], to<PType>(this->defining_IBCF[3]) );
 
   // rho2 = a*delta + b
-  add(this->rho2, this->rho1, this->defining_IBCF[2]);
+  add(this->rho2, this->rho1, to<PType>(this->defining_IBCF[2]) );
   // rho2 = a*delta*delta + b*delta
   NTL::mul(this->rho2, this->rho2, this->root_list[0]);
 
@@ -178,7 +177,7 @@ template <typename Type, typename PType>
 void CubicOrder<Type, PType> :: compute_fundamental_unit(){
 
   // initialize matrix L0 as the identity
-  
+
   CubicIdeal<Type, PType> L_identity = CubicIdeal<Type, PType>(this);
   CubicIdeal<Type, PType> L1 = CubicIdeal<Type, PType>(this);
   CubicIdeal<Type, PType> L2 = CubicIdeal<Type, PType>(this);
