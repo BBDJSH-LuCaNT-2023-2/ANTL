@@ -111,6 +111,7 @@ void CubicElement<Type, PType> :: get_real_value(PType & newVal) {
     add(newVal, newVal, to<PType>(this->u));
     mul(this->precise_temp, to<PType>(this->y), this->get_order()->get_rho2());
     add(newVal, newVal, this->precise_temp);
+    std::cout << "real elt: " << newVal << std::endl;
     div(newVal, newVal, to<PType>(this->get_denom()) );
 
 

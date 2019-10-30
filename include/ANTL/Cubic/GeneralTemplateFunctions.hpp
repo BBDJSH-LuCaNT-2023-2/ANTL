@@ -3,9 +3,11 @@
 
 #include <boost/math/bindings/rr.hpp>
 #include <boost/math/tools/polynomial.hpp>
+#include "../common.hpp"
 #include "../Arithmetic/QQ.hpp"
 
 using namespace NTL;
+
 using namespace ANTL;
 using boost::math::tools::polynomial;
 using boost::math::ntl::atan;

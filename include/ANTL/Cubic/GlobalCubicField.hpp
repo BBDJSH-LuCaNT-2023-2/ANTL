@@ -8,14 +8,26 @@
  * and in the future to CubicFunctionField
  */
 
+ #include <sstream>
+ #include <string>
+ #include <NTL/RR.h>
+ #include <NTL/ZZX.h>
+ #include <NTL/ZZ.h>
+ #include <boost/math/tools/polynomial.hpp>
+ #include <boost/multiprecision/gmp.hpp>
+ #include "../common.hpp"
+ #include "../Arithmetic/QQ.hpp"
 
-#include <NTL/ZZX.h>
-#include <NTL/RR.h>
-#include "GeneralTemplateFunctions.hpp"
-#include "CubicOrder.hpp"
-#include <boost/math/tools/polynomial.hpp>
-#include <boost/multiprecision/gmp.hpp>
-#include "../common.hpp"
+
+ #include "GeneralTemplateFunctions.hpp"
+ #include "CubicOrderReal.hpp"
+ #include "Multiplication/IdealMultiplicationStrategy.hpp"
+ #include "Multiplication/MultiplyStrategyWilliams.hpp"
+ #include "VoronoiMethods.hpp"
+ #include "VoronoiComplex.hpp"
+ #include "VoronoiReal.hpp"
+ using boost::math::tools::polynomial;
+ using NTL::abs;
 
 
 

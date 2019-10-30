@@ -119,9 +119,11 @@ void CubicOrder<Type, PType> :: get_real_value(PType & newVal, Type & U, Type & 
 template <typename Type, typename PType>
 void CubicOrder<Type, PType> :: set_roots(){
   int type = cardano<Type, PType>(this->defining_IBCF ,this->root_list );
-
-  if ( (this->discriminant > 0) &&(ANTL::abs(this->root_list[0])-to<PType>(1.0) <= to<PType>(0))){
-    roots_swap_position(this->root_list[0], this->root_list[1]);
+  PType x1;
+  abs(x1, this->root_list[0]);
+  if ( (this->discriminant > 0) && (x1 - to<PType>(1.0) <= to<PType>(0)) ){
+    //roots_swap_position(this->root_list[0], this->root_list[1]);
+    roots_swap_position(0, 1);
   }
 }
 

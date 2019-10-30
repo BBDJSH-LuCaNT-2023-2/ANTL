@@ -32,6 +32,10 @@ CubicElement(){
   NTL::clear(this->x);
   NTL::clear(this->y);
 };
+
+/**
+* @brief Constructor which takes in a cubic order and creates the one element
+*/
 CubicElement(const CubicOrder<Type,PType> * cnfo){
   my_order = cnfo;
   NTL::set(this->denom);

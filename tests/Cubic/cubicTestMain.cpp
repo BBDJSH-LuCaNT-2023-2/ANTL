@@ -73,20 +73,31 @@ int main(){
 */
 
 
-  long ibcf[4] = {2,1,1,1};
-  polynomial<mpz_int> test_poly{ {(ibcf[3]), (ibcf[2]),(ibcf[1]), (ibcf[0])} };
-  CubicOrder<long, double> * co_point; co_point = CubicOrder<long, double>::make_order(test_poly);
-  CubicOrder<long, double> * Odie = co_point;
+  ZZ ibcf[4];
+  ibcf[3] = 2;
+  ibcf[2] = 2;
+  ibcf[1] = 3;
+  ibcf[0] = 1;
+
+  polynomial<ZZ> const test_poly{{ibcf[0],ibcf[1],ibcf[2],ibcf[3] }};
+
+
+  std::cout << test_poly[3] << "x^3 + " << test_poly[2]<< "x^2 + " << test_poly[1] << "x + " << test_poly[0]<< std::endl;
+  CubicOrder<ZZ, RR> * co_point; co_point = CubicOrder<ZZ, RR>::make_order(test_poly);
+  CubicOrder<ZZ, RR> * Odie = co_point;
 
   cout << "rho1:  " << Odie->get_rho1() << "     rho2:  " << Odie->get_rho2() << endl;
   cout << " root1 " << Odie->get_root1() << " root2 " << Odie->get_root2() << " root3 " << Odie->get_root3() << std::endl;
   cout << "order disc:  "<< Odie->get_discriminant() << endl;
   cout << "----------------------------------------" << endl;
 
-  double val;
+  RR val;
   Odie->get_fund_unit(0)->get_real_value(val);
+
+  std::cout << test_poly[3] << "x^3 + " << test_poly[2]<< "x^2 + " << test_poly[1] << "x + " << test_poly[0]<< std::endl;
+
   std::cout << "Fundamental Units " << std::endl;
-  std::cout << Odie->get_fund_unit(0)->get_u() << " " << Odie->get_fund_unit(0)->get_x() << " " << Odie->get_fund_unit(0)->get_y() << " Reg: "<< ANTL::log(val) << std::endl;
+  std::cout << Odie->get_fund_unit(0)->get_u() << " " << Odie->get_fund_unit(0)->get_x() << " " << Odie->get_fund_unit(0)->get_y() << " Reg: "<< NTL::log(val) << std::endl;
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
@@ -199,11 +210,6 @@ int main(){
   //cout << dedekindEta(z1, 2) << endl;
   //std::complex<RR> z3 = z2 + RR(1);
 
-
-  mpf_float_100 root_list[3];
-  mpf_float_100 a1 = test_poly[2]/test_poly[3];
-  mpf_float_100 a2 = test_poly[1]/test_poly[3];
-  mpf_float_100 a3 = test_poly[0]/test_poly[3];
   //std::cout << SolveP3<mpf_float_100>(root_list, a1,a2,a3) << std::endl;
 
 

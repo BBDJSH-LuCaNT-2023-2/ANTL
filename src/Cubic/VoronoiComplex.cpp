@@ -161,7 +161,7 @@ void VoronoiComplex<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> &
       div(this->alpha1, to<PType>(4), to<PType>(3));
       pow(this->alpha1, this->alpha2, this->alpha1);
 
-          if (this->alpha2 > to<Type>(16384) ){
+          if (this->alpha2 > to<PType>(16384) ){
 
               this->pm = to<Type>(ceil(to<PType>(213)*this->alpha1 ));
               //this->pm = to<Type>(ceil(to<PType>(213)*power(to<PType>(ideal1.get_order()->get_discriminant()),4/3) ));  // pm is playing the role of I in the text

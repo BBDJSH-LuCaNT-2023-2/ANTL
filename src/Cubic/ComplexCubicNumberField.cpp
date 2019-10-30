@@ -27,12 +27,8 @@ ComplexCubicNumberField<Type, PType> :: ComplexCubicNumberField( polynomial<Type
 
 template <typename Type, typename PType>
 void ComplexCubicNumberField<Type, PType> :: set_roots(){
-
   PType roots[3];
-  PType a1 = this->definingPolynomial[2]/this->definingPolynomial[3];
-  PType b1 = this->definingPolynomial[1]/this->definingPolynomial[3];
-  PType c1 = this->definingPolynomial[0]/this->definingPolynomial[3];
-  int root_type = SolveP3<PType>(roots, a1,b1,c1);
+  int root_type = cardano<PType>(this->definingPolynomial, roots);
 
   real_root = roots[0];
   complex_root = (roots[1], roots[2]);
