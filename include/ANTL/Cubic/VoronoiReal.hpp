@@ -14,7 +14,7 @@ class VoronoiReal : public VoronoiMethods<Type, PType>{
 
 public:
 
-void make_voronoi_basis(CubicIdeal<Type, PType> & ideal1, bool reduced = true);
+void make_voronoi_basis(CubicIdeal<Type, PType> & ideal1);
 protected:
 
 int p1, p2;

@@ -48,8 +48,9 @@ void CubicOrderReal<Type, PType> :: get_real_value(PType & newVal, Type &U, Type
 
 
 
-
-
+/*
+// This is a working version of the Voronoi algorithm for Fundamental units, but it
+// has been moved to the BasicVornoi class
 
 template <typename Type, typename PType>
 void CubicOrderReal<Type, PType> :: compute_fundamental_unit(){
@@ -217,8 +218,7 @@ void CubicOrderReal<Type, PType> :: compute_fundamental_unit(){
 
 
 
-}
-
+}*/
 
 
 

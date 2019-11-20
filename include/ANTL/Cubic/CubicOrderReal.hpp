@@ -53,16 +53,11 @@ void get_real_value(PType & newVal, Type &U, Type &X, Type &Y, Type &D, int conj
 /**
 * @brief See pg 317 of CFG, this algorithm computes a pair of fund. units of a cubic order
 */
-void compute_fundamental_unit();
-
-CubicElement<Type, PType> * get_fund_unit(int i){
-  if (i > 1){
-    std::cout << "Please supply argument either 0 or 1" << std::endl;
-  }
+CubicElement<Type, PType> * get_fundamental_unit(int i){
   if (this->fundamentalUnits.size() == 0){
-    this->compute_fundamental_unit();
+    this->unit_strat->compute(this->fundamentalUnits, this, this->is_real());
     return &this->fundamentalUnits[i];
-  }
+  }else
   return &this->fundamentalUnits[i];
 };
 
@@ -72,8 +67,7 @@ protected:
 // [ rho1', rho2' ]
 // [ rho1'' rho2'']
 PType conjugate_bases[2][2];
-std::vector<CubicIdeal<Type, PType>> x_cycle;         // container to hold x-cycle
-std::vector<CubicElement<Type, PType>> adj_minima_vec;    // container for holding adjacent min
+
 
 
 private:

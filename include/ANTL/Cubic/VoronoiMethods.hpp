@@ -20,7 +20,7 @@ public:
 void make_prepared(CubicIdeal<Type, PType> & ideal1, PType plattice[2][2]);
 
 
-virtual void make_voronoi_basis(CubicIdeal<Type, PType> & ideal1, bool reduced = true){
+virtual void make_voronoi_basis(CubicIdeal<Type, PType> & ideal1){
   std::cout << "using the base class method: Error" << std::endl;
 };
 

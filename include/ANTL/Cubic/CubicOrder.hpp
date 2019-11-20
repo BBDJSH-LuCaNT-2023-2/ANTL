@@ -19,8 +19,12 @@
 
 #include "GeneralTemplateFunctions.hpp"
 #include "CubicOrderReal.hpp"
+#include "CubicOrderComplex.hpp"
 #include "Multiplication/IdealMultiplicationStrategy.hpp"
 #include "Multiplication/MultiplyStrategyWilliams.hpp"
+#include "fund_unit/FundUnitStrategy.hpp"
+#include "fund_unit/BasicVoronoi.hpp"
+#include "fund_unit/BSGSVoronoi.hpp"
 #include "VoronoiMethods.hpp"
 #include "VoronoiComplex.hpp"
 #include "VoronoiReal.hpp"
@@ -41,6 +45,12 @@ template<typename Type, typename PType>
 class VoronoiComplex;
 template<typename Type, typename PType>
 class VoronoiReal;
+template<typename Type, typename PType>
+class FundUnitStrategy;
+template<typename Type, typename PType>
+class BasicVoronoi;
+template<typename Type, typename PType>
+class BSGSVoronoi;
 
 template <typename T, typename PT>
 void mul (CubicElement <T,PT> & A, const CubicElement <T,PT> & B, const CubicElement <T,PT> & C);
@@ -53,11 +63,11 @@ class CubicOrder {
 public:
 
 static CubicOrder * make_order(polynomial<Type> const &poly){
-  if (discriminant_bcf(poly) > 0 ){
+  if (discriminant_bcf(poly) >= 0 ){
     return new CubicOrderReal<Type, PType>(poly);
   }
-  else{
-    return new CubicOrder(poly);
+  else {
+    return new CubicOrderComplex<Type, PType>(poly);
   }
 }
 /** Constructor
@@ -79,6 +89,9 @@ boost::math::tools::polynomial<Type> get_IBCF() const {return defining_IBCF;}
 Type get_coeff(int i) const {
     return defining_IBCF[i];
 }
+/**
+* @brief Returns a pointer to the associated VoronoiMethods object
+*/
 std::shared_ptr<VoronoiMethods<Type, PType>> get_voronoi() const{
   return vmethods;
 }
@@ -101,17 +114,19 @@ ZZ get_class_number();
 PType get_regulator();
 std::vector<Type> get_class_group();
 
-virtual CubicElement<Type, PType> * get_fund_unit(int i = 0){
-  if (this->fundamentalUnits.size() == 0){
-    this->compute_fundamental_unit();
-  }
-  return &fundamentalUnits[0];
-};
 
+
+
+
+/**
+* @brief Method returns a bool indicating if the order is real (positive discriminant)
+*/
 inline bool is_real() const {
   return (discriminant > 0);
 }
-
+/**
+* @brief Method returns a bool indicating if the order is complex (negative discriminant)
+*/
 inline bool is_complex() const {
   return (discriminant < 0);
 }
@@ -134,8 +149,26 @@ int splitting_type(int p);
 inline void set_mul_strategy(std::shared_ptr<IdealMultiplicationStrategy<Type,PType>> mstrat){
   this->m_method = std::static_pointer_cast< IdealMultiplicationStrategy<Type, PType>>(mstrat);
 };
+inline void set_unit_strategy(std::shared_ptr<FundUnitStrategy<Type,PType>> ustrat){
+  this->unit_strat = std::static_pointer_cast< FundUnitStrategy<Type, PType>>(ustrat);
+};
 
-
+inline void set_unit_strategy(std::string s){
+  if (s.compare("Voronoi") == 0){
+      if (!(this->voronoi_basic)){
+          this->voronoi_basic.reset();
+          this->voronoi_basic = std::make_shared<BasicVoronoi<Type, PType>>();
+      }
+      this->unit_strat = std::static_pointer_cast< FundUnitStrategy<Type, PType>>(this->voronoi_basic);
+    }
+  else if ( (s.compare("BSGS") == 0) && (this->is_complex()) ){
+    if (!(this->voronoi_bsgs)){
+        this->voronoi_bsgs.reset();
+        this->voronoi_bsgs = std::make_shared<BSGSVoronoi<Type, PType>>();
+    }
+    this->unit_strat = std::static_pointer_cast< FundUnitStrategy<Type, PType>>(this->voronoi_bsgs);
+  }
+};
 
 /** @brief returns the index of the order wrt the maximal order, the number f such that disc(O) = f^2 * Delta,
 Delta = field discriminant.
@@ -158,8 +191,11 @@ bool is_equal(const CubicOrder<Type, PType> &CO2) const;
 */
 virtual void get_real_value(PType & newVal, Type &U, Type &X, Type &Y, Type &D, int conj = 0);
 
-
-
+/**
+* @brief Method returns the fundamental unit.
+* If the computation has not been performed, it computes and stores it first.
+*/
+virtual CubicElement<Type, PType> * get_fundamental_unit(int i = 0) = 0;
 
 
 // **************************************************************************  /
@@ -182,13 +218,18 @@ protected:
 
 // GlobalCubicField * my_cubic_field;
 boost::math::tools::polynomial<Type> defining_IBCF;
-//IdealMultiplicationStrategy<Type,PType> * mul_method;
+
 std::shared_ptr<IdealMultiplicationStrategy<Type,PType>> m_method;
 // Put pointers to concrete Multiply strategies here
 std::shared_ptr<MultiplyStrategyWilliams<Type, PType>>  williams;
 std::shared_ptr<VoronoiComplex<Type, PType>>  vcomplex;
 std::shared_ptr<VoronoiReal<Type, PType>>  vreal;
 
+
+std::shared_ptr<FundUnitStrategy<Type,PType>> unit_strat;
+// Put pointers to concrete unit strategies here
+std::shared_ptr<BasicVoronoi<Type, PType>>  voronoi_basic;
+std::shared_ptr<BSGSVoronoi<Type, PType>>  voronoi_bsgs;
 ////////////////////////////////////////////////////////////////
 
 std::shared_ptr<VoronoiMethods<Type, PType>>  vmethods;
@@ -229,7 +270,7 @@ void set_class_group();
 
 void set_regulator();
 
-void compute_fundamental_unit();
+//void compute_fundamental_unit();
 
 private:
 

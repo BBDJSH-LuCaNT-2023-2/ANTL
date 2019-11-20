@@ -23,6 +23,17 @@ CubicOrder<Type, PType> :: CubicOrder(polynomial<Type> const &poly, std::string 
     }
     defining_IBCF = poly;
 
+    // this initiate the fund unit strategy, we only have one for now, but the if statement will
+    // allow us to switch strategies possibly or just use the setter method
+    if (true){
+        if (!(this->voronoi_basic)){
+          this->voronoi_basic.reset();
+          this->voronoi_basic = std::make_shared<BasicVoronoi<Type, PType>>();
+        }
+
+        this->unit_strat = std::static_pointer_cast< FundUnitStrategy<Type, PType>>(this->voronoi_basic);
+    }
+
 
     if (this->discriminant < 0){
       //this->vmethods = std::static_pointer_cast< VoronoiMethods<Type, PType>>( std::make_shared<VoronoiComplex<Type,PType> >() );
@@ -175,6 +186,7 @@ void CubicOrder<Type, PType> :: set_class_group( ){
     std::cout << "set class group"<< std::endl;
 }
 
+/*
 template <typename Type, typename PType>
 void CubicOrder<Type, PType> :: compute_fundamental_unit(){
 
@@ -209,8 +221,8 @@ void CubicOrder<Type, PType> :: compute_fundamental_unit(){
         ++rounds; //prints and increases counter.
 
 
-        /* compute the VoronoiBasis (1, theta_g, theta_h),
-          where theta_g is the minima adjacent to 1 in L */
+        // compute the VoronoiBasis (1, theta_g, theta_h),
+        //  where theta_g is the minima adjacent to 1 in L
         //L.make_voronoi_basis();
 
 //std::cout << "FundamentalUnit2: After voronoiBasis: " << std::endl;
@@ -247,7 +259,7 @@ void CubicOrder<Type, PType> :: compute_fundamental_unit(){
     std::cout << "Fundamental Unit computed: "<< std::endl;
   this->fundamentalUnits.push_back(epsilon);
 }
-
+*/
 
 template <typename Type, typename PType>
 void CubicOrder<Type, PType> :: set_regulator( ){

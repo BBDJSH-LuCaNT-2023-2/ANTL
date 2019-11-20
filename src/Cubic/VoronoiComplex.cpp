@@ -4,7 +4,7 @@
 #include "../../include/ANTL/Cubic/VoronoiComplex.hpp"
 
 template <typename Type, typename PType>
-void VoronoiComplex<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> & ideal1, bool reduced){
+void VoronoiComplex<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> & ideal1){
 
       //Type omegaMatrix[3][5];  //to hold the coordinates of omega_1 ... omega_5
                                       //which are the cadidates from the 5 puncture thm
@@ -71,7 +71,7 @@ void VoronoiComplex<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> &
       std::cout <<  ideal1.coeff_matrix[2][1] << "  " << ideal1.coeff_matrix[2][2] <<  std::endl;
 
       ideal1.make_canonical();
-      std::cout << "VoronoiBasis: Convert to Canonical: " <<  std::endl;
+      std::cout << "VoronoiBasis: The canonical form: " <<  std::endl;
       std::cout <<  ideal1.coeff_matrix[0][1] << "  " << ideal1.coeff_matrix[0][2] <<  std::endl;
       std::cout <<  ideal1.coeff_matrix[1][1] << "  " << ideal1.coeff_matrix[1][2] <<  std::endl;
       std::cout <<  ideal1.coeff_matrix[2][1] << "  " << ideal1.coeff_matrix[2][2] <<  std::endl;
@@ -90,7 +90,7 @@ void VoronoiComplex<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> &
       // Step 3: convert B, PuncB to a prepared basis, {1, phi, psi}
       // this step is performed above
 
-      std::cout << "VoronoiBasis: After becomePrepared: " <<  std::endl;
+      std::cout << "VoronoiBasis: Now Prepared: " <<  std::endl;
       std::cout <<  ideal1.coeff_matrix[0][1] << "  " << ideal1.coeff_matrix[0][2] <<  std::endl;
       std::cout <<  ideal1.coeff_matrix[1][1] << "  " << ideal1.coeff_matrix[1][2] <<  std::endl;
       std::cout <<  ideal1.coeff_matrix[2][1] << "  " << ideal1.coeff_matrix[2][2] <<  std::endl;
@@ -102,17 +102,17 @@ void VoronoiComplex<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> &
       //std::cout <<  ideal1.coeff_matrix[2][1] << "  " << ideal1.coeff_matrix[2][2] <<  std::endl;
       //std::cout <<  ideal1.coeff_matrix[0][0] << std::endl;
 
-      std::cout << "VoronoiBasis: Resulting Puncture Lattice:" << std::endl;
+      std::cout << "VoronoiBasis: PB's puncture Lattice:" << std::endl;
       std::cout <<  ideal1.p_lat[0][0] << "  " << ideal1.p_lat[0][1] <<  std::endl;
       std::cout <<  ideal1.p_lat[1][0] << "  " << ideal1.p_lat[1][1] <<  std::endl;
+      #ifdef DEBUG
       std::cout << ( to<PType>(ideal1.coeff_matrix[0][1])
                     + to<PType>(ideal1.coeff_matrix[1][1]) *ideal1.get_order()->get_rho1()
                     + to<PType>(ideal1.coeff_matrix[2][1])*ideal1.get_order()->get_rho2())/to<PType>(ideal1.coeff_matrix[0][0]) << std::endl;
       std::cout << ( to<PType>(ideal1.coeff_matrix[0][2])
                     + to<PType>(ideal1.coeff_matrix[1][2]) *(ideal1.get_order()->get_rho1())
                     + to<PType>(ideal1.coeff_matrix[2][2])*ideal1.get_order()->get_rho2())/to<PType>(ideal1.coeff_matrix[0][0]) << std::endl;
-
-
+      #endif
 
       // Step 4, formation ofto<Type>( the matrix F whose columns are basis reps of
       //  phi, psi, phi-psi, phi+psi, 2phi+psi
@@ -141,10 +141,12 @@ void VoronoiComplex<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> &
       this->omegaMatrix[1][4] = (2*ideal1.coeff_matrix[1][1])+ideal1.coeff_matrix[1][2];
       this->omegaMatrix[2][4] = (2*ideal1.coeff_matrix[2][1])+ideal1.coeff_matrix[2][2];
 
+      #ifdef DEBUG
       std::cout << "VoronoiBasis: Omega matrix" << std::endl;
       std::cout << this->omegaMatrix[0][0] << " " << this->omegaMatrix[0][1] << " " << this->omegaMatrix[0][2] << " " << this->omegaMatrix[0][3] << " " << this->omegaMatrix[0][4] << std::endl;
       std::cout << this->omegaMatrix[1][0] << " " << this->omegaMatrix[1][1] << " " << this->omegaMatrix[1][2] << " " << this->omegaMatrix[1][3] << " " << this->omegaMatrix[1][4] << std::endl;
       std::cout << this->omegaMatrix[2][0] << " " << this->omegaMatrix[2][1] << " " << this->omegaMatrix[2][2] << " " << this->omegaMatrix[2][3] << " " << this->omegaMatrix[2][4] << std::endl;
+      #endif
       ///////////////////////////////////////////////////////////////////////////
       //
       //                                Step 5:
@@ -223,10 +225,12 @@ void VoronoiComplex<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> &
 
             }
           }
+          #ifdef DEBUG
           std::cout << "omegabar matrix" << std::endl;
           std::cout << this->omegaMatrix[0][0] << "  " << this->omegaMatrix[0][1] << "  " << this->omegaMatrix[0][2] << "  " << this->omegaMatrix[0][3] << "  " << this->omegaMatrix[0][4] << std::endl;
           std::cout << this->omegaMatrix[1][0] << "  " << this->omegaMatrix[1][1] << "  " << this->omegaMatrix[1][2] << "  " << this->omegaMatrix[1][3] << "  " << this->omegaMatrix[1][4] << std::endl;
           std::cout << this->omegaMatrix[2][0] << "  " << this->omegaMatrix[2][1] << "  " << this->omegaMatrix[2][2] << "  " << this->omegaMatrix[2][3] << "  " << this->omegaMatrix[2][4] << std::endl;
+          #endif
 
 
   //        std::cout << "Output the arithemtic matrices of the candidates:" << std::endl;
@@ -294,6 +298,7 @@ void VoronoiComplex<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> &
               }
           }
 
+  #ifdef DEBUG
   std::cout << Fbar[0][0] << " " << Fbar[0][1] << " " << Fbar[0][2] << " " << Fbar[0][3]<< " " << Fbar[0][4] << std::endl;
   std::cout << Fbar[1][0] << " " << Fbar[1][1] << " " << Fbar[1][2] << " " << Fbar[1][3]<< " " << Fbar[1][4] << std::endl;
   std::cout << Fbar[2][0] << " " << Fbar[2][1] << " " << Fbar[2][2] << " " << Fbar[2][3]<< " " << Fbar[2][4] << std::endl;
@@ -303,6 +308,7 @@ void VoronoiComplex<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> &
       log(this->alpha1, Fbar[0][k]);
       std::cout << k << " " << this->alpha1 << std::endl;
   }
+
 
           std::cout << "t = zeta^2 + eta^2" << std::endl;
           for (int k = 0; k < 5; ++k){
@@ -319,7 +325,7 @@ void VoronoiComplex<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> &
             std::cout << k << " minus: " << this->alpha1 << ",  original: " << (this->alpha1  + 2*Fbar[2][k] -1) << std::endl;
 
           }
-
+          #endif
 
         //////////////////////////////////////////////////////////////////////////
         //                                                                      //
@@ -329,7 +335,7 @@ void VoronoiComplex<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> &
         // This should be indicated by the parameter 'reduced'                  //
         //                                                                      //
         //////////////////////////////////////////////////////////////////////////
-        if (reduced){
+        if (ideal1.is_reduced() == char(1)){
 
         //////////////////////////////////////////////////////////////////////////
         //
@@ -459,6 +465,18 @@ void VoronoiComplex<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> &
           }
           while(index != -1);
 
+
+          // Additional step when not reduced, check if the candidate is greater than 1
+          // If not, then we are not reduced, but if it is, then we are reduced
+          if(ideal1.is_reduced() != char(1)){
+            sub(this->alpha2, Fbar[0][index], to<PType>(s));
+            if(this->alpha2 > to<PType>(1)){
+              ideal1.set_reduction_state(1);
+            }
+            else{
+              ideal1.set_reduction_state(0);
+            }
+          }
         //////////////////////////////////////////////////////////////////////////
         //
         //                                Step 11:
@@ -488,13 +506,16 @@ void VoronoiComplex<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> &
               ideal1.coeff_matrix[1][2] = this->omegaMatrix[1][0];
               ideal1.coeff_matrix[2][2] = this->omegaMatrix[2][0];
           }
-          std::cout << ideal1.coeff_matrix[0][1] << "  " << ideal1.coeff_matrix[0][2] << std::endl;
-          std::cout << ideal1.coeff_matrix[1][1] << "  " << ideal1.coeff_matrix[1][2] << std::endl;
-          std::cout << ideal1.coeff_matrix[2][1] << "  " << ideal1.coeff_matrix[2][2] << std::endl;
+
+          std::cout << "VB New matrix (not canonical)" << std::endl;
+          std::cout << ideal1.coeff_matrix[0][0] << "  "<< ideal1.coeff_matrix[0][1] << "  " << ideal1.coeff_matrix[0][2] << std::endl;
+          std::cout << ideal1.coeff_matrix[1][0] << "  "<< ideal1.coeff_matrix[1][1] << "  " << ideal1.coeff_matrix[1][2] << std::endl;
+          std::cout << ideal1.coeff_matrix[2][0] << "  "<< ideal1.coeff_matrix[2][1] << "  " << ideal1.coeff_matrix[2][2] << std::endl;
 
           ideal1.normalize();
 
 std::cout << "***************** VoronoiEnd ******************"<< std::endl;
+std::cout << "***************** ********** ******************"<< std::endl;
 }
 
 

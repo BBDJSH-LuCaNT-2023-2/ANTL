@@ -5,7 +5,7 @@
 #include "../../include/ANTL/Cubic/CubicOrderReal.hpp"
 template <typename Type, typename PType>
 
-void VoronoiReal<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> & ideal1,bool reduced){
+void VoronoiReal<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> & ideal1){
 
 
       this->real_ord = dynamic_cast<CubicOrderReal<Type, PType>*>(ideal1.get_order());
@@ -135,7 +135,7 @@ void VoronoiReal<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> & id
 
 
 
-      if (reduced){
+      if (ideal1.is_reduced() == char(1)){
 
 
       //////////////////////////////////////////////////////////
@@ -284,6 +284,13 @@ void VoronoiReal<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> & id
                   minGamma = GammaValue;
               }
           }
+      }
+      if(ideal1.is_reduced() != char(1)){
+        if(minGamma > to<PType>(1)){
+          ideal1.set_reduction_state(1);
+        } else{
+          ideal1.set_reduction_state(0);
+        }
       }
       std::cout <<  "    VoronoiBasis: Index of the adjacent min:  " << smallestGammaIndex<< std::endl;
       //////////////////////////////////////////////////////////

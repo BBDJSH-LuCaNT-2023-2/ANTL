@@ -27,6 +27,7 @@ Type CubicElement<Type, PType>::newY;
 
 template <typename Type, typename PType>
 void CubicElement<Type, PType> :: assign(const CubicElement<Type,PType> & C){
+  this->my_order = C.get_order();
   this->u = C.get_u();
   this->x = C.get_x();
   this->y = C.get_y();
@@ -72,9 +73,12 @@ void CubicElement<Type, PType> :: trace(ANTL::QQ<Type> & newVal){
   mul(this->temp2, 2, this->get_order()->get_coeff(1));                 // 2*c
   mul(this->temp2, this->temp2, this->y);                               // 2*cy
   sub(this->temp, this->temp, this->temp2);
+  //std::cout << "Trace " << this->temp << "   " << this->denom << std::endl;
 
+  clear(newVal);
   newVal.setNumerator(this->temp);
   newVal.setDenominator(this->denom);
+  //std::cout << "Trace " << newVal.getNumerator() << " " << newVal.getDenominator() << std::endl;
 }
 
 /*
@@ -100,7 +104,6 @@ void CubicElement<Type, PType> :: norm(ANTL::QQ<Type> & newVal){
 
   newVal.setDenominator(this->denom^3 ) ;
 }
-
 */
 
 template <typename Type, typename PType>
@@ -111,7 +114,7 @@ void CubicElement<Type, PType> :: get_real_value(PType & newVal) {
     add(newVal, newVal, to<PType>(this->u));
     mul(this->precise_temp, to<PType>(this->y), this->get_order()->get_rho2());
     add(newVal, newVal, this->precise_temp);
-    std::cout << "real elt: " << newVal << std::endl;
+
     div(newVal, newVal, to<PType>(this->get_denom()) );
 
 
@@ -255,7 +258,15 @@ void CubicElement<Type, PType> :: normalize(){
   }
 }
 
-/****** Operations *******/
+template <typename Type, typename PType>
+std::string CubicElement<Type, PType> :: toString()
+{
+  string s = (zToString(this->get_u()) + " + " + zToString(this->x) + "*rho1 + " + zToString(this->y) + "rho2 \n");
+  return s;
+};
+
+
+// ****** Operations ******* //
 
 
 template <typename T, typename PT>
@@ -562,7 +573,7 @@ template <typename T, typename PT>
 void div (CubicElement <T,PT> & A, const CubicElement <T,PT> & B, const T & alpha){
 
   if (IsZero(alpha)){
-    std::cout << "Attempting to divide by zero. You just broke math.";
+    std::cout << "Attempting to divide by zero.";
     throw std::exception();
   }
   else if (IsOne(alpha)){
@@ -598,7 +609,18 @@ void div (CubicElement <T,PT> & A, const CubicElement <T,PT> & B, const QQ<T> & 
 
 template <typename Type, typename PType>
 void div (CubicElement <Type,PType> & A, const CubicElement <Type,PType> & B, const CubicElement <Type,PType> & C){
-  std::cout << "unimplemented" << std::endl;
+  if (!( B.my_order->is_equal( *(C.my_order) ) ) ){
+    std::cout << "element orders are not the same. Throw exception" << std::endl;
+  }
+  CubicElement<Type, PType> div_intermediate(B.get_order());
+  //PType divreal;
+  //C.get_real_value(divreal);
+  //std::cout "C's real value " << divreal << std::endl;
+  C.inverse(div_intermediate);
+  //A.get_real_value(divreal);
+  //std::cout "C inverse's real value " << divreal << std::endl;
+  mul(A,B,div_intermediate);
+
 }
 
 template <typename Type, typename PType>

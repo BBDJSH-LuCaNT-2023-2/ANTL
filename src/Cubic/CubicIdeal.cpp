@@ -78,8 +78,17 @@ const Type U3, const Type X3, const Type Y3, const Type D3){
   mul(this->denom, this->ci_temp, D3);     // d1*d2*d3
   this->make_canonical();
 }
-
-
+template<typename Type,typename PType>
+void CubicIdeal<Type,PType> :: assign(const CubicIdeal<Type, PType> & A){
+  this->set_order(A.get_order());
+  for (int i = 0; i < 3; ++i){
+    for (int j = 0; j< 3; ++j){
+      this->coeff_matrix[i][j] = A.get_coeff(i,j);
+    }
+  }
+  this->denom = A.get_denom();
+  this->reduced = A.is_reduced();
+}
 
 template<typename Type,typename PType>
 PType CubicIdeal<Type,PType> :: get_gen_numeric(int i){
@@ -97,8 +106,11 @@ void CubicIdeal<Type,PType> :: puncture(int i, PType & xi, PType & eta){
   gen.assign(this->coeff_matrix[0][i], this->coeff_matrix[1][i], this->coeff_matrix[2][i], this->coeff_matrix[0][0]);
 
   gen.get_real_value(xi);
+
   mul(xi, xi, to<PType>(3));
   gen.trace( this->rational_temp);
+
+
   div(this->p_temp, to<PType>(rational_temp.getNumerator()), to<PType>(rational_temp.getDenominator()) );
   sub(xi, xi, this->p_temp);
   mul(xi, xi, 0.5);
@@ -433,11 +445,35 @@ bool CubicIdeal<Type, PType> :: is_equivalent(const CubicIdeal<Type, PType> & B)
 }
 
 template<typename Type,typename PType>
-Type CubicIdeal<Type, PType> :: norm(){
-  std::cout <<"undefined" << std::endl;
-  return Type(-1);
-}
+void CubicIdeal<Type, PType> :: integral_norm( Type & val){
+  // checks if the matrix is triangular
+  if(( coeff_matrix[2][1] == Type(0)) && ( coeff_matrix[1][0] == Type(0)) && ( coeff_matrix[2][0] == Type(0)) ){
+    mul(val, coeff_matrix[0][0], coeff_matrix[1][1]);
+    mul(val, val, coeff_matrix[2][2]);
+  }else{
 
+    mul(this->ci_temp, coeff_matrix[1][1], coeff_matrix[2][2]);
+    mul(this->ci_temp2, coeff_matrix[1][2],coeff_matrix[2][1]);
+    sub(this->ci_temp, this->ci_temp, this->ci_temp2);
+    mul(val, this->ci_temp, coeff_matrix[0][0]);
+
+
+  //val.x = s23*y - x*s33;
+    mul(this->ci_temp, coeff_matrix[1][2], coeff_matrix[2][0]);
+    mul(this->ci_temp2, coeff_matrix[2][2],coeff_matrix[1][0]);
+    sub(this->ci_temp, this->ci_temp, this->ci_temp2);
+    mul(this->ci_temp, this->ci_temp, coeff_matrix[0][1]);
+    add(val, val, this->ci_temp);
+
+    //val.y = x*s32 - y*s22;
+    mul(this->ci_temp, coeff_matrix[1][0], coeff_matrix[2][1]);
+    mul(this->ci_temp2, coeff_matrix[1][1],coeff_matrix[2][0]);
+    sub(this->ci_temp, this->ci_temp, this->ci_temp2);
+    mul(this->ci_temp, this->ci_temp, coeff_matrix[0][2]);
+    add(val, val, this->ci_temp);
+  }
+}
+//s11*(s22*s33- s23*s32) + s12*(s12*s20- s22*s10) + s02*(s10*s21 - s11*s20)
 template<typename Type,typename PType>
 bool CubicIdeal<Type, PType> :: is_principal(){
   std::cout <<"undefined" << std::endl;
@@ -457,14 +493,53 @@ bool CubicIdeal<Type, PType> :: is_canonical(){
 }
 
 template<typename Type,typename PType>
-void CubicIdeal<Type, PType> :: reduce(){
-  std::cout <<"undefined" << std::endl;
+void CubicIdeal<Type, PType> :: reduce(CubicIdeal<Type, PType> & rIdeal,CubicElement<Type, PType> & relatingElement ){
+
+  // relating element is to hold the element which you need to multiply the reduced ideal with the get back to the original
+  // initialize by setting its order to this->ideal's, and assigning its value to 1.
+  relatingElement.set_order(this->get_order());
+  relatingElement.assign(Type(1));
+
+  // copy the current element, rIdeal will hold the reduced ideal
+  rIdeal.assign(*this);
+  rIdeal.set_reduction_state(2);
+
+  // This is going to hold an element which sits inside the normed body of 1
+  CubicElement<Type, PType> interloper(this->get_order());
+
+  while (rIdeal.is_reduced() != char(1)){
+    // typical voronoi approach for reduction: Obtain a  Voronoi and divide by the adjacent minima
+    // the behaviour of the make_voronoi algorithm is dependent on the ideal objects flag
+    rIdeal.make_voronoi_basis();
+
+    // because the is_reduced flag is not 1, the element in column 1 is an element
+    // inside the norm body of 1. Set interloper to be this
+    interloper.assign(rIdeal.get_coeff(0,1),rIdeal.get_coeff(1,1),rIdeal.get_coeff(2,1), rIdeal.get_coeff(0,0));
+
+
+
+    rIdeal.divide_adjacent(rIdeal, interloper);
+    mul(relatingElement, relatingElement,interloper);
+    rIdeal.make_canonical();
+
+    // for testing, print the real value of this element
+    relatingElement.get_real_value(p_temp);
+    //std::cout << " Ideal reduction: adj_min value before neg: "<< p_temp<< std::endl;
+    if (p_temp < to<PType>(0)){
+      relatingElement.negate(relatingElement);
+    }
+      //relatingElement.get_real_value(p_temp);
+    //std::cout << " Ideal reduction: adj_min value: "<< p_temp<< std::endl;
+  }
 }
 
 
 template<typename Type,typename PType>
 void CubicIdeal<Type, PType> :: make_voronoi_basis(char axis){
   std::cout << "Computing Voronoi basis..." << std::endl;
+  // if you incorporate axis choice, now would be the time to swap the roots and
+  // recalculate the values
+
   this->get_order()->get_voronoi()->make_voronoi_basis(*this);
 }
 

@@ -33,7 +33,7 @@ using NTL::RR;
 
 long elt_coeff[3] = {1,2,3};
 boost::math::tools::polynomial<long> poly1{{-1,-3,1,1}};
-CubicOrder<long, double> Rufio(poly1);
+CubicOrder<long, double> * Rufio = CubicOrder<long, double>::make_order(poly1);
 
 ZZ newpoly[4];
 ZZ elt_vector[3];
@@ -164,9 +164,9 @@ TEST_CASE("Trace Function for ZZ and RR"){
 
 
 TEST_CASE("CubicElement getter functions (long, double)"){
-  CubicOrder<long, double> Rufio(poly1);
-  CubicElement<long, double> Ellie (&Rufio, elt_coeff, 7);
-  CubicElement<long, double> Est (&Rufio, elt_coeff, 7);
+  CubicOrder<long, double> * Rufio = CubicOrder<long, double>::make_order(poly1);
+  CubicElement<long, double> Ellie (Rufio, elt_coeff, 7);
+  CubicElement<long, double> Est (Rufio, elt_coeff, 7);
   // This will be the constructor, the getters, and the assign function
   REQUIRE(Est.get_denom() == 7);
   REQUIRE(Est.get_u() == 1);
@@ -176,7 +176,7 @@ TEST_CASE("CubicElement getter functions (long, double)"){
 
   SECTION("Reassignment and is zero"){
     long tea[3] = {0,0,0};
-    CubicElement<long, double> Elias (&Rufio, tea, 1);
+    CubicElement<long, double> Elias (Rufio, tea, 1);
     Ellie.assign(Elias);
 
     REQUIRE(Ellie.get_u() == 0);
@@ -224,11 +224,11 @@ TEST_CASE("Trace Function"){
     QQ<long> rn1(elt_coeff[0], denny);
     mul(rn1, rn1, 3);
 
-    CubicElement<long, double> Est (&Rufio, elt_coeff, 1);
+    CubicElement<long, double> Est (Rufio, elt_coeff, 1);
     Est.trace(tempQ);
     REQUIRE(tempQ.isEqual((3*elt_coeff[0])) );
 
-    CubicElement<long, double> Ellie (&Rufio, elt_coeff, denny);
+    CubicElement<long, double> Ellie (Rufio, elt_coeff, denny);
     Ellie.trace(tempQ);
     REQUIRE(rn1.isEqual(tempQ));
   }
@@ -236,7 +236,7 @@ TEST_CASE("Trace Function"){
   SECTION("Trace of an arbitrary cubic number"){
     elt_coeff[1] = std::rand() % 1000;
     elt_coeff[2] = std::rand() % 1000;
-    CubicElement<long, double>Ellie (&Rufio, elt_coeff, bottom);
+    CubicElement<long, double>Ellie (Rufio, elt_coeff, bottom);
 
     Ellie.trace(tempQ);
 
@@ -246,9 +246,9 @@ TEST_CASE("Trace Function"){
 }
 
 TEST_CASE("Addition"){
-  CubicElement<long, double> Ellie (&Rufio, 2,2,2, 3);
-  CubicElement<long, double> Est (&Rufio, 5, 1,112, 2);
-  CubicElement<long, double> Erika (&Rufio, 0,0, 0, 5);
+  CubicElement<long, double> Ellie (Rufio, 2,2,2, 3);
+  CubicElement<long, double> Est (Rufio, 5, 1,112, 2);
+  CubicElement<long, double> Erika (Rufio, 0,0, 0, 5);
   QQ<long> tempQ(0, 2);
   SECTION("Add a constant"){
     add(Erika,Ellie, 0L);
@@ -288,9 +288,9 @@ TEST_CASE("Addition"){
 }
 
 TEST_CASE("Subtraction"){
-  CubicElement<long, double> Ellie (&Rufio, 2,2,2, 3);
-  CubicElement<long, double> Est (&Rufio, 5, 1,112, 2);
-  CubicElement<long, double> Erika (&Rufio, 0,0, 0, 5);
+  CubicElement<long, double> Ellie (Rufio, 2,2,2, 3);
+  CubicElement<long, double> Est (Rufio, 5, 1,112, 2);
+  CubicElement<long, double> Erika (Rufio, 0,0, 0, 5);
   QQ<long> tempQ(0, 2);
   SECTION("Subtract a constant"){
     sub(Erika,Ellie, 0L);
@@ -330,9 +330,9 @@ TEST_CASE("Subtraction"){
 }
 
 TEST_CASE("Multiplication"){
-  CubicElement<long, double> Ellie (&Rufio, 2,2,2, 3);
-  CubicElement<long, double> Est (&Rufio, 1, 0,0, 5);
-  CubicElement<long, double> Erika (&Rufio, 0,0, 0, 5);
+  CubicElement<long, double> Ellie (Rufio, 2,2,2, 3);
+  CubicElement<long, double> Est (Rufio, 1, 0,0, 5);
+  CubicElement<long, double> Erika (Rufio, 0,0, 0, 5);
   QQ<long> tempQ(0, 2);
 
   SECTION("Mul by a constant"){
@@ -396,6 +396,44 @@ TEST_CASE("Multiplication"){
     REQUIRE(Erika.get_y() == 84);
     REQUIRE(Erika.get_denom() == 15);
   }
+}
+
+TEST_CASE("Division"){
+  newpoly[3] = 1;
+  newpoly[2] = 1;
+  newpoly[1] = -3;
+  newpoly[0] = -1;
+  polynomial<ZZ> const test_poly{{newpoly[0],newpoly[1],newpoly[2],newpoly[3] }};
+  co_point = CubicOrder<ZZ, RR>::make_order(test_poly);
+  CubicOrder<ZZ, RR> * Odie = co_point;
+
+  CubicElement<ZZ, RR> Ellie (Odie, ZZ(5),ZZ(0),ZZ(0), ZZ(2));
+  CubicElement<ZZ, RR> Est (Odie, ZZ(1), ZZ(0),ZZ(0), ZZ(1));
+  CubicElement<ZZ, RR> Erika (Odie, ZZ(2),ZZ(0), ZZ(0), ZZ(5));
+  QQ<ZZ> tempQ(ZZ(0), ZZ(2));
+
+  SECTION("Inverse test"){
+    mul(Erika, Ellie, Erika);
+    std::cout << Erika.toString() << std::endl;
+    REQUIRE(Erika.is_equal(Est));
+
+    Ellie.inverse(Erika);
+    mul(Erika, Ellie, Erika);
+    REQUIRE(Erika.is_equal(Est));
+
+    Ellie.assign(ZZ(14), ZZ(3), ZZ(7), ZZ(2));
+    Ellie.inverse(Erika);
+    mul(Erika, Ellie, Erika);
+    REQUIRE(Erika.is_equal(Est));
+
+    div(Erika, Ellie, Ellie);
+    REQUIRE(Erika.is_equal(Est));
+  }
+
+
+  //SECTION("Multiply two cubic elements"){
+//
+  //}
 }
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////

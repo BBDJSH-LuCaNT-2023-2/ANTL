@@ -92,11 +92,10 @@ inline void set_order(const CubicOrder<Type, PType> * ord){
 //virtual void norm(ANTL::QQ<Type> & newVal) = 0;
 //virtual void trace(ANTL::QQ<Type> & newVal) = 0;
 
-/** @brief Should set this CubicElement to C */
 
 /**
-* @brief Sets this CubicElementNF equal to C
-* Note that there is a friend version too
+* @brief Sets this CubicElementNF equal to C.
+* Note that there is a friend version too.
 * @pre this CubicElementNF and C must be in the same CubicOrder
 */
 void assign(const CubicElement<Type,PType> & C);
@@ -128,22 +127,32 @@ void assign(const QQ<Type> & r){
   this->denom = r.getDenominator();
 }
 
+void negate( CubicElement <Type, PType> & B){
+  this->temp = this->denom;
+  NTL::set(B.denom);
+  B.u = -this->u;
+  B.x = -this->x;
+  B.y = -this->y;
+  B.denom = this->temp;
+}
 /**
 * @brief Checks if this CubicElement is equal to B
 * @ param[in] B a CubicElementNF
 */
 bool is_equal(const CubicElement <Type, PType> & B);
 
-
+/** @brief Cecks if the element is the zero element and returns appropriate bool
+*/
 inline bool is_zero() const {
   return (this->u ==Type(0)) && (this->x ==Type(0)) && (this->y == Type(0));
 }
+
+
 /**
 * @brief Computes the inverse element of this CubicElement and puts it in val
 * @ param[in] val a CubicElement
 * @pre val must be in the same order as this CubicElement
 */
-
 void inverse(CubicElement<Type, PType> & val) const;
 //this should specify whether val is zero
 
@@ -152,7 +161,7 @@ void inverse(CubicElement<Type, PType> & val) const;
 
 /**
 * @brief Computes the absolute norm of this CubicElement
-* and puts it in newVal
+* and puts it in newVal. NOT IMPLEMENTED YET
 */
 void norm(ANTL::QQ<Type> & newVal);
 /**
@@ -162,13 +171,14 @@ void norm(ANTL::QQ<Type> & newVal);
 void trace(ANTL::QQ<Type> & newVal);
 
 
-/**
-* @brief Return the real value of the CubicElement
-* Obtained by subbing in the main root of the associated CubicOrder
+/** @brief Outputs the real value of the cubic element.
+* @params[in] A floating point datatype in which the calculation is stored
+* @params[out] The real value is stored in newVal
 */
 void get_real_value(PType & newVal) ;
 
 
+std::string toString() ;
 //these procedural operations should take B and C and place the result into A
 
 
@@ -211,7 +221,9 @@ static Type newU, newX, newY,temp, temp2;
 static PType precise_temp;
 /***************** member functions **********************/
 
-
+/*
+* @brief Puts the coefficient vector and denominator into lowest terms.
+*/
 void normalize(); // This function should reduce the coefficient vector and denominator into lowest terms.
 
 

@@ -3,11 +3,12 @@
 
 #include <boost/math/bindings/rr.hpp>
 #include <boost/math/tools/polynomial.hpp>
-#include "../common.hpp"
 #include "../Arithmetic/QQ.hpp"
+#include "../common.hpp"
+#include <functional>
+#include <cstdint>
 
 using namespace NTL;
-
 using namespace ANTL;
 using boost::math::tools::polynomial;
 using boost::math::ntl::atan;
@@ -314,6 +315,81 @@ Type discriminant_bcf(polynomial<Type> const &poly){
   - Type(27)*poly[3]*poly[3]*poly[0]*poly[0] ;
 
 }
+
+
+// our hash function!
+namespace std {
+
+  template<>
+  struct hash<NTL::ZZ> {
+    public:
+
+      hash(NTL::ZZ m){
+        modulus = m;
+      }
+
+      std::size_t operator()(const NTL::ZZ & a){
+
+
+          std::size_t endvalue;
+          rem(value_holder, a, modulus);
+
+          conv(endvalue, value_holder);
+          return endvalue;
+
+      }
+
+
+
+    private:
+      ZZ modulus;
+      ZZ value_holder;
+
+  };
+}
+
+struct ZZEqual {
+ bool operator()(const ZZ& lhs, const ZZ& rhs) const
+ {
+    return lhs == rhs;
+ }
+};
+
+struct ZZHash {
+
+  ZZHash(NTL::ZZ m = ZZ(100)){
+    modulus = m;
+  }
+
+  std::size_t operator()(const ZZ& a) const {
+    std::size_t endvalue;
+    ZZ value_holder;
+    NTL::rem(value_holder, a, modulus);
+
+    conv(endvalue, value_holder);
+    return endvalue;
+  }
+  void set_modulus(NTL::ZZ m){
+    modulus = m;
+  }
+
+  ZZ modulus;
+};
+
+inline std::string zToString(const ZZ &z) {
+    std::stringstream buffer;
+    buffer << z;
+    return buffer.str();
+}
+inline std::string zToString(const long &z) {
+    std::stringstream buffer;
+    buffer << z;
+    return buffer.str();
+}
+
+
+
+
 
 
 #endif

@@ -7,6 +7,7 @@
 #include <mpfr.h>
 #include <mpc.h>
 
+
 #include "../../include/ANTL/Cubic/generalFunctions.hpp"
 #include <boost/multiprecision/gmp.hpp>
 

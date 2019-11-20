@@ -13,7 +13,6 @@ void VoronoiMethods<Type, PType>::make_prepared(CubicIdeal<Type, PType> & ideal1
 
           plattice[0][0] = -plattice[0][0];
           plattice[1][0] = -plattice[1][0];
-
           ideal1.flip_basis_element(1);
 
       }
@@ -23,7 +22,6 @@ void VoronoiMethods<Type, PType>::make_prepared(CubicIdeal<Type, PType> & ideal1
 
           plattice[0][1] = -plattice[0][1];
           plattice[1][1] = -plattice[1][1];
-
           ideal1.flip_basis_element(2);
 
       }

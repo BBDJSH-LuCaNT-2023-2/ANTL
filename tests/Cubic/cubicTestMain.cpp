@@ -3,12 +3,14 @@
 */
 
 #include <iostream>
-
+#include <functional>
+#include <iterator>
+#include <unordered_map>
 // qvm matrix headers
-#include <boost/qvm/mat.hpp>
-#include <boost/qvm/mat_traits.hpp>
-#include <boost/qvm/mat_access.hpp>
-#include <boost/qvm/mat_operations.hpp>
+//#include <boost/qvm/mat.hpp>
+//#include <boost/qvm/mat_traits.hpp>
+//#include <boost/qvm/mat_access.hpp>
+//#include <boost/qvm/mat_operations.hpp>
 
 #include <boost/multiprecision/mpfi.hpp>
 
@@ -37,6 +39,35 @@ using boost::multiprecision::mpfi_float;
 using std::cout;
 using std::endl;
 NTL_CLIENT
+
+
+/*
+struct ZZEqual {
+ bool operator()(const ZZ& lhs, const ZZ& rhs) const
+ {
+    return lhs == rhs;
+ }
+};
+
+struct ZZHash {
+
+  ZZHash(NTL::ZZ m = ZZ(100)){
+    modulus = m;
+  }
+
+  std::size_t operator()(const ZZ& a) const {
+    std::size_t endvalue;
+    ZZ value_holder;
+    NTL::rem(value_holder, a, modulus);
+
+    conv(endvalue, value_holder);
+    return endvalue;
+  }
+
+
+  ZZ modulus;
+};
+*/
 
 int main(){
   //std::unique_ptr< MultiplyStrategyWilliams<long,double> > pointo;
@@ -85,29 +116,35 @@ int main(){
   std::cout << test_poly[3] << "x^3 + " << test_poly[2]<< "x^2 + " << test_poly[1] << "x + " << test_poly[0]<< std::endl;
   CubicOrder<ZZ, RR> * co_point; co_point = CubicOrder<ZZ, RR>::make_order(test_poly);
   CubicOrder<ZZ, RR> * Odie = co_point;
-
+  Odie->set_unit_strategy("BSGS");
   cout << "rho1:  " << Odie->get_rho1() << "     rho2:  " << Odie->get_rho2() << endl;
   cout << " root1 " << Odie->get_root1() << " root2 " << Odie->get_root2() << " root3 " << Odie->get_root3() << std::endl;
   cout << "order disc:  "<< Odie->get_discriminant() << endl;
   cout << "----------------------------------------" << endl;
 
   RR val;
-  Odie->get_fund_unit(0)->get_real_value(val);
+  Odie->get_fundamental_unit(0)->get_real_value(val);
 
   std::cout << test_poly[3] << "x^3 + " << test_poly[2]<< "x^2 + " << test_poly[1] << "x + " << test_poly[0]<< std::endl;
 
   std::cout << "Fundamental Units " << std::endl;
-  std::cout << Odie->get_fund_unit(0)->get_u() << " " << Odie->get_fund_unit(0)->get_x() << " " << Odie->get_fund_unit(0)->get_y() << " Reg: "<< NTL::log(val) << std::endl;
+  std::cout << Odie->get_fundamental_unit(0)->get_u() << " " << Odie->get_fundamental_unit(0)->get_x() << " " << Odie->get_fundamental_unit(0)->get_y() << " Reg: "<< NTL::log(val) << std::endl;
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 // Real Order Testing
-
 /*
-  polynomial<long> real_poly{{-2,-2,4,1}};
+ZZ real_ibcf[4];
+real_ibcf[3] = 1;
+real_ibcf[2] = 4;
+real_ibcf[1] = -3;
+real_ibcf[0] = -3;
+
+polynomial<ZZ> const real_poly{{real_ibcf[0],real_ibcf[1],real_ibcf[2],real_ibcf[3] }};
+
   cout << " Poly (R): " << real_poly[0]<< " + " << real_poly[1] << "x + " << real_poly[2]<< " x^2 + " << real_poly[3] << "x^3" << endl;
-  CubicOrder<long, double> * ro_point; ro_point = CubicOrder<long, double>::make_order(real_poly);
-  CubicOrder<long, double> * Odessa = ro_point;
+  CubicOrder<ZZ, RR> * ro_point; ro_point = CubicOrder<ZZ, RR>::make_order(real_poly);
+  CubicOrder<ZZ, RR> * Odessa = ro_point;
 
   Odessa->roots_swap_position(0,1);Odessa->roots_swap_position(1,2);
   cout << "rho1:  " << Odessa->get_rho1() << "     rho2:  " << Odessa->get_rho2() << endl;
@@ -115,8 +152,8 @@ int main(){
   cout << "order disc:  "<< Odessa->get_discriminant() << endl;
   cout << "----------------------------------------" << endl;
     std::cout << "Fundamental Units: " << std::endl;
-  std::cout << Odessa->get_fund_unit(0)->get_u() << " " << Odessa->get_fund_unit(0)->get_x() << " " << Odessa->get_fund_unit(0)->get_y() << std::endl;
-  std::cout << Odessa->get_fund_unit(1)->get_u() << " " << Odessa->get_fund_unit(1)->get_x() << " " << Odessa->get_fund_unit(1)->get_y() << std::endl;
+  std::cout << Odessa->get_fundamental_unit(0)->get_u() << " " << Odessa->get_fundamental_unit(0)->get_x() << " " << Odessa->get_fundamental_unit(0)->get_y() << std::endl;
+  std::cout << Odessa->get_fundamental_unit(1)->get_u() << " " << Odessa->get_fundamental_unit(1)->get_x() << " " << Odessa->get_fundamental_unit(1)->get_y() << std::endl;
   //std::cout << "Pointer practice1" << (*testptr)[0] << (*testptr)[1] << std::endl;
   //polynomial<long> * pptr = CNF.get_defining_polynomial();
   //cout << (pptr)->degree()<< endl;
@@ -210,8 +247,30 @@ int main(){
   //cout << dedekindEta(z1, 2) << endl;
   //std::complex<RR> z3 = z2 + RR(1);
 
-  //std::cout << SolveP3<mpf_float_100>(root_list, a1,a2,a3) << std::endl;
 
+  //std::hash<ZZ> h1;
+  //h1(ZZ(100));
+/*
+  ZZHash h2(ZZ(100));
+  std::unordered_multimap<ZZ, ZZ, ZZHash, ZZEqual> testmap{100, h2, ZZEqual()};
+
+  testmap.reserve(100);
+  //{{1, ZZ(10)}, {2, ZZ(12)}, {1, ZZ(15)}};
+  cout << testmap.size() << endl;
+  cout << testmap.count(ZZ(1)) << endl;
+  //cout << testmap.count(5) << endl;
+  cout << testmap.size() << endl;
+  testmap.emplace(std::make_pair(ZZ(1), ZZ(12)));
+
+  auto its = testmap.equal_range(ZZ(1));
+  for (auto it = its.first; it != its.second; ++it) {
+    cout << (it->second) << endl;
+    cout << it->first << endl;
+    cout << it->first << '\t' << it->second << endl;
+  }
+  //std::hash<ZZ> h1(ZZ(10));
+  std::cout << h2(ZZ(15)) << std::endl;
+*/
 
   return 0;
 };
