@@ -112,14 +112,14 @@ void BasicVoronoi<Type, PType> :: fundamental_unit_real(std::vector<CubicElement
         while (!completeCycle){
             std::cout << "-----------------------------------------------------" << std::endl;
             std::cout << "----------------XCycle iteration: " << cycleSize1 << "------------------" << std::endl;
-            std::cout << "-----------------------------------------------------" << std::endl;
+            //std::cout << "-----------------------------------------------------" << std::endl;
             ++cycleSize1;
 
             // make sure L1 is in canonical form, the push it onto x_cycle
             L1.make_canonical();
             this->x_cycle.push_back(L1);
             // convert to Voronoi basis
-            L1.make_voronoi_basis();
+            //L1.make_voronoi_basis();
 
 
 
@@ -137,13 +137,13 @@ void BasicVoronoi<Type, PType> :: fundamental_unit_real(std::vector<CubicElement
                 // Once a lattice L1 is found which matches a previous lattice L, we delete the lattices preceding L
                 if (completeCycle){
 
-                    std::cout << "Smallest match found with lattice " << i << std::endl;
-                    std::cout << " Number of Lattices in this->x_cycle"<<this->x_cycle.size() << std::endl;
+                    std::cout << " MATCH: Lattice " << i << std::endl;
+                    std::cout << " Number of Lattices in this->x_cycle: "<<this->x_cycle.size() << std::endl;
 
                     this->x_cycle.erase(this->x_cycle.begin(), this->x_cycle.begin()+i);
                     adj_minima_vec.erase(adj_minima_vec.begin(), adj_minima_vec.begin()+i);
 
-                    std::cout << "Lattices remaining: " <<  this->x_cycle.size() << std::endl;
+                    std::cout << " Erasing Preperiod: Lattices remaining: " <<  this->x_cycle.size() << std::endl;
 
                     break;    // breaks out of the x_cycle comparison loop and enter step 4
                 }
@@ -162,16 +162,14 @@ void BasicVoronoi<Type, PType> :: fundamental_unit_real(std::vector<CubicElement
         //At this point psi_bar (aka epsilon2) is equal to 1.
         // this should rotate the roots, and recompute the rho_i and conjugates
         ord->roots_swap_position(0,2);
-
-
+        #ifdef DEBUGVORONOI
+        std::cout << "after swapping roots" << std::endl;
+        std::cout << ord->get_root1() << " " << ord->get_root2() << " " << ord->get_root3() << std::endl;
+        std::cout << ord->get_rho1()<<std::endl; //" " << ord->get_conjugate_bases(0,0) << " " << ord->get_conjugate_bases(1,0) << std::endl;
+        std::cout << ord->get_rho2() << std::endl;//" " << ord->get_conjugate_bases(0,1) << " " << ord->get_conjugate_bases(1,1) << std::endl;
+        #endif
         // it should be that L1 is already equal to the 0th entry of x_cycle
-        // the code below is unnecessary
-        //for (int i = 0; i < 3; ++i){
-        //  for (int j = 0; j < 2; ++j){
-        //    L1.coefficientMatrix[i][j] = this->x_cycle[0].coefficientMatrix[i][j];
-        //  }
-        //} //end initializing loop for L
-        //L1.mainDenominator = this->x_cycle[0].mainDenominator; //redundant, should always be 1
+
 
         #ifdef DEBUG
           std::cout << "\n" <<"FundamentalUnit: Lbar: " << std::endl;
@@ -203,7 +201,7 @@ void BasicVoronoi<Type, PType> :: fundamental_unit_real(std::vector<CubicElement
 
             // compare with the lattices of x_cycle
             for (int i = 0; i < this->x_cycle.size(); i++){
-                std::cout << "Comparing with stored lattice :" << i << "..." << std::endl;
+                std::cout << "Comparing with stored lattice: " << i << " ..." << std::endl;
                 completeCycle = ::is_equal(L1, this->x_cycle[i]);
 
 
@@ -235,8 +233,8 @@ void BasicVoronoi<Type, PType> :: fundamental_unit_real(std::vector<CubicElement
         unitvec.push_back(epsilon2);
         PType eps1, eps2;
         unitvec[0].get_real_value(eps1); unitvec[1].get_real_value(eps2);
-        std::cout << "Epsilon_1 " << epsilon1.get_u() << " "<<epsilon1.get_x() << " "<< epsilon1.get_y() << " : " <<  eps1 << std::endl;
-        std::cout << "Epsilon_2 " << epsilon2.get_u() << " "<<epsilon2.get_x() << " "<< epsilon2.get_y() << " : " <<  eps2 << std::endl;
+
+        std::cout << "BV: eps1 = " << epsilon1.get_u() << " "<<epsilon1.get_x() << " "<< epsilon1.get_y() << ", approx: " <<  eps1 << "     eps2 = " << epsilon2.get_u() << " "<<epsilon2.get_x() << " "<< epsilon2.get_y() << ", approx: " <<  eps2 << std::endl;
 
 };
 #endif

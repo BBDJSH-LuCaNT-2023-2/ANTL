@@ -214,7 +214,7 @@ void make_primitive();
 * Warning this will change the basis of this CubicIdeal to a Voronoi Basis
 * @ params[out] B becomes the adjacent ideal
 */
-void adjacent_ideal(CubicIdeal<Type, PType> &B, CubicElement<Type, PType> &adj_min, int axis = 'X');
+void adjacent_ideal(CubicIdeal<Type, PType> &B, CubicElement<Type, PType> &adj_min, char axis = 'X');
 
 
 
@@ -238,7 +238,8 @@ void make_voronoi_basis(char axis = 1);
 
 
 /*
-* @brief This function divides by the second basis element. It is intended
+* @brief This function divides the ideal by the second basis element.
+* Generally not useful,It is intended
 * for dividing an ideal in voronoi basis form by the adjacent minimum to 1,
 * @param[in] B is a CubicIdeal to hold the new lattice, adj_min is a CubicElement
 * which will hold the 2nd basis element.

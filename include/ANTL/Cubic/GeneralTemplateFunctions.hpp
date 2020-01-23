@@ -36,7 +36,11 @@ template<typename PP>
 int SolveP3(PP* x,PP a,PP b,PP c);
 
 template<typename Type>
-Type calc_discriminant(polynomial<Type> const &poly);
+Type calc_discriminant(polynomial<Type> const &poly){
+  return (poly[2]*poly[2]*poly[1]*poly[1]) + Type(18)*poly[0]*poly[1]*poly[2]*poly[3] -
+    Type(4)*poly[3]*poly[1]*poly[1]*poly[1] - Type(4)*poly[2]*poly[2]*poly[2]*poly[0] -
+    Type(27)*poly[3]*poly[3]*poly[0]*poly[0];
+}
 
 
 template<typename PP>
@@ -316,8 +320,28 @@ Type discriminant_bcf(polynomial<Type> const &poly){
 
 }
 
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+/**
+* @params variable result will hold the output, evaluand is what to evaluate x at
+* a,b,c,d are coefficients of the cubic ax^3 + bx^2 + cx + d
+*/
+template<typename Type>
+void eval_cubic_mod_p(Type & result, const Type & evaluand, const Type &a, const Type &b, const Type & c, const Type & d, const Type & p){
+  // horner's method for evaluating a cubic
 
-// our hash function!
+  MulMod(result, a, evaluand, p);
+
+  AddMod(result, result, b,p);
+  MulMod(result, result, evaluand,p);
+  AddMod(result, result, c,p);
+  MulMod(result, result, evaluand,p);
+  AddMod(result, result, d,p);
+}
+
+
+
+// our hash function! Used in the hash table construction in BSGSVoronoi
 namespace std {
 
   template<>

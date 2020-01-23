@@ -110,8 +110,10 @@ void CubicIdeal<Type,PType> :: puncture(int i, PType & xi, PType & eta){
   mul(xi, xi, to<PType>(3));
   gen.trace( this->rational_temp);
 
-
-  div(this->p_temp, to<PType>(rational_temp.getNumerator()), to<PType>(rational_temp.getDenominator()) );
+  //std::cout << gen.get_u() << " " << gen.get_x() << " " << gen.get_y() << " " << gen.get_denom() << std::endl;
+  //std::cout << xi << std::endl;
+  //std::cout << this->rational_temp.getNumerator() << " / " << this->rational_temp.getDenominator() << std::endl;
+  div(this->p_temp, to<PType>(this->rational_temp.getNumerator()), to<PType>(this->rational_temp.getDenominator()) );
   sub(xi, xi, this->p_temp);
   mul(xi, xi, 0.5);
   // now compute eta
@@ -369,7 +371,7 @@ void CubicIdeal<Type, PType> :: make_primitive(){
 
 // By the end, adjacent_ideal will be the next ideal, while adj_min will contain the min adjacent to 1 of the last lattice
 template<typename Type,typename PType>
-void CubicIdeal<Type, PType> :: adjacent_ideal(CubicIdeal<Type, PType> &B, CubicElement<Type, PType> &adj_min,int axis){
+void CubicIdeal<Type, PType> :: adjacent_ideal(CubicIdeal<Type, PType> &B, CubicElement<Type, PType> &adj_min,char axis){
 
 // Do I need to make sure the ideal is primitive? What about reduced?
   this->make_voronoi_basis(axis);
@@ -381,8 +383,8 @@ void CubicIdeal<Type, PType> :: adjacent_ideal(CubicIdeal<Type, PType> &B, Cubic
 }
 
 
-// this function is intended to divide an ideal by the adjacent minima,
-// and assumes this ideal is already a Voronoi basis
+// this function is intended to divide an ideal by the adjacent minima to 1,
+// Assumes this ideal is already a Voronoi basis
 template<typename Type, typename PType>
 void CubicIdeal<Type, PType> :: divide_adjacent(CubicIdeal<Type, PType> &B, CubicElement<Type, PType> &adj_min){
 
@@ -536,11 +538,26 @@ void CubicIdeal<Type, PType> :: reduce(CubicIdeal<Type, PType> & rIdeal,CubicEle
 
 template<typename Type,typename PType>
 void CubicIdeal<Type, PType> :: make_voronoi_basis(char axis){
+  #ifdef DEBUGVORONOI
   std::cout << "Computing Voronoi basis..." << std::endl;
-  // if you incorporate axis choice, now would be the time to swap the roots and
-  // recalculate the values
+  #endif
+  if (axis == 'X'){
+    this->get_order()->get_voronoi()->make_voronoi_basis(*this);
+  }
+  else if (axis == 'Z'){
+    this->get_order()->roots_swap_position(0,2);
+    this->get_order()->get_voronoi()->make_voronoi_basis(*this);
+    this->get_order()->roots_swap_position(0,2);
 
-  this->get_order()->get_voronoi()->make_voronoi_basis(*this);
+  }else if (axis == 'Y'){
+    this->get_order()->roots_swap_position(0,1);
+    this->get_order()->get_voronoi()->make_voronoi_basis(*this);
+    this->get_order()->roots_swap_position(0,1);
+  }
+
+
+
+
 }
 
 
@@ -548,8 +565,9 @@ void CubicIdeal<Type, PType> :: make_voronoi_basis(char axis){
 // This function might modify the ideal representation!
 template<typename T,typename PT>
 bool is_equal(CubicIdeal<T,PT> & A, CubicIdeal <T,PT> & B){
+  #ifdef DEBUG
   std::cout << "... Comparing Lattices ... "<< std::endl;
-
+  #endif
   /*LatticeBasis B1,B2;
   for (int i = 0; i<3; ++i){
     for (int j = 0; j<2; ++j){
@@ -585,7 +603,9 @@ bool is_equal(CubicIdeal<T,PT> & A, CubicIdeal <T,PT> & B){
         || ( A.ci_temp != A.ci_temp2 )                            // e values match
         || (A.coeff_matrix[2][2] != B.coeff_matrix[2][2]) ){              //g values match
 
-        std::cout << "first equality check fails" << std::endl;
+        #ifdef DEBUG
+        std::cout << "first lattice-equality check fails" << std::endl;
+        #endif
         return false;
     }//close if clause
 
@@ -597,7 +617,10 @@ bool is_equal(CubicIdeal<T,PT> & A, CubicIdeal <T,PT> & B){
           != ( ( (A.coeff_matrix[1][2] - B.coeff_matrix[1][2])*A.coeff_matrix[0][1] / A.coeff_matrix[1][1] ) % A.coeff_matrix[0][0])   )
       ) //close else if clause
     {
-        std::cout << "second equality check fails" << std::endl;
+        #ifdef DEBUG
+        std::cout << "second latice-equality check fails" << std::endl;
+        #endif
+
         return false;
     }
     else if (A.get_denom() != B.get_denom()){

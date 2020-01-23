@@ -178,7 +178,7 @@ void trace(ANTL::QQ<Type> & newVal);
 void get_real_value(PType & newVal) ;
 
 
-std::string toString() ;
+std::string toString() const ;
 //these procedural operations should take B and C and place the result into A
 
 

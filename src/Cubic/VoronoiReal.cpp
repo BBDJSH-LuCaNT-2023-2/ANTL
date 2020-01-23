@@ -42,6 +42,13 @@ void VoronoiReal<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> & id
       std::cout <<  ideal1.coeff_matrix[0][1] << "  " << ideal1.coeff_matrix[0][2] <<  std::endl;
       std::cout <<  ideal1.coeff_matrix[1][1] << "  " << ideal1.coeff_matrix[1][2] <<  "   Denom: " << ideal1.coeff_matrix[0][0] << std::endl;
       std::cout <<  ideal1.coeff_matrix[2][1] << "  " << ideal1.coeff_matrix[2][2] <<  std::endl;
+
+
+      //PType ppl[2][2];
+      //ideal1.puncture_lattice(ppl);
+      //std::cout << "canonical puncture" << std::endl;
+      //std::cout << ppl[0][0] << " " << ppl[0][1] << std::endl;
+      //std::cout << ppl[1][0] << " " << ppl[1][1] << std::endl;
       #endif
 
       //////////////////////////////////////////////////////////
@@ -75,10 +82,13 @@ void VoronoiReal<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> & id
       //        Step 4: Modify phi and psi                    //
       //                                                      //
       //////////////////////////////////////////////////////////
-      //ideal1.get_order()->get_real_value(this->alpha2, ideal1.coeff_matrix[0][1],ideal1.coeff_matrix[1][1],ideal1.coeff_matrix[2][1], ideal1.coeff_matrix[0][0], 2);
-      //ideal1.get_order()->get_real_value(this->alpha1, ideal1.coeff_matrix[0][2],ideal1.coeff_matrix[1][2],ideal1.coeff_matrix[2][2], ideal1.coeff_matrix[0][0], 1);
-      //std::cout << "Phi'' : " << this->alpha2 << std::endl;
-      //std::cout << "Psi' : " << this->alpha1 << std::endl;
+      #ifdef DEBUG
+      ideal1.get_order()->get_real_value(this->alpha2, ideal1.coeff_matrix[0][1],ideal1.coeff_matrix[1][1],ideal1.coeff_matrix[2][1], ideal1.coeff_matrix[0][0], 2);
+      ideal1.get_order()->get_real_value(this->alpha1, ideal1.coeff_matrix[0][2],ideal1.coeff_matrix[1][2],ideal1.coeff_matrix[2][2], ideal1.coeff_matrix[0][0], 1);
+      std::cout << ideal1.coeff_matrix[0][1] << " " << ideal1.coeff_matrix[1][1 ]<< " " << ideal1.coeff_matrix[2][1] << " " << std::endl;
+      std::cout << "Phi'' : " << this->alpha2 << std::endl;
+      std::cout << "Psi' : " << this->alpha1 << std::endl;
+      #endif
 
       if(ideal1.p_lat[1][0] < 0){
           // phi = phi-floor(phi')-1
@@ -292,7 +302,9 @@ void VoronoiReal<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> & id
           ideal1.set_reduction_state(0);
         }
       }
+      #ifdef DEBUGVORONOI
       std::cout <<  "    VoronoiBasis: Index of the adjacent min:  " << smallestGammaIndex<< std::endl;
+      #endif
       //////////////////////////////////////////////////////////
       //                                                      //
       //        Step 12: get the puncture lattice of B         //
@@ -311,12 +323,13 @@ void VoronoiReal<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> & id
           ideal1.coeff_matrix[1][2] = this->omegaMatrix[1][0];
           ideal1.coeff_matrix[2][2] = this->omegaMatrix[2][0];
       }
+      #ifdef DEBUGVORONOI
       std::cout << "\n"<< "    VoronoiBasis: Final Output: " << std::endl;
       std::cout <<  "    " << ideal1.coeff_matrix[0][1] << "  " << ideal1.coeff_matrix[0][2] <<  std::endl;
       std::cout <<  "    " <<ideal1.coeff_matrix[1][1] << "  " << ideal1.coeff_matrix[1][2] <<  std::endl;
       std::cout <<  "    " <<ideal1.coeff_matrix[2][1] << "  " << ideal1.coeff_matrix[2][2] <<  std::endl;
       std::cout << "\n"<< std::endl;
-
+      #endif
 
   }//close function
 

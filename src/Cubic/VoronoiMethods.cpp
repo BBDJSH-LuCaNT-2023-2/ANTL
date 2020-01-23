@@ -6,7 +6,13 @@
 
 template <typename Type, typename PType>
 void VoronoiMethods<Type, PType>::make_prepared(CubicIdeal<Type, PType> & ideal1, PType plattice[2][2]){
+      //ideal1.puncture_lattice(plattice);
 
+      #ifdef DEBUGVORONOI
+      std::cout << "canonical puncture: within make_prepared" << std::endl;
+      std::cout << plattice[0][0] << " " << plattice[0][1] << std::endl;
+      std::cout << plattice[1][0] << " " << plattice[1][1] << std::endl;
+      #endif
       // Step 1:
       // Check if xi_mu is negative, flip the first row if it is
       if (plattice[0][0] < to<PType>(0)){
@@ -32,7 +38,7 @@ void VoronoiMethods<Type, PType>::make_prepared(CubicIdeal<Type, PType> & ideal1
       if ( (this->alpha2 <= to<PType>(0.5)) || (this->alpha1 <= to<PType>(0.5))
          || ((plattice[1][0])*(plattice[1][1]) >= 0) ) {
 
-           #ifdef DEBUG
+           #ifdef DEBUGVORONOI
            std::cout << "becomePrepared: Enter step 4,5,6" << std::endl;
            #endif
             //encompasses steps 3,4,5,6
@@ -117,7 +123,7 @@ void VoronoiMethods<Type, PType>::make_prepared(CubicIdeal<Type, PType> & ideal1
       abs(this->alpha2, plattice[1][0] );
       abs(this->alpha1, plattice[1][1] );
       if ( !( this->alpha2 < to<PType>(0.5) && this->alpha1 > to<PType>(0.5) ) ){
-          #ifdef DEBUG
+          #ifdef DEBUGVORONOI
           std::cout << "becomePrepared: Enter step 8,9,10" << std::endl;
           #endif
           //encompasses steps 8,9,10
@@ -164,7 +170,7 @@ void VoronoiMethods<Type, PType>::make_prepared(CubicIdeal<Type, PType> & ideal1
             //std::cout <<  this->pm << "  " << this->pminus  <<  std::endl;
             //std::cout <<  this->qm << "  " << this->qminus <<  std::endl;
 
-            #ifdef DEBUG
+            #ifdef DEBUGVORONOI
             std::cout << "becomePrepared: step 10: first transform" << std::endl;
             #endif
             this->temp_pb[0][0] = to<PType>(this->pm)*plattice[0][0] + to<PType>(this->qm)*plattice[0][1];
@@ -194,7 +200,7 @@ void VoronoiMethods<Type, PType>::make_prepared(CubicIdeal<Type, PType> & ideal1
 
           }
           else{
-            #ifdef DEBUG
+            #ifdef DEBUGVORONOI
             std::cout << "becomePrepared: Step10 second transform" << std::endl;
             #endif
             this->temp_pb[0][0] = to<PType>(pminus)*plattice[0][0] + to<PType>(qminus)*plattice[0][1];

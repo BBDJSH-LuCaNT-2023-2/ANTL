@@ -19,7 +19,10 @@ public:
 */
 void make_prepared(CubicIdeal<Type, PType> & ideal1, PType plattice[2][2]);
 
-
+/**
+* @brief virtual stub for converting an ideal's basis to Voronoi form.
+* prints an error as the virtual method should not be used.
+*/
 virtual void make_voronoi_basis(CubicIdeal<Type, PType> & ideal1){
   std::cout << "using the base class method: Error" << std::endl;
 };

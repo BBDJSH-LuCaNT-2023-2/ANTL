@@ -27,15 +27,19 @@ public:
 CubicOrderReal( polynomial<Type> const &poly)
   : CubicOrder<Type,PType>::CubicOrder(poly) {
 
+    this->set_integral_basis();
+    compute_conjugate_elements();
   }
 
-
+// Swaps the roots as well as the integral basis values with with specified conjugate
 void roots_swap_position(int p1, int p2){
   if (this->discriminant > 0) {
     // swap roots and recalculate the integral basis.
     std::swap(this->root_list[p1], this->root_list[p2]);
-    this->set_integral_basis();
-    compute_conjugate_elements();
+    std::swap(this->rho1, this->conjugate_bases[p2-1][0]);
+    std::swap(this->rho2, this->conjugate_bases[p2-1][1]);
+    //this->set_integral_basis();
+    //compute_conjugate_elements();
   }
 
 };
@@ -47,7 +51,7 @@ inline PType get_conjugate_bases(int i, int j) const {
   return conjugate_bases[i][j];
 }
 
-void get_real_value(PType & newVal, Type &U, Type &X, Type &Y, Type &D, int conj = 0);
+void get_real_value(PType & newVal, const Type &U, const Type &X, const Type &Y, const Type &D, int conj = 0);
 
 
 /**
@@ -61,6 +65,8 @@ CubicElement<Type, PType> * get_fundamental_unit(int i){
   return &this->fundamentalUnits[i];
 };
 
+
+void set_regulator();
 
 protected:
 // This is meant to store the Matrix

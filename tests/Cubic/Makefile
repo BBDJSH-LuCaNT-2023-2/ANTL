@@ -12,6 +12,12 @@ main: cubicTestMain.o generalFunctions.o GlobalCubicField.o CubicNumberField.o\
 
 	$(CC) $(CFLAGS) -o testFile -I/c/include generalFunctions.o cubicTestMain.o GlobalCubicField.o CubicNumberField.o RealCubicNumberField.o ComplexCubicNumberField.o CubicOrder.o CubicOrderReal.o CubicElement.o CubicIdeal.o IdealMultiplicationStrategy.o MultiplyStrategyWilliams.o VoronoiMethods.o VoronoiReal.o VoronoiComplex.o BasicVoronoi.o BSGSVoronoi.o -L/c/lib $(LFLAGS)
 
+main2: belabas-extract.o
+	$(CC) $(CFLAGS) -o belabasrun -I/c/include generalFunctions.o belabas-extract.o GlobalCubicField.o CubicNumberField.o RealCubicNumberField.o ComplexCubicNumberField.o CubicOrder.o CubicOrderReal.o CubicElement.o CubicIdeal.o IdealMultiplicationStrategy.o MultiplyStrategyWilliams.o VoronoiMethods.o VoronoiReal.o VoronoiComplex.o BasicVoronoi.o BSGSVoronoi.o -L/c/lib $(LFLAGS)
+
+belabas-extract.o:
+	 $(CC) $(CFLAGS) -c -I/c/include belabas-extract.cpp -L/c/lib $(LFLAGS)
+
 cubicTestMain.o: cubicTestMain.cpp ../../include/ANTL/Cubic/CubicNumberField.hpp ../../include/ANTL/Cubic/ComplexCubicNumberField.hpp ../../include/ANTL/Cubic/RealCubicNumberField.hpp
 	$(CC) $(CFLAGS) -c -I/c/include cubicTestMain.cpp -L/c/lib $(LFLAGS)
 
@@ -82,8 +88,9 @@ objects = cubicTestMain.o generalFunctions.o GlobalCubicField.o CubicNumberField
 
 mul_objects = cubicTestMain.o IdealMultiplicationStrategy.o MultiplyStrategyWilliams.o cubicTestMain.o
 voronoi_objects = VoronoiMethods.o VoronoiReal.o VoronoiComplex.o CubicIdeal.o cubicTestMain.o BasicVoronoi.o BSGSVoronoi.o
-core_obj = CubicIdeal.o CubicOrder.o CubicElement.o cubicTestMain.o
+core_obj = CubicIdeal.o CubicOrder.o CubicElement.o cubicTestMain.o CubicOrderReal.o
 unit_obj = BasicVoronoi.o CubicOrderReal.o CubicOrder.o
+belabas_obj = belabas-extract.o VoronoiReal.o CubicOrderReal.o CubicElement.o
 clean:
 	rm $(objects)
 
@@ -93,3 +100,5 @@ clean_core:
 	rm $(core_obj)
 clean_unit:
 	rm $(unit_obj)
+clean_belabas:
+	rm $(belabas_obj)

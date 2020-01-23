@@ -34,7 +34,7 @@ CubicOrderComplex( polynomial<Type> const &poly)
   }
 
 
-void get_real_value(PType & newVal, Type &U, Type &X, Type &Y, Type &D, int conj = 0){
+void get_real_value(PType & newVal, const Type &U, const Type &X, const Type &Y, const Type &D, int conj = 0){
   NTL::mul(newVal, to<PType>(X), this->get_rho1());
   NTL::add(newVal, newVal, to<PType>(U));
   NTL::mul(this->order_temp, to<PType>(Y), this->get_rho2());
@@ -57,6 +57,18 @@ if (this->fundamentalUnits.size() == 0){
 
 };
 
+
+void set_regulator(){
+  if (this->regulator == 0){
+    if(this->fundamentalUnits.size() == 0){
+        this->unit_strat->compute(this->fundamentalUnits, this, this->is_real());
+    }
+    get_real_value(this->order_temp, this->fundamentalUnits[0].get_u(),this->fundamentalUnits[0].get_x(),this->fundamentalUnits[0].get_y(), this->fundamentalUnits[0].get_denom() );
+    abs(this->order_temp, this->order_temp);
+    log(this->order_temp, this->order_temp);
+    this->regulator = this->order_temp;
+  }
+}
 
 protected:
 

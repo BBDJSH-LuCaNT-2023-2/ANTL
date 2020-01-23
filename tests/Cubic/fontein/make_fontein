@@ -1,0 +1,27 @@
+CC=g++
+CFLAGS=-g -O2
+LFLAGS= -lntl -lgmp -lmpfi -lmpfr -lm -lpthread
+SRC_FILES := $(wildcard ../../src/Cubic/*.cpp)
+OBJ_FILES := $(notdir $(SRC_FILES:.cpp=.o))
+
+main: minimaFinder.o ../generalFunctions.o ../GlobalCubicField.o ../CubicNumberField.o\
+					../RealCubicNumberField.o ../ComplexCubicNumberField.o ../CubicOrder.o ../CubicOrderReal.o\
+					../CubicElement.o ../CubicIdeal.o ../IdealMultiplicationStrategy.o ../MultiplyStrategyWilliams.o \
+					../VoronoiMethods.o ../VoronoiReal.o ../VoronoiComplex.o ../BasicVoronoi.o ../BSGSVoronoi.o
+					#QQ.o common.o debug.o xgcd.o
+
+	$(CC) $(CFLAGS) -o fontTest -I/c/include ../generalFunctions.o minimaFinder.o ../GlobalCubicField.o ../CubicNumberField.o ../RealCubicNumberField.o ../ComplexCubicNumberField.o ../CubicOrder.o ../CubicOrderReal.o ../CubicElement.o ../CubicIdeal.o ../IdealMultiplicationStrategy.o ../MultiplyStrategyWilliams.o ../VoronoiMethods.o ../VoronoiReal.o ../VoronoiComplex.o ../BasicVoronoi.o ../BSGSVoronoi.o -L/c/lib $(LFLAGS)
+
+minimaFinder.o: minimaFinder.cpp ../../../include/ANTL/Cubic/CubicNumberField.hpp ../../../include/ANTL/Cubic/ComplexCubicNumberField.hpp ../../../include/ANTL/Cubic/RealCubicNumberField.hpp
+	$(CC) $(CFLAGS) -c -I/c/include minimaFinder.cpp -L/c/lib $(LFLAGS)
+
+
+
+objects = cubicTestMain.o generalFunctions.o GlobalCubicField.o CubicNumberField.o\
+					RealCubicNumberField.o ComplexCubicNumberField.o CubicOrder.o \
+					CubicElement.o  CubicIdeal.o  IdealMultiplicationStrategy.o \
+					MultiplyStrategyWilliams.o VoronoiMethods.o VoronoiReal.o VoronoiComplex.o\
+					CubicOrderReal.o BasicVoronoi.o BSGSVoronoi.o
+
+clean:
+	rm $(objects)

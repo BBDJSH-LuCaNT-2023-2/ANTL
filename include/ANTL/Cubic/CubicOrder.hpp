@@ -15,6 +15,7 @@
 #include <boost/math/tools/polynomial.hpp>
 #include <boost/multiprecision/gmp.hpp>
 #include "../Arithmetic/QQ.hpp"
+#include  "../Exponentiation/Exponentiation.hpp"
 #include "../common.hpp"
 
 #include "GeneralTemplateFunctions.hpp"
@@ -86,9 +87,11 @@ CubicOrder(polynomial<Type> const &poly, std::string s = "Williams");
 
 // Accessor methods
 boost::math::tools::polynomial<Type> get_IBCF() const {return defining_IBCF;}
+
 Type get_coeff(int i) const {
     return defining_IBCF[i];
 }
+
 /**
 * @brief Returns a pointer to the associated VoronoiMethods object
 */
@@ -132,6 +135,7 @@ inline bool is_complex() const {
 }
 /**
 * @brief Method for switching the order of the roots of the defining polynomial
+* Note that in the real case, this function is specialized to re-compute the conjugates of all basis elements
 * @param two integers which indicate the positions to swap
 */
 virtual void roots_swap_position(int p1, int p2);
@@ -140,7 +144,7 @@ virtual void roots_swap_position(int p1, int p2);
 * @brief Method for determining the splitting type of a rational prime
 * @param A prime number p
 */
-int splitting_type(int p);
+int splitting_type(Type p);
 
 /**
 * @brief Method for setting the IdealMultiplicationStrategy
@@ -153,6 +157,10 @@ inline void set_unit_strategy(std::shared_ptr<FundUnitStrategy<Type,PType>> ustr
   this->unit_strat = std::static_pointer_cast< FundUnitStrategy<Type, PType>>(ustrat);
 };
 
+/**
+* @brief Method for setting the FundUnitStrategy
+* @param A pointer to a concrete strategy (subclass of FundUnitStrategy)
+*/
 inline void set_unit_strategy(std::string s){
   if (s.compare("Voronoi") == 0){
       if (!(this->voronoi_basic)){
@@ -181,6 +189,12 @@ bool is_maximal(){if (index ==1) return true; else return false;}
 */
 bool is_equal(const CubicOrder<Type, PType> &CO2) const;
 
+/**
+* Given a generating polynomial f, obtain its standard form, x^3 + Ex + G, where E,G are integers.
+* See pg 22 CFG for formulas
+*/
+void standard_form(Type & E, Type& G);
+
 
 /**
 * @brief function to obtain the real value of a basis element, or conjugates
@@ -189,7 +203,7 @@ bool is_equal(const CubicOrder<Type, PType> &CO2) const;
 *             {1, rho1, rho2}. In the real case can use a user-specified
 *             conjugate of the defining root 0, 1, or 2.
 */
-virtual void get_real_value(PType & newVal, Type &U, Type &X, Type &Y, Type &D, int conj = 0);
+virtual void get_real_value(PType & newVal, const Type &U, const Type &X, const Type &Y, const Type &D, int conj = 0)=0;
 
 /**
 * @brief Method returns the fundamental unit.
@@ -237,7 +251,7 @@ std::shared_ptr<VoronoiMethods<Type, PType>>  vmethods;
 PType root_list[3];
 
 Type discriminant;
-
+Type E =Type(0); Type G = Type(0);
 // 2nd and 3rd elements of the integral basis
 PType rho1, rho2;
 
@@ -268,7 +282,7 @@ void set_class_number();
 
 void set_class_group();
 
-void set_regulator();
+virtual void set_regulator() = 0;
 
 //void compute_fundamental_unit();
 

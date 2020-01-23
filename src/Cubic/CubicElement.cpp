@@ -81,30 +81,94 @@ void CubicElement<Type, PType> :: trace(ANTL::QQ<Type> & newVal){
   //std::cout << "Trace " << newVal.getNumerator() << " " << newVal.getDenominator() << std::endl;
 }
 
-/*
+
+// see pg 45 of CFG for the formula
 template <typename Type, typename PType>
 void CubicElement<Type, PType> :: norm(ANTL::QQ<Type> & newVal){
 
-  boost::math::tools::polynomial<Type> order_poly = (*this->my_order).get_IBCF();
+  newVal.setDenominator(Type(1));
+  Type a,b,c,d, normtemp;
+  a = (this->my_order)->get_coeff(3);
+  b = (this->my_order)->get_coeff(2);
+  c = (this->my_order)->get_coeff(1);
+  d = (this->my_order)->get_coeff(0);
 
-  Type a,b,c,d,u,x,y;
-  u = this->coefficients[0]; x = this->coefficients[1]; y = this->coefficients[2];
-  a = order_poly[3]; b = order_poly[2];
-  c = order_poly[1]; d = order_poly[0];
-  newVal.setNumerator( (power(u,3) - power(u,2)*x*b - 2*c*power(u,2)*y + a*c*u*power(x,2)
-      +(b*c+ 3*a*d)*u*x*y + (b*d + power(c,2))*u*power(y,2)
-      - power(a,2)*d*power(x,3) - 2*a*b*d*power(x,2)*y
-      - d*(power(b,2)+a*c)*x*power(y,2) +d*(a*d -b*c)*power(y,3) ));
+  mul(this->temp2, b, this->x);
+  mul(this->temp, c, this->y); mul(this->temp, this->temp, Type(2));
+  sub(this->temp2, this->temp2, this->temp);           // (bx -2cy)
+  sub(normtemp, this->u, this->temp2);                 // u - (bx -2cy)
+  mul(normtemp, normtemp, this->u);                    // u(u - (bx -2cy))
+
+
+  mul(this->temp, a, c);
+  mul(this->temp, this->temp, this->x);
+
+  mul(this->temp2, b,c);
+  mul(this->newU, a,d); mul(this->newU, this->newU, Type(3));
+  add(this->temp2, this->temp2, this->newU);          //  bc+3ad
+  mul(this->temp2, this->temp2, this->y);           //  (bc+3ad)y
+  add(this->temp, this->temp, this->temp2);         // acx + (bc+3ad)y
+  mul(this->temp, this->temp, this->x);             // x(acx + (bc+3ad)y)
+
+  mul(this->temp2, b,d);
+  mul(this->newU, c,c);
+  add(this->temp2, this->temp2, this->newU);
+  mul(this->temp2, this->temp2, this->y);
+  mul(this->temp2, this->temp2, this->y);           // y^2(bd + c^2)
+  add(this->temp, this->temp, this->temp2);         // x(acx + (bc+3ad)y) + y^2(bd + c^2)
+
+  add(normtemp, normtemp, this->temp);              // u(u - (bx -2cy)) + x(acx + (bc+3ad)y) + y^2(bd + c^2)
+  mul(normtemp, normtemp, this->u);                 // u(u(u - (bx -2cy)) + x(acx + (bc+3ad)y) + y^2(bd + c^2))
+                                                    // u^3 - u^2(bx -2cy) + u (acx^2 + (bc+3ad)yx + y^2(bd + c^2))
+
+  // Below defines the linear term with respect to u of the norm
+  mul(this->temp, a, x);
+
+  mul(this->temp2, b, this->y);
+  mul(this->temp2, this->temp2, Type(2));
+
+  add(this->temp, this->temp, this->temp2);         // ax + 2by
+  mul(this->temp, this->temp, a);                   // a^2x + 2aby
+  mul(this->temp, this->temp, this->x);             // a^2x^2 + 2abxy
+
+  mul(this->temp2, b,b);
+  mul(this->newU, a,c);
+  add(this->temp2, this->temp2, newU);              // b^2 + ac
+  mul(this->temp2, this->temp2, y);
+  mul(this->temp2, this->temp2, y);                 // y^2*(b^2 + ac)
+
+  add(this->temp, this->temp, this->temp2);         // a^2x^2 + 2abxy + y^2*(b^2 + ac)
+  mul(this->temp, this->temp, this->x);             // a^2x^3 + 2abx^2y + x*y^2*(b^2 + ac)
+
+  mul(this->temp2, a,d);
+  mul(this->newU,b,c);
+  sub(this->temp2, this->temp2, this->newU);
+  mul(this->temp2,this->temp2, this->y);
+  mul(this->temp2,this->temp2, this->y);
+  mul(this->temp2,this->temp2, this->y);            // y^3(ad -bc)
+  sub(this->temp, this->temp, this->temp2);         // a^2x^3 + 2abx^2y + x*y^2*(b^2 + ac) - y^3(ad -bc)
+  mul(this->temp, this->temp, d);
+
+  sub(normtemp, normtemp, this->temp);              // u^3 - u^2(bx -2cy) + u (acx^2 + (bc+3ad)yx + y^2(bd + c^2))
+                                                    // - d( a^2x^3 + 2abx^2y + x*y^2*(b^2 + ac) - y^3(ad -bc) )
+  newVal.setNumerator(normtemp);
+
+  //mul(this->temp, this->temp, this->x);
+  //newVal.setNumerator( (power(u,3) - power(u,2)*x*b - 2*c*power(u,2)*y + a*c*u*power(x,2)
+  //    +(b*c+ 3*a*d)*u*x*y + (b*d + power(c,2))*u*power(y,2)
+  //    - power(a,2)*d*power(x,3) - 2*a*b*d*power(x,2)*y
+  //    - d*(power(b,2)+a*c)*x*power(y,2) +d*(a*d -b*c)*power(y,3) ));
 
 
   //newVal.setNumerator( (power(u,3) - power(u,2)*x*b - 2*c*power(u,2)*y + a*c*u*power(x,2)
   //    +(b*c+ 3*a*d)*u*x*y + (b*d + power(c,2))*u*power(y,2)
   //    - power(a,2)*d*power(x,3) - 2*a*b*d*power(x,2)*y
   //    - d*(power(b,2)+a*c)*x*power(y,2) +d*(a*d -b*c)*power(y,3) ));
-
-  newVal.setDenominator(this->denom^3 ) ;
+  mul(this->temp, this->denom, this->denom);
+  mul(this->temp, this->temp, this->denom);
+  newVal.setDenominator(this->temp);
 }
-*/
+
 
 template <typename Type, typename PType>
 void CubicElement<Type, PType> :: get_real_value(PType & newVal) {
@@ -132,7 +196,7 @@ void CubicElement<Type, PType> :: inverse(CubicElement<Type, PType> & val) const
   //That can be represented by a matrix S
 
   //Solve the matrix S with Cramers Rule
-
+  NTL::set(val.denom);
   Type a,b,c,d;
   Type s12, s22, s32, s13, s23, s33;
   //u = this->u;
@@ -176,7 +240,7 @@ void CubicElement<Type, PType> :: inverse(CubicElement<Type, PType> & val) const
   sub(s33, s33, this->temp);    // u-cy
 
   #ifdef DEBUG
-  std::cout << "   " << std::endl;
+  std::cout << " Arithmetic Matrix  " << std::endl;
   std::cout << this->u << "  " << s12<< "  " << s13<< std::endl;
   std::cout << this->x << "  " << s22<< "  " << s23<< std::endl;
   std::cout << this->y << "  " << s32<< "  " << s33<< std::endl;
@@ -201,13 +265,6 @@ void CubicElement<Type, PType> :: inverse(CubicElement<Type, PType> & val) const
   mul(this->temp, this->y,s22);
   sub(val.y, val.y, this->temp);
 
-  #ifdef DEBUG
-  std::cout << "   " << std::endl;
-  std::cout << this->u << "  " << s12<< "  " << s13<< std::endl;
-  std::cout << this->x << "  " << s22<< "  " << s23<< std::endl;
-  std::cout << this->y << "  " << s32<< "  " << s33<< std::endl;
-  std::cout << "new x,y,z " << val.u << " " << val.x << " " << val.y << std::endl;
-  #endif
   // compute the determinant
   mul(this->temp, val.u, this->u);
 
@@ -216,8 +273,17 @@ void CubicElement<Type, PType> :: inverse(CubicElement<Type, PType> & val) const
 
   mul(this->temp2, val.y, s13);
   add(this->temp, this->temp, this->temp2);
+  //std::cout << "Inverse:  determinant " << this->temp << std::endl;
   //std::cout << " Denom " << this->temp << std::endl;
+
+
   val.denom = this->temp;
+
+  //std::cout << "Inverse data" << std::endl;
+  //std::cout << this->toString() << std::endl;
+  //std::cout << val.toString() << std::endl;
+  val.normalize();
+  //std::cout << val.toString() << std::endl;
   //Type determinant = s11*s22*s33 + s12*s23*s31 + s13*s21*s32 - s23*s32*s11 - s33*s21*s12 - s13*s22*s31;
   // = s11*(s22*s33- s23*s32) + s12*(s23*s31- s33*s21) + s13*(s21*s32 - s22*s31)
 
@@ -225,12 +291,22 @@ void CubicElement<Type, PType> :: inverse(CubicElement<Type, PType> & val) const
   // But if it is not, then we need to multiply by the original denominator
   // in order to get the true inverse.
       // r
-  mul(val.u, val.u, this->get_denom());
-  mul(val.x, val.x, this->get_denom());
-  mul(val.y, val.y, this->get_denom());
+    mul(val, val, this->get_denom());
+  //mul(val.u, val.u, this->get_denom());
+  //mul(val.x, val.x, this->get_denom());
+  //mul(val.y, val.y, this->get_denom());
 
   val.normalize();
+  #ifdef DEBUG
+  std::cout << "   " << std::endl;
+  std::cout << this->u << "  " << s12<< "  " << s13<< std::endl;
+  std::cout << this->x << "  " << s22<< "  " << s23<< std::endl;
+  std::cout << this->y << "  " << s32<< "  " << s33<< std::endl;
+  std::cout << "new x,y,z " << val.u << " " << val.x << " " << val.y << std::endl;
+  #endif
 }
+
+
 
 template <typename T, typename PT>
 void assign (CubicElement <T,PT> & A, const CubicElement <T,PT> & B){
@@ -250,6 +326,9 @@ void assign (CubicElement <T,PT> & A, const CubicElement <T,PT> & B){
 template <typename Type, typename PType>
 void CubicElement<Type, PType> :: normalize(){
   Type g = GCD(GCD(GCD(this->u,this->x),this->y), this->denom);
+  if (this->denom < Type(0)){
+    g = -g;
+  }
   if (!::IsOne(g)) {
     NTL::div(this->u,this->u,g);
     NTL::div(this->x,this->x,g);
@@ -259,9 +338,9 @@ void CubicElement<Type, PType> :: normalize(){
 }
 
 template <typename Type, typename PType>
-std::string CubicElement<Type, PType> :: toString()
+std::string CubicElement<Type, PType> :: toString() const
 {
-  string s = (zToString(this->get_u()) + " + " + zToString(this->x) + "*rho1 + " + zToString(this->y) + "rho2 \n");
+  string s = (zToString(this->get_u()) + " + " + zToString(this->x) + "*rho1 + " + zToString(this->y) + "*rho2  /" + zToString(this->denom) );
   return s;
 };
 

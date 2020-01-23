@@ -401,7 +401,7 @@ TEST_CASE("Multiplication"){
 TEST_CASE("Division"){
   newpoly[3] = 1;
   newpoly[2] = 1;
-  newpoly[1] = -3;
+  newpoly[1] = -2;
   newpoly[0] = -1;
   polynomial<ZZ> const test_poly{{newpoly[0],newpoly[1],newpoly[2],newpoly[3] }};
   co_point = CubicOrder<ZZ, RR>::make_order(test_poly);
@@ -418,6 +418,7 @@ TEST_CASE("Division"){
     REQUIRE(Erika.is_equal(Est));
 
     Ellie.inverse(Erika);
+    std::cout << Ellie.toString() << std::endl;
     mul(Erika, Ellie, Erika);
     REQUIRE(Erika.is_equal(Est));
 
@@ -428,6 +429,20 @@ TEST_CASE("Division"){
 
     div(Erika, Ellie, Ellie);
     REQUIRE(Erika.is_equal(Est));
+
+    Erika.assign(ZZ(1), ZZ(1), ZZ(0), ZZ(1));
+    REQUIRE(Erika.get_u() ==ZZ(1));
+    REQUIRE(Erika.get_x() == ZZ(1));
+    REQUIRE(Erika.get_y() == ZZ(0));
+    REQUIRE(Erika.get_denom() == ZZ(1));
+    Ellie.inverse(Erika);
+    mul(Ellie, Ellie, Erika);
+    //std::cout << Erika.toString() << std::endl;
+    REQUIRE(Ellie.get_u() == Est.get_u());
+    REQUIRE(Ellie.get_x() == Est.get_x());
+    REQUIRE(Ellie.get_y() == Est.get_y());
+    REQUIRE(Ellie.get_denom() == Est.get_denom());
+    //REQUIRE(Erika.is_equal(Est));
   }
 
 
