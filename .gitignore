@@ -35,6 +35,9 @@
 # dependency lists
 *.d
 
+# build artifacts
+/build/*
+!/build/README
 
 #
 # Autotools rules
@@ -42,6 +45,7 @@
 
 # http://www.gnu.org/software/automake
 
+Makefile
 Makefile.in
 
 # http://www.gnu.org/software/autoconf
