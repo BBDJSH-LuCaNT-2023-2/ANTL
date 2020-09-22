@@ -2,8 +2,8 @@
 // Created by David Marquis on 2020-09-17.
 //
 
-#ifndef RUNNTL_ORDERINVARIANTS_H
-#define RUNNTL_ORDERINVARIANTS_H
+#ifndef ORDERINVARIANTS_H
+#define ORDERINVARIANTS_H
 
 #include <NTL/ZZ.h>
 
@@ -34,4 +34,4 @@ public:
   virtual NTL::ZZ regulator() = 0;
 };
 
-#endif //RUNNTL_ORDERINVARIANTS_H
+#endif //ORDERINVARIANTS_H
