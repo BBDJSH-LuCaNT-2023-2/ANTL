@@ -32,9 +32,13 @@
 *.out
 *.app
 
-# dependency lists
+# dependencies 
 *.d
+*.Po
 
+# build artifacts
+/build/*
+!/build/README
 
 #
 # Autotools rules
@@ -42,6 +46,7 @@
 
 # http://www.gnu.org/software/automake
 
+Makefile
 Makefile.in
 
 # http://www.gnu.org/software/autoconf
@@ -62,15 +67,22 @@ Makefile.in
 
 
 #
-# Eclipse data
+# IDE 
 #
 
 /.cproject
 /.externalToolBuilders/
 /.project
 /.settings/
+html*
+latex*
+../../.gitignore
+../../CONFIG
+../../Makefile
+progress-log
 
-
+.idea/*
+cmake-build-debug/*
 
 #
 # Emancs backup files

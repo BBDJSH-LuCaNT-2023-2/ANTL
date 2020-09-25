@@ -17,9 +17,9 @@ public:
   ClassGroupIndCalc(IOrder const &order, std::map<std::string, std::string> const &params) {setup_cg_mat(order, params);}
 
   // subclasses should implement class_number to return the class_number using cg_mat
-  virtual NTL::ZZ class_number() {};
+  virtual NTL::ZZ class_number();
   // subclasses should implement class_group to return the class_group using cg_mat
-  virtual std::string class_group() {};
+  virtual std::vector<NTL::ZZ> class_group();
 
   std::vector<IMultiplicative> cg_factor_base;
   std::vector<IMultiplicative> cg_relations;

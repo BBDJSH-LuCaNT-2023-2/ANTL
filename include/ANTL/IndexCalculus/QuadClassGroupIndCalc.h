@@ -16,7 +16,7 @@ public:
   virtual void compute_cg_relations(IOrder const &quad_order, std::map<std::string, std::string> const &params) {};
   virtual void compute_cg_mat(IOrder const &quad_order, std::map<std::string, std::string> const &params) {};
   virtual NTL::ZZ class_number() {return NTL::ZZ(0);};
-  virtual std::string class_group() {std::string cg = "unimplemented"; return cg;};
+  virtual std::vector<NTL::ZZ> class_group() {std::vector<NTL::ZZ> cg = {NTL::ZZ(4), NTL::ZZ(5)}; return cg;};
 };
 
 #endif //QUADCLASSGROUPINDCALC_H

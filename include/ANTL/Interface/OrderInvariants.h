@@ -9,12 +9,12 @@
 
 class IOrder {
   // interface for objects that behave like orders in algebraic number fields
-  // and have invariants like class_number and regulator
+  // and have invariants like class number and regulator
 };
 
 class IClassGroup:public IOrder {
 public:
-  virtual std::string class_group() = 0;
+  virtual std::vector<NTL::ZZ> class_group() = 0;
 };
 
 class IClassNumber:public IOrder {
@@ -28,10 +28,10 @@ public:
   virtual T unit_group() = 0;
 };
 
-template <class R> // class for the type of real numbers
+template <class R> // type of the regulator
 class IRegulator:public IOrder {
 public:
-  virtual NTL::ZZ regulator() = 0;
+  virtual R regulator() = 0;
 };
 
 #endif //ORDERINVARIANTS_H
