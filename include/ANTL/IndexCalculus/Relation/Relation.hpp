@@ -4,6 +4,9 @@
 #include <vector>
 #include "ANTL/Interface/Multiplicative.hpp"
 #include "ANTL/IndexCalculus/FactorBase/FactorBase.hpp"
+#include <ANTL/common.hpp>
+
+using namespace ANTL;
 
 namespace ANTL {
 

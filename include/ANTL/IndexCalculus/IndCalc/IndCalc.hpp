@@ -7,6 +7,11 @@
 #include <map>
 #include "ANTL/Interface/OrderInvariants.hpp"
 #include "ANTL/Interface/Multiplicative.hpp"
+#include "ANTL/IndexCalculus/FactorBase/FactorBase.hpp"
+#include "ANTL/IndexCalculus/RelationGenerator/RelationGenerator.hpp"
+#include <ANTL/common.hpp>
+
+using namespace ANTL;
 
 template <class R> // type of regulator
 class IndCalc {
@@ -18,8 +23,8 @@ public:
   // subclasses should implement class_group to return the class_group
   virtual std::vector<NTL::ZZ> class_group();
 
-  std::vector<IMultiplicative> cg_factor_base;
-  std::vector<IMultiplicative> cg_relations;
+  FactorBase cg_factor_base;
+  RelationGenerator cg_relations_generator;
   NTL::Mat<long> cg_mat;
 
   void setup_cg_fac_base(IOrder const &order, std::map<std::string, std::string> const &params);
@@ -37,17 +42,19 @@ protected:
 
 template <class R> void IndCalc<R>::setup_cg_fac_base(const IOrder &order, const std::map<std::string, std::string> &params) {
   compute_cg_fac_base(order, params);
-  if (cg_factor_base.size() == 0) {
+  //TODO
+//  if (cg_factor_base.size() == 0) {
     // raise error
-  }
+//  }
 }
 
 template <class R> void IndCalc<R>::setup_cg_relations(IOrder const &order, std::map<std::string, std::string> const &params) {
   setup_cg_fac_base(order, params);
   compute_cg_relations(order, params);
-  if (cg_relations.size() == 0) {
+  //TODO
+//  if (cg_relations.size() == 0) {
     // raise error
-  }
+//  }
 }
 
 template <class R> void IndCalc<R>::setup_cg_mat(IOrder const &order, std::map<std::string, std::string> const &params) {

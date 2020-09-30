@@ -15,6 +15,10 @@ template <class T>
 class QuadRelationGenerator : public RelationGenerator
 {
   QuadRelationGenerator();
+  // check how IndCalc
+
+  QuadRelationGenerator<T>(IOrder const &order, std::map<std::string, std::string> const &params, FactorBase const &fb) :
+  RelationGenerator(order, params, fb) {size_fb = std::stoi(params.find("size_fb")->first);};
   virtual ~QuadRelationGenerator() = 0;
   // initialization (set curve and relation generation method)
   virtual long get_relation(QuadRelation<T> &rel);
