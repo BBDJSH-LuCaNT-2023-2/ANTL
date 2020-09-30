@@ -6,6 +6,7 @@
 #define ORDERINVARIANTS_H
 
 #include <NTL/ZZ.h>
+#include <vector>
 
 class IOrder {
   // interface for objects that behave like orders in algebraic number fields
