@@ -26,7 +26,7 @@ public:
 template <class T> // type of a unit
 class IUnitGroup:public IOrder {
 public:
-  virtual T unit_group() = 0;
+  virtual std::vector<T> unit_group() = 0;
 };
 
 template <class R> // type of the regulator

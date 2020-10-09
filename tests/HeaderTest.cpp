@@ -12,6 +12,3 @@
 #include "ANTL/IndexCalculus/FactorBase/QuadFactorBase.hpp"
 #include "ANTL/IndexCalculus/Relation/QuadRelation.hpp"
 #include "ANTL/IndexCalculus/RelationGenerator/QuadRelationGenerator.hpp"
-int main() {
-  return 0;
-}

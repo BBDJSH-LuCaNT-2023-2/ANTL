@@ -7,16 +7,15 @@
 namespace ANTL {
 
   template<class T> // type of gamma
-  class QuadRelation:Relation
+  class QuadRelation:public Relation
   {
   public:
   	QuadRelation<T>();
-  	~QuadRelation();
 
   	// get the minimum of a relation
-    QuadraticNumber<T> get_minimum() const;
+//    QuadraticNumber<T> get_minimum() const;
 
-    int check(const QuadFactorBase<T>& fac_base);
+//    int check(const QuadFactorBase<T>& fac_base);
   };
 } // ANTL
 

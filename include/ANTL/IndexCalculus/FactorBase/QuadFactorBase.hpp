@@ -12,11 +12,12 @@ namespace ANTL {
   template <class T> // type of ideals in the order
   class QuadFactorBase : public FactorBase {
   public:
-    QuadFactorBase(QuadraticOrder<T> &new_order) {
-      order = &new_order;
-    }
 
-    ~QuadFactorBase();
+    QuadFactorBase(QuadraticOrder<T> const &new_order, std::map<std::string, std::string> const &params) : FactorBase(new_order, params) {
+
+    }
+    QuadFactorBase & operator = (const QuadFactorBase &fb);
+
   };
 }
 

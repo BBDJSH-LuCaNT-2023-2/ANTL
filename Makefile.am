@@ -1,4 +1,4 @@
 AUTOMAKE_OPTIONS = subdir-objects
-bin_PROGRAMS = main 
+bin_PROGRAMS = test
 
-main_SOURCES=tests/HeaderTest.cpp
+test_SOURCES= tests/IndexCalculus/IndCalc_test.cpp tests/HeaderTest.cpp
