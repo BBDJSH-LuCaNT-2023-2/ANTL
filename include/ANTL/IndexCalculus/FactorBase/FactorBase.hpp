@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <map>
 #include "ANTL/Interface/Multiplicative.hpp"
 #include "ANTL/Interface/OrderInvariants.hpp"
 #include "ANTL/Constants.hpp"
@@ -27,7 +28,8 @@ namespace ANTL
     std::vector<IMultiplicative> factor_base;
   public:
     long get_size_fb() {return size_fb;}
-    FactorBase & operator = (const FactorBase &fb);
+
+    FactorBase(FactorBase &fb) : order(fb.order), size_fb(fb.size_fb), bound(fb.bound), factor_base(fb.factor_base) {};
 
     FactorBase(IOrder const &new_order, std::map<std::string, std::string> const &params) : order(new_order) {
       if ( params.find(Constants::size_fb) == params.end() ) {
@@ -42,9 +44,21 @@ namespace ANTL
       }
     }
 
+    FactorBase &operator = (FactorBase const &fb) {
+      std::cout << "Warning: assigning new factor base" << std::endl;
+      bound = fb.bound;
+      size_fb = fb.size_fb;
+      factor_base = fb.factor_base;
+      return *this;
+    };
+
     // accessors
     std::vector<IMultiplicative>& get_fb() {
       return factor_base;
+    }
+
+    void push_to_fb(IMultiplicative &fb_elem) {
+      factor_base.push_back(fb_elem);
     }
 
     long get_size() const {

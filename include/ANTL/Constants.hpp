@@ -10,5 +10,8 @@ namespace Constants
   std::string const num_relations = "num_relations";
   std::string const size_fb = "size_fb";
   std::string const bound_fb = "bound_fb";
+
+  std::string const max_num_tests = "max_num_tests";
+  std::string const seed = "seed";
 }
 #endif

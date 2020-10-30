@@ -3,22 +3,26 @@
 
 #include "ANTL/IndexCalculus/RelationGenerator/RelationGenerator.hpp"
 #include "ANTL/IndexCalculus/Relation/QuadRelation.hpp"
+#include "ANTL/IndexCalculus/FactorBase/QuadFactorBase.hpp"
 #include "ANTL/Constants.hpp"
+
+template < class T >
+class QuadraticOrder; // an order that inherits from IOrder
 
 namespace ANTL
 {
 
-// forward declarations
-template <class T> class QuadRelation;
-
-// class
-template <class T>
-class QuadRelationGenerator : public RelationGenerator
-{
+class QuadRelationGenerator : public RelationGenerator {
 public:
-  QuadRelationGenerator<T>(IOrder const &order, std::map<std::string, std::string> const &params, FactorBase const &fb) :
-  RelationGenerator(order, params, fb) {};
+  QuadRelationGenerator(IOrder const &order, std::map<std::string, std::string> const &params, QuadFactorBase const &fb) :
+  FB(fb), RelationGenerator(order, params) {};
+
   QuadRelationGenerator & operator = (const QuadRelationGenerator &fb);
+
+  virtual bool get_relation(Relation &rel, long &num_tests) {};
+private:
+  // factor base associated to this relation generator
+  QuadFactorBase const &FB;
 };
 
 } // ANTL

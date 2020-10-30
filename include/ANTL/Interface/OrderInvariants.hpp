@@ -11,6 +11,8 @@
 class IOrder {
   // interface for objects that behave like orders in algebraic number fields
   // and have invariants like class number and regulator
+
+  IOrder &operator = (IOrder const &order);
 };
 
 class IClassGroup:public IOrder {

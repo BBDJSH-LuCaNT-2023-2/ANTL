@@ -22,7 +22,6 @@ namespace ANTL {
   public:
 
   	Relation() = default;
-  	Relation(const Relation & rel);
 
   	static void set_sizeFB(long newsize);
   	static long get_sizeFB();

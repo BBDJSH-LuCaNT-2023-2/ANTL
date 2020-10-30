@@ -4,20 +4,15 @@
 #include "ANTL/IndexCalculus/FactorBase/FactorBase.hpp"
 #include "ANTL/Interface/OrderInvariants.hpp"
 
-namespace ANTL {
-  // this fake QuadraticOrder is used as a placeholder while ANTL/Quadratic/QuadraticOrder is under development
-  template < class T >
-  class QuadraticOrder: public IOrder {};
+template < class T >
+class QuadraticOrder; // an order that inherits from IOrder
 
-  template <class T> // type of ideals in the order
+namespace ANTL {
+
   class QuadFactorBase : public FactorBase {
   public:
-
-    QuadFactorBase(QuadraticOrder<T> const &new_order, std::map<std::string, std::string> const &params) : FactorBase(new_order, params) {
-
-    }
+    using FactorBase::FactorBase; // inherit the construtors
     QuadFactorBase & operator = (const QuadFactorBase &fb);
-
   };
 }
 
