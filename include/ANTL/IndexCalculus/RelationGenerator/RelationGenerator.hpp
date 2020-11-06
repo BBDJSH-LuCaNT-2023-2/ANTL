@@ -13,9 +13,9 @@ using namespace ANTL;
 namespace ANTL {
   class RelationGenerator {
   public:
-    // constructors and destructor
+    // constructors
     RelationGenerator(IOrder const &order, std::map<std::string, std::string> const &params, FactorBase const &fb) :
-    QO(order), FB(fb) {
+    order(order), FB(fb) {
       long total_tests = 0;
       long total_rels_found = 0;
 
@@ -31,9 +31,9 @@ namespace ANTL {
         std::cout << "RelationGenerator: max_num_tests should be set" << std::endl;
       } else {
         max_num_tests = std::stoi(params.find(Constants::max_num_tests)->second);
-        std::cout << "RelationGenerator: max_num_tests set to" << max_num_tests << std::endl;
       }
       if ( params.find(Constants::seed) == params.end() ) {
+        std::cout << "RelationGenerator: seed should be set" << std::endl;
       } else {
         seed = std::stoi(params.find(Constants::seed)->second);
       }
@@ -69,7 +69,7 @@ namespace ANTL {
     long total_rels_found = 0;
 
     // Order that relations are generated for
-    IOrder const &QO;
+    IOrder const &order;
 
     // factor base associated with this relation generator
     FactorBase const &FB;

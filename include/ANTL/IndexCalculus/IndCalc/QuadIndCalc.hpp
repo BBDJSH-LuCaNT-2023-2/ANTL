@@ -41,7 +41,7 @@ public:
     relation_generator = std::make_shared<QuadRelationGenerator>(order, params, *factor_base);
 
     QuadIndCalc<T,R> ind_calc = QuadIndCalc<T,R>(factor_base, relation_generator);
-    ind_calc.setup_mat(order, params);
+    ind_calc.setup_mat();
     return ind_calc;
   }
 
@@ -49,17 +49,19 @@ public:
   virtual FactorBase* get_factor_base() override {return factor_base.get();};
 
 protected:
-  void compute_fac_base(IOrder const &order, std::map<std::string, std::string> const &params) override;
-  void compute_relations(IOrder const &order, std::map<std::string, std::string> const &params) override;
-  void compute_mat(IOrder const &order, std::map<std::string, std::string> const &params) override;
+  void compute_fac_base() override;
+  void compute_relations() override;
+  void compute_mat() override;
 
 private:
   std::shared_ptr<QuadFactorBase> factor_base;
   std::shared_ptr<QuadRelationGenerator> relation_generator;
 };
 
+// For now these 3 functions stubs. The code in them is just to suggest what they need to do
+
 template <class T, class R>
-void QuadIndCalc<T,R>::compute_fac_base(IOrder const &quad_order, std::map<std::string, std::string> const &params) {
+void QuadIndCalc<T,R>::compute_fac_base() {
   IMultiplicative fb_elem = IMultiplicative();
 
   for(int i=0; i < factor_base->get_size(); i++) {
@@ -68,10 +70,9 @@ void QuadIndCalc<T,R>::compute_fac_base(IOrder const &quad_order, std::map<std::
 };
 
 template <class T, class R>
-void QuadIndCalc<T,R>::compute_relations(IOrder const &quad_order, std::map<std::string, std::string> const &params) {
+void QuadIndCalc<T,R>::compute_relations() {
   bool result;
-  /* compute_relations does sieving, random exponents, etc to construct a relation */
-  // For now this function is just a stub
+  /* compute_relations does sieving or random exponents to construct a relation */
 
   Relation quad_relation = Relation();
   for(long i=0; i < get_relation_generator()->get_max_num_tests(); i++) {
@@ -83,7 +84,7 @@ void QuadIndCalc<T,R>::compute_relations(IOrder const &quad_order, std::map<std:
 };
 
 template <class T, class R>
-void QuadIndCalc<T,R>::compute_mat(IOrder const &quad_order, std::map<std::string, std::string> const &params) {
+void QuadIndCalc<T,R>::compute_mat() {
   //cf ANTL/include/ANTL/quadratic/index_calculus/qo_relation_matrix.hpp
   IndCalc<T,R>::rels_mat.SetDims(IndCalc<T,R>::relations.size(), factor_base->get_size());
 

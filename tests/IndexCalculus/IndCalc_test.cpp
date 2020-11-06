@@ -1,23 +1,18 @@
 #ifndef INDCALC_TEST
 #define INDCALC_TEST
 
-#include "ANTL/IndexCalculus/RelationGenerator/QuadRelationGenerator.hpp"
-#include "ANTL/IndexCalculus/IndCalc/QuadIndCalc.hpp"
-#include "ANTL/Interface/OrderInvariants.hpp"
-#include "ANTL/Constants.hpp"
-#include <NTL/ZZ.h>
 #include <string>
 #include <map>
 #include <iostream>
-
+#include <NTL/ZZ.h>
 #include "../UnitTests.hpp"
-#include <iostream>
-#include <exception>
+#include "ANTL/IndexCalculus/IndCalc/QuadIndCalc.hpp"
+#include "ANTL/Interface/OrderInvariants.hpp"
+#include "ANTL/Constants.hpp"
 
 using namespace Constants;
 using namespace NTL;
 using namespace ANTL;
-using namespace std;
 
 namespace UT {
   typedef int ord_t; // fake type for the QuadraticOrder
