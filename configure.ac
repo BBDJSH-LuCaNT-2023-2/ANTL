@@ -12,6 +12,9 @@ AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_LN_S
 
+# this macro figures out how to build with pthreads 
+AX_PTHREAD(, )
+
 # Checks for libraries.
 # FIXME: Replace `main' with a function in `-lantl':
 AC_CHECK_LIB([antl], [main])
@@ -27,8 +30,6 @@ AC_CHECK_LIB([mpfr], [main])
 AC_CHECK_LIB([ntl], [main])
 # FIXME: Replace `main' with a function in `-lpari':
 AC_CHECK_LIB([pari], [main])
-# FIXME: Replace `main' with a function in `-lpthread':
-AC_CHECK_LIB([pthread], [main])
 
 # Checks for header files.
 AC_CHECK_HEADERS([stdlib.h unistd.h])
