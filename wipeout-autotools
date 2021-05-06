@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+/bin/rm -rf missing ltmain.sh install-sh  depcomp configure autom4te.cache aclocal.m4 INSTALL compile libtool config.status config.h config.h.in config.h.in~ config.log
+
+rm -rf build/tests
+rm -rf build/src
+find . -name Makefile.in | xargs rm -rf
+find . -name .libs | xargs rm -rf
+
+

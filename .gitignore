@@ -32,8 +32,9 @@
 *.out
 *.app
 
-# dependency lists
+# dependencies 
 *.d
+*.Po
 
 # build artifacts
 /build/*
@@ -66,7 +67,7 @@ Makefile.in
 
 
 #
-# Eclipse data
+# IDE 
 #
 
 /.cproject
@@ -80,6 +81,8 @@ latex*
 ../../Makefile
 progress-log
 
+.idea/*
+cmake-build-debug/*
 
 #
 # Emancs backup files
