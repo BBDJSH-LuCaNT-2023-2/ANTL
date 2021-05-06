@@ -38,11 +38,12 @@ NTL_CLIENT
 
 int main(){
 
-  ZZ joe, bob;
+  ZZ joe, bob, gordon;
   joe = 1;
   bob = 2;
+  gordon = 5;
 
-  std::cout <<joe+bob << std::endl;
+  std::cout <<joe+bob+gordon << std::endl;
 
 }
 
