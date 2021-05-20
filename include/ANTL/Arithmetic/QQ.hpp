@@ -8,7 +8,7 @@
 #ifndef ANTL_QQ_H
 #define ANTL_QQ_H
 
-#include "../common.hpp"
+#include <ANTL/common.hpp>
 
 namespace ANTL
 {
