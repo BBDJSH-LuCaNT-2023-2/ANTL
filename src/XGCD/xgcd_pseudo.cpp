@@ -4,7 +4,7 @@
  * @remark specialized implementations of XGCD variations with pseudo-division
  */
 
-#include "../../include/ANTL/XGCD/xgcd_pseudo.hpp"
+#include <ANTL/XGCD/xgcd_pseudo.hpp>
 
 //
 // XGCD with one inversion

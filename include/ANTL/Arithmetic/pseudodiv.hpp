@@ -7,8 +7,7 @@
 #ifndef PSEUDODIV_H
 #define PSEUDODIV_H
 
-//#include <ANTL/utilities.hpp>
-#include "../utilities.hpp"
+#include <ANTL/utilities.hpp>
 
 // We use the NTL namespace everywhere. Rather than have a using directive in
 // every file, we just put it here, for convenience and clarity.

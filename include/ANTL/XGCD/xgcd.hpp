@@ -26,10 +26,11 @@
 #ifndef XGCD_H
 #define XGCD_H
 
-#include "../utilities.hpp"
-#include "../thresholds.hpp"
-#include "xgcd_iter.hpp"
-#include "hxgcd.hpp"
+#include <ANTL/utilities.hpp>
+#include <ANTL/thresholds.hpp>
+#include <ANTL/XGCD/xgcd_iter.hpp>
+#include <ANTL/XGCD/hxgcd.hpp>
+
 
 
 //

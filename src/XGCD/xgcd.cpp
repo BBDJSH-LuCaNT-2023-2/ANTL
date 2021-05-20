@@ -5,8 +5,8 @@
  * XGCD_PARTIAL_REDUCE
  */
 
-#include "../../include/ANTL/XGCD/xgcd.hpp"
-#include "../../include/ANTL/XGCD/hxgcd.hpp"
+#include <ANTL/XGCD/xgcd.hpp>
+#include <ANTL/XGCD/hxgcd.hpp>
 
 //
 // XGCD_LEFT functions

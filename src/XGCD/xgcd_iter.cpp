@@ -5,7 +5,7 @@
  * XGCD_PARTIAL_REDUCE_ITER
  */
 
-#include "../../include/ANTL/XGCD/xgcd_iter.hpp"
+#include <ANTL/XGCD/xgcd_iter.hpp>
 
 //
 // Partial Euclidean algorithm (for NUCOMP)

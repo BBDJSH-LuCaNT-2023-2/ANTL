@@ -7,12 +7,9 @@
 #ifndef HXGCD_H
 #define HXGCD_H
 
-//#include <ANTL/utilities.hpp>
-//#include <ANTL/thresholds.hpp>
-//#include <ANTL/XGCD/xgcd_iter.hpp>
-#include "../utilities.hpp"
-#include "../thresholds.hpp"
-#include "xgcd_iter.hpp"
+#include <ANTL/utilities.hpp>
+#include <ANTL/thresholds.hpp>
+#include <ANTL/XGCD/xgcd_iter.hpp>
 
 
 template < class T >

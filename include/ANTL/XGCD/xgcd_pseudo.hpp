@@ -20,10 +20,9 @@
 #ifndef XGCD_PSEUDO_H
 #define XGCD_PSEUDO_H
 
-//#include <ANTL/utilities.hpp>
-//#include <ANTL/Arithmetic/pseudodiv.hpp>
-#include "../utilities.hpp"
-#include "../Arithmetic/pseudodiv.hpp"
+#include <ANTL/utilities.hpp>
+#include <ANTL/Arithmetic/pseudodiv.hpp>
+
 
 
 // We use the NTL namespace everywhere. Rather than have a using directive in

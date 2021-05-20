@@ -5,7 +5,7 @@
  * XGCD_PARTIAL_REDUCE_PLAIN
  */
 
-#include "../../include/ANTL/XGCD/xgcd_plain.hpp"
+#include <ANTL/XGCD/xgcd_plain.hpp>
 
 //
 // XGCD_PLAIN

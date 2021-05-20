@@ -25,16 +25,12 @@
 
 #ifndef XGCD_ITER_H
 #define XGCD_ITER_H
-/*
+
 #include <ANTL/utilities.hpp>
 #include <ANTL/thresholds.hpp>
 #include <ANTL/XGCD/xgcd_plain.hpp>
 #include <ANTL/XGCD/xgcd_pseudo.hpp>
-*/
-#include "../utilities.hpp"
-#include "../thresholds.hpp"
-#include "xgcd_plain.hpp"
-#include "xgcd_pseudo.hpp"
+
 
 
 //
