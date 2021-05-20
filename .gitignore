@@ -32,7 +32,7 @@
 *.out
 *.app
 
-# dependencies 
+# dependencies
 *.d
 *.Po
 
@@ -67,7 +67,7 @@ Makefile.in
 
 
 #
-# IDE 
+# IDE
 #
 
 /.cproject
@@ -80,6 +80,7 @@ latex*
 ../../CONFIG
 ../../Makefile
 progress-log
+bin/
 
 .idea/*
 cmake-build-debug/*
