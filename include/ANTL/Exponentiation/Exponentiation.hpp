@@ -7,7 +7,7 @@
 #ifndef EXPONENTIATION_H
 #define EXPONENTIATION_H
 
-#include "../common.hpp"
+#include <ANTL/common.hpp>
 
 namespace ANTL
 {

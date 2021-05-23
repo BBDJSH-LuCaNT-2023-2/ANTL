@@ -257,15 +257,18 @@ PType rho1, rho2;
 
 long index; // The number f such that disc(O) = f^2 * Delta, Delta = field discriminant
 
+
+// See the issue link below regarding the four members below
+// https://gitlab.cpsc.ucalgary.ca/jacobs/ANTL/-/issues/11
 Type class_number = Type(0);
-
 std::vector<Type> cg_structure;
-
 PType regulator = PType(0);
+std::vector<CubicElement<Type, PType>> fundamentalUnits;
+
+
+
 
 Type mul_table[3][3];
-
-std::vector<CubicElement<Type, PType>> fundamentalUnits;
 
 static PType order_temp;
 
