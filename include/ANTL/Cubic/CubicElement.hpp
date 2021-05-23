@@ -59,11 +59,11 @@ CubicElement(const CubicOrder<Type,PType> * cnfo, const Type _coefficients[3], c
   my_order = cnfo;
 }
 
-CubicElement(const CubicOrder<Type,PType> * cnfo, const Type U, const Type X, const Type Y, const Type & _denom){
+CubicElement(const CubicOrder<Type,PType> * cnfo, const Type &U, const Type &X, const Type &Y, const Type & _denom){
 
   //throw exception if denom is zero
   if (_denom == Type(0)){
-    std::cout << "error, 3rd argument cannot be 0 " << std::endl;
+    std::cout << "error, 5th argument cannot be 0 " << std::endl;
     throw std::exception();
   }
 
@@ -141,7 +141,7 @@ void negate( CubicElement <Type, PType> & B){
 */
 bool is_equal(const CubicElement <Type, PType> & B);
 
-/** @brief Cecks if the element is the zero element and returns appropriate bool
+/** @brief Checks if the element is the zero element and returns appropriate bool
 */
 inline bool is_zero() const {
   return (this->u ==Type(0)) && (this->x ==Type(0)) && (this->y == Type(0));
