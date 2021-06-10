@@ -16,7 +16,7 @@
 #include <ANTL/Quadratic/Reduce/qo_reduce.hpp>
 #include <ANTL/Quadratic/Reduce/qo_reduce_plain_imag.hpp>
 #include <ANTL/Quadratic/Reduce/qo_reduce_plain_real.hpp>
-//#include <ANTL/Quadratic/Reduce/qo_reduce_fast.hpp>
+#include <ANTL/Quadratic/Reduce/qo_reduce_fast.hpp>
 
 #include <ANTL/Quadratic/Multiply/qo_multiply.hpp>
 #include <ANTL/Quadratic/Multiply/qo_multiply_plain.hpp>
@@ -47,7 +47,7 @@
 #include <ANTL/Quadratic/Invariants/qo_regulator_subexp.hpp>
 */
 
-namespace ANTL { 
+namespace ANTL {
 
   template < class T > class QuadraticOrder;
 
@@ -304,7 +304,7 @@ namespace ANTL {
     // and class number first
 
     template < class RTYPE >
-    void Lfunction (RTYPE & outL); 
+    void Lfunction (RTYPE & outL);
 
     LTYPE Lfunction();
 
@@ -317,7 +317,7 @@ namespace ANTL {
     void set_class_number (const S & newh);
 
 
-    template < class RTYPE > 
+    template < class RTYPE >
     void regulator (RTYPE & outR, long method = 0);
 
     DTYPE regulator(long method = 0);
@@ -330,24 +330,24 @@ namespace ANTL {
 
     // invariants in other floating point types (for improved accuracy, if desired)
 
-    template < class RTYPE > 
+    template < class RTYPE >
     void LDfunction (RTYPE & out);
 
-    template < class RTYPE > 
+    template < class RTYPE >
     void LLI (RTYPE & out);
 
-    template < class RTYPE > 
+    template < class RTYPE >
     void LLI_D (RTYPE & out);
 
-    template < class RTYPE > 
+    template < class RTYPE >
     void ULI (RTYPE & out);
 
-    template < class RTYPE > 
+    template < class RTYPE >
     void ULI_D (RTYPE & out);
 
     long generate_optimal_Q_cfunc ();
 
-    template < class RTYPE > 
+    template < class RTYPE >
     void estimate_C (RTYPE & out, long nQ);
 
 
@@ -364,7 +364,7 @@ namespace ANTL {
 
     //
     // access to class group statistics
-    // 
+    //
 
     S & get_CL(long i) {
       S A;
@@ -405,10 +405,10 @@ namespace ANTL {
     // input/output
     //
 
-    
+
     void read_from_file (std::istream & in);
     void write_to_file (std::ostream & out) const;
-    
+
 
     friend std::istream & operator >> <T> (std::istream & in, QuadraticOrder < T > &QO);
     friend std::ostream & operator << <T> (std::ostream & out, const QuadraticOrder < T > &QO);
@@ -498,7 +498,7 @@ class QuadraticOrder<ZZ> : public QuadraticOrder<ZZ, ZZ, RR, RR> { };
 template<>
 class QuadraticOrder<long> : public QuadraticOrder<long, long, double, double> {
 };
-*/  
+*/
 
 
   template <> bool QuadraticOrder<GF2EX>::IsEqual (const QuadraticOrder<GF2EX> &QO) const;
@@ -527,4 +527,3 @@ class QuadraticOrder<long> : public QuadraticOrder<long, long, double, double> {
 
 
 #endif // guard
-

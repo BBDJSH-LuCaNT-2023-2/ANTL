@@ -9,7 +9,7 @@
 
 #include <ANTL/common.hpp>
 
-namespace ANTL 
+namespace ANTL
 {
 
   /**
@@ -22,10 +22,10 @@ namespace ANTL
    *   - mul(T &C, const T &A, const T &B): computes C = AB
    *   - sqr(T &C, const T &A): computes C = AA
    * Concrete subclasses may have further requirements (eg. a cube function) that are
-   * described in the documentation of each concrete class. 
+   * described in the documentation of each concrete class.
    */
   template < class T >
-  class Exponentiation 
+  class Exponentiation
   {
 
   public:
@@ -48,4 +48,3 @@ namespace ANTL
 } // ANTL
 
 #endif // EXPONENTIATION_H
-

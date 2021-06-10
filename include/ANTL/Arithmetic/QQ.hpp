@@ -1,7 +1,7 @@
 /**
  * @file QQ.hpp
  * @author Jonathan Hammell / Michael Jacobson
- * @brief template rational number class.  The numerator and denominator are always 
+ * @brief template rational number class.  The numerator and denominator are always
  * stored in lowest terms.
  */
 
@@ -244,7 +244,7 @@ namespace ANTL
       QQ ()
       {
 	::clear (a);
-	::set (d);
+	NTL::set (d);
       }
 
       /**
@@ -264,7 +264,7 @@ namespace ANTL
       QQ (const T& x)
       {
 	a = x;
-	::set (d);
+	NTL::set (d);
       }
 
       /**
@@ -352,7 +352,7 @@ namespace ANTL
       clear (QQ<T> & z)
       {
 	::clear (z.a);
-	::set (z.d);
+	NTL::set (z.d);
       }
 
       /**
@@ -362,8 +362,8 @@ namespace ANTL
       friend void
       set (QQ<T> & z)
       {
-	::set (z.a);
-	::set (z.d);
+	NTL::set (z.a);
+	NTL::set (z.d);
       }
 
       /**
@@ -385,7 +385,7 @@ namespace ANTL
       assign (const T & n)
       {
 	a = n;
-	::set (d);
+	NTL::set (d);
       }
 
       /**
@@ -1173,9 +1173,9 @@ namespace ANTL
 
   // Partial specializations
   template<>
-    void
+    inline void
     QQ<long>::normalize (){
-    
+
        long g = GCD(this->a, this->d);
        if(g > 1){
            this->a /= g;
@@ -1188,7 +1188,7 @@ namespace ANTL
     };
 
   template<>
-    void
+    inline void
     QQ<ZZ>::normalize (){
 
        ZZ g = GCD(this->a, this->d);
@@ -1206,4 +1206,3 @@ namespace ANTL
 } // ANTL
 
 #endif // ANTL_QQ_H
-

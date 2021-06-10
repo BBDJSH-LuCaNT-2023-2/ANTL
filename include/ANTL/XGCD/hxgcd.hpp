@@ -54,6 +54,6 @@ template <> void HXGCD(zz_pX& G, zz_pX& U, zz_pX& V, const zz_pX& A, const zz_pX
 
 
 // Unspecialized template definitions.
-#include "../src/XGCD/hxgcd_impl.hpp"
+#include "../../../src/XGCD/hxgcd_impl.hpp"
 
 #endif // guard

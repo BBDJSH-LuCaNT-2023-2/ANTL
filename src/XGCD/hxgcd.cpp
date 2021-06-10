@@ -1,7 +1,7 @@
 /**
  * @file hxgcd.cpp
  * @author Laurent Imbert
- * @remark 
+ * @remark
  */
 
 
@@ -60,7 +60,7 @@ void HXGCD_PARTIAL(GF2EX & R2, GF2EX & R1, GF2EX & C2, GF2EX & C1, long bound)
 
 
 //
-// Partial Euclidean algorithm (for fast reduce) with revised termination for 
+// Partial Euclidean algorithm (for fast reduce) with revised termination for
 // polynomial types
 //
 

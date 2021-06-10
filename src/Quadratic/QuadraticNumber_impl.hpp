@@ -162,7 +162,7 @@ bool
 
 
 
-template < class 
+template < class
       friend void
       conjugate (QuadraticNumber<T> & z, const QuadraticNumber<T> & x)
       {

@@ -9,7 +9,6 @@
 
 #include <ANTL/utilities.hpp>
 
-
 // We use the NTL namespace everywhere. Rather than have a using directive in
 // every file, we just put it here, for convenience and clarity.
 NTL_CLIENT
@@ -26,7 +25,7 @@ NTL_CLIENT
  * Computes d in F, q, r in F[x] such that d a = q b + r and
  * deg(r) < deg(b).  Thus, q d^-1 and r d^-1 yield the usual
  * quotient and remainder.
- * 
+ *
  * @param d The field element multiplier in the output
  * @param q The pseudo-quotient
  * @param r The pseudo-remainder
@@ -43,8 +42,8 @@ void PseudoDivRem(S & d, T & q, T & r, const T & a, const T & b);
  * Computes d in F, q, r in F[x] such that d a = q b + r and
  * deg(r) < deg(b).  Thus, q d^-1 and r d^-1 yield the usual
  * quotient and remainder.
- * 
- * In this version, coefficients that are multiplied by the leading 
+ *
+ * In this version, coefficients that are multiplied by the leading
  * coefficient of b are reduced immediately.
  *
  * @param d The field element multiplier in the output
@@ -67,7 +66,7 @@ void PseudoDivRem_reduce(S & d, T & q, T & r, const T & a, const T & b);
  * Unlike PseudoDivRem_reduce, this version does not immediately reduce coefficients
  * that are multiplied by the leading coefficient of b.  Instead, these are
  * allowed to accumulate and reduced once at the end of the function.
- * 
+ *
  * @param d The field element multiplier in the output
  * @param q The pseudo-quotient
  * @param r The pseudo-remainder
@@ -95,6 +94,6 @@ template <> void PseudoDivRem_accumulate(GF2E & d, GF2EX & q, GF2EX & r, const G
 
 
 // Unspecialized template definitions.
-#include "../src/Arithmetic/pseudodiv_impl.hpp"
+#include "../../../src/Arithmetic/pseudodiv_impl.hpp"
 
 #endif // guard

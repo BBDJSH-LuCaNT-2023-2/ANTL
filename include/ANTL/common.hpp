@@ -15,8 +15,8 @@
 #include <NTL/lzz_pX.h>
 #include <NTL/ZZ_pEX.h>
 #include <NTL/lzz_pEX.h>
-
-
+#include <boost/math/bindings/rr.hpp>
+using boost::math::ntl::atan;
 // We use the NTL namespace everywhere. Rather than have a using directive in
 // every file, we just put it here, for convenience and clarity.
 NTL_CLIENT
@@ -24,14 +24,14 @@ NTL_CLIENT
 
 /**
  * @brief Suggested beginning of the definition of a function-like macro.
- * 
+ *
  * This helps to prevent heisenbugs caused by macros that have tricky semantics
  * when placed in, say, an if-block. The optimizer strips out the do-while.
  */
 #define ANTL_BEGIN_MACRO_FUNCTION	do {
 
 /**
- * @brief Used to close a macro definition started with \c ANTL_BEGIN_MACRO. 
+ * @brief Used to close a macro definition started with \c ANTL_BEGIN_MACRO.
  */
 #define ANTL_END_MACRO_FUNCTION		} while(0)
 
@@ -88,6 +88,8 @@ namespace NTL {
   template < class T >
   inline void assign(T &C, const T &A) { C = A; }
 
+  inline void SqrRoot(double &x, const double &a) { x = std::sqrt(a); }
+  inline void ComputePi(double & p){ p = 3.141592653589793;}
 
   // procedural arithmetic operations for standard types, to increase compatibility with NTL
   inline void add ( long &C, const long &A, const long &B )     { C = A + B; }
@@ -108,8 +110,25 @@ namespace NTL {
 
   inline void sqr ( long &C, const long &A)     { C = A * A; }
   inline void sqr ( float &C, const float &A)     { C = A * A; }
-  inline void sqr ( double &C, const double &A)     { C = A * A; } 
+  inline void sqr ( double &C, const double &A)     { C = A * A; }
 
+  inline void power(double &C, double &A, double &E) { C= std::pow(A,E); }
+  inline void power(float &C, float &A, float &E) { C= std::pow(A,E); }
+
+  inline void pow(double &C, double &A, const double &E) { C= std::pow(A,E); }
+  inline void pow(float &C, float &A, const float &E) { C= std::pow(A,E); }
+
+
+  inline void abs(long & z, const long a) { z =  std::abs(a); }
+  inline void abs(double & z, const double a) { z = std::abs(a); }
+
+  inline void floor(long & z, const long a) { z =  std::floor(a); }
+  inline void floor(double & z, const double a) { z = std::floor(a); }
+
+  inline void log(double & z, const double a) { z = std::log(a); }
+
+  inline void atan_val(RR & z, const RR & a){z = atan(a).value(); }
+  inline void atan_val(double & z, const double & a){z = atan(a); }
 }
 
 namespace ANTL {
@@ -121,7 +140,7 @@ namespace ANTL {
 
   //
   // cmath-like methods, for completeness.
-  // Most of these exist because of problems where gcc doesn't find the
+  // Most of thezse exist because of problems where gcc doesn't find the
   // cmath methods, presumably because of namespace issues).
   //
   inline float sqrt(float x) { return (float)std::sqrt((double)x); }
@@ -134,7 +153,8 @@ namespace ANTL {
   inline double exp(double x) { return std::exp(x); }
   inline float log(float x) { return (float)std::log((double)x); }
   inline double log(double x) { return std::log(x); }
-
+  inline float pow(float x, float e) { return (float)std::pow((double)x, (double)e ); }
+  inline double pow(double x, float e) { return std::pow(x,e); }
 
 
   // finite field cardinality macros

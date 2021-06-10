@@ -13,12 +13,12 @@
  *     a remainder goes below the given threshold.  Uses a parital version
  *     of Lehmer's algorithm for integers, partial extended Euclid for
  *     polynomials.
- * 
- *   - XGCD_PARTIAL_REDUCE: same as XGCD_PARTIAL, with an extra parameter for 
- *     revised termination condition for ideal reduction algorithm 
+ *
+ *   - XGCD_PARTIAL_REDUCE: same as XGCD_PARTIAL, with an extra parameter for
+ *     revised termination condition for ideal reduction algorithm
  *     (polynomial types only)
  *
- * For polynomial base types, these functions use either the XGCD_*_ITER function or the 
+ * For polynomial base types, these functions use either the XGCD_*_ITER function or the
  * XGCD_*_HALF function, depending on the thresholds in qir_thresholds.hpp.  For ZZ, a version
  * of Lehmer's algorithm is used.
  */
@@ -30,6 +30,7 @@
 #include <ANTL/thresholds.hpp>
 #include <ANTL/XGCD/xgcd_iter.hpp>
 #include <ANTL/XGCD/hxgcd.hpp>
+
 
 
 //
@@ -85,6 +86,6 @@ template <> void XGCD_PARTIAL(ZZ & R2, ZZ & R1, ZZ & C2, ZZ & C1, long bound, bo
 
 
 // Unspecialized template definitions.
-#include "../src/XGCD/xgcd_impl.hpp"
+#include "../../../src/XGCD/xgcd_impl.hpp"
 
 #endif // guard
