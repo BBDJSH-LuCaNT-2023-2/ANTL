@@ -81,6 +81,8 @@ latex*
 ../../Makefile
 progress-log
 bin/
+unused/
+special/
 
 .idea/*
 cmake-build-debug/*
