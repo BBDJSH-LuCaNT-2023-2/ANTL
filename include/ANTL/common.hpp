@@ -36,7 +36,7 @@ NTL_CLIENT
 #define ANTL_END_MACRO_FUNCTION		} while(0)
 
 // Include macros for debugging output, and general output.
-#include "debug.hpp"
+#include <ANTL/debug.hpp>
 
 /**
  * @brief Null macro used to mark a by-reference argument pass.
