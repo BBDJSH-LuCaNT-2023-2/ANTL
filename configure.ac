@@ -16,8 +16,6 @@ AC_PROG_LN_S
 AX_PTHREAD(, )
 
 # Checks for libraries.
-# FIXME: Replace `main' with a function in `-lantl':
-AC_CHECK_LIB([antl], [main])
 # FIXME: Replace `main' with a function in `-lgmp':
 AC_CHECK_LIB([gmp], [main])
 # FIXME: Replace `main' with a function in `-lm':
