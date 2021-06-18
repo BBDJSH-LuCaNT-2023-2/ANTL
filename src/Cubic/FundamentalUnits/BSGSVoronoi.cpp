@@ -1,7 +1,7 @@
 #ifndef ANTL_BSGS_VORONOI_CPP
 #define ANTL_BSGS_VORONOI_CPP
 
-#include "../../../include/ANTL/Cubic/fund_unit/BSGSVoronoi.hpp"
+#include "../../../include/ANTL/Cubic/FundamentalUnits/BSGSVoronoi.hpp"
 
 
 
@@ -113,7 +113,7 @@ void BSGSVoronoi<Type, PType> :: fundamental_unit_complex(std::vector<CubicEleme
 
       if (L2.is_one()){
         unitvec.push_back(epsilon1);
-        std::cout << "fund_unit complete" << std::endl;
+        std::cout << "FundamentalUnits complete" << std::endl;
         epsilon1.get_real_value(this->distance);
         log(this->distance, this->distance);
         std::cout << "Reg. estimate " << this->distance << std::endl;
@@ -190,7 +190,7 @@ void BSGSVoronoi<Type, PType> :: fundamental_unit_complex(std::vector<CubicEleme
 
     } while( !collision);
 unitvec.push_back(epsilon1);
-std::cout << "fund_unit complete" << std::endl;
+std::cout << "FundamentalUnits complete" << std::endl;
 std::cout << "Reg. estimate " << this->distance << std::endl;
 };
 

@@ -98,9 +98,9 @@ int main(){
   cout << "----------------------------------------" << endl;
 
   double val;
-  Odie->get_fund_unit(0)->get_real_value(val);
+  Odie->get_FundamentalUnits(0)->get_real_value(val);
   std::cout << "Fundamental Units " << std::endl;
-  std::cout << Odie->get_fund_unit(0)->get_u() << " " << Odie->get_fund_unit(0)->get_x() << " " << Odie->get_fund_unit(0)->get_y() << " Reg: "<< ANTL::log(val) << std::endl;
+  std::cout << Odie->get_FundamentalUnits(0)->get_u() << " " << Odie->get_FundamentalUnits(0)->get_x() << " " << Odie->get_FundamentalUnits(0)->get_y() << " Reg: "<< ANTL::log(val) << std::endl;
 */
 
 
@@ -220,7 +220,7 @@ polynomial<ZZ> const real_poly{{real_ibcf[0],real_ibcf[1],real_ibcf[2],real_ibcf
   //Ideal1.make_prepared();
   //Ideal1.make_voronoi_basis();
 
-  //std::cout << Odie->get_fund_unit()->get_u() << " " << Odie->get_fund_unit()->get_x() << " " << Odie->get_fund_unit()->get_y() << std::endl;
+  //std::cout << Odie->get_FundamentalUnits()->get_u() << " " << Odie->get_FundamentalUnits()->get_x() << " " << Odie->get_FundamentalUnits()->get_y() << std::endl;
 
 
 /*

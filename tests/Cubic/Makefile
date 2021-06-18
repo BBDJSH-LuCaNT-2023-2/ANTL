@@ -70,11 +70,11 @@ VoronoiReal.o: ../../src/Cubic/VoronoiReal.cpp ../../include/ANTL/Cubic/VoronoiR
 VoronoiComplex.o: ../../src/Cubic/VoronoiComplex.cpp ../../include/ANTL/Cubic/VoronoiComplex.hpp ../../include/ANTL/Cubic/VoronoiMethods.hpp
 		$(CC) $(CFLAGS) -c $(IFLAGS) ../../src/Cubic/VoronoiComplex.cpp -L/c/lib $(LFLAGS)
 
-BasicVoronoi.o: ../../src/Cubic/fund_unit/BasicVoronoi.cpp ../../include/ANTL/Cubic/fund_unit/BasicVoronoi.hpp ../../include/ANTL/Cubic/fund_unit/FundUnitStrategy.hpp
-		$(CC) $(CFLAGS) -c $(IFLAGS) ../../src/Cubic/fund_unit/BasicVoronoi.cpp -L/c/lib $(LFLAGS)
+BasicVoronoi.o: ../../src/Cubic/FundamentalUnits/BasicVoronoi.cpp ../../include/ANTL/Cubic/FundamentalUnits/BasicVoronoi.hpp ../../include/ANTL/Cubic/FundamentalUnits/FundUnitStrategy.hpp
+		$(CC) $(CFLAGS) -c $(IFLAGS) ../../src/Cubic/FundamentalUnits/BasicVoronoi.cpp -L/c/lib $(LFLAGS)
 
-BSGSVoronoi.o: ../../src/Cubic/fund_unit/BSGSVoronoi.cpp ../../include/ANTL/Cubic/fund_unit/BSGSVoronoi.hpp ../../include/ANTL/Cubic/fund_unit/FundUnitStrategy.hpp
-		$(CC) $(CFLAGS) -c $(IFLAGS) ../../src/Cubic/fund_unit/BSGSVoronoi.cpp -L/c/lib $(LFLAGS)
+BSGSVoronoi.o: ../../src/Cubic/FundamentalUnits/BSGSVoronoi.cpp ../../include/ANTL/Cubic/FundamentalUnits/BSGSVoronoi.hpp ../../include/ANTL/Cubic/FundamentalUnits/FundUnitStrategy.hpp
+		$(CC) $(CFLAGS) -c $(IFLAGS) ../../src/Cubic/FundamentalUnits/BSGSVoronoi.cpp -L/c/lib $(LFLAGS)
 
 xgcd.o: ../../src/XGCD/xgcd.cpp ../../include/ANTL/XGCD/xgcd.hpp
 	$(CC) $(CFLAGS) -c $(IFLAGS) ../../src/XGCD/xgcd.cpp -L/c/lib $(LFLAGS)

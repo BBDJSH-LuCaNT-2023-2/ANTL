@@ -5,16 +5,16 @@ IFLAGS= -I/c/include -I/home/cs-gb2khv2/ANTL/include
 SRC_FILES := $(wildcard ../../src/Cubic/*.cpp)
 OBJ_FILES := $(notdir $(SRC_FILES:.cpp=.o))
 
-main: testingMain.o bin/test-cnf bin/test-element bin/test-order
+main: testingMain.o test-cnf test-element test-order
 
 test-cnf: test-cnf.cpp testingMain.o ../catch.hpp ../../../include/ANTL/Cubic/GeneralTemplateFunctions.hpp
-	$(CC) $(CFLAGS) -o 010-TestCase $(IFLAGS) testingMain.o test-cnf.cpp -L/c/lib $(LFLAGS)
+	$(CC) $(CFLAGS) -o bin/010-TestCase $(IFLAGS) testingMain.o test-cnf.cpp -L/c/lib $(LFLAGS)
 
 test-element: ../catch.hpp test-element.cpp
-	$(CC) $(CFLAGS) -o 020-TestCase test-element.cpp $(IFLAGS) testingMain.o ../generalFunctions.o ../CubicOrder.o ../CubicElement.o -L/c/lib $(LFLAGS)
+	$(CC) $(CFLAGS) -o bin/020-TestCase test-element.cpp $(IFLAGS) testingMain.o ../generalFunctions.o ../CubicOrder.o ../CubicElement.o -L/c/lib $(LFLAGS)
 
 test-order: ../catch.hpp test-order.cpp testingMain.o ../generalFunctions.o ../CubicOrder.o
-	$(CC) $(CFLAGS) -o 030-TestCase $(IFLAGS) testingMain.o ../CubicOrder.o test-order.cpp -L/c/lib $(LFLAGS)
+	$(CC) $(CFLAGS) -o bin/030-TestCase $(IFLAGS) testingMain.o ../CubicOrder.o test-order.cpp -L/c/lib $(LFLAGS)
 
 
 testingMain.o: testingMain.cpp
