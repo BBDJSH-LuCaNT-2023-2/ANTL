@@ -28,7 +28,7 @@ public:
 
 //this will be a virtual function which is instantiated in subclasses
 // different subclasses shall implement distinct methods
-virtual void compute( std::vector<CubicElement<Type, PType>> & unitvec, CubicOrder<Type, PType> * ord, bool realorder);
+virtual void compute( std::vector<CubicElement<Type, PType>> & unitvec, CubicOrder<Type, PType> * ord, bool realorder) {};
 
 
 protected:
