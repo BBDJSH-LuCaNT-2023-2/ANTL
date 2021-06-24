@@ -20,6 +20,7 @@ The headers for them must be in a directory where your linker will find them.
 m
 ntl 
 gmp 
+mpc
 mpfi 
 mpfr 
 pthread
