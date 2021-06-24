@@ -13,7 +13,6 @@
 #include "ANTL/IndexCalculus/Relation/QuadRelation.hpp"
 #include "ANTL/IndexCalculus/RelationGenerator/QuadRelationGenerator.hpp"
 
-#include <boost/math/tools/polynomial.hpp>
 int main() {
   return 0;
 }
