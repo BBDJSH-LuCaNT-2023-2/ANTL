@@ -13,6 +13,11 @@
 #include "ANTL/IndexCalculus/Relation/QuadRelation.hpp"
 #include "ANTL/IndexCalculus/RelationGenerator/QuadRelationGenerator.hpp"
 
+#include "ANTL/Quadratic/QuadraticOrder.hpp"
+#include "ANTL/Quadratic/QuadraticIdeal.hpp"
+#include "ANTL/Quadratic/QuadraticNumber.hpp"
+//#include "ANTL/Quadratic/QuadraticField.hpp"
+
 int main() {
   return 0;
 }

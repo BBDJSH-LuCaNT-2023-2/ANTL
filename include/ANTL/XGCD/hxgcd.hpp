@@ -7,7 +7,7 @@
 #ifndef HXGCD_H
 #define HXGCD_H
 
-#include <ANTL/utilities.hpp>
+#include <ANTL/common.hpp>
 #include <ANTL/thresholds.hpp>
 #include <ANTL/XGCD/xgcd_iter.hpp>
 

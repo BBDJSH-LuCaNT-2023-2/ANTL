@@ -8,6 +8,8 @@
 #define ANTL_COMMON_H
 
 #include <cmath>
+#include <gmp.h>
+
 #include <NTL/ZZ.h>
 #include <NTL/RR.h>
 #include <NTL/GF2EX.h>
@@ -15,8 +17,15 @@
 #include <NTL/lzz_pX.h>
 #include <NTL/ZZ_pEX.h>
 #include <NTL/lzz_pEX.h>
-#include <boost/math/bindings/rr.hpp>
-using boost::math::ntl::atan;
+
+#include <NTL/ZZ_pXFactoring.h>
+#include <NTL/lzz_pXFactoring.h>
+#include <NTL/ZZ_pEXFactoring.h>
+#include <NTL/lzz_pEXFactoring.h>
+#include <NTL/GF2XFactoring.h>
+#include <NTL/GF2EXFactoring.h>
+
+
 // We use the NTL namespace everywhere. Rather than have a using directive in
 // every file, we just put it here, for convenience and clarity.
 NTL_CLIENT
@@ -36,7 +45,7 @@ NTL_CLIENT
 #define ANTL_END_MACRO_FUNCTION		} while(0)
 
 // Include macros for debugging output, and general output.
-#include <ANTL/debug.hpp>
+#include "debug.hpp"
 
 /**
  * @brief Null macro used to mark a by-reference argument pass.
@@ -49,8 +58,8 @@ NTL_CLIENT
 // Forward declarations for prototypes in this file.
 namespace NTL {
   //
-  // NTL-like methods, for completeness.
-  //
+  // NTL-like methods, for completeness. There exists a "set" and "clear" for most (all?) NTL types.
+  // The below definitions extend this functionality for other types.
   inline void clear (long &X)	        { X = 0; }
   inline void set (long &X)          { X = 1; }
   inline void clear (float &i)       { i = 0.0f; }
@@ -88,8 +97,6 @@ namespace NTL {
   template < class T >
   inline void assign(T &C, const T &A) { C = A; }
 
-  inline void SqrRoot(double &x, const double &a) { x = std::sqrt(a); }
-  inline void ComputePi(double & p){ p = 3.141592653589793;}
 
   // procedural arithmetic operations for standard types, to increase compatibility with NTL
   inline void add ( long &C, const long &A, const long &B )     { C = A + B; }
@@ -112,23 +119,6 @@ namespace NTL {
   inline void sqr ( float &C, const float &A)     { C = A * A; }
   inline void sqr ( double &C, const double &A)     { C = A * A; }
 
-  inline void power(double &C, double &A, double &E) { C= std::pow(A,E); }
-  inline void power(float &C, float &A, float &E) { C= std::pow(A,E); }
-
-  inline void pow(double &C, double &A, const double &E) { C= std::pow(A,E); }
-  inline void pow(float &C, float &A, const float &E) { C= std::pow(A,E); }
-
-
-  inline void abs(long & z, const long a) { z =  std::abs(a); }
-  inline void abs(double & z, const double a) { z = std::abs(a); }
-
-  inline void floor(long & z, const long a) { z =  std::floor(a); }
-  inline void floor(double & z, const double a) { z = std::floor(a); }
-
-  inline void log(double & z, const double a) { z = std::log(a); }
-
-  inline void atan_val(RR & z, const RR & a){z = atan(a).value(); }
-  inline void atan_val(double & z, const double & a){z = atan(a); }
 }
 
 namespace ANTL {
@@ -140,7 +130,7 @@ namespace ANTL {
 
   //
   // cmath-like methods, for completeness.
-  // Most of thezse exist because of problems where gcc doesn't find the
+  // Most of these exist because of problems where gcc doesn't find the
   // cmath methods, presumably because of namespace issues).
   //
   inline float sqrt(float x) { return (float)std::sqrt((double)x); }
@@ -153,62 +143,6 @@ namespace ANTL {
   inline double exp(double x) { return std::exp(x); }
   inline float log(float x) { return (float)std::log((double)x); }
   inline double log(double x) { return std::log(x); }
-  inline float pow(float x, float e) { return (float)std::pow((double)x, (double)e ); }
-  inline double pow(double x, float e) { return std::pow(x,e); }
-
-
-  // finite field cardinality macros
-  template <class> ZZ CARDINALITY(void);
-
-  template <> inline ZZ CARDINALITY < ZZ > (void) {
-    return to_ZZ(0);
-  }
-
-  template <> inline ZZ CARDINALITY < long > (void) {
-    return to_ZZ(0);
-  }
-
-  template <> inline ZZ CARDINALITY < ZZ_p > (void) {
-    return ZZ_p::modulus ();
-  }
-
-  template <> inline ZZ CARDINALITY < zz_p > (void) {
-    return to_ZZ (zz_p::modulus ());
-  }
-
-  template <> inline ZZ CARDINALITY < ZZ_pX > (void) {
-    return ZZ_p::modulus ();
-  }
-
-  template <> inline ZZ CARDINALITY < zz_pX > (void) {
-    return to_ZZ (zz_p::modulus ());
-  }
-
-  template <> inline ZZ CARDINALITY < ZZ_pE > (void) {
-    return ZZ_pE::cardinality ();
-  }
-
-  template <> inline ZZ CARDINALITY < zz_pE > (void) {
-    return zz_pE::cardinality ();
-  }
-
-  template <> inline ZZ CARDINALITY < ZZ_pEX > (void) {
-    return ZZ_pE::cardinality ();
-  }
-
-  template <> inline ZZ CARDINALITY < zz_pEX > (void) {
-    return zz_pE::cardinality ();
-  }
-
-  template <> inline ZZ CARDINALITY < GF2E > (void) {
-    return GF2E::cardinality ();
-  }
-
-  template <> inline ZZ CARDINALITY < GF2EX > (void) {
-    return GF2E::cardinality ();
-  }
-
-
 
   //
   // Template-friendly methods for common conversions & constants.
@@ -302,9 +236,165 @@ namespace ANTL {
   template<> inline zz_pX to<zz_pX>(const int & a) { return zz_pX(a,0); }
 } // ANTL
 
-/*
+  // finite field cardinality macros
+  template <class> ZZ CARDINALITY(void);
+
+  template <> inline ZZ CARDINALITY < ZZ > (void) {
+    return to_ZZ(0);
+  }
+
+  template <> inline ZZ CARDINALITY < long > (void) {
+    return to_ZZ(0);
+  }
+
+  template <> inline ZZ CARDINALITY < ZZ_p > (void) {
+    return ZZ_p::modulus ();
+  }
+
+  template <> inline ZZ CARDINALITY < zz_p > (void) {
+    return to_ZZ (zz_p::modulus ());
+  }
+
+  template <> inline ZZ CARDINALITY < ZZ_pX > (void) {
+    return ZZ_p::modulus ();
+  }
+
+  template <> inline ZZ CARDINALITY < zz_pX > (void) {
+    return to_ZZ (zz_p::modulus ());
+  }
+
+  template <> inline ZZ CARDINALITY < ZZ_pE > (void) {
+    return ZZ_pE::cardinality ();
+  }
+
+  template <> inline ZZ CARDINALITY < zz_pE > (void) {
+    return zz_pE::cardinality ();
+  }
+
+  template <> inline ZZ CARDINALITY < ZZ_pEX > (void) {
+    return ZZ_pE::cardinality ();
+  }
+
+  template <> inline ZZ CARDINALITY < zz_pEX > (void) {
+    return zz_pE::cardinality ();
+  }
+
+  template <> inline ZZ CARDINALITY < GF2E > (void) {
+    return GF2E::cardinality ();
+  }
+
+  template <> inline ZZ CARDINALITY < GF2EX > (void) {
+    return GF2E::cardinality ();
+  }
+
+//
+// Utility routines for polynomials.
+//
+
+/**
+ * @fn get_poly_modq
+ * Computes a polynomial mod q corresponding to the integer X (q-adic
+ * representation of X).
+ *
+ * @param p Reference to an instance of GF2EX to hold the newly
+ * created polynomial.
+ * @param X The integer to create the polynomial from.
+ * @param q The modulus of the polynomial creation.
+ */
+void get_poly_modq (GF2X & p, const ZZ & X, const ZZ & q);
+void get_poly_modq (GF2EX & p, const ZZ & X, const ZZ & q);
+void get_poly_modq (ZZ_pX & p, const ZZ & X, const ZZ & q);
+void get_poly_modq (ZZ_pEX & p, const ZZ & X, const ZZ & q);
+void get_poly_modq (zz_pX & p, const ZZ & X, const ZZ & q);
+void get_poly_modq (zz_pEX & p, const ZZ & X, const ZZ & q);
+
+
+/**
+ * @brief Computes the integer X corresponding to the q-adic
+ * representation of p.
+ */
+template < class T >
+ZZ eval_poly (const T & p, const ZZ & q);
+template <> ZZ eval_poly <ZZ_pEX> (const ZZ_pEX & p, const ZZ & q);
+template <> ZZ eval_poly <zz_pEX> (const zz_pEX & p, const ZZ & q);
+template <> ZZ eval_poly <GF2EX> (const GF2EX & p, const ZZ & q);
+
+
+
+//
+// quadratic residuosity functions
+//
+
+/* Jacobi functions - assumes a is reduced mod n */
+long Jacobi_base (const ZZ & a, const ZZ & n);
+long Jacobi_base (const long & a, const long & n);
+
+/* Jacobi functions - no preconditions on a and n */
+long Jacobi(const ZZ & a, const ZZ & n);
+long Jacobi(const long & a, const long & n);
+long Jacobi(const ZZ_pX & a, const ZZ_pX & n);
+long Jacobi(const zz_pX & a, const zz_pX & n);
+long Jacobi(const ZZ_pEX & a, const ZZ_pEX & n);
+long Jacobi(const zz_pEX & a, const zz_pEX & n);
+
+/* GF2X quadratic character */
+/**
+ * @brief Computes the trace of a (mod p), i.e.,
+ * 		tr = sum_{i=0}^{vt-1} a^2^i (mod p)
+ *  where deg(p) = v.
+ */
+void trace (GF2X & t, const GF2X & a, const GF2X & pmod);
+long Jacobi (const GF2X & h, const GF2X & f, const GF2X & n);
+
+/* GF2EX quadratic character */
+/**
+ * @brief Computes the trace of a (mod p), i.e.,
+ * 		tr = sum_{i=0}^{vt-1} a^2^i (mod p)
+ *  where deg(p) = v.
+ */
+void trace (GF2EX & t, const GF2EX & a, const GF2EXModulus & pmod);
+long Jacobi (const GF2EX & h, const GF2EX & f, const GF2EX & n);
+
+
+
+//
+// modular square root functions
+//
+
+//
+// get_qdp (computes a square root of Delta mod p)
+//   - used by templated ressol)
+//
+void get_qdp(ZZ & q, const ZZ_pX & p);
+void get_qdp(ZZ & q, const zz_pX & p);
+void get_qdp(ZZ & q, const ZZ_pEX & p);
+void get_qdp(ZZ & q, const zz_pEX & p);
+
+/**
+ * @brief Computes x, a a solution of x^2 = a (mod p).
+ * @return
+ * 		 0  if the equation has a unique solution (p | a)
+ * 		-1  if x^2 = a (mod p) has no solutions
+ * 		 1  if x^2 = a (mod p) has 2 solutions
+ */
+template < class T >
+long ressol (T & x, const T & a, const T & p);
+
+
+
+/**
+ * @brief Computes x, a a solution of x^2 + hx -f = 0 (mod p).
+ * @return
+ * 		 0  if the equation has a unique solution (p | h)
+ * 		-1  if x^2 + hx -f = 0 (mod p) has no solutions
+ * 		 1  if x^2 + hx -f = 0 (mod p) has 2 solutions
+ */
+long ressol (GF2EX & x, const GF2EX & h, const GF2EX & f, const GF2EX & p);
+
+
+
 // Unspecialized template definitions.
 #include "../../src/common_impl.hpp"
-*/
+
 
 #endif // guard

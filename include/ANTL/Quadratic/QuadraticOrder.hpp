@@ -16,20 +16,20 @@
 #include <ANTL/Quadratic/Reduce/qo_reduce.hpp>
 #include <ANTL/Quadratic/Reduce/qo_reduce_plain_imag.hpp>
 #include <ANTL/Quadratic/Reduce/qo_reduce_plain_real.hpp>
-#include <ANTL/Quadratic/Reduce/qo_reduce_fast.hpp>
+// #include <ANTL/Quadratic/Reduce/qo_reduce_fast.hpp>
 
 #include <ANTL/Quadratic/Multiply/qo_multiply.hpp>
-#include <ANTL/Quadratic/Multiply/qo_multiply_plain.hpp>
-#include <ANTL/Quadratic/Multiply/qo_nucomp.hpp>
+// #include <ANTL/Quadratic/Multiply/qo_multiply_plain.hpp>
+// #include <ANTL/Quadratic/Multiply/qo_nucomp.hpp>
 
 #include <ANTL/Quadratic/Square/qo_square.hpp>
-#include <ANTL/Quadratic/Square/qo_square_plain.hpp>
-#include <ANTL/Quadratic/Square/qo_nudupl.hpp>
+// #include <ANTL/Quadratic/Square/qo_square_plain.hpp>
+// #include <ANTL/Quadratic/Square/qo_nudupl.hpp>
 
 #include <ANTL/Quadratic/Cube/qo_cube.hpp>
-#include <ANTL/Quadratic/Cube/qo_cube_plain.hpp>
-#include <ANTL/Quadratic/Cube/qo_nucube.hpp>
-#include <ANTL/Quadratic/Cube/qo_cube_mulsqr.hpp>
+// #include <ANTL/Quadratic/Cube/qo_cube_plain.hpp>
+// #include <ANTL/Quadratic/Cube/qo_nucube.hpp>
+// #include <ANTL/Quadratic/Cube/qo_cube_mulsqr.hpp>
 
 /*
 // class group classes
@@ -128,23 +128,23 @@ namespace ANTL {
     // reduction
     qo_reduce<T> *red_best;
     //qo_reduce_plain<T> red_plain;     //Note that qo_reduce_plain is not a class, but there are separate classes for real and imag  -RL
-    qo_reduce_fast<T> red_fast;
+    // qo_reduce_fast<T> red_fast;
 
     // multiplication
     qo_multiply<T> *mul_best;
-    qo_multiply_plain<T> mul_plain;
-    qo_nucomp<T> mul_nucomp;
+    // qo_multiply_plain<T> mul_plain;
+    // qo_nucomp<T> mul_nucomp;
 
     // squaring
     qo_square<T> *sqr_best;
-    qo_square_plain<T> sqr_plain;
-    qo_nudupl<T> sqr_nudupl;
+    // qo_square_plain<T> sqr_plain;
+    // qo_nudupl<T> sqr_nudupl;
 
     // cubing
     qo_cube<T> *cube_best;
-    qo_cube_plain<T> cube_plain;
-    qo_nucube<T> cube_nucube;
-    qo_cube_mulsqr<T> cube_mulsqr;
+    // qo_cube_plain<T> cube_plain;
+    // qo_nucube<T> cube_nucube;
+    // qo_cube_mulsqr<T> cube_mulsqr;
 
 
 

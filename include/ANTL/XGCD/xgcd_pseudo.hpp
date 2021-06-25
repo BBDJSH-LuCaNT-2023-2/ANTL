@@ -20,7 +20,7 @@
 #ifndef XGCD_PSEUDO_H
 #define XGCD_PSEUDO_H
 
-#include <ANTL/utilities.hpp>
+#include <ANTL/common.hpp>
 #include <ANTL/Arithmetic/pseudodiv.hpp>
 
 
