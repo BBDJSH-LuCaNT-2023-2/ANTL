@@ -10,6 +10,8 @@
 #include <vector>
 #include <NTL/ZZ.h>
 
+#include <ANTL/Interface/OrderInvariants.hpp>
+
 // arithmetic classes
 //#include <ANTL/Quadratic/QuadraticIdealBase.hpp>
 
@@ -108,8 +110,7 @@ namespace ANTL {
    *       zz_pEX --- hyperelliptic function field over Fq (char <> 2, p < 2^64)
    *       GF2EX --- hyperelliptic function field (char = 2)
    */
-  template < class T >
-  class QuadraticOrder
+  template < class T > class QuadraticOrder : public IClassGroup, public IClassNumber, public IUnitGroup<T>, public IRegulator<T>
   {
   private:
 
@@ -256,6 +257,30 @@ namespace ANTL {
     bool IsImaginary () const;
     bool IsUnusual () const;
     bool IsReal () const;
+
+  //Inherited virtual methods
+
+
+  virtual std::vector<NTL::ZZ> class_group() {
+	std::vector<NTL::ZZ> classGroup = {ZZ(1), ZZ(2)};
+	return classGroup;
+  }
+
+  virtual NTL::ZZ class_number() {
+	ZZ classNumber = ZZ(0);
+	return classNumber;
+  }
+
+  virtual std::vector<T> unit_group() {
+	T object1, object2;
+	std::vector<T> unitGroup = {object1, object2};
+	return unitGroup;
+  }
+
+  virtual T regulator() {
+	T regulator;
+	return regulator;
+  }
 
     /*
     bool is_R_conditional () const
@@ -500,6 +525,8 @@ class QuadraticOrder<long> : public QuadraticOrder<long, long, double, double> {
 };
 */
 
+  template <>      QuadraticOrder<ZZ>::QuadraticOrder (const ZZ & D);
+  template <>      QuadraticOrder<long>::QuadraticOrder (const long & D);
 
   template <> bool QuadraticOrder<GF2EX>::IsEqual (const QuadraticOrder<GF2EX> &QO) const;
   template <> bool QuadraticOrder<GF2EX>::IsImaginary () const;

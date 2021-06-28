@@ -170,8 +170,8 @@ long ressol(T & x, const T & a, const T & p)
     x2 = -x;
     x2 %= p;
 
-    xval = eval_poly (x, CARDINALITY<T>());
-    x2val = eval_poly (x2, CARDINALITY<T>());
+    xval = eval_poly (x, ANTL::CARDINALITY<T>());
+    x2val = eval_poly (x2, ANTL::CARDINALITY<T>());
 
     if (x2val < xval)
       x = x2;

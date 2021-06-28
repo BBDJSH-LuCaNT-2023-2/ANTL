@@ -7,17 +7,17 @@
 using namespace NTL;
 using namespace ANTL;
 
-TEST_CASE("Miscellaneous tests for QuadraticOrder<ZZ>", "[capturing]") {
+TEST_CASE("Miscellaneous tests for QuadraticOrder<long>", "[capturing]") {
 
-    ZZ D1 = ZZ(13);
-    ZZ D2 = ZZ(17);
+    long D1 = 13;
+    long D2 = 17;
 
-    QuadraticOrder<ZZ> quad_order1 = QuadraticOrder<ZZ>(D1);
-    QuadraticOrder<ZZ> quad_order2 = QuadraticOrder<ZZ>(D1);
+    QuadraticOrder<long> quad_order1 = QuadraticOrder<long>(D1);
+    QuadraticOrder<long> quad_order2 = QuadraticOrder<long>(D1);
 
-    QuadraticOrder<ZZ> quad_order3 = QuadraticOrder<ZZ>(D2);
+    QuadraticOrder<long> quad_order3 = QuadraticOrder<long>(D2);
 
-    ZZ expected_discriminant = ZZ(13);
+    long expected_discriminant = 13;
 
     REQUIRE(quad_order1 == quad_order2);
 

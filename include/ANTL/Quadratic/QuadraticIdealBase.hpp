@@ -12,9 +12,11 @@
 #include <ANTL/Quadratic/QuadraticNumber.hpp>
 
 template < class T > class QuadraticIdealBase;
+
+namespace ANTL {
 template < class T > class QuadraticOrder;
 template < class T > class QuadraticNumber;
-
+}
 
 // declare templated friend functions
 template < class T >
