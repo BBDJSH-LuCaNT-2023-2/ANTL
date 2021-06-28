@@ -25,6 +25,8 @@
 #include <NTL/GF2XFactoring.h>
 #include <NTL/GF2EXFactoring.h>
 
+#include <boost/math/bindings/rr.hpp>
+using boost::math::ntl::atan;
 
 // We use the NTL namespace everywhere. Rather than have a using directive in
 // every file, we just put it here, for convenience and clarity.
@@ -45,7 +47,7 @@ NTL_CLIENT
 #define ANTL_END_MACRO_FUNCTION		} while(0)
 
 // Include macros for debugging output, and general output.
-#include "debug.hpp"
+#include <ANTL/debug.hpp>
 
 /**
  * @brief Null macro used to mark a by-reference argument pass.
@@ -119,6 +121,23 @@ namespace NTL {
   inline void sqr ( float &C, const float &A)     { C = A * A; }
   inline void sqr ( double &C, const double &A)     { C = A * A; }
 
+  inline void power(double &C, double &A, double &E) { C= std::pow(A,E); }
+  inline void power(float &C, float &A, float &E) { C= std::pow(A,E); }
+
+  inline void pow(double &C, double &A, const double &E) { C= std::pow(A,E); }
+  inline void pow(float &C, float &A, const float &E) { C= std::pow(A,E); }
+
+
+  inline void abs(long & z, const long a) { z =  std::abs(a); }
+  inline void abs(double & z, const double a) { z = std::abs(a); }
+
+  inline void floor(long & z, const long a) { z =  std::floor(a); }
+  inline void floor(double & z, const double a) { z = std::floor(a); }
+
+  inline void log(double & z, const double a) { z = std::log(a); }
+
+  inline void atan_val(RR & z, const RR & a){z = atan(a).value(); }
+  inline void atan_val(double & z, const double & a){z = atan(a); }
 }
 
 namespace ANTL {
@@ -143,6 +162,62 @@ namespace ANTL {
   inline double exp(double x) { return std::exp(x); }
   inline float log(float x) { return (float)std::log((double)x); }
   inline double log(double x) { return std::log(x); }
+  inline float pow(float x, float e) { return (float)std::pow((double)x, (double)e ); }
+  inline double pow(double x, float e) { return std::pow(x,e); }
+
+
+  // finite field cardinality macros
+  template <class> ZZ CARDINALITY(void);
+
+  template <> inline ZZ CARDINALITY < ZZ > (void) {
+    return to_ZZ(0);
+  }
+
+  template <> inline ZZ CARDINALITY < long > (void) {
+    return to_ZZ(0);
+  }
+
+  template <> inline ZZ CARDINALITY < ZZ_p > (void) {
+    return ZZ_p::modulus ();
+  }
+
+  template <> inline ZZ CARDINALITY < zz_p > (void) {
+    return to_ZZ (zz_p::modulus ());
+  }
+
+  template <> inline ZZ CARDINALITY < ZZ_pX > (void) {
+    return ZZ_p::modulus ();
+  }
+
+  template <> inline ZZ CARDINALITY < zz_pX > (void) {
+    return to_ZZ (zz_p::modulus ());
+  }
+
+  template <> inline ZZ CARDINALITY < ZZ_pE > (void) {
+    return ZZ_pE::cardinality ();
+  }
+
+  template <> inline ZZ CARDINALITY < zz_pE > (void) {
+    return zz_pE::cardinality ();
+  }
+
+  template <> inline ZZ CARDINALITY < ZZ_pEX > (void) {
+    return ZZ_pE::cardinality ();
+  }
+
+  template <> inline ZZ CARDINALITY < zz_pEX > (void) {
+    return zz_pE::cardinality ();
+  }
+
+  template <> inline ZZ CARDINALITY < GF2E > (void) {
+    return GF2E::cardinality ();
+  }
+
+  template <> inline ZZ CARDINALITY < GF2EX > (void) {
+    return GF2E::cardinality ();
+  }
+
+
 
   //
   // Template-friendly methods for common conversions & constants.
@@ -236,56 +311,7 @@ namespace ANTL {
   template<> inline zz_pX to<zz_pX>(const int & a) { return zz_pX(a,0); }
 } // ANTL
 
-  // finite field cardinality macros
-  template <class> ZZ CARDINALITY(void);
 
-  template <> inline ZZ CARDINALITY < ZZ > (void) {
-    return to_ZZ(0);
-  }
-
-  template <> inline ZZ CARDINALITY < long > (void) {
-    return to_ZZ(0);
-  }
-
-  template <> inline ZZ CARDINALITY < ZZ_p > (void) {
-    return ZZ_p::modulus ();
-  }
-
-  template <> inline ZZ CARDINALITY < zz_p > (void) {
-    return to_ZZ (zz_p::modulus ());
-  }
-
-  template <> inline ZZ CARDINALITY < ZZ_pX > (void) {
-    return ZZ_p::modulus ();
-  }
-
-  template <> inline ZZ CARDINALITY < zz_pX > (void) {
-    return to_ZZ (zz_p::modulus ());
-  }
-
-  template <> inline ZZ CARDINALITY < ZZ_pE > (void) {
-    return ZZ_pE::cardinality ();
-  }
-
-  template <> inline ZZ CARDINALITY < zz_pE > (void) {
-    return zz_pE::cardinality ();
-  }
-
-  template <> inline ZZ CARDINALITY < ZZ_pEX > (void) {
-    return ZZ_pE::cardinality ();
-  }
-
-  template <> inline ZZ CARDINALITY < zz_pEX > (void) {
-    return zz_pE::cardinality ();
-  }
-
-  template <> inline ZZ CARDINALITY < GF2E > (void) {
-    return GF2E::cardinality ();
-  }
-
-  template <> inline ZZ CARDINALITY < GF2EX > (void) {
-    return GF2E::cardinality ();
-  }
 
 //
 // Utility routines for polynomials.

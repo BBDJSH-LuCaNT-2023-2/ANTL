@@ -1,3 +1,4 @@
+ cd . && /bin/bash /home/work/ANTLtesting/ANTL/build/missing automake-1.16 --foreign Makefile
  cd . && /bin/bash ./config.status Makefile depfiles
 config.status: creating Makefile
 config.status: executing depfiles commands
@@ -8,17 +9,17 @@ config.status: executing depfiles commands
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri Jun 25 17:11:37 2021
+# Make data base, printed on Mon Jun 28 13:50:00 2021
 
 # Variables
 
-# makefile (from 'Makefile', line 217)
+# makefile (from 'Makefile', line 221)
 ETAGS = etags
 # automatic
 <D = $(patsubst %/,%,$(dir $<))
 # automatic
 ?F = $(notdir $?)
-# makefile (from 'Makefile', line 219)
+# makefile (from 'Makefile', line 223)
 CSCOPE = cscope
 # default
 .SHELLFLAGS := -c
@@ -26,25 +27,25 @@ CSCOPE = cscope
 am__dirstamp = $(am__leading_dot)dirstamp
 # makefile (from 'Makefile', line 88)
 POST_UNINSTALL = :
-# makefile (from 'Makefile', line 332)
+# makefile (from 'Makefile', line 336)
 localedir = ${datarootdir}/locale
 # default
 CWEAVE = cweave
-# makefile (from 'Makefile', line 328)
+# makefile (from 'Makefile', line 332)
 infodir = ${datarootdir}/info
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
-# makefile (from 'Makefile', line 255)
+# makefile (from 'Makefile', line 259)
 CPPFLAGS = 
-# makefile (from 'Makefile', line 239)
+# makefile (from 'Makefile', line 243)
 DIST_TARGETS = dist-gzip
-# makefile (from 'Makefile', line 268)
+# makefile (from 'Makefile', line 272)
 INSTALL = /usr/bin/install -c
 # makefile (from 'Makefile', line 109)
 am_cubic_OBJECTS = tests/Cubic/cubicTestMain.$(OBJEXT) src/Cubic/generalFunctions.$(OBJEXT) src/Cubic/GlobalCubicField.$(OBJEXT) src/Cubic/CubicNumberField.$(OBJEXT) src/Cubic/RealCubicNumberField.$(OBJEXT) src/Cubic/ComplexCubicNumberField.$(OBJEXT) src/Cubic/CubicOrder.$(OBJEXT) src/Cubic/CubicOrderReal.$(OBJEXT) src/Cubic/CubicElement.$(OBJEXT) src/Cubic/CubicIdeal.$(OBJEXT) src/Cubic/Multiplication/IdealMultiplicationStrategy.$(OBJEXT) src/Cubic/Multiplication/MultiplyStrategyWilliams.$(OBJEXT) src/Cubic/VoronoiMethods.$(OBJEXT) src/Cubic/VoronoiReal.$(OBJEXT) src/Cubic/VoronoiComplex.$(OBJEXT) src/Cubic/fund_unit/BasicVoronoi.$(OBJEXT) src/Cubic/fund_unit/BSGSVoronoi.$(OBJEXT)
-# makefile (from 'Makefile', line 352)
+# makefile (from 'Makefile', line 356)
 AM_CXXFLAGS = -g -O2 -pthread
-# makefile (from 'Makefile', line 260)
+# makefile (from 'Makefile', line 264)
 DEFS = -DHAVE_CONFIG_H
 # automatic
 @D = $(patsubst %/,%,$(dir $@))
@@ -52,19 +53,19 @@ DEFS = -DHAVE_CONFIG_H
 @F = $(notdir $@)
 # makefile
 CURDIR := /home/work/ANTLtesting/ANTL
-# makefile (from 'Makefile', line 294)
+# makefile (from 'Makefile', line 298)
 SHELL = /bin/bash
 # default
 RM = rm -f
 # default
 CO = co
-# makefile (from 'Makefile', line 290)
+# makefile (from 'Makefile', line 294)
 PTHREAD_CFLAGS = -pthread
 # environment
 V = 0
-# makefile (from 'Makefile', line 317)
+# makefile (from 'Makefile', line 321)
 datarootdir = ${prefix}/share
-# makefile (from 'Makefile', line 355)
+# makefile (from 'Makefile', line 359)
 test_SOURCES = tests/IndexCalculus/IndCalc_test.cpp
 # default
 PREPROCESS.F = $(FC) $(FFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -F
@@ -72,85 +73,85 @@ PREPROCESS.F = $(FC) $(FFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -F
 NORMAL_INSTALL = :
 # default
 LINK.m = $(OBJC) $(OBJCFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH)
-# makefile (from 'Makefile', line 144)
+# makefile (from 'Makefile', line 146)
 AM_V_GEN = $(am__v_GEN_$(V))
 # default
 LINK.o = $(CC) $(LDFLAGS) $(TARGET_ARCH)
 # default
 OUTPUT_OPTION = -o $@
-# makefile (from 'Makefile', line 227)
+# makefile (from 'Makefile', line 231)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-# makefile (from 'Makefile', line 337)
+# makefile (from 'Makefile', line 341)
 pdfdir = ${docdir}
-# makefile (from 'Makefile', line 323)
+# makefile (from 'Makefile', line 327)
 host_cpu = x86_64
-# makefile (from 'Makefile', line 141)
+# makefile (from 'Makefile', line 143)
 am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
-# makefile (from 'Makefile', line 145)
+# makefile (from 'Makefile', line 147)
 am__v_GEN_ = $(am__v_GEN_$(AM_DEFAULT_VERBOSITY))
 # default
 COMPILE.cpp = $(COMPILE.cc)
-# makefile (from 'Makefile', line 271)
+# makefile (from 'Makefile', line 275)
 INSTALL_SCRIPT = ${INSTALL}
 # makefile (from 'tests/IndexCalculus/.deps/IndCalc_test.Po', line 1)
-MAKEFILE_LIST :=  Makefile src/Cubic/.deps/ComplexCubicNumberField.Po src/Cubic/.deps/CubicElement.Po src/Cubic/.deps/CubicIdeal.Po src/Cubic/.deps/CubicNumberField.Po src/Cubic/.deps/CubicOrder.Po src/Cubic/.deps/CubicOrderReal.Po src/Cubic/.deps/GlobalCubicField.Po src/Cubic/.deps/RealCubicNumberField.Po src/Cubic/.deps/VoronoiComplex.Po src/Cubic/.deps/VoronoiMethods.Po src/Cubic/.deps/VoronoiReal.Po src/Cubic/.deps/generalFunctions.Po src/Cubic/Multiplication/.deps/IdealMultiplicationStrategy.Po src/Cubic/Multiplication/.deps/MultiplyStrategyWilliams.Po src/Cubic/fund_unit/.deps/BSGSVoronoi.Po src/Cubic/fund_unit/.deps/BasicVoronoi.Po tests/.deps/HeaderTest.Po tests/Cubic/.deps/cubicTestMain.Po tests/Cubic/catch-tests/.deps/test-order.Po tests/Cubic/catch-tests/.deps/testingMain.Po tests/IndexCalculus/.deps/IndCalc_test.Po
-# makefile (from 'Makefile', line 315)
+MAKEFILE_LIST :=  Makefile src/Cubic/.deps/ComplexCubicNumberField.Po src/Cubic/.deps/CubicElement.Po src/Cubic/.deps/CubicIdeal.Po src/Cubic/.deps/CubicNumberField.Po src/Cubic/.deps/CubicOrder.Po src/Cubic/.deps/CubicOrderReal.Po src/Cubic/.deps/GlobalCubicField.Po src/Cubic/.deps/RealCubicNumberField.Po src/Cubic/.deps/VoronoiComplex.Po src/Cubic/.deps/VoronoiMethods.Po src/Cubic/.deps/VoronoiReal.Po src/Cubic/.deps/generalFunctions.Po src/Cubic/Multiplication/.deps/IdealMultiplicationStrategy.Po src/Cubic/Multiplication/.deps/MultiplyStrategyWilliams.Po src/Cubic/fund_unit/.deps/BSGSVoronoi.Po src/Cubic/fund_unit/.deps/BasicVoronoi.Po src/Quadratic/.deps/QuadraticOrder_ZZ.Po src/Quadratic/.deps/QuadraticOrder_long.Po tests/.deps/HeaderTest.Po tests/Cubic/.deps/cubicTestMain.Po tests/Cubic/catch-tests/.deps/test-order.Po tests/Cubic/catch-tests/.deps/testingMain.Po tests/IndexCalculus/.deps/IndCalc_test.Po
+# makefile (from 'Makefile', line 319)
 builddir = .
-# makefile (from 'Makefile', line 314)
+# makefile (from 'Makefile', line 318)
 build_vendor = pc
 # makefile (from 'Makefile', line 106)
 am__installdirs = "$(DESTDIR)$(bindir)"
-# makefile (from 'Makefile', line 316)
+# makefile (from 'Makefile', line 320)
 datadir = ${datarootdir}
-# makefile (from 'Makefile', line 276)
+# makefile (from 'Makefile', line 280)
 LN_S = ln -s
 # 'override' directive
 GNUMAKEFLAGS := 
 # default
 LINK.p = $(PC) $(PFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH)
-# makefile (from 'Makefile', line 132)
+# makefile (from 'Makefile', line 134)
 test_OBJECTS = $(am_test_OBJECTS)
-# makefile (from 'Makefile', line 258)
+# makefile (from 'Makefile', line 262)
 CXXFLAGS = -g -O2
 # makefile (from 'Makefile', line 74)
 pkgincludedir = $(includedir)/antl
 # makefile (from 'Makefile', line 79)
 install_sh_PROGRAM = $(install_sh) -c
-# makefile (from 'Makefile', line 142)
+# makefile (from 'Makefile', line 144)
 am__v_P_0 = false
-# makefile (from 'Makefile', line 146)
+# makefile (from 'Makefile', line 148)
 am__v_GEN_0 = @echo "  GEN     " $@;
-# makefile (from 'Makefile', line 296)
+# makefile (from 'Makefile', line 300)
 VERSION = 1.0
-# makefile (from 'Makefile', line 305)
+# makefile (from 'Makefile', line 309)
 am__quote = 
 # makefile (from 'Makefile', line 29)
 am__make_running_with_option = case $${target_option-} in ?) ;; *) echo "am__make_running_with_option: internal error: invalid" "target option '$${target_option-}' specified" >&2; exit 1;; esac; has_opt=no; sane_makeflags=$$MAKEFLAGS; if $(am__is_gnu_make); then sane_makeflags=$$MFLAGS; else case $$MAKEFLAGS in *\\[\ \	]*) bs=\\; sane_makeflags=`printf '%s\n' "$$MAKEFLAGS" | sed "s/$$bs$$bs[$$bs $$bs	]*//g"`;; esac; fi; skip_next=no; strip_trailopt () { flg=`printf '%s\n' "$$flg" | sed "s/$$1.*$$//"`; }; for flg in $$sane_makeflags; do test $$skip_next = yes && { skip_next=no; continue; }; case $$flg in *=*|--*) continue;; -*I) strip_trailopt 'I'; skip_next=yes;; -*I?*) strip_trailopt 'I';; -*O) strip_trailopt 'O'; skip_next=yes;; -*O?*) strip_trailopt 'O';; -*l) strip_trailopt 'l'; skip_next=yes;; -*l?*) strip_trailopt 'l';; -[dEDm]) skip_next=yes;; -[JT]) skip_next=yes;; esac; case $$flg in *$$target_option*) has_opt=yes; break;; esac; done; test $$has_opt = yes
-# makefile (from 'Makefile', line 251)
+# makefile (from 'Makefile', line 255)
 CC = x86_64-linux-gnu-gcc
 # makefile (from 'Makefile', line 104)
 CONFIG_CLEAN_FILES = 
-# makefile (from 'Makefile', line 252)
+# makefile (from 'Makefile', line 256)
 CCDEPMODE = depmode=gcc3
 # makefile (from 'Makefile', line 100)
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log configure.lineno config.status.lineno
-# makefile (from 'Makefile', line 340)
+# makefile (from 'Makefile', line 344)
 psdir = ${docdir}
-# makefile (from 'Makefile', line 250)
+# makefile (from 'Makefile', line 254)
 AWK = gawk
 # default
 CHECKOUT,v = +$(if $(wildcard $@),,$(CO) $(COFLAGS) $< $@)
-# makefile (from 'Makefile', line 313)
+# makefile (from 'Makefile', line 317)
 build_os = linux-gnu
-# makefile (from 'Makefile', line 190)
+# makefile (from 'Makefile', line 194)
 SOURCES = $(cubic_SOURCES) $(main_SOURCES) $(test_SOURCES) $(testorder_SOURCES)
-# makefile (from 'Makefile', line 254)
+# makefile (from 'Makefile', line 258)
 CPP = x86_64-linux-gnu-gcc -E
-# makefile (from 'Makefile', line 351)
+# makefile (from 'Makefile', line 355)
 AM_LIBS = -lpari -lntl -lmpfr -lmpfi -lm -lgmp 
 # default
 LINK.cc = $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH)
-# makefile (from 'Makefile', line 293)
+# makefile (from 'Makefile', line 297)
 SET_MAKE = 
 # makefile (from 'Makefile', line 78)
 install_sh_DATA = $(install_sh) -c -m 644
@@ -158,49 +159,49 @@ install_sh_DATA = $(install_sh) -c -m 644
 MAKE_HOST := x86_64-pc-linux-gnu
 # environment
 PATH = /usr/bin:/bin
-# makefile (from 'Makefile', line 149)
+# makefile (from 'Makefile', line 151)
 am__v_at_ = $(am__v_at_$(AM_DEFAULT_VERBOSITY))
-# makefile (from 'Makefile', line 274)
+# makefile (from 'Makefile', line 278)
 LIBOBJS = 
 # default
 LD = ld
-# makefile (from 'Makefile', line 212)
+# makefile (from 'Makefile', line 216)
 am__define_uniq_tagged_files = list='$(am__tagged_files)'; unique=`for i in $$list; do if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; done | $(am__uniquify_input)`
-# makefile (from 'Makefile', line 349)
+# makefile (from 'Makefile', line 353)
 top_srcdir = .
 # default
 TEXI2DVI = texi2dvi
-# makefile (from 'Makefile', line 143)
+# makefile (from 'Makefile', line 145)
 am__v_P_1 = :
-# makefile (from 'Makefile', line 147)
+# makefile (from 'Makefile', line 149)
 am__v_GEN_1 = 
-# makefile (from 'Makefile', line 287)
+# makefile (from 'Makefile', line 291)
 PACKAGE_VERSION = 1.0
-# makefile (from 'Makefile', line 341)
+# makefile (from 'Makefile', line 345)
 runstatedir = ${localstatedir}/run
 # default
 YACC = yacc
-# makefile (from 'Makefile', line 270)
+# makefile (from 'Makefile', line 274)
 INSTALL_PROGRAM = ${INSTALL}
-# makefile (from 'Makefile', line 312)
+# makefile (from 'Makefile', line 316)
 build_cpu = x86_64
 # default
 COMPILE.mod = $(M2C) $(M2FLAGS) $(MODFLAGS) $(TARGET_ARCH)
-# makefile (from 'Makefile', line 335)
+# makefile (from 'Makefile', line 339)
 mkdir_p = $(MKDIR_P)
-# makefile (from 'Makefile', line 253)
+# makefile (from 'Makefile', line 257)
 CFLAGS = -g -O2
 # default
 ARFLAGS = rv
 # default
 LINK.r = $(FC) $(FFLAGS) $(RFLAGS) $(LDFLAGS) $(TARGET_ARCH)
-# makefile (from 'Makefile', line 298)
+# makefile (from 'Makefile', line 302)
 abs_srcdir = /home/work/ANTLtesting/ANTL
-# makefile (from 'Makefile', line 339)
+# makefile (from 'Makefile', line 343)
 program_transform_name = s,x,x,
 # default
 LINT = lint
-# makefile (from 'Makefile', line 272)
+# makefile (from 'Makefile', line 276)
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
 # default
 COMPILE.f = $(FC) $(FFLAGS) $(TARGET_ARCH) -c
@@ -210,41 +211,41 @@ PROGRAMS = $(bin_PROGRAMS)
 LINT.c = $(LINT) $(LINTFLAGS) $(CPPFLAGS) $(TARGET_ARCH)
 # default
 YACC.m = $(YACC) $(YFLAGS)
-# makefile (from 'Makefile', line 153)
+# makefile (from 'Makefile', line 155)
 depcomp = $(SHELL) $(top_srcdir)/build/depcomp
 # makefile (from 'Makefile', line 126)
 cubic_OBJECTS = $(am_cubic_OBJECTS)
-# makefile (from 'Makefile', line 221)
+# makefile (from 'Makefile', line 225)
 am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/config.h.in $(top_srcdir)/build/compile $(top_srcdir)/build/config.guess $(top_srcdir)/build/config.sub $(top_srcdir)/build/depcomp $(top_srcdir)/build/install-sh $(top_srcdir)/build/missing build/compile build/config.guess build/config.sub build/depcomp build/install-sh build/missing
-# makefile (from 'Makefile', line 240)
+# makefile (from 'Makefile', line 244)
 distuninstallcheck_listfiles = find . -type f -print
 # default
 YACC.y = $(YACC) $(YFLAGS)
-# makefile (from 'Makefile', line 280)
+# makefile (from 'Makefile', line 284)
 OBJEXT = o
-# makefile (from 'Makefile', line 244)
+# makefile (from 'Makefile', line 248)
 ACLOCAL = ${SHELL} /home/work/ANTLtesting/ANTL/build/missing aclocal-1.16
-# makefile (from 'Makefile', line 353)
+# makefile (from 'Makefile', line 357)
 AM_CC = x86_64-linux-gnu-gcc
 # default
 AR = ar
-# makefile (from 'Makefile', line 133)
+# makefile (from 'Makefile', line 135)
 test_LDADD = $(LDADD)
-# makefile (from 'Makefile', line 284)
+# makefile (from 'Makefile', line 288)
 PACKAGE_STRING = ANTL 1.0
-# makefile (from 'Makefile', line 273)
+# makefile (from 'Makefile', line 277)
 LDFLAGS = 
-# makefile (from 'Makefile', line 310)
+# makefile (from 'Makefile', line 314)
 build = x86_64-pc-linux-gnu
-# makefile (from 'Makefile', line 152)
+# makefile (from 'Makefile', line 154)
 DEFAULT_INCLUDES = -I.
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # default
 TANGLE = tangle
-# makefile (from 'Makefile', line 263)
+# makefile (from 'Makefile', line 267)
 ECHO_N = -n
-# makefile (from 'Makefile', line 134)
+# makefile (from 'Makefile', line 136)
 am_testorder_OBJECTS = tests/Cubic/catch-tests/test-order.$(OBJEXT) tests/Cubic/catch-tests/testingMain.$(OBJEXT) src/Cubic/generalFunctions.$(OBJEXT) src/Cubic/CubicOrder.$(OBJEXT)
 # makefile (from 'Makefile', line 105)
 CONFIG_CLEAN_VPATH_FILES = 
@@ -252,21 +253,21 @@ CONFIG_CLEAN_VPATH_FILES =
 GET = get
 # automatic
 %F = $(notdir $%)
-# makefile (from 'Makefile', line 262)
+# makefile (from 'Makefile', line 266)
 ECHO_C = 
-# makefile (from 'Makefile', line 241)
+# makefile (from 'Makefile', line 245)
 am__distuninstallcheck_listfiles = $(distuninstallcheck_listfiles) | sed 's|^\./|$(prefix)/|' | grep -v '$(infodir)/dir$$'
 # makefile (from 'Makefile', line 77)
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
-# makefile (from 'Makefile', line 188)
+# makefile (from 'Makefile', line 192)
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
-# makefile (from 'Makefile', line 154)
+# makefile (from 'Makefile', line 156)
 am__maybe_remake_depfiles = depfiles
 # default
 COMPILE.F = $(FC) $(FFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
-# makefile (from 'Makefile', line 336)
+# makefile (from 'Makefile', line 340)
 oldincludedir = /usr/include
-# makefile (from 'Makefile', line 320)
+# makefile (from 'Makefile', line 324)
 exec_prefix = ${prefix}
 # makefile (from 'Makefile', line 91)
 bin_PROGRAMS = test$(EXEEXT) main$(EXEEXT) cubic$(EXEEXT) testorder$(EXEEXT)
@@ -274,21 +275,21 @@ bin_PROGRAMS = test$(EXEEXT) main$(EXEEXT) cubic$(EXEEXT) testorder$(EXEEXT)
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 # default
 CTANGLE = ctangle
-# makefile (from 'Makefile', line 307)
+# makefile (from 'Makefile', line 311)
 am__untar = $${TAR-tar} xf -
-# makefile (from 'Makefile', line 344)
+# makefile (from 'Makefile', line 348)
 srcdir = .
-# makefile (from 'Makefile', line 139)
+# makefile (from 'Makefile', line 141)
 testorder_LDADD = $(LDADD)
-# makefile (from 'Makefile', line 338)
+# makefile (from 'Makefile', line 342)
 prefix = /home/work/.cache/gnome-builder/install/ANTL/host
-# makefile (from 'Makefile', line 319)
+# makefile (from 'Makefile', line 323)
 dvidir = ${docdir}
 # default
 .LIBPATTERNS = lib%.so lib%.a
 # default
 LINK.C = $(LINK.cc)
-# makefile (from 'Makefile', line 297)
+# makefile (from 'Makefile', line 301)
 abs_builddir = /home/work/ANTLtesting/ANTL
 # makefile (from 'Makefile', line 80)
 install_sh_SCRIPT = $(install_sh) -c
@@ -296,71 +297,71 @@ install_sh_SCRIPT = $(install_sh) -c
 .LOADED := 
 # default
 LINK.S = $(CC) $(ASFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_MACH)
-# makefile (from 'Makefile', line 299)
+# makefile (from 'Makefile', line 303)
 abs_top_builddir = /home/work/ANTLtesting/ANTL
 # default
 PREPROCESS.r = $(FC) $(FFLAGS) $(RFLAGS) $(TARGET_ARCH) -F
-# makefile (from 'Makefile', line 129)
+# makefile (from 'Makefile', line 131)
 main_OBJECTS = $(am_main_OBJECTS)
-# makefile (from 'Makefile', line 334)
+# makefile (from 'Makefile', line 338)
 mandir = ${datarootdir}/man
 # default
 LINK.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH)
-# makefile (from 'Makefile', line 330)
+# makefile (from 'Makefile', line 334)
 libdir = ${exec_prefix}/lib
-# makefile (from 'Makefile', line 291)
+# makefile (from 'Makefile', line 295)
 PTHREAD_LIBS = 
-# makefile (from 'Makefile', line 345)
+# makefile (from 'Makefile', line 349)
 sysconfdir = ${prefix}/etc
 # default
 LINK.s = $(CC) $(ASFLAGS) $(LDFLAGS) $(TARGET_MACH)
 # environment
 HOME = /home/work
-# makefile (from 'Makefile', line 220)
+# makefile (from 'Makefile', line 224)
 AM_RECURSIVE_TARGETS = cscope
-# makefile (from 'Makefile', line 329)
+# makefile (from 'Makefile', line 333)
 install_sh = ${SHELL} /home/work/ANTLtesting/ANTL/build/install-sh
-# makefile (from 'Makefile', line 292)
+# makefile (from 'Makefile', line 296)
 SED = /usr/bin/sed
-# makefile (from 'Makefile', line 357)
+# makefile (from 'Makefile', line 361)
 cubic_SOURCES = tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp
 # makefile (from 'Makefile', line 102)
 mkinstalldirs = $(install_sh) -d
-# makefile (from 'Makefile', line 304)
+# makefile (from 'Makefile', line 308)
 am__leading_dot = .
-# makefile (from 'Makefile', line 331)
+# makefile (from 'Makefile', line 335)
 libexecdir = ${exec_prefix}/libexec
-# makefile (from 'Makefile', line 347)
+# makefile (from 'Makefile', line 351)
 top_build_prefix = 
 # makefile (from 'Makefile', line 72)
 am__make_keepgoing = (target_option=k; $(am__make_running_with_option))
 # makefile (from 'Makefile', line 94)
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-# makefile (from 'Makefile', line 311)
+# makefile (from 'Makefile', line 315)
 build_alias = 
-# makefile (from 'Makefile', line 179)
+# makefile (from 'Makefile', line 183)
 AM_V_CXX = $(am__v_CXX_$(V))
-# makefile (from 'Makefile', line 343)
+# makefile (from 'Makefile', line 347)
 sharedstatedir = ${prefix}/com
 # makefile (from 'Makefile', line 84)
 PRE_INSTALL = :
-# makefile (from 'Makefile', line 180)
+# makefile (from 'Makefile', line 184)
 am__v_CXX_ = $(am__v_CXX_$(AM_DEFAULT_VERBOSITY))
-# makefile (from 'Makefile', line 302)
+# makefile (from 'Makefile', line 306)
 ac_ct_CXX = 
-# makefile (from 'Makefile', line 286)
+# makefile (from 'Makefile', line 290)
 PACKAGE_URL = 
 # automatic
 ^D = $(patsubst %/,%,$(dir $^))
-# makefile (from 'Makefile', line 229)
+# makefile (from 'Makefile', line 233)
 top_distdir = $(distdir)
-# makefile (from 'Makefile', line 333)
+# makefile (from 'Makefile', line 337)
 localstatedir = ${prefix}/var
-# makefile (from 'Makefile', line 288)
+# makefile (from 'Makefile', line 292)
 PATH_SEPARATOR = :
 # environment
 MAKELEVEL := 0
-# makefile (from 'Makefile', line 325)
+# makefile (from 'Makefile', line 329)
 host_vendor = pc
 # makefile (from 'Makefile', line 89)
 build_triplet = x86_64-pc-linux-gnu
@@ -370,57 +371,57 @@ COMPILE.m = $(OBJC) $(OBJCFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
 POST_INSTALL = :
 # default
 MAKE = $(MAKE_COMMAND)
-# makefile (from 'Makefile', line 237)
+# makefile (from 'Makefile', line 241)
 DIST_ARCHIVES = $(distdir).tar.gz
-# makefile (from 'Makefile', line 181)
+# makefile (from 'Makefile', line 185)
 am__v_CXX_0 = @echo "  CXX     " $@;
 # makefile (from 'Makefile', line 86)
 NORMAL_UNINSTALL = :
 # makefile (from 'Makefile', line 71)
 am__make_dryrun = (target_option=n; $(am__make_running_with_option))
-# makefile (from 'Makefile', line 289)
+# makefile (from 'Makefile', line 293)
 PTHREAD_CC = x86_64-linux-gnu-gcc
 # default
 AS = as
 # default
 PREPROCESS.S = $(CC) -E $(CPPFLAGS)
-# makefile (from 'Makefile', line 356)
-main_SOURCES = tests/HeaderTest.cpp
+# makefile (from 'Makefile', line 360)
+main_SOURCES = tests/HeaderTest.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp
 # default
 COMPILE.p = $(PC) $(PFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
 # default
 MAKE_VERSION := 4.2.1
 # environment
 USER = work
-# makefile (from 'Makefile', line 265)
+# makefile (from 'Makefile', line 269)
 EGREP = /usr/bin/grep -E
-# makefile (from 'Makefile', line 243)
+# makefile (from 'Makefile', line 247)
 distcleancheck_listfiles = find . -type f -print
 # default
 FC = f77
 # makefile
 .DEFAULT_GOAL := all
-# makefile (from 'Makefile', line 308)
+# makefile (from 'Makefile', line 312)
 ax_pthread_config = 
-# makefile (from 'Makefile', line 309)
+# makefile (from 'Makefile', line 313)
 bindir = ${exec_prefix}/bin
-# makefile (from 'Makefile', line 140)
+# makefile (from 'Makefile', line 142)
 AM_V_P = $(am__v_P_$(V))
 # makefile (from 'Makefile', line 103)
 CONFIG_HEADER = config.h
-# makefile (from 'Makefile', line 279)
+# makefile (from 'Makefile', line 283)
 MKDIR_P = /usr/bin/mkdir -p
-# makefile (from 'Makefile', line 301)
+# makefile (from 'Makefile', line 305)
 ac_ct_CC = 
-# makefile (from 'Makefile', line 131)
+# makefile (from 'Makefile', line 133)
 am_test_OBJECTS = tests/IndexCalculus/IndCalc_test.$(OBJEXT)
-# makefile (from 'Makefile', line 324)
+# makefile (from 'Makefile', line 328)
 host_os = linux-gnu
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
 # makefile (from 'Makefile', line 128)
-am_main_OBJECTS = tests/HeaderTest.$(OBJEXT)
-# makefile (from 'Makefile', line 182)
+am_main_OBJECTS = tests/HeaderTest.$(OBJEXT) src/Quadratic/QuadraticOrder_ZZ.$(OBJEXT) src/Quadratic/QuadraticOrder_long.$(OBJEXT)
+# makefile (from 'Makefile', line 186)
 am__v_CXX_1 = 
 # default
 WEAVE = weave
@@ -434,15 +435,15 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) $(ACLOCAL_
 F77 = $(FC)
 # default
 COMPILE.cc = $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
-# makefile (from 'Makefile', line 285)
+# makefile (from 'Makefile', line 289)
 PACKAGE_TARNAME = antl
-# makefile (from 'Makefile', line 186)
+# makefile (from 'Makefile', line 190)
 AM_V_CXXLD = $(am__v_CXXLD_$(V))
 # makefile (from 'Makefile', line 98)
 DIST_COMMON = $(srcdir)/Makefile.am $(top_srcdir)/configure $(am__configure_deps) $(am__DIST_COMMON)
 # default
 .VARIABLES := 
-# makefile (from 'Makefile', line 342)
+# makefile (from 'Makefile', line 346)
 sbindir = ${exec_prefix}/sbin
 # default
 PC = pc
@@ -450,7 +451,7 @@ PC = pc
 *F = $(notdir $*)
 # makefile (from 'Makefile', line 81)
 INSTALL_HEADER = $(INSTALL_DATA)
-# makefile (from 'Makefile', line 245)
+# makefile (from 'Makefile', line 249)
 AMTAR = $${TAR-tar}
 # makefile (from 'Makefile', line 93)
 subdir = .
@@ -458,7 +459,7 @@ subdir = .
 pkglibexecdir = $(libexecdir)/antl
 # default
 COMPILE.def = $(M2C) $(M2FLAGS) $(DEFFLAGS) $(TARGET_ARCH)
-# makefile (from 'Makefile', line 187)
+# makefile (from 'Makefile', line 191)
 am__v_CXXLD_ = $(am__v_CXXLD_$(AM_DEFAULT_VERBOSITY))
 # default
 LEX = lex
@@ -478,91 +479,91 @@ LEX.m = $(LEX) $(LFLAGS) -t
 +D = $(patsubst %/,%,$(dir $+))
 # default
 COMPILE.r = $(FC) $(FFLAGS) $(RFLAGS) $(TARGET_ARCH) -c
-# makefile (from 'Makefile', line 257)
+# makefile (from 'Makefile', line 261)
 CXXDEPMODE = depmode=gcc3
-# makefile (from 'Makefile', line 236)
+# makefile (from 'Makefile', line 240)
 am__post_remove_distdir = $(am__remove_distdir)
-# makefile (from 'Makefile', line 148)
+# makefile (from 'Makefile', line 150)
 AM_V_at = $(am__v_at_$(V))
 # automatic
 +F = $(notdir $+)
 # default
 M2C = m2c
-# makefile (from 'Makefile', line 155)
-am__depfiles_remade = src/Cubic/$(DEPDIR)/ComplexCubicNumberField.Po src/Cubic/$(DEPDIR)/CubicElement.Po src/Cubic/$(DEPDIR)/CubicIdeal.Po src/Cubic/$(DEPDIR)/CubicNumberField.Po src/Cubic/$(DEPDIR)/CubicOrder.Po src/Cubic/$(DEPDIR)/CubicOrderReal.Po src/Cubic/$(DEPDIR)/GlobalCubicField.Po src/Cubic/$(DEPDIR)/RealCubicNumberField.Po src/Cubic/$(DEPDIR)/VoronoiComplex.Po src/Cubic/$(DEPDIR)/VoronoiMethods.Po src/Cubic/$(DEPDIR)/VoronoiReal.Po src/Cubic/$(DEPDIR)/generalFunctions.Po src/Cubic/Multiplication/$(DEPDIR)/IdealMultiplicationStrategy.Po src/Cubic/Multiplication/$(DEPDIR)/MultiplyStrategyWilliams.Po src/Cubic/fund_unit/$(DEPDIR)/BSGSVoronoi.Po src/Cubic/fund_unit/$(DEPDIR)/BasicVoronoi.Po tests/$(DEPDIR)/HeaderTest.Po tests/Cubic/$(DEPDIR)/cubicTestMain.Po tests/Cubic/catch-tests/$(DEPDIR)/test-order.Po tests/Cubic/catch-tests/$(DEPDIR)/testingMain.Po tests/IndexCalculus/$(DEPDIR)/IndCalc_test.Po
-# makefile (from 'Makefile', line 192)
+# makefile (from 'Makefile', line 157)
+am__depfiles_remade = src/Cubic/$(DEPDIR)/ComplexCubicNumberField.Po src/Cubic/$(DEPDIR)/CubicElement.Po src/Cubic/$(DEPDIR)/CubicIdeal.Po src/Cubic/$(DEPDIR)/CubicNumberField.Po src/Cubic/$(DEPDIR)/CubicOrder.Po src/Cubic/$(DEPDIR)/CubicOrderReal.Po src/Cubic/$(DEPDIR)/GlobalCubicField.Po src/Cubic/$(DEPDIR)/RealCubicNumberField.Po src/Cubic/$(DEPDIR)/VoronoiComplex.Po src/Cubic/$(DEPDIR)/VoronoiMethods.Po src/Cubic/$(DEPDIR)/VoronoiReal.Po src/Cubic/$(DEPDIR)/generalFunctions.Po src/Cubic/Multiplication/$(DEPDIR)/IdealMultiplicationStrategy.Po src/Cubic/Multiplication/$(DEPDIR)/MultiplyStrategyWilliams.Po src/Cubic/fund_unit/$(DEPDIR)/BSGSVoronoi.Po src/Cubic/fund_unit/$(DEPDIR)/BasicVoronoi.Po src/Quadratic/$(DEPDIR)/QuadraticOrder_ZZ.Po src/Quadratic/$(DEPDIR)/QuadraticOrder_long.Po tests/$(DEPDIR)/HeaderTest.Po tests/Cubic/$(DEPDIR)/cubicTestMain.Po tests/Cubic/catch-tests/$(DEPDIR)/test-order.Po tests/Cubic/catch-tests/$(DEPDIR)/testingMain.Po tests/IndexCalculus/$(DEPDIR)/IndCalc_test.Po
+# makefile (from 'Makefile', line 196)
 DIST_SOURCES = $(cubic_SOURCES) $(main_SOURCES) $(test_SOURCES) $(testorder_SOURCES)
 # makefile (from 'Makefile', line 90)
 host_triplet = x86_64-pc-linux-gnu
-# makefile (from 'Makefile', line 295)
+# makefile (from 'Makefile', line 299)
 STRIP = x86_64-linux-gnu-strip
-# makefile (from 'Makefile', line 321)
+# makefile (from 'Makefile', line 325)
 host = x86_64-pc-linux-gnu
-# makefile (from 'Makefile', line 150)
+# makefile (from 'Makefile', line 152)
 am__v_at_0 = @
-# makefile (from 'Makefile', line 283)
+# makefile (from 'Makefile', line 287)
 PACKAGE_NAME = ANTL
-# makefile (from 'Makefile', line 183)
+# makefile (from 'Makefile', line 187)
 CXXLD = $(CXX)
-# makefile (from 'Makefile', line 303)
+# makefile (from 'Makefile', line 307)
 am__include = include
-# makefile (from 'Makefile', line 282)
+# makefile (from 'Makefile', line 286)
 PACKAGE_BUGREPORT = test@gmail.com
-# makefile (from 'Makefile', line 354)
+# makefile (from 'Makefile', line 358)
 AM_CPPFLAGS = -I$(top_srcdir)/include
 # default
 MAKEFILES := 
-# makefile (from 'Makefile', line 261)
+# makefile (from 'Makefile', line 265)
 DEPDIR = .deps
-# makefile (from 'Makefile', line 358)
+# makefile (from 'Makefile', line 362)
 testorder_SOURCES = tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp
-# makefile (from 'Makefile', line 348)
+# makefile (from 'Makefile', line 352)
 top_builddir = .
-# makefile (from 'Makefile', line 204)
+# makefile (from 'Makefile', line 208)
 am__uniquify_input = $(AWK) ' BEGIN { nonempty = 0; } { items[$$0] = 1; nonempty = 1; } END { if (nonempty) { for (i in items) print i; }; } '
 # automatic
 <F = $(notdir $<)
-# makefile (from 'Makefile', line 184)
+# makefile (from 'Makefile', line 188)
 CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-# makefile (from 'Makefile', line 259)
+# makefile (from 'Makefile', line 263)
 CYGPATH_W = echo
-# makefile (from 'Makefile', line 326)
+# makefile (from 'Makefile', line 330)
 htmldir = ${docdir}
-# makefile (from 'Makefile', line 256)
+# makefile (from 'Makefile', line 260)
 CXX = x86_64-linux-gnu-g++
-# makefile (from 'Makefile', line 246)
+# makefile (from 'Makefile', line 250)
 AM_DEFAULT_VERBOSITY = 1
 # makefile (from 'Makefile', line 75)
 pkglibdir = $(libdir)/antl
-# makefile (from 'Makefile', line 130)
+# makefile (from 'Makefile', line 132)
 main_LDADD = $(LDADD)
-# makefile (from 'Makefile', line 300)
+# makefile (from 'Makefile', line 304)
 abs_top_srcdir = /home/work/ANTLtesting/ANTL
 # default
 COFLAGS = 
-# makefile (from 'Makefile', line 277)
+# makefile (from 'Makefile', line 281)
 LTLIBOBJS = 
-# makefile (from 'Makefile', line 189)
+# makefile (from 'Makefile', line 193)
 am__v_CXXLD_1 = 
-# makefile (from 'Makefile', line 194)
+# makefile (from 'Makefile', line 198)
 am__can_run_installinfo = case $$AM_UPDATE_INFO_DIR in n|no|NO) false;; *) (install-info --version) >/dev/null 2>&1;; esac
-# makefile (from 'Makefile', line 264)
+# makefile (from 'Makefile', line 268)
 ECHO_T = 
-# makefile (from 'Makefile', line 266)
+# makefile (from 'Makefile', line 270)
 EXEEXT = 
-# makefile (from 'Makefile', line 350)
+# makefile (from 'Makefile', line 354)
 AUTOMAKE_OPTIONS = subdir-objects
-# makefile (from 'Makefile', line 151)
+# makefile (from 'Makefile', line 153)
 am__v_at_1 = 
 # default
 COMPILE.C = $(COMPILE.cc)
-# makefile (from 'Makefile', line 327)
+# makefile (from 'Makefile', line 331)
 includedir = ${prefix}/include
-# makefile (from 'Makefile', line 275)
+# makefile (from 'Makefile', line 279)
 LIBS = -lpari -lntl -lmpfr -lmpfi -lm -lgmp 
 # automatic
 ^F = $(notdir $^)
-# makefile (from 'Makefile', line 138)
+# makefile (from 'Makefile', line 140)
 testorder_OBJECTS = $(am_testorder_OBJECTS)
 # default
 COMPILE.S = $(CC) $(ASFLAGS) $(CPPFLAGS) $(TARGET_MACH) -c
@@ -574,39 +575,39 @@ transform = $(program_transform_name)
 SUFFIXES := .out .a .ln .o .c .cc .C .cpp .p .f .F .m .r .y .l .ym .yl .s .S .mod .sym .def .h .info .dvi .tex .texinfo .texi .txinfo .w .ch .web .sh .elc .el
 # default
 COMPILE.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
-# makefile (from 'Makefile', line 199)
+# makefile (from 'Makefile', line 203)
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)config.h.in
-# makefile (from 'Makefile', line 346)
+# makefile (from 'Makefile', line 350)
 target_alias = 
-# makefile (from 'Makefile', line 218)
+# makefile (from 'Makefile', line 222)
 CTAGS = ctags
-# makefile (from 'Makefile', line 247)
+# makefile (from 'Makefile', line 251)
 AUTOCONF = ${SHELL} /home/work/ANTLtesting/ANTL/build/missing autoconf
-# makefile (from 'Makefile', line 249)
+# makefile (from 'Makefile', line 253)
 AUTOMAKE = ${SHELL} /home/work/ANTLtesting/ANTL/build/missing automake-1.16
 # default
 COMPILE.s = $(AS) $(ASFLAGS) $(TARGET_MACH)
-# makefile (from 'Makefile', line 322)
+# makefile (from 'Makefile', line 326)
 host_alias = x86_64-linux-gnu
-# makefile (from 'Makefile', line 176)
+# makefile (from 'Makefile', line 180)
 am__mv = mv -f
 # default
 .INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
-# makefile (from 'Makefile', line 269)
+# makefile (from 'Makefile', line 273)
 INSTALL_DATA = ${INSTALL} -m 644
-# makefile (from 'Makefile', line 306)
+# makefile (from 'Makefile', line 310)
 am__tar = $${TAR-tar} chof - "$$tardir"
-# makefile (from 'Makefile', line 318)
+# makefile (from 'Makefile', line 322)
 docdir = ${datarootdir}/doc/${PACKAGE_TARNAME}
 # default
 .RECIPEPREFIX := 
-# makefile (from 'Makefile', line 278)
+# makefile (from 'Makefile', line 282)
 MAKEINFO = ${SHELL} /home/work/ANTLtesting/ANTL/build/missing makeinfo
-# makefile (from 'Makefile', line 228)
+# makefile (from 'Makefile', line 232)
 distdir = $(PACKAGE)-$(VERSION)
 # default
 OBJC = cc
-# makefile (from 'Makefile', line 177)
+# makefile (from 'Makefile', line 181)
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 # makefile (from 'Makefile', line 18)
 am__is_gnu_make = { if test -z '$(MAKELEVEL)'; then false; elif test -n '$(MAKE_HOST)'; then true; elif test -n '$(MAKE_VERSION)' && test -n '$(CURDIR)'; then true; else false; fi; }
@@ -614,7 +615,7 @@ am__is_gnu_make = { if test -z '$(MAKELEVEL)'; then false; elif test -n '$(MAKE_
 pkgdatadir = $(datadir)/antl
 # default
 TEX = tex
-# makefile (from 'Makefile', line 281)
+# makefile (from 'Makefile', line 285)
 PACKAGE = antl
 # environment
 LANG = en_CA.UTF-8
@@ -622,18 +623,18 @@ LANG = en_CA.UTF-8
 F77FLAGS = $(FFLAGS)
 # default
 LINK.f = $(FC) $(FFLAGS) $(LDFLAGS) $(TARGET_ARCH)
-# makefile (from 'Makefile', line 248)
+# makefile (from 'Makefile', line 252)
 AUTOHEADER = ${SHELL} /home/work/ANTLtesting/ANTL/build/missing autoheader
-# makefile (from 'Makefile', line 267)
+# makefile (from 'Makefile', line 271)
 GREP = /usr/bin/grep
 # makefile (from 'Makefile', line 87)
 PRE_UNINSTALL = :
-# makefile (from 'Makefile', line 230)
+# makefile (from 'Makefile', line 234)
 am__remove_distdir = if test -d "$(distdir)"; then find "$(distdir)" -type d ! -perm -200 -exec chmod u+w {} ';' && rm -rf "$(distdir)" || { sleep 5 && rm -rf "$(distdir)"; }; else :; fi
-# makefile (from 'Makefile', line 238)
+# makefile (from 'Makefile', line 242)
 GZIP_ENV = --best
 # variable set hash-table stats:
-# Load=310/1024=30%, Rehash=0, Collisions=203/770=26%
+# Load=310/1024=30%, Rehash=0, Collisions=210/824=25%
 
 # Pattern-specific Variable Values
 
@@ -642,10 +643,10 @@ GZIP_ENV = --best
 # Directories
 
 # SCCS: could not be stat'd.
-# . (device 2053, inode 4472929): 30 files, 4 impossibilities.
+# . (device 2053, inode 4472929): 28 files, 4 impossibilities.
 # RCS: could not be stat'd.
 
-# 30 files, 4 impossibilities in 3 directories.
+# 28 files, 4 impossibilities in 3 directories.
 
 # Implicit Rules
 
@@ -656,13 +657,13 @@ GZIP_ENV = --best
 	$(LINK.cpp) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 %.o: %.cpp
-#  recipe to execute (from 'Makefile', line 604):
+#  recipe to execute (from 'Makefile', line 623):
 	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
 	$(CXXCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
 	$(am__mv) $$depbase.Tpo $$depbase.Po
 
 %.obj: %.cpp
-#  recipe to execute (from 'Makefile', line 612):
+#  recipe to execute (from 'Makefile', line 631):
 	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.obj$$||'`;\
 	$(CXXCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ `$(CYGPATH_W) '$<'` &&\
 	$(am__mv) $$depbase.Tpo $$depbase.Po
@@ -718,12 +719,18 @@ GZIP_ENV = --best
 
 src/Cubic/.deps/CubicElement.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.470939927
+#  Last modified 2021-06-25 17:13:33.946909473
 #  File has been updated.
 #  Successfully updated.
-#  recipe to execute (from 'Makefile', line 598):
+#  recipe to execute (from 'Makefile', line 617):
 	@$(MKDIR_P) $(@D)
 	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
+
+# Not a target:
+src/Quadratic/QuadraticOrder_long.cpp:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
 
 src/Cubic/ComplexCubicNumberField.o: src/Cubic/.dirstamp src/Cubic/.deps/.dirstamp
 #  Implicit rule search has not been done.
@@ -737,10 +744,10 @@ cscopelist: cscopelist-am
 
 src/Cubic/fund_unit/.deps/BasicVoronoi.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.490940141
+#  Last modified 2021-06-25 17:13:33.966909692
 #  File has been updated.
 #  Successfully updated.
-#  recipe to execute (from 'Makefile', line 598):
+#  recipe to execute (from 'Makefile', line 617):
 	@$(MKDIR_P) $(@D)
 	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
 
@@ -770,7 +777,7 @@ maintainer-clean: maintainer-clean-am
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 967):
+#  recipe to execute (from 'Makefile', line 990):
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
 		-rm -f src/Cubic/$(DEPDIR)/ComplexCubicNumberField.Po
@@ -789,6 +796,8 @@ maintainer-clean: maintainer-clean-am
 	-rm -f src/Cubic/Multiplication/$(DEPDIR)/MultiplyStrategyWilliams.Po
 	-rm -f src/Cubic/fund_unit/$(DEPDIR)/BSGSVoronoi.Po
 	-rm -f src/Cubic/fund_unit/$(DEPDIR)/BasicVoronoi.Po
+	-rm -f src/Quadratic/$(DEPDIR)/QuadraticOrder_ZZ.Po
+	-rm -f src/Quadratic/$(DEPDIR)/QuadraticOrder_long.Po
 	-rm -f tests/$(DEPDIR)/HeaderTest.Po
 	-rm -f tests/Cubic/$(DEPDIR)/cubicTestMain.Po
 	-rm -f tests/Cubic/catch-tests/$(DEPDIR)/test-order.Po
@@ -807,8 +816,16 @@ distclean-compile:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 573):
+#  recipe to execute (from 'Makefile', line 590):
 	-rm -f *.tab.c
+
+clean-cscope:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 675):
+	-rm -f cscope.files
 
 install-dvi-am:
 #  Phony target (prerequisite of .PHONY).
@@ -821,7 +838,7 @@ GTAGS:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 649):
+#  recipe to execute (from 'Makefile', line 668):
 	here=`$(am__cd) $(top_builddir) && pwd` \
 	  && $(am__cd) $(top_srcdir) \
 	  && gtags -i $(GTAGS_ARGS) "$$here"
@@ -848,11 +865,11 @@ src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp:
 	$(LEX.l) $< > $@ 
 	 mv -f lex.yy.r $@
 
-distdir-am: Makefile.am configure configure.ac aclocal.m4 Makefile.in config.h.in build/compile build/config.guess build/config.sub build/depcomp build/install-sh build/missing build/compile build/config.guess build/config.sub build/depcomp build/install-sh build/missing tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp tests/HeaderTest.cpp tests/IndexCalculus/IndCalc_test.cpp tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp
+distdir-am: Makefile.am configure configure.ac aclocal.m4 Makefile.in config.h.in build/compile build/config.guess build/config.sub build/depcomp build/install-sh build/missing build/compile build/config.guess build/config.sub build/depcomp build/install-sh build/missing tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp tests/HeaderTest.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp tests/IndexCalculus/IndCalc_test.cpp tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 682):
+#  recipe to execute (from 'Makefile', line 701):
 	$(am__remove_distdir)
 	test -d "$(distdir)" || mkdir "$(distdir)"
 	@srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g'`; \
@@ -896,7 +913,7 @@ testorder: tests/Cubic/catch-tests/test-order.o tests/Cubic/catch-tests/testingM
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 559):
+#  recipe to execute (from 'Makefile', line 575):
 	@rm -f testorder$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(testorder_OBJECTS) $(testorder_LDADD) $(LIBS)
 
@@ -907,10 +924,10 @@ src/Cubic/GlobalCubicField.o: src/Cubic/.dirstamp src/Cubic/.deps/.dirstamp
 
 tests/Cubic/catch-tests/.deps/test-order.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.494940184
+#  Last modified 2021-06-25 17:13:33.970909736
 #  File has been updated.
 #  Successfully updated.
-#  recipe to execute (from 'Makefile', line 598):
+#  recipe to execute (from 'Makefile', line 617):
 	@$(MKDIR_P) $(@D)
 	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
 
@@ -918,7 +935,7 @@ src/Cubic/Multiplication/.dirstamp:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 487):
+#  recipe to execute (from 'Makefile', line 491):
 	@$(MKDIR_P) src/Cubic/Multiplication
 	@: > src/Cubic/Multiplication/$(am__dirstamp)
 
@@ -927,7 +944,7 @@ distclean-tags:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 675):
+#  recipe to execute (from 'Makefile', line 694):
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 	-rm -f cscope.out cscope.in.out cscope.po.out cscope.files
 
@@ -949,14 +966,14 @@ install-am: all-am
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 857):
+#  recipe to execute (from 'Makefile', line 876):
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 
 tests/IndexCalculus/.deps/.dirstamp:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 536):
+#  recipe to execute (from 'Makefile', line 552):
 	@$(MKDIR_P) tests/IndexCalculus/$(DEPDIR)
 	@: > tests/IndexCalculus/$(DEPDIR)/$(am__dirstamp)
 
@@ -975,14 +992,14 @@ src/Cubic/CubicElement.cpp:
 
 src/Cubic/.deps/VoronoiReal.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.486940098
+#  Last modified 2021-06-25 17:13:33.958909604
 #  File has been updated.
 #  Successfully updated.
-#  recipe to execute (from 'Makefile', line 598):
+#  recipe to execute (from 'Makefile', line 617):
 	@$(MKDIR_P) $(@D)
 	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
 
-am--depfiles: src/Cubic/.deps/ComplexCubicNumberField.Po src/Cubic/.deps/CubicElement.Po src/Cubic/.deps/CubicIdeal.Po src/Cubic/.deps/CubicNumberField.Po src/Cubic/.deps/CubicOrder.Po src/Cubic/.deps/CubicOrderReal.Po src/Cubic/.deps/GlobalCubicField.Po src/Cubic/.deps/RealCubicNumberField.Po src/Cubic/.deps/VoronoiComplex.Po src/Cubic/.deps/VoronoiMethods.Po src/Cubic/.deps/VoronoiReal.Po src/Cubic/.deps/generalFunctions.Po src/Cubic/Multiplication/.deps/IdealMultiplicationStrategy.Po src/Cubic/Multiplication/.deps/MultiplyStrategyWilliams.Po src/Cubic/fund_unit/.deps/BSGSVoronoi.Po src/Cubic/fund_unit/.deps/BasicVoronoi.Po tests/.deps/HeaderTest.Po tests/Cubic/.deps/cubicTestMain.Po tests/Cubic/catch-tests/.deps/test-order.Po tests/Cubic/catch-tests/.deps/testingMain.Po tests/IndexCalculus/.deps/IndCalc_test.Po
+am--depfiles: src/Cubic/.deps/ComplexCubicNumberField.Po src/Cubic/.deps/CubicElement.Po src/Cubic/.deps/CubicIdeal.Po src/Cubic/.deps/CubicNumberField.Po src/Cubic/.deps/CubicOrder.Po src/Cubic/.deps/CubicOrderReal.Po src/Cubic/.deps/GlobalCubicField.Po src/Cubic/.deps/RealCubicNumberField.Po src/Cubic/.deps/VoronoiComplex.Po src/Cubic/.deps/VoronoiMethods.Po src/Cubic/.deps/VoronoiReal.Po src/Cubic/.deps/generalFunctions.Po src/Cubic/Multiplication/.deps/IdealMultiplicationStrategy.Po src/Cubic/Multiplication/.deps/MultiplyStrategyWilliams.Po src/Cubic/fund_unit/.deps/BSGSVoronoi.Po src/Cubic/fund_unit/.deps/BasicVoronoi.Po src/Quadratic/.deps/QuadraticOrder_ZZ.Po src/Quadratic/.deps/QuadraticOrder_long.Po tests/.deps/HeaderTest.Po tests/Cubic/.deps/cubicTestMain.Po tests/Cubic/catch-tests/.deps/test-order.Po tests/Cubic/catch-tests/.deps/testingMain.Po tests/IndexCalculus/.deps/IndCalc_test.Po
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
 #  File does not exist.
@@ -1013,7 +1030,7 @@ src/Cubic/CubicOrder.cpp:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 612):
+#  recipe to execute (from 'Makefile', line 631):
 	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.obj$$||'`;\
 	$(CXXCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ `$(CYGPATH_W) '$<'` &&\
 	$(am__mv) $$depbase.Tpo $$depbase.Po
@@ -1066,11 +1083,12 @@ mostlyclean-compile:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 563):
+#  recipe to execute (from 'Makefile', line 579):
 	-rm -f *.$(OBJEXT)
 	-rm -f src/Cubic/*.$(OBJEXT)
 	-rm -f src/Cubic/Multiplication/*.$(OBJEXT)
 	-rm -f src/Cubic/fund_unit/*.$(OBJEXT)
+	-rm -f src/Quadratic/*.$(OBJEXT)
 	-rm -f tests/*.$(OBJEXT)
 	-rm -f tests/Cubic/*.$(OBJEXT)
 	-rm -f tests/Cubic/catch-tests/*.$(OBJEXT)
@@ -1080,7 +1098,7 @@ tests/Cubic/.dirstamp:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 455):
+#  recipe to execute (from 'Makefile', line 459):
 	@$(MKDIR_P) tests/Cubic
 	@: > tests/Cubic/$(am__dirstamp)
 
@@ -1122,7 +1140,7 @@ cubic: tests/Cubic/cubicTestMain.o src/Cubic/generalFunctions.o src/Cubic/Global
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 518):
+#  recipe to execute (from 'Makefile', line 522):
 	@rm -f cubic$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(cubic_OBJECTS) $(cubic_LDADD) $(LIBS)
 
@@ -1168,7 +1186,7 @@ clean-binPROGRAMS:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 453):
+#  recipe to execute (from 'Makefile', line 457):
 	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
 
 clean-generic:
@@ -1212,7 +1230,7 @@ configure: configure.ac aclocal.m4
 #  Last modified 2021-06-24 14:14:32.467464228
 #  File has been updated.
 #  Successfully updated.
-#  recipe to execute (from 'Makefile', line 393):
+#  recipe to execute (from 'Makefile', line 397):
 	$(am__cd) $(srcdir) && $(AUTOCONF)
 
 # Not a target:
@@ -1226,7 +1244,7 @@ tests/.deps/.dirstamp:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 524):
+#  recipe to execute (from 'Makefile', line 528):
 	@$(MKDIR_P) tests/$(DEPDIR)
 	@: > tests/$(DEPDIR)/$(am__dirstamp)
 
@@ -1270,10 +1288,10 @@ build/compile:
 
 src/Cubic/.deps/CubicNumberField.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.47493997
+#  Last modified 2021-06-25 17:13:33.946909473
 #  File has been updated.
 #  Successfully updated.
-#  recipe to execute (from 'Makefile', line 598):
+#  recipe to execute (from 'Makefile', line 617):
 	@$(MKDIR_P) $(@D)
 	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
 
@@ -1316,7 +1334,7 @@ distclean: distclean-am
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 900):
+#  recipe to execute (from 'Makefile', line 921):
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 		-rm -f src/Cubic/$(DEPDIR)/ComplexCubicNumberField.Po
 	-rm -f src/Cubic/$(DEPDIR)/CubicElement.Po
@@ -1334,6 +1352,8 @@ distclean: distclean-am
 	-rm -f src/Cubic/Multiplication/$(DEPDIR)/MultiplyStrategyWilliams.Po
 	-rm -f src/Cubic/fund_unit/$(DEPDIR)/BSGSVoronoi.Po
 	-rm -f src/Cubic/fund_unit/$(DEPDIR)/BasicVoronoi.Po
+	-rm -f src/Quadratic/$(DEPDIR)/QuadraticOrder_ZZ.Po
+	-rm -f src/Quadratic/$(DEPDIR)/QuadraticOrder_long.Po
 	-rm -f tests/$(DEPDIR)/HeaderTest.Po
 	-rm -f tests/Cubic/$(DEPDIR)/cubicTestMain.Po
 	-rm -f tests/Cubic/catch-tests/$(DEPDIR)/test-order.Po
@@ -1375,16 +1395,22 @@ src/Cubic/VoronoiReal.o: src/Cubic/.dirstamp src/Cubic/.deps/.dirstamp
 
 src/Cubic/fund_unit/.deps/BSGSVoronoi.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.490940141
+#  Last modified 2021-06-25 17:13:33.962909648
 #  File has been updated.
 #  Successfully updated.
-#  recipe to execute (from 'Makefile', line 598):
+#  recipe to execute (from 'Makefile', line 617):
 	@$(MKDIR_P) $(@D)
 	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
 
 # Not a target:
 .def:
 #  Builtin rule
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+src/Quadratic/QuadraticOrder_ZZ.cpp:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -1398,7 +1424,7 @@ tests/IndexCalculus/.dirstamp:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 533):
+#  recipe to execute (from 'Makefile', line 549):
 	@$(MKDIR_P) tests/IndexCalculus
 	@: > tests/IndexCalculus/$(am__dirstamp)
 
@@ -1439,7 +1465,7 @@ Makefile: Makefile.in config.status
 #  Precious file (prerequisite of .PRECIOUS).
 #  Implicit rule search has not been done.
 #  Implicit/static pattern stem: ''
-#  Last modified 2021-06-25 17:11:37.317633723
+#  Last modified 2021-06-28 13:50:00.539617181
 #  File has been updated.
 #  Successfully updated.
 # automatic
@@ -1459,8 +1485,8 @@ Makefile: Makefile.in config.status
 # automatic
 # ? := Makefile.in
 # variable set hash-table stats:
-# Load=8/32=25%, Rehash=0, Collisions=1/22=5%
-#  recipe to execute (from 'Makefile', line 380):
+# Load=8/32=25%, Rehash=0, Collisions=1/47=2%
+#  recipe to execute (from 'Makefile', line 384):
 	@case '$?' in \
 	  *config.status*) \
 	    echo ' $(SHELL) ./config.status'; \
@@ -1481,10 +1507,29 @@ Makefile: Makefile.in config.status
 
 Makefile.in: Makefile.am configure.ac aclocal.m4
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:10:05.12463062
+#  Implicit/static pattern stem: ''
+#  Last modified 2021-06-28 13:50:00.511502594
 #  File has been updated.
 #  Successfully updated.
-#  recipe to execute (from 'Makefile', line 367):
+# automatic
+# @ := Makefile.in
+# automatic
+# % := 
+# automatic
+# * := 
+# automatic
+# + := Makefile.am configure.ac aclocal.m4
+# automatic
+# | := 
+# automatic
+# < := Makefile.am
+# automatic
+# ^ := Makefile.am configure.ac aclocal.m4
+# automatic
+# ? := Makefile.am
+# variable set hash-table stats:
+# Load=8/32=25%, Rehash=0, Collisions=4/34=12%
+#  recipe to execute (from 'Makefile', line 371):
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
@@ -1500,10 +1545,10 @@ Makefile.in: Makefile.am configure.ac aclocal.m4
 
 src/Cubic/.deps/CubicOrderReal.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.478940012
+#  Last modified 2021-06-25 17:13:33.950909516
 #  File has been updated.
 #  Successfully updated.
-#  recipe to execute (from 'Makefile', line 598):
+#  recipe to execute (from 'Makefile', line 617):
 	@$(MKDIR_P) $(@D)
 	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
 
@@ -1521,7 +1566,7 @@ dist-tarZ: distdir
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 737):
+#  recipe to execute (from 'Makefile', line 756):
 	@echo WARNING: "Support for distribution archives compressed with" \
 		       "legacy program 'compress' is deprecated." >&2
 	@echo WARNING: "It will be removed altogether in Automake 2.0" >&2
@@ -1534,13 +1579,14 @@ build/depcomp:
 #  Modification time never checked.
 #  File has not been updated.
 
-clean-cscope:
-#  Phony target (prerequisite of .PHONY).
+src/Quadratic/.deps/QuadraticOrder_long.Po:
 #  Implicit rule search has not been done.
-#  File does not exist.
-#  File has not been updated.
-#  recipe to execute (from 'Makefile', line 656):
-	-rm -f cscope.files
+#  Last modified 2021-06-25 17:13:33.966909692
+#  File has been updated.
+#  Successfully updated.
+#  recipe to execute (from 'Makefile', line 617):
+	@$(MKDIR_P) $(@D)
+	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
 
 # Not a target:
 src/Cubic/CubicOrderReal.cpp:
@@ -1550,10 +1596,10 @@ src/Cubic/CubicOrderReal.cpp:
 
 tests/.deps/HeaderTest.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.494940184
+#  Last modified 2021-06-25 17:13:33.970909736
 #  File has been updated.
 #  Successfully updated.
-#  recipe to execute (from 'Makefile', line 598):
+#  recipe to execute (from 'Makefile', line 617):
 	@$(MKDIR_P) $(@D)
 	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
 
@@ -1561,7 +1607,7 @@ test: tests/IndexCalculus/IndCalc_test.o
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 543):
+#  recipe to execute (from 'Makefile', line 559):
 	@rm -f test$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(test_OBJECTS) $(test_LDADD) $(LIBS)
 
@@ -1571,12 +1617,12 @@ src/Cubic/RealCubicNumberField.cpp:
 #  Modification time never checked.
 #  File has not been updated.
 
-tags-am: tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp tests/HeaderTest.cpp tests/IndexCalculus/IndCalc_test.cpp tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp config.h.in
+tags-am: tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp tests/HeaderTest.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp tests/IndexCalculus/IndCalc_test.cpp tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp config.h.in
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 625):
+#  recipe to execute (from 'Makefile', line 644):
 	set x; \
 	here=`pwd`; \
 	$(am__define_uniq_tagged_files); \
@@ -1622,7 +1668,7 @@ src/Cubic/fund_unit/.deps/.dirstamp:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 508):
+#  recipe to execute (from 'Makefile', line 512):
 	@$(MKDIR_P) src/Cubic/fund_unit/$(DEPDIR)
 	@: > src/Cubic/fund_unit/$(DEPDIR)/$(am__dirstamp)
 
@@ -1654,7 +1700,7 @@ dist-gzip: distdir
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 721):
+#  recipe to execute (from 'Makefile', line 740):
 	tardir=$(distdir) && $(am__tar) | eval GZIP= gzip $(GZIP_ENV) -c >$(distdir).tar.gz
 	$(am__post_remove_distdir)
 
@@ -1668,7 +1714,7 @@ tests/.dirstamp:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 521):
+#  recipe to execute (from 'Makefile', line 525):
 	@$(MKDIR_P) tests
 	@: > tests/$(am__dirstamp)
 
@@ -1684,7 +1730,7 @@ cscope: cscope.files
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 653):
+#  recipe to execute (from 'Makefile', line 672):
 	test ! -s cscope.files \
 	  || $(CSCOPE) -b -q $(AM_CSCOPEFLAGS) $(CSCOPEFLAGS) -i cscope.files $(CSCOPE_ARGS)
 
@@ -1703,7 +1749,7 @@ dist-bzip2: distdir
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 725):
+#  recipe to execute (from 'Makefile', line 744):
 	tardir=$(distdir) && $(am__tar) | BZIP2=$${BZIP2--9} bzip2 -c >$(distdir).tar.bz2
 	$(am__post_remove_distdir)
 
@@ -1714,19 +1760,19 @@ src/Cubic/fund_unit/BSGSVoronoi.o: src/Cubic/fund_unit/.dirstamp src/Cubic/fund_
 
 src/Cubic/.deps/CubicOrder.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.47493997
+#  Last modified 2021-06-25 17:13:33.950909516
 #  File has been updated.
 #  Successfully updated.
-#  recipe to execute (from 'Makefile', line 598):
+#  recipe to execute (from 'Makefile', line 617):
 	@$(MKDIR_P) $(@D)
 	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
 
 src/Cubic/.deps/generalFunctions.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.486940098
+#  Last modified 2021-06-25 17:13:33.958909604
 #  File has been updated.
 #  Successfully updated.
-#  recipe to execute (from 'Makefile', line 598):
+#  recipe to execute (from 'Makefile', line 617):
 	@$(MKDIR_P) $(@D)
 	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
 
@@ -1742,7 +1788,7 @@ dist-shar: distdir
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 744):
+#  recipe to execute (from 'Makefile', line 763):
 	@echo WARNING: "Support for shar distribution archives is" \
 	               "deprecated." >&2
 	@echo WARNING: "It will be removed altogether in Automake 2.0" >&2
@@ -1754,7 +1800,7 @@ all: config.h
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 360):
+#  recipe to execute (from 'Makefile', line 364):
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
 distcheck: dist
@@ -1762,7 +1808,7 @@ distcheck: dist
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 763):
+#  recipe to execute (from 'Makefile', line 782):
 	case '$(DIST_ARCHIVES)' in \
 	*.tar.gz*) \
 	  eval GZIP= gzip $(GZIP_ENV) -dc $(distdir).tar.gz | $(am__untar) ;;\
@@ -1821,10 +1867,10 @@ distcheck: dist
 
 src/Cubic/.deps/VoronoiMethods.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.482940055
+#  Last modified 2021-06-25 17:13:33.95490956
 #  File has been updated.
 #  Successfully updated.
-#  recipe to execute (from 'Makefile', line 598):
+#  recipe to execute (from 'Makefile', line 617):
 	@$(MKDIR_P) $(@D)
 	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
 
@@ -1954,7 +2000,7 @@ distclean-hdr:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 411):
+#  recipe to execute (from 'Makefile', line 415):
 	-rm -f config.h stamp-h1
 
 install-binPROGRAMS: test main cubic testorder
@@ -1962,7 +2008,7 @@ install-binPROGRAMS: test main cubic testorder
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 413):
+#  recipe to execute (from 'Makefile', line 417):
 	@$(NORMAL_INSTALL)
 	@list='$(bin_PROGRAMS)'; test -n "$(bindir)" || list=; \
 	if test -n "$$list"; then \
@@ -2005,7 +2051,7 @@ tests/Cubic/catch-tests/.deps/.dirstamp:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 549):
+#  recipe to execute (from 'Makefile', line 565):
 	@$(MKDIR_P) tests/Cubic/catch-tests/$(DEPDIR)
 	@: > tests/Cubic/catch-tests/$(DEPDIR)/$(am__dirstamp)
 
@@ -2014,7 +2060,7 @@ maintainer-clean-generic:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 893):
+#  recipe to execute (from 'Makefile', line 914):
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
 
@@ -2063,20 +2109,29 @@ src/Cubic/generalFunctions.o: src/Cubic/.dirstamp src/Cubic/.deps/.dirstamp
 
 src/Cubic/.deps/VoronoiComplex.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.482940055
+#  Last modified 2021-06-25 17:13:33.95490956
 #  File has been updated.
 #  Successfully updated.
-#  recipe to execute (from 'Makefile', line 598):
+#  recipe to execute (from 'Makefile', line 617):
 	@$(MKDIR_P) $(@D)
 	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
 
 config.status: configure
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.442939626
+#  Last modified 2021-06-25 17:13:33.914909122
 #  File has been updated.
 #  Successfully updated.
-#  recipe to execute (from 'Makefile', line 390):
+#  recipe to execute (from 'Makefile', line 394):
 	$(SHELL) ./config.status --recheck
+
+src/Quadratic/.deps/QuadraticOrder_ZZ.Po:
+#  Implicit rule search has not been done.
+#  Last modified 2021-06-25 17:13:33.966909692
+#  File has been updated.
+#  Successfully updated.
+#  recipe to execute (from 'Makefile', line 617):
+	@$(MKDIR_P) $(@D)
+	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
 
 # Not a target:
 .lm.m:
@@ -2095,10 +2150,10 @@ src/Cubic/VoronoiMethods.o: src/Cubic/.dirstamp src/Cubic/.deps/.dirstamp
 
 src/Cubic/Multiplication/.deps/IdealMultiplicationStrategy.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.486940098
+#  Last modified 2021-06-25 17:13:33.962909648
 #  File has been updated.
 #  Successfully updated.
-#  recipe to execute (from 'Makefile', line 598):
+#  recipe to execute (from 'Makefile', line 617):
 	@$(MKDIR_P) $(@D)
 	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
 
@@ -2122,7 +2177,7 @@ aclocal.m4: configure.ac
 #  Last modified 2021-06-24 14:14:32.231461636
 #  File has been updated.
 #  Successfully updated.
-#  recipe to execute (from 'Makefile', line 395):
+#  recipe to execute (from 'Makefile', line 399):
 	$(am__cd) $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 
 # Not a target:
@@ -2158,7 +2213,7 @@ config.h.in: configure.ac aclocal.m4
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 406):
+#  recipe to execute (from 'Makefile', line 410):
 	($(am__cd) $(top_srcdir) && $(AUTOHEADER))
 	rm -f stamp-h1
 	touch $@
@@ -2182,18 +2237,18 @@ installcheck: installcheck-am
 
 src/Cubic/.deps/RealCubicNumberField.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.478940012
+#  Last modified 2021-06-25 17:13:33.95490956
 #  File has been updated.
 #  Successfully updated.
-#  recipe to execute (from 'Makefile', line 598):
+#  recipe to execute (from 'Makefile', line 617):
 	@$(MKDIR_P) $(@D)
 	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
 
-ID: tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp tests/HeaderTest.cpp tests/IndexCalculus/IndCalc_test.cpp tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp config.h.in
+ID: tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp tests/HeaderTest.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp tests/IndexCalculus/IndCalc_test.cpp tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp config.h.in
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 620):
+#  recipe to execute (from 'Makefile', line 639):
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
 
 # Not a target:
@@ -2206,7 +2261,7 @@ stamp-h1: config.h.in config.status
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 403):
+#  recipe to execute (from 'Makefile', line 407):
 	@rm -f stamp-h1
 	cd $(top_builddir) && $(SHELL) ./config.status config.h
 
@@ -2229,10 +2284,10 @@ install-data-am:
 
 tests/IndexCalculus/.deps/IndCalc_test.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.498940227
+#  Last modified 2021-06-25 17:13:33.97490978
 #  File has been updated.
 #  Successfully updated.
-#  recipe to execute (from 'Makefile', line 598):
+#  recipe to execute (from 'Makefile', line 617):
 	@$(MKDIR_P) $(@D)
 	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
 
@@ -2241,7 +2296,7 @@ uninstall-binPROGRAMS:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 442):
+#  recipe to execute (from 'Makefile', line 446):
 	@$(NORMAL_UNINSTALL)
 	@list='$(bin_PROGRAMS)'; test -n "$(bindir)" || list=; \
 	files=`for p in $$list; do echo "$$p"; done | \
@@ -2257,7 +2312,7 @@ am--refresh: Makefile
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 365):
+#  recipe to execute (from 'Makefile', line 369):
 	@:
 
 src/Cubic/Multiplication/IdealMultiplicationStrategy.o: src/Cubic/Multiplication/.dirstamp src/Cubic/Multiplication/.deps/.dirstamp
@@ -2278,7 +2333,7 @@ tests/Cubic/catch-tests/.dirstamp:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 546):
+#  recipe to execute (from 'Makefile', line 562):
 	@$(MKDIR_P) tests/Cubic/catch-tests
 	@: > tests/Cubic/catch-tests/$(am__dirstamp)
 
@@ -2286,7 +2341,7 @@ tests/Cubic/catch-tests/.dirstamp:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 604):
+#  recipe to execute (from 'Makefile', line 623):
 	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
 	$(CXXCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
 	$(am__mv) $$depbase.Tpo $$depbase.Po
@@ -2326,7 +2381,7 @@ distclean-generic:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 875):
+#  recipe to execute (from 'Makefile', line 894):
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
 	-rm -f src/Cubic/$(DEPDIR)/$(am__dirstamp)
@@ -2335,6 +2390,8 @@ distclean-generic:
 	-rm -f src/Cubic/Multiplication/$(am__dirstamp)
 	-rm -f src/Cubic/fund_unit/$(DEPDIR)/$(am__dirstamp)
 	-rm -f src/Cubic/fund_unit/$(am__dirstamp)
+	-rm -f src/Quadratic/$(DEPDIR)/$(am__dirstamp)
+	-rm -f src/Quadratic/$(am__dirstamp)
 	-rm -f tests/$(DEPDIR)/$(am__dirstamp)
 	-rm -f tests/$(am__dirstamp)
 	-rm -f tests/Cubic/$(DEPDIR)/$(am__dirstamp)
@@ -2343,6 +2400,11 @@ distclean-generic:
 	-rm -f tests/Cubic/catch-tests/$(am__dirstamp)
 	-rm -f tests/IndexCalculus/$(DEPDIR)/$(am__dirstamp)
 	-rm -f tests/IndexCalculus/$(am__dirstamp)
+
+src/Quadratic/QuadraticOrder_ZZ.o: src/Quadratic/.dirstamp src/Quadratic/.deps/.dirstamp
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
 
 # Not a target:
 .texi:
@@ -2354,7 +2416,7 @@ distclean-generic:
 # Not a target:
 Makefile.am:
 #  Implicit rule search has been done.
-#  Last modified 2021-06-25 17:09:56.452536544
+#  Last modified 2021-06-25 18:13:50.887771769
 #  File has been updated.
 #  Successfully updated.
 
@@ -2362,7 +2424,7 @@ config.h: stamp-h1
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 399):
+#  recipe to execute (from 'Makefile', line 403):
 	@test -f $@ || rm -f stamp-h1
 	@test -f $@ || $(MAKE) $(AM_MAKEFLAGS) stamp-h1
 
@@ -2394,10 +2456,10 @@ src/Cubic/fund_unit/BasicVoronoi.cpp:
 
 tests/Cubic/catch-tests/.deps/testingMain.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.498940227
+#  Last modified 2021-06-25 17:13:33.97490978
 #  File has been updated.
 #  Successfully updated.
-#  recipe to execute (from 'Makefile', line 598):
+#  recipe to execute (from 'Makefile', line 617):
 	@$(MKDIR_P) $(@D)
 	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
 
@@ -2405,7 +2467,7 @@ src/Cubic/.deps/.dirstamp:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 466):
+#  recipe to execute (from 'Makefile', line 470):
 	@$(MKDIR_P) src/Cubic/$(DEPDIR)
 	@: > src/Cubic/$(DEPDIR)/$(am__dirstamp)
 
@@ -2414,7 +2476,7 @@ dist:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 756):
+#  recipe to execute (from 'Makefile', line 775):
 	$(MAKE) $(AM_MAKEFLAGS) $(DIST_TARGETS) am__post_remove_distdir='@:'
 	$(am__post_remove_distdir)
 
@@ -2427,6 +2489,14 @@ dist:
 #  recipe to execute (built-in):
 	$(MAKEINFO) $(MAKEINFO_FLAGS) $< -o $@
 
+src/Quadratic/.deps/.dirstamp:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 536):
+	@$(MKDIR_P) src/Quadratic/$(DEPDIR)
+	@: > src/Quadratic/$(DEPDIR)/$(am__dirstamp)
+
 src/Cubic/CubicOrderReal.o: src/Cubic/.dirstamp src/Cubic/.deps/.dirstamp
 #  Implicit rule search has not been done.
 #  Modification time never checked.
@@ -2434,10 +2504,10 @@ src/Cubic/CubicOrderReal.o: src/Cubic/.dirstamp src/Cubic/.deps/.dirstamp
 
 src/Cubic/.deps/CubicIdeal.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.47493997
+#  Last modified 2021-06-25 17:13:33.946909473
 #  File has been updated.
 #  Successfully updated.
-#  recipe to execute (from 'Makefile', line 598):
+#  recipe to execute (from 'Makefile', line 617):
 	@$(MKDIR_P) $(@D)
 	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
 
@@ -2446,7 +2516,7 @@ install-strip:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 861):
+#  recipe to execute (from 'Makefile', line 880):
 	if test -z '$(STRIP)'; then \
 	  $(MAKE) $(AM_MAKEFLAGS) INSTALL_PROGRAM="$(INSTALL_STRIP_PROGRAM)" \
 	    install_sh_PROGRAM="$(INSTALL_STRIP_PROGRAM)" INSTALL_STRIP_FLAG=-s \
@@ -2495,7 +2565,7 @@ src/Cubic/.dirstamp:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 463):
+#  recipe to execute (from 'Makefile', line 467):
 	@$(MKDIR_P) src/Cubic
 	@: > src/Cubic/$(am__dirstamp)
 
@@ -2513,7 +2583,7 @@ src/Cubic/fund_unit/.dirstamp:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 505):
+#  recipe to execute (from 'Makefile', line 509):
 	@$(MKDIR_P) src/Cubic/fund_unit
 	@: > src/Cubic/fund_unit/$(am__dirstamp)
 
@@ -2528,7 +2598,7 @@ distuninstallcheck:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 819):
+#  recipe to execute (from 'Makefile', line 838):
 	@test -n '$(distuninstallcheck_dir)' || { \
 	  echo 'ERROR: trying to run $@ with an empty' \
 	       '$$(distuninstallcheck_dir)' >&2; \
@@ -2551,7 +2621,7 @@ dist-all:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 756):
+#  recipe to execute (from 'Makefile', line 775):
 	$(MAKE) $(AM_MAKEFLAGS) $(DIST_TARGETS) am__post_remove_distdir='@:'
 	$(am__post_remove_distdir)
 
@@ -2561,17 +2631,22 @@ ctags: ctags-am
 #  File does not exist.
 #  File has not been updated.
 
+src/Quadratic/QuadraticOrder_long.o: src/Quadratic/.dirstamp src/Quadratic/.deps/.dirstamp
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
 # Not a target:
 build/missing:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 
-main: tests/HeaderTest.o
+main: tests/HeaderTest.o src/Quadratic/QuadraticOrder_ZZ.o src/Quadratic/QuadraticOrder_long.o
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 530):
+#  recipe to execute (from 'Makefile', line 546):
 	@rm -f main$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(main_OBJECTS) $(main_LDADD) $(LIBS)
 
@@ -2580,7 +2655,7 @@ dist-lzip: distdir
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 729):
+#  recipe to execute (from 'Makefile', line 748):
 	tardir=$(distdir) && $(am__tar) | lzip -c $${LZIP_OPT--9} >$(distdir).tar.lz
 	$(am__post_remove_distdir)
 
@@ -2610,10 +2685,10 @@ install-man:
 
 src/Cubic/Multiplication/.deps/MultiplyStrategyWilliams.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.490940141
+#  Last modified 2021-06-25 17:13:33.962909648
 #  File has been updated.
 #  Successfully updated.
-#  recipe to execute (from 'Makefile', line 598):
+#  recipe to execute (from 'Makefile', line 617):
 	@$(MKDIR_P) $(@D)
 	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
 
@@ -2637,7 +2712,7 @@ distcleancheck: distclean
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 836):
+#  recipe to execute (from 'Makefile', line 855):
 	@if test '$(srcdir)' = . ; then \
 	  echo "ERROR: distcleancheck can only run from a VPATH build" ; \
 	  exit 1 ; \
@@ -2682,10 +2757,10 @@ install-html: install-html-am
 
 src/Cubic/.deps/ComplexCubicNumberField.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.470939927
+#  Last modified 2021-06-25 17:13:33.942909429
 #  File has been updated.
 #  Successfully updated.
-#  recipe to execute (from 'Makefile', line 598):
+#  recipe to execute (from 'Makefile', line 617):
 	@$(MKDIR_P) $(@D)
 	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
 
@@ -2702,7 +2777,7 @@ src/Cubic/Multiplication/.deps/.dirstamp:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 490):
+#  recipe to execute (from 'Makefile', line 494):
 	@$(MKDIR_P) src/Cubic/Multiplication/$(DEPDIR)
 	@: > src/Cubic/Multiplication/$(DEPDIR)/$(am__dirstamp)
 
@@ -2716,7 +2791,7 @@ dist-zip: distdir
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 751):
+#  recipe to execute (from 'Makefile', line 770):
 	-rm -f $(distdir).zip
 	zip -rq $(distdir).zip $(distdir)
 	$(am__post_remove_distdir)
@@ -2727,12 +2802,12 @@ check: check-am
 #  File does not exist.
 #  File has not been updated.
 
-ctags-am: tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp tests/HeaderTest.cpp tests/IndexCalculus/IndCalc_test.cpp tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp config.h.in
+ctags-am: tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp tests/HeaderTest.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp tests/IndexCalculus/IndCalc_test.cpp tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp config.h.in
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 643):
+#  recipe to execute (from 'Makefile', line 662):
 	$(am__define_uniq_tagged_files); \
 	test -z "$(CTAGS_ARGS)$$unique" \
 	  || $(CTAGS) $(CTAGSFLAGS) $(AM_CTAGSFLAGS) $(CTAGS_ARGS) \
@@ -2756,12 +2831,20 @@ install-ps: install-ps-am
 #  File does not exist.
 #  File has not been updated.
 
-cscopelist-am: tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp tests/HeaderTest.cpp tests/IndexCalculus/IndCalc_test.cpp tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp config.h.in
+src/Quadratic/.dirstamp:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 533):
+	@$(MKDIR_P) src/Quadratic
+	@: > src/Quadratic/$(am__dirstamp)
+
+cscopelist-am: tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp tests/HeaderTest.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp tests/IndexCalculus/IndCalc_test.cpp tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp config.h.in
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 661):
+#  recipe to execute (from 'Makefile', line 680):
 	list='$(am__tagged_files)'; \
 	case "$(srcdir)" in \
 	  [\\/]* | ?:[\\/]*) sdir="$(srcdir)" ;; \
@@ -2777,10 +2860,10 @@ cscopelist-am: tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/
 
 src/Cubic/.deps/GlobalCubicField.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.478940012
+#  Last modified 2021-06-25 17:13:33.950909516
 #  File has been updated.
 #  Successfully updated.
-#  recipe to execute (from 'Makefile', line 598):
+#  recipe to execute (from 'Makefile', line 617):
 	@$(MKDIR_P) $(@D)
 	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
 
@@ -2795,7 +2878,7 @@ installdirs:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 848):
+#  recipe to execute (from 'Makefile', line 867):
 	for dir in "$(DESTDIR)$(bindir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
@@ -2804,7 +2887,7 @@ tests/Cubic/.deps/.dirstamp:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 458):
+#  recipe to execute (from 'Makefile', line 462):
 	@$(MKDIR_P) tests/Cubic/$(DEPDIR)
 	@: > tests/Cubic/$(DEPDIR)/$(am__dirstamp)
 
@@ -2828,7 +2911,7 @@ distdir:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 679):
+#  recipe to execute (from 'Makefile', line 698):
 	$(MAKE) $(AM_MAKEFLAGS) distdir-am
 
 install-html-am:
@@ -2865,10 +2948,10 @@ CTAGS: ctags
 
 tests/Cubic/.deps/cubicTestMain.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.494940184
+#  Last modified 2021-06-25 17:13:33.970909736
 #  File has been updated.
 #  Successfully updated.
-#  recipe to execute (from 'Makefile', line 598):
+#  recipe to execute (from 'Makefile', line 617):
 	@$(MKDIR_P) $(@D)
 	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
 
@@ -2903,7 +2986,7 @@ dist-xz: distdir
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 733):
+#  recipe to execute (from 'Makefile', line 752):
 	tardir=$(distdir) && $(am__tar) | XZ_OPT=$${XZ_OPT--e} xz -c >$(distdir).tar.xz
 	$(am__post_remove_distdir)
 
@@ -2926,23 +3009,21 @@ install-ps-am:
 #  File has not been updated.
 
 # files hash-table stats:
-# Load=260/1024=25%, Rehash=0, Collisions=246/833=30%
+# Load=268/1024=26%, Rehash=0, Collisions=252/864=29%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 329 / storage = 5170 B / avg = 15 B
-# current buf: size = 8162 B / used = 5170 B / count = 329 / avg = 15 B
+# strcache buffers: 1 (0) / strings = 335 / storage = 5434 B / avg = 16 B
+# current buf: size = 8162 B / used = 5434 B / count = 335 / avg = 16 B
 
-# strcache performance: lookups = 942 / hit rate = 65%
+# strcache performance: lookups = 975 / hit rate = 65%
 # hash-table stats:
-# Load=329/8192=4%, Rehash=0, Collisions=51/942=5%
-# Finished Make data base on Fri Jun 25 17:11:37 2021
+# Load=335/8192=4%, Rehash=0, Collisions=51/975=5%
+# Finished Make data base on Mon Jun 28 13:50:00 2021
 
-test -f config.h || rm -f stamp-h1
-test -f config.h || make  stamp-h1
 make  all-am
 /usr/bin/mkdir -p tests/IndexCalculus
 : > tests/IndexCalculus/.dirstamp
@@ -2950,15 +3031,6 @@ make  all-am
 : > tests/IndexCalculus/.deps/.dirstamp
 echo "  CXX     " tests/IndexCalculus/IndCalc_test.o;depbase=`echo tests/IndexCalculus/IndCalc_test.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
 x86_64-linux-gnu-g++ -DHAVE_CONFIG_H -I.  -I./include  -g -O2 -pthread -g -O2 -MT tests/IndexCalculus/IndCalc_test.o -MD -MP -MF $depbase.Tpo -c -o tests/IndexCalculus/IndCalc_test.o tests/IndexCalculus/IndCalc_test.cpp &&\
-mv -f $depbase.Tpo $depbase.Po
-rm -f test
-echo "  CXXLD   " test;x86_64-linux-gnu-g++ -g -O2 -pthread -g -O2   -o test tests/IndexCalculus/IndCalc_test.o  -lpari -lntl -lmpfr -lmpfi -lm -lgmp 
-/usr/bin/mkdir -p tests
-: > tests/.dirstamp
-/usr/bin/mkdir -p tests/.deps
-: > tests/.deps/.dirstamp
-echo "  CXX     " tests/HeaderTest.o;depbase=`echo tests/HeaderTest.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
-x86_64-linux-gnu-g++ -DHAVE_CONFIG_H -I.  -I./include  -g -O2 -pthread -g -O2 -MT tests/HeaderTest.o -MD -MP -MF $depbase.Tpo -c -o tests/HeaderTest.o tests/HeaderTest.cpp &&\
 mv -f $depbase.Tpo $depbase.Po
 /usr/bin/mkdir -p src/Quadratic
 : > src/Quadratic/.dirstamp
@@ -2970,8 +3042,17 @@ mv -f $depbase.Tpo $depbase.Po
 echo "  CXX     " src/Quadratic/QuadraticOrder_long.o;depbase=`echo src/Quadratic/QuadraticOrder_long.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
 x86_64-linux-gnu-g++ -DHAVE_CONFIG_H -I.  -I./include  -g -O2 -pthread -g -O2 -MT src/Quadratic/QuadraticOrder_long.o -MD -MP -MF $depbase.Tpo -c -o src/Quadratic/QuadraticOrder_long.o src/Quadratic/QuadraticOrder_long.cpp &&\
 mv -f $depbase.Tpo $depbase.Po
+rm -f test
+echo "  CXXLD   " test;x86_64-linux-gnu-g++ -g -O2 -pthread -g -O2   -o test tests/IndexCalculus/IndCalc_test.o src/Quadratic/QuadraticOrder_ZZ.o src/Quadratic/QuadraticOrder_long.o  -lpari -lntl -lmpfr -lmpfi -lm -lgmp 
+/usr/bin/mkdir -p tests
+: > tests/.dirstamp
+/usr/bin/mkdir -p tests/.deps
+: > tests/.deps/.dirstamp
+echo "  CXX     " tests/HeaderTest.o;depbase=`echo tests/HeaderTest.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
+x86_64-linux-gnu-g++ -DHAVE_CONFIG_H -I.  -I./include  -g -O2 -pthread -g -O2 -MT tests/HeaderTest.o -MD -MP -MF $depbase.Tpo -c -o tests/HeaderTest.o tests/HeaderTest.cpp &&\
+mv -f $depbase.Tpo $depbase.Po
 rm -f main
-echo "  CXXLD   " main;x86_64-linux-gnu-g++ -g -O2 -pthread -g -O2   -o main tests/HeaderTest.o src/Quadratic/QuadraticOrder_ZZ.o src/Quadratic/QuadraticOrder_long.o  -lpari -lntl -lmpfr -lmpfi -lm -lgmp 
+echo "  CXXLD   " main;x86_64-linux-gnu-g++ -g -O2 -pthread -g -O2   -o main tests/HeaderTest.o  -lpari -lntl -lmpfr -lmpfi -lm -lgmp 
 /usr/bin/mkdir -p tests/Cubic
 : > tests/Cubic/.dirstamp
 /usr/bin/mkdir -p tests/Cubic/.deps
@@ -3053,8 +3134,6 @@ x86_64-linux-gnu-g++ -DHAVE_CONFIG_H -I.  -I./include  -g -O2 -pthread -g -O2 -M
 mv -f $depbase.Tpo $depbase.Po
 rm -f testorder
 echo "  CXXLD   " testorder;x86_64-linux-gnu-g++ -g -O2 -pthread -g -O2   -o testorder tests/Cubic/catch-tests/test-order.o tests/Cubic/catch-tests/testingMain.o src/Cubic/generalFunctions.o src/Cubic/CubicOrder.o  -lpari -lntl -lmpfr -lmpfi -lm -lgmp 
-test -f config.h || rm -f stamp-h1
-test -f config.h || make  stamp-h1
 # GNU Make 4.2.1
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2016 Free Software Foundation, Inc.
@@ -3062,7 +3141,7 @@ test -f config.h || make  stamp-h1
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri Jun 25 17:11:37 2021
+# Make data base, printed on Mon Jun 28 13:50:00 2021
 
 # Variables
 
@@ -3119,7 +3198,7 @@ V = 0
 # makefile (from 'Makefile', line 321)
 datarootdir = ${prefix}/share
 # makefile (from 'Makefile', line 359)
-test_SOURCES = tests/IndexCalculus/IndCalc_test.cpp
+test_SOURCES = tests/IndexCalculus/IndCalc_test.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp
 # environment
 _ = /usr/bin/make
 # default
@@ -3360,7 +3439,7 @@ LINK.S = $(CC) $(ASFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_MACH)
 abs_top_builddir = /home/work/ANTLtesting/ANTL
 # default
 PREPROCESS.r = $(FC) $(FFLAGS) $(RFLAGS) $(TARGET_ARCH) -F
-# makefile (from 'Makefile', line 131)
+# makefile (from 'Makefile', line 129)
 main_OBJECTS = $(am_main_OBJECTS)
 # makefile (from 'Makefile', line 338)
 mandir = ${datarootdir}/man
@@ -3447,7 +3526,7 @@ AS = as
 # default
 PREPROCESS.S = $(CC) -E $(CPPFLAGS)
 # makefile (from 'Makefile', line 360)
-main_SOURCES = tests/HeaderTest.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp
+main_SOURCES = tests/HeaderTest.cpp
 # default
 COMPILE.p = $(PC) $(PFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
 # default
@@ -3474,14 +3553,14 @@ CONFIG_HEADER = config.h
 MKDIR_P = /usr/bin/mkdir -p
 # makefile (from 'Makefile', line 305)
 ac_ct_CC = 
-# makefile (from 'Makefile', line 133)
-am_test_OBJECTS = tests/IndexCalculus/IndCalc_test.$(OBJEXT)
+# makefile (from 'Makefile', line 131)
+am_test_OBJECTS = tests/IndexCalculus/IndCalc_test.$(OBJEXT) src/Quadratic/QuadraticOrder_ZZ.$(OBJEXT) src/Quadratic/QuadraticOrder_long.$(OBJEXT)
 # makefile (from 'Makefile', line 328)
 host_os = linux-gnu
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
 # makefile (from 'Makefile', line 128)
-am_main_OBJECTS = tests/HeaderTest.$(OBJEXT) src/Quadratic/QuadraticOrder_ZZ.$(OBJEXT) src/Quadratic/QuadraticOrder_long.$(OBJEXT)
+am_main_OBJECTS = tests/HeaderTest.$(OBJEXT)
 # makefile (from 'Makefile', line 186)
 am__v_CXX_1 = 
 # default
@@ -3596,7 +3675,7 @@ CXX = x86_64-linux-gnu-g++
 AM_DEFAULT_VERBOSITY = 1
 # makefile (from 'Makefile', line 75)
 pkglibdir = $(libdir)/antl
-# makefile (from 'Makefile', line 132)
+# makefile (from 'Makefile', line 130)
 main_LDADD = $(LDADD)
 # makefile (from 'Makefile', line 304)
 abs_top_srcdir = /home/work/ANTLtesting/ANTL
@@ -3695,7 +3774,7 @@ am__remove_distdir = if test -d "$(distdir)"; then find "$(distdir)" -type d ! -
 # makefile (from 'Makefile', line 242)
 GZIP_ENV = --best
 # variable set hash-table stats:
-# Load=314/1024=31%, Rehash=0, Collisions=349/1494=23%
+# Load=314/1024=31%, Rehash=0, Collisions=348/1485=23%
 
 # Pattern-specific Variable Values
 
@@ -3709,7 +3788,7 @@ GZIP_ENV = --best
 # tests/Cubic/catch-tests (device 2053, inode 4489235): 10 files, no impossibilities.
 # SCCS: could not be stat'd.
 # tests/Cubic/RCS: could not be stat'd.
-# . (device 2053, inode 4472929): 30 files, 4 impossibilities.
+# . (device 2053, inode 4472929): 28 files, 4 impossibilities.
 # tests/RCS: could not be stat'd.
 # src/Quadratic/SCCS: could not be stat'd.
 # tests/Cubic/catch-tests/SCCS: could not be stat'd.
@@ -3731,7 +3810,7 @@ GZIP_ENV = --best
 # RCS: could not be stat'd.
 # tests/Cubic/SCCS: could not be stat'd.
 
-# 121 files, 4 impossibilities in 27 directories.
+# 119 files, 4 impossibilities in 27 directories.
 
 # Implicit Rules
 
@@ -3804,7 +3883,7 @@ GZIP_ENV = --best
 
 src/Cubic/.deps/CubicElement.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.470939927
+#  Last modified 2021-06-25 17:13:33.946909473
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -3854,7 +3933,7 @@ cscopelist: cscopelist-am
 
 src/Cubic/fund_unit/.deps/BasicVoronoi.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.490940141
+#  Last modified 2021-06-25 17:13:33.966909692
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -3864,7 +3943,7 @@ src/Cubic/fund_unit/.deps/BasicVoronoi.Po:
 # Not a target:
 tests/HeaderTest.cpp:
 #  Implicit rule search has been done.
-#  Last modified 2021-06-23 10:51:33.9124926
+#  Last modified 2021-06-25 17:12:05.517941552
 #  File has been updated.
 #  Successfully updated.
 
@@ -3977,7 +4056,7 @@ src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp:
 	$(LEX.l) $< > $@ 
 	 mv -f lex.yy.r $@
 
-distdir-am: Makefile.am configure configure.ac aclocal.m4 Makefile.in config.h.in build/compile build/config.guess build/config.sub build/depcomp build/install-sh build/missing build/compile build/config.guess build/config.sub build/depcomp build/install-sh build/missing tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp tests/HeaderTest.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp tests/IndexCalculus/IndCalc_test.cpp tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp
+distdir-am: Makefile.am configure configure.ac aclocal.m4 Makefile.in config.h.in build/compile build/config.guess build/config.sub build/depcomp build/install-sh build/missing build/compile build/config.guess build/config.sub build/depcomp build/install-sh build/missing tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp tests/HeaderTest.cpp tests/IndexCalculus/IndCalc_test.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -4080,7 +4159,7 @@ src/Cubic/GlobalCubicField.o: src/Cubic/GlobalCubicField.cpp src/Cubic/.dirstamp
 
 tests/Cubic/catch-tests/.deps/test-order.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.494940184
+#  Last modified 2021-06-25 17:13:33.970909736
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -4169,7 +4248,7 @@ tests/IndexCalculus/.deps/.dirstamp:
 # ? := 
 # variable set hash-table stats:
 # Load=8/32=25%, Rehash=0, Collisions=2/19=11%
-#  recipe to execute (from 'Makefile', line 552):
+#  recipe to execute (from 'Makefile', line 540):
 	@$(MKDIR_P) tests/IndexCalculus/$(DEPDIR)
 	@: > tests/IndexCalculus/$(DEPDIR)/$(am__dirstamp)
 
@@ -4189,7 +4268,7 @@ src/Cubic/CubicElement.cpp:
 
 src/Cubic/.deps/VoronoiReal.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.486940098
+#  Last modified 2021-06-25 17:13:33.958909604
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -4565,7 +4644,7 @@ all-am: Makefile test main cubic testorder config.h
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
-# Load=0/32=0%, Rehash=0, Collisions=0/696=0%
+# Load=0/32=0%, Rehash=0, Collisions=0/687=0%
 
 tests/Cubic/catch-tests/test-order.o: tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/.dirstamp tests/Cubic/catch-tests/.deps/.dirstamp
 #  Implicit rule search has been done.
@@ -4625,7 +4704,7 @@ build/compile:
 
 src/Cubic/.deps/CubicNumberField.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.47493997
+#  Last modified 2021-06-25 17:13:33.946909473
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -4756,7 +4835,7 @@ src/Cubic/VoronoiReal.o: src/Cubic/VoronoiReal.cpp src/Cubic/.dirstamp src/Cubic
 
 src/Cubic/fund_unit/.deps/BSGSVoronoi.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.490940141
+#  Last modified 2021-06-25 17:13:33.962909648
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -4806,7 +4885,7 @@ tests/IndexCalculus/.dirstamp:
 # ? := 
 # variable set hash-table stats:
 # Load=8/32=25%, Rehash=0, Collisions=2/17=12%
-#  recipe to execute (from 'Makefile', line 549):
+#  recipe to execute (from 'Makefile', line 537):
 	@$(MKDIR_P) tests/IndexCalculus
 	@: > tests/IndexCalculus/$(am__dirstamp)
 
@@ -4846,7 +4925,7 @@ info: info-am
 Makefile: Makefile.in config.status
 #  Precious file (prerequisite of .PRECIOUS).
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:11:37.317633723
+#  Last modified 2021-06-28 13:50:00.539617181
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 384):
@@ -4870,7 +4949,7 @@ Makefile: Makefile.in config.status
 
 Makefile.in: Makefile.am configure.ac aclocal.m4
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:10:05.12463062
+#  Last modified 2021-06-28 13:50:00.511502594
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 371):
@@ -4889,7 +4968,7 @@ Makefile.in: Makefile.am configure.ac aclocal.m4
 
 src/Cubic/.deps/CubicOrderReal.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.478940012
+#  Last modified 2021-06-25 17:13:33.950909516
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -4925,7 +5004,7 @@ build/depcomp:
 
 src/Quadratic/.deps/QuadraticOrder_long.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:11:37.32563381
+#  Last modified 2021-06-25 17:13:33.966909692
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -4941,14 +5020,14 @@ src/Cubic/CubicOrderReal.cpp:
 
 tests/.deps/HeaderTest.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.494940184
+#  Last modified 2021-06-25 17:13:33.970909736
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
 	@$(MKDIR_P) $(@D)
 	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
 
-test: tests/IndexCalculus/IndCalc_test.o
+test: tests/IndexCalculus/IndCalc_test.o src/Quadratic/QuadraticOrder_ZZ.o src/Quadratic/QuadraticOrder_long.o
 #  Implicit rule search has not been done.
 #  Implicit/static pattern stem: ''
 #  Last modified 2514-05-29 21:53:03.107374182
@@ -4961,17 +5040,17 @@ test: tests/IndexCalculus/IndCalc_test.o
 # automatic
 # * := 
 # automatic
-# + := tests/IndexCalculus/IndCalc_test.o
+# + := tests/IndexCalculus/IndCalc_test.o src/Quadratic/QuadraticOrder_ZZ.o src/Quadratic/QuadraticOrder_long.o
 # automatic
 # | := 
 # automatic
 # < := tests/IndexCalculus/IndCalc_test.o
 # automatic
-# ^ := tests/IndexCalculus/IndCalc_test.o
+# ^ := tests/IndexCalculus/IndCalc_test.o src/Quadratic/QuadraticOrder_ZZ.o src/Quadratic/QuadraticOrder_long.o
 # automatic
-# ? := tests/IndexCalculus/IndCalc_test.o
+# ? := tests/IndexCalculus/IndCalc_test.o src/Quadratic/QuadraticOrder_ZZ.o src/Quadratic/QuadraticOrder_long.o
 # variable set hash-table stats:
-# Load=8/32=25%, Rehash=0, Collisions=6/71=8%
+# Load=8/32=25%, Rehash=0, Collisions=6/129=5%
 #  recipe to execute (from 'Makefile', line 559):
 	@rm -f test$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(test_OBJECTS) $(test_LDADD) $(LIBS)
@@ -4983,7 +5062,7 @@ src/Cubic/RealCubicNumberField.cpp:
 #  File has been updated.
 #  Successfully updated.
 
-tags-am: tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp tests/HeaderTest.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp tests/IndexCalculus/IndCalc_test.cpp tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp config.h.in
+tags-am: tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp tests/HeaderTest.cpp tests/IndexCalculus/IndCalc_test.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp config.h.in
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
 #  File does not exist.
@@ -5215,7 +5294,7 @@ src/Cubic/fund_unit/BSGSVoronoi.o: src/Cubic/fund_unit/BSGSVoronoi.cpp src/Cubic
 
 src/Cubic/.deps/CubicOrder.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.47493997
+#  Last modified 2021-06-25 17:13:33.950909516
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -5224,7 +5303,7 @@ src/Cubic/.deps/CubicOrder.Po:
 
 src/Cubic/.deps/generalFunctions.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.486940098
+#  Last modified 2021-06-25 17:13:33.958909604
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -5322,7 +5401,7 @@ distcheck: dist
 
 src/Cubic/.deps/VoronoiMethods.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.482940055
+#  Last modified 2021-06-25 17:13:33.95490956
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -5683,7 +5762,7 @@ src/Cubic/generalFunctions.o: src/Cubic/generalFunctions.cpp src/Cubic/.dirstamp
 
 src/Cubic/.deps/VoronoiComplex.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.482940055
+#  Last modified 2021-06-25 17:13:33.95490956
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -5692,7 +5771,7 @@ src/Cubic/.deps/VoronoiComplex.Po:
 
 config.status: configure
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.442939626
+#  Last modified 2021-06-25 17:13:33.914909122
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 394):
@@ -5700,7 +5779,7 @@ config.status: configure
 
 src/Quadratic/.deps/QuadraticOrder_ZZ.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:11:37.32563381
+#  Last modified 2021-06-25 17:13:33.966909692
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -5748,7 +5827,7 @@ src/Cubic/VoronoiMethods.o: src/Cubic/VoronoiMethods.cpp src/Cubic/.dirstamp src
 
 src/Cubic/Multiplication/.deps/IdealMultiplicationStrategy.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.486940098
+#  Last modified 2021-06-25 17:13:33.962909648
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -5860,14 +5939,14 @@ installcheck: installcheck-am
 
 src/Cubic/.deps/RealCubicNumberField.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.478940012
+#  Last modified 2021-06-25 17:13:33.95490956
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
 	@$(MKDIR_P) $(@D)
 	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
 
-ID: tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp tests/HeaderTest.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp tests/IndexCalculus/IndCalc_test.cpp tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp config.h.in
+ID: tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp tests/HeaderTest.cpp tests/IndexCalculus/IndCalc_test.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp config.h.in
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -5883,7 +5962,7 @@ src/Cubic/GlobalCubicField.cpp:
 
 stamp-h1: config.h.in config.status
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.466939884
+#  Last modified 2021-06-25 17:13:33.938909386
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 407):
@@ -5933,7 +6012,7 @@ install-data-am:
 
 tests/IndexCalculus/.deps/IndCalc_test.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.498940227
+#  Last modified 2021-06-25 17:13:33.97490978
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -6134,34 +6213,15 @@ src/Quadratic/QuadraticOrder_ZZ.o: src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadr
 # Not a target:
 Makefile.am:
 #  Implicit rule search has been done.
-#  Last modified 2021-06-25 17:09:56.452536544
+#  Last modified 2021-06-25 18:13:50.887771769
 #  File has been updated.
 #  Successfully updated.
 
 config.h: stamp-h1
 #  Implicit rule search has not been done.
-#  Implicit/static pattern stem: ''
-#  Last modified 2514-05-29 21:53:03.107374182
+#  Last modified 2021-06-25 17:13:33.938909386
 #  File has been updated.
 #  Successfully updated.
-# automatic
-# @ := config.h
-# automatic
-# % := 
-# automatic
-# * := 
-# automatic
-# + := stamp-h1
-# automatic
-# | := 
-# automatic
-# < := stamp-h1
-# automatic
-# ^ := stamp-h1
-# automatic
-# ? := stamp-h1
-# variable set hash-table stats:
-# Load=8/32=25%, Rehash=0, Collisions=2/19=11%
 #  recipe to execute (from 'Makefile', line 403):
 	@test -f $@ || rm -f stamp-h1
 	@test -f $@ || $(MAKE) $(AM_MAKEFLAGS) stamp-h1
@@ -6195,7 +6255,7 @@ src/Cubic/fund_unit/BasicVoronoi.cpp:
 
 tests/Cubic/catch-tests/.deps/testingMain.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.498940227
+#  Last modified 2021-06-25 17:13:33.97490978
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -6272,7 +6332,7 @@ src/Quadratic/.deps/.dirstamp:
 # ? := 
 # variable set hash-table stats:
 # Load=8/32=25%, Rehash=0, Collisions=2/19=11%
-#  recipe to execute (from 'Makefile', line 536):
+#  recipe to execute (from 'Makefile', line 549):
 	@$(MKDIR_P) src/Quadratic/$(DEPDIR)
 	@: > src/Quadratic/$(DEPDIR)/$(am__dirstamp)
 
@@ -6307,7 +6367,7 @@ src/Cubic/CubicOrderReal.o: src/Cubic/CubicOrderReal.cpp src/Cubic/.dirstamp src
 
 src/Cubic/.deps/CubicIdeal.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.47493997
+#  Last modified 2021-06-25 17:13:33.946909473
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -6536,7 +6596,7 @@ build/missing:
 #  Modification time never checked.
 #  File has not been updated.
 
-main: tests/HeaderTest.o src/Quadratic/QuadraticOrder_ZZ.o src/Quadratic/QuadraticOrder_long.o
+main: tests/HeaderTest.o
 #  Implicit rule search has not been done.
 #  Implicit/static pattern stem: ''
 #  Last modified 2514-05-29 21:53:03.107374182
@@ -6549,18 +6609,18 @@ main: tests/HeaderTest.o src/Quadratic/QuadraticOrder_ZZ.o src/Quadratic/Quadrat
 # automatic
 # * := 
 # automatic
-# + := tests/HeaderTest.o src/Quadratic/QuadraticOrder_ZZ.o src/Quadratic/QuadraticOrder_long.o
+# + := tests/HeaderTest.o
 # automatic
 # | := 
 # automatic
 # < := tests/HeaderTest.o
 # automatic
-# ^ := tests/HeaderTest.o src/Quadratic/QuadraticOrder_ZZ.o src/Quadratic/QuadraticOrder_long.o
+# ^ := tests/HeaderTest.o
 # automatic
-# ? := tests/HeaderTest.o src/Quadratic/QuadraticOrder_ZZ.o src/Quadratic/QuadraticOrder_long.o
+# ? := tests/HeaderTest.o
 # variable set hash-table stats:
-# Load=8/32=25%, Rehash=0, Collisions=5/129=4%
-#  recipe to execute (from 'Makefile', line 546):
+# Load=8/32=25%, Rehash=0, Collisions=5/71=7%
+#  recipe to execute (from 'Makefile', line 534):
 	@rm -f main$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(main_OBJECTS) $(main_LDADD) $(LIBS)
 
@@ -6599,7 +6659,7 @@ install-man:
 
 src/Cubic/Multiplication/.deps/MultiplyStrategyWilliams.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.490940141
+#  Last modified 2021-06-25 17:13:33.962909648
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -6695,7 +6755,7 @@ install-html: install-html-am
 
 src/Cubic/.deps/ComplexCubicNumberField.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.470939927
+#  Last modified 2021-06-25 17:13:33.942909429
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -6784,7 +6844,7 @@ check: check-am
 #  File does not exist.
 #  File has not been updated.
 
-ctags-am: tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp tests/HeaderTest.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp tests/IndexCalculus/IndCalc_test.cpp tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp config.h.in
+ctags-am: tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp tests/HeaderTest.cpp tests/IndexCalculus/IndCalc_test.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp config.h.in
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
 #  File does not exist.
@@ -6838,11 +6898,11 @@ src/Quadratic/.dirstamp:
 # ? := 
 # variable set hash-table stats:
 # Load=8/32=25%, Rehash=0, Collisions=2/17=12%
-#  recipe to execute (from 'Makefile', line 533):
+#  recipe to execute (from 'Makefile', line 546):
 	@$(MKDIR_P) src/Quadratic
 	@: > src/Quadratic/$(am__dirstamp)
 
-cscopelist-am: tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp tests/HeaderTest.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp tests/IndexCalculus/IndCalc_test.cpp tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp config.h.in
+cscopelist-am: tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp tests/HeaderTest.cpp tests/IndexCalculus/IndCalc_test.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp config.h.in
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
 #  File does not exist.
@@ -6863,7 +6923,7 @@ cscopelist-am: tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/
 
 src/Cubic/.deps/GlobalCubicField.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.478940012
+#  Last modified 2021-06-25 17:13:33.950909516
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -6972,7 +7032,7 @@ CTAGS: ctags
 
 tests/Cubic/.deps/cubicTestMain.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.494940184
+#  Last modified 2021-06-25 17:13:33.970909736
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -7057,22 +7117,22 @@ install-ps-am:
 #  File has not been updated.
 
 # files hash-table stats:
-# Load=268/1024=26%, Rehash=0, Collisions=406/1067=38%
+# Load=268/1024=26%, Rehash=0, Collisions=406/1066=38%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 2 (0) / strings = 564 / storage = 12095 B / avg = 21 B
-# current buf: size = 8162 B / used = 3970 B / count = 114 / avg = 34 B
-# other used: total = 8125 B / count = 450 / avg = 18 B
-# other free: total = 37 B / max = 37 B / min = 37 B / avg = 37 B
+# strcache buffers: 2 (1) / strings = 562 / storage = 12077 B / avg = 21 B
+# current buf: size = 8162 B / used = 3933 B / count = 113 / avg = 34 B
+# other used: total = 8144 B / count = 449 / avg = 18 B
+# other free: total = 18 B / max = 18 B / min = 18 B / avg = 18 B
 
-# strcache performance: lookups = 1297 / hit rate = 56%
+# strcache performance: lookups = 1294 / hit rate = 56%
 # hash-table stats:
-# Load=564/8192=7%, Rehash=0, Collisions=78/1297=6%
-# Finished Make data base on Fri Jun 25 17:11:37 2021
+# Load=562/8192=7%, Rehash=0, Collisions=78/1294=6%
+# Finished Make data base on Mon Jun 28 13:50:00 2021
 
 # GNU Make 4.2.1
 # Built for x86_64-pc-linux-gnu
@@ -7081,7 +7141,7 @@ install-ps-am:
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri Jun 25 17:11:37 2021
+# Make data base, printed on Mon Jun 28 13:50:00 2021
 
 # Variables
 
@@ -7138,7 +7198,7 @@ V = 0
 # makefile (from 'Makefile', line 321)
 datarootdir = ${prefix}/share
 # makefile (from 'Makefile', line 359)
-test_SOURCES = tests/IndexCalculus/IndCalc_test.cpp
+test_SOURCES = tests/IndexCalculus/IndCalc_test.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp
 # default
 PREPROCESS.F = $(FC) $(FFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -F
 # makefile (from 'Makefile', line 83)
@@ -7373,7 +7433,7 @@ LINK.S = $(CC) $(ASFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_MACH)
 abs_top_builddir = /home/work/ANTLtesting/ANTL
 # default
 PREPROCESS.r = $(FC) $(FFLAGS) $(RFLAGS) $(TARGET_ARCH) -F
-# makefile (from 'Makefile', line 131)
+# makefile (from 'Makefile', line 129)
 main_OBJECTS = $(am_main_OBJECTS)
 # makefile (from 'Makefile', line 338)
 mandir = ${datarootdir}/man
@@ -7458,7 +7518,7 @@ AS = as
 # default
 PREPROCESS.S = $(CC) -E $(CPPFLAGS)
 # makefile (from 'Makefile', line 360)
-main_SOURCES = tests/HeaderTest.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp
+main_SOURCES = tests/HeaderTest.cpp
 # default
 COMPILE.p = $(PC) $(PFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
 # default
@@ -7485,14 +7545,14 @@ CONFIG_HEADER = config.h
 MKDIR_P = /usr/bin/mkdir -p
 # makefile (from 'Makefile', line 305)
 ac_ct_CC = 
-# makefile (from 'Makefile', line 133)
-am_test_OBJECTS = tests/IndexCalculus/IndCalc_test.$(OBJEXT)
+# makefile (from 'Makefile', line 131)
+am_test_OBJECTS = tests/IndexCalculus/IndCalc_test.$(OBJEXT) src/Quadratic/QuadraticOrder_ZZ.$(OBJEXT) src/Quadratic/QuadraticOrder_long.$(OBJEXT)
 # makefile (from 'Makefile', line 328)
 host_os = linux-gnu
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
 # makefile (from 'Makefile', line 128)
-am_main_OBJECTS = tests/HeaderTest.$(OBJEXT) src/Quadratic/QuadraticOrder_ZZ.$(OBJEXT) src/Quadratic/QuadraticOrder_long.$(OBJEXT)
+am_main_OBJECTS = tests/HeaderTest.$(OBJEXT)
 # makefile (from 'Makefile', line 186)
 am__v_CXX_1 = 
 # default
@@ -7609,7 +7669,7 @@ CXX = x86_64-linux-gnu-g++
 AM_DEFAULT_VERBOSITY = 1
 # makefile (from 'Makefile', line 75)
 pkglibdir = $(libdir)/antl
-# makefile (from 'Makefile', line 132)
+# makefile (from 'Makefile', line 130)
 main_LDADD = $(LDADD)
 # makefile (from 'Makefile', line 304)
 abs_top_srcdir = /home/work/ANTLtesting/ANTL
@@ -7708,7 +7768,7 @@ am__remove_distdir = if test -d "$(distdir)"; then find "$(distdir)" -type d ! -
 # makefile (from 'Makefile', line 242)
 GZIP_ENV = --best
 # variable set hash-table stats:
-# Load=311/1024=30%, Rehash=0, Collisions=203/806=25%
+# Load=311/1024=30%, Rehash=0, Collisions=202/797=25%
 
 # Pattern-specific Variable Values
 
@@ -7717,10 +7777,10 @@ GZIP_ENV = --best
 # Directories
 
 # SCCS: could not be stat'd.
-# . (device 2053, inode 4472929): 30 files, 4 impossibilities.
+# . (device 2053, inode 4472929): 28 files, 4 impossibilities.
 # RCS: could not be stat'd.
 
-# 30 files, 4 impossibilities in 3 directories.
+# 28 files, 4 impossibilities in 3 directories.
 
 # Implicit Rules
 
@@ -7793,7 +7853,7 @@ GZIP_ENV = --best
 
 src/Cubic/.deps/CubicElement.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.470939927
+#  Last modified 2021-06-25 17:13:33.946909473
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -7818,7 +7878,7 @@ cscopelist: cscopelist-am
 
 src/Cubic/fund_unit/.deps/BasicVoronoi.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.490940141
+#  Last modified 2021-06-25 17:13:33.966909692
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -7939,7 +7999,7 @@ src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp:
 	$(LEX.l) $< > $@ 
 	 mv -f lex.yy.r $@
 
-distdir-am: Makefile.am configure configure.ac aclocal.m4 Makefile.in config.h.in build/compile build/config.guess build/config.sub build/depcomp build/install-sh build/missing build/compile build/config.guess build/config.sub build/depcomp build/install-sh build/missing tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp tests/HeaderTest.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp tests/IndexCalculus/IndCalc_test.cpp tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp
+distdir-am: Makefile.am configure configure.ac aclocal.m4 Makefile.in config.h.in build/compile build/config.guess build/config.sub build/depcomp build/install-sh build/missing build/compile build/config.guess build/config.sub build/depcomp build/install-sh build/missing tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp tests/HeaderTest.cpp tests/IndexCalculus/IndCalc_test.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -7998,7 +8058,7 @@ src/Cubic/GlobalCubicField.o: src/Cubic/.dirstamp src/Cubic/.deps/.dirstamp
 
 tests/Cubic/catch-tests/.deps/test-order.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.494940184
+#  Last modified 2021-06-25 17:13:33.970909736
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -8047,7 +8107,7 @@ tests/IndexCalculus/.deps/.dirstamp:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 552):
+#  recipe to execute (from 'Makefile', line 540):
 	@$(MKDIR_P) tests/IndexCalculus/$(DEPDIR)
 	@: > tests/IndexCalculus/$(DEPDIR)/$(am__dirstamp)
 
@@ -8066,7 +8126,7 @@ src/Cubic/CubicElement.cpp:
 
 src/Cubic/.deps/VoronoiReal.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.486940098
+#  Last modified 2021-06-25 17:13:33.958909604
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -8362,7 +8422,7 @@ build/compile:
 
 src/Cubic/.deps/CubicNumberField.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.47493997
+#  Last modified 2021-06-25 17:13:33.946909473
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -8469,7 +8529,7 @@ src/Cubic/VoronoiReal.o: src/Cubic/.dirstamp src/Cubic/.deps/.dirstamp
 
 src/Cubic/fund_unit/.deps/BSGSVoronoi.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.490940141
+#  Last modified 2021-06-25 17:13:33.962909648
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -8498,7 +8558,7 @@ tests/IndexCalculus/.dirstamp:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 549):
+#  recipe to execute (from 'Makefile', line 537):
 	@$(MKDIR_P) tests/IndexCalculus
 	@: > tests/IndexCalculus/$(am__dirstamp)
 
@@ -8538,7 +8598,7 @@ info: info-am
 Makefile: Makefile.in config.status
 #  Precious file (prerequisite of .PRECIOUS).
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:11:37.317633723
+#  Last modified 2021-06-28 13:50:00.539617181
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 384):
@@ -8562,7 +8622,7 @@ Makefile: Makefile.in config.status
 
 Makefile.in: Makefile.am configure.ac aclocal.m4
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:10:05.12463062
+#  Last modified 2021-06-28 13:50:00.511502594
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 371):
@@ -8581,7 +8641,7 @@ Makefile.in: Makefile.am configure.ac aclocal.m4
 
 src/Cubic/.deps/CubicOrderReal.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.478940012
+#  Last modified 2021-06-25 17:13:33.950909516
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -8617,7 +8677,7 @@ build/depcomp:
 
 src/Quadratic/.deps/QuadraticOrder_long.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:11:37.32563381
+#  Last modified 2021-06-25 17:13:33.966909692
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -8632,14 +8692,14 @@ src/Cubic/CubicOrderReal.cpp:
 
 tests/.deps/HeaderTest.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.494940184
+#  Last modified 2021-06-25 17:13:33.970909736
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
 	@$(MKDIR_P) $(@D)
 	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
 
-test: tests/IndexCalculus/IndCalc_test.o
+test: tests/IndexCalculus/IndCalc_test.o src/Quadratic/QuadraticOrder_ZZ.o src/Quadratic/QuadraticOrder_long.o
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -8653,7 +8713,7 @@ src/Cubic/RealCubicNumberField.cpp:
 #  Modification time never checked.
 #  File has not been updated.
 
-tags-am: tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp tests/HeaderTest.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp tests/IndexCalculus/IndCalc_test.cpp tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp config.h.in
+tags-am: tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp tests/HeaderTest.cpp tests/IndexCalculus/IndCalc_test.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp config.h.in
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
 #  File does not exist.
@@ -8796,7 +8856,7 @@ src/Cubic/fund_unit/BSGSVoronoi.o: src/Cubic/fund_unit/.dirstamp src/Cubic/fund_
 
 src/Cubic/.deps/CubicOrder.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.47493997
+#  Last modified 2021-06-25 17:13:33.950909516
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -8805,7 +8865,7 @@ src/Cubic/.deps/CubicOrder.Po:
 
 src/Cubic/.deps/generalFunctions.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.486940098
+#  Last modified 2021-06-25 17:13:33.958909604
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -8855,7 +8915,7 @@ all: config.h
 # automatic
 # ? := config.h
 # variable set hash-table stats:
-# Load=8/32=25%, Rehash=0, Collisions=2/23=9%
+# Load=8/32=25%, Rehash=0, Collisions=2/14=14%
 #  recipe to execute (from 'Makefile', line 364):
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
@@ -8923,7 +8983,7 @@ distcheck: dist
 
 src/Cubic/.deps/VoronoiMethods.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.482940055
+#  Last modified 2021-06-25 17:13:33.95490956
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -9165,7 +9225,7 @@ src/Cubic/generalFunctions.o: src/Cubic/.dirstamp src/Cubic/.deps/.dirstamp
 
 src/Cubic/.deps/VoronoiComplex.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.482940055
+#  Last modified 2021-06-25 17:13:33.95490956
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -9174,7 +9234,7 @@ src/Cubic/.deps/VoronoiComplex.Po:
 
 config.status: configure
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.442939626
+#  Last modified 2021-06-25 17:13:33.914909122
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 394):
@@ -9182,7 +9242,7 @@ config.status: configure
 
 src/Quadratic/.deps/QuadraticOrder_ZZ.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:11:37.32563381
+#  Last modified 2021-06-25 17:13:33.966909692
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -9206,7 +9266,7 @@ src/Cubic/VoronoiMethods.o: src/Cubic/.dirstamp src/Cubic/.deps/.dirstamp
 
 src/Cubic/Multiplication/.deps/IdealMultiplicationStrategy.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.486940098
+#  Last modified 2021-06-25 17:13:33.962909648
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -9294,14 +9354,14 @@ installcheck: installcheck-am
 
 src/Cubic/.deps/RealCubicNumberField.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.478940012
+#  Last modified 2021-06-25 17:13:33.95490956
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
 	@$(MKDIR_P) $(@D)
 	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
 
-ID: tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp tests/HeaderTest.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp tests/IndexCalculus/IndCalc_test.cpp tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp config.h.in
+ID: tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp tests/HeaderTest.cpp tests/IndexCalculus/IndCalc_test.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp config.h.in
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -9316,7 +9376,7 @@ src/Cubic/GlobalCubicField.cpp:
 
 stamp-h1: config.h.in config.status
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.466939884
+#  Last modified 2021-06-25 17:13:33.938909386
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 407):
@@ -9342,7 +9402,7 @@ install-data-am:
 
 tests/IndexCalculus/.deps/IndCalc_test.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.498940227
+#  Last modified 2021-06-25 17:13:33.97490978
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -9474,34 +9534,15 @@ src/Quadratic/QuadraticOrder_ZZ.o: src/Quadratic/.dirstamp src/Quadratic/.deps/.
 # Not a target:
 Makefile.am:
 #  Implicit rule search has been done.
-#  Last modified 2021-06-25 17:09:56.452536544
+#  Last modified 2021-06-25 18:13:50.887771769
 #  File has been updated.
 #  Successfully updated.
 
 config.h: stamp-h1
 #  Implicit rule search has not been done.
-#  Implicit/static pattern stem: ''
-#  Last modified 2514-05-29 21:53:03.107374182
+#  Last modified 2021-06-25 17:13:33.938909386
 #  File has been updated.
 #  Successfully updated.
-# automatic
-# @ := config.h
-# automatic
-# % := 
-# automatic
-# * := 
-# automatic
-# + := stamp-h1
-# automatic
-# | := 
-# automatic
-# < := stamp-h1
-# automatic
-# ^ := stamp-h1
-# automatic
-# ? := stamp-h1
-# variable set hash-table stats:
-# Load=8/32=25%, Rehash=0, Collisions=2/19=11%
 #  recipe to execute (from 'Makefile', line 403):
 	@test -f $@ || rm -f stamp-h1
 	@test -f $@ || $(MAKE) $(AM_MAKEFLAGS) stamp-h1
@@ -9534,7 +9575,7 @@ src/Cubic/fund_unit/BasicVoronoi.cpp:
 
 tests/Cubic/catch-tests/.deps/testingMain.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.498940227
+#  Last modified 2021-06-25 17:13:33.97490978
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -9571,7 +9612,7 @@ src/Quadratic/.deps/.dirstamp:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 536):
+#  recipe to execute (from 'Makefile', line 549):
 	@$(MKDIR_P) src/Quadratic/$(DEPDIR)
 	@: > src/Quadratic/$(DEPDIR)/$(am__dirstamp)
 
@@ -9582,7 +9623,7 @@ src/Cubic/CubicOrderReal.o: src/Cubic/.dirstamp src/Cubic/.deps/.dirstamp
 
 src/Cubic/.deps/CubicIdeal.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.47493997
+#  Last modified 2021-06-25 17:13:33.946909473
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -9720,11 +9761,11 @@ build/missing:
 #  Modification time never checked.
 #  File has not been updated.
 
-main: tests/HeaderTest.o src/Quadratic/QuadraticOrder_ZZ.o src/Quadratic/QuadraticOrder_long.o
+main: tests/HeaderTest.o
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 546):
+#  recipe to execute (from 'Makefile', line 534):
 	@rm -f main$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(main_OBJECTS) $(main_LDADD) $(LIBS)
 
@@ -9763,7 +9804,7 @@ install-man:
 
 src/Cubic/Multiplication/.deps/MultiplyStrategyWilliams.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.490940141
+#  Last modified 2021-06-25 17:13:33.962909648
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -9835,7 +9876,7 @@ install-html: install-html-am
 
 src/Cubic/.deps/ComplexCubicNumberField.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.470939927
+#  Last modified 2021-06-25 17:13:33.942909429
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -9880,7 +9921,7 @@ check: check-am
 #  File does not exist.
 #  File has not been updated.
 
-ctags-am: tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp tests/HeaderTest.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp tests/IndexCalculus/IndCalc_test.cpp tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp config.h.in
+ctags-am: tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp tests/HeaderTest.cpp tests/IndexCalculus/IndCalc_test.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp config.h.in
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
 #  File does not exist.
@@ -9913,11 +9954,11 @@ src/Quadratic/.dirstamp:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 533):
+#  recipe to execute (from 'Makefile', line 546):
 	@$(MKDIR_P) src/Quadratic
 	@: > src/Quadratic/$(am__dirstamp)
 
-cscopelist-am: tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp tests/HeaderTest.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp tests/IndexCalculus/IndCalc_test.cpp tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp config.h.in
+cscopelist-am: tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/fund_unit/BasicVoronoi.cpp src/Cubic/fund_unit/BSGSVoronoi.cpp tests/HeaderTest.cpp tests/IndexCalculus/IndCalc_test.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp config.h.in
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
 #  File does not exist.
@@ -9938,7 +9979,7 @@ cscopelist-am: tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/
 
 src/Cubic/.deps/GlobalCubicField.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.478940012
+#  Last modified 2021-06-25 17:13:33.950909516
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -10026,7 +10067,7 @@ CTAGS: ctags
 
 tests/Cubic/.deps/cubicTestMain.Po:
 #  Implicit rule search has not been done.
-#  Last modified 2021-06-25 17:07:28.494940184
+#  Last modified 2021-06-25 17:13:33.970909736
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 617):
@@ -10087,18 +10128,18 @@ install-ps-am:
 #  File has not been updated.
 
 # files hash-table stats:
-# Load=268/1024=26%, Rehash=0, Collisions=253/865=29%
+# Load=268/1024=26%, Rehash=0, Collisions=253/864=29%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 337 / storage = 5452 B / avg = 16 B
-# current buf: size = 8162 B / used = 5452 B / count = 337 / avg = 16 B
+# strcache buffers: 1 (0) / strings = 335 / storage = 5434 B / avg = 16 B
+# current buf: size = 8162 B / used = 5434 B / count = 335 / avg = 16 B
 
-# strcache performance: lookups = 977 / hit rate = 65%
+# strcache performance: lookups = 974 / hit rate = 65%
 # hash-table stats:
-# Load=337/8192=4%, Rehash=0, Collisions=51/977=5%
-# Finished Make data base on Fri Jun 25 17:11:37 2021
+# Load=335/8192=4%, Rehash=0, Collisions=51/974=5%
+# Finished Make data base on Mon Jun 28 13:50:00 2021
 
