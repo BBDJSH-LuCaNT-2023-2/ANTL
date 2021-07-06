@@ -8,17 +8,17 @@
 template <typename Type, typename PType>
 void CubicOrderReal<Type, PType> :: compute_conjugate_elements(){
 
-  mul(this->conjugate_bases[0][0],to<PType>((this->defining_IBCF)[3]), this->root_list[1]);      // rho1' = a*delta'
+  mul(this->conjugate_bases[0][0],to<PType>((this->defining_IBCF)[3]), this->root_list[1]);           // rho1' = a*delta'
 
   this->conjugate_bases[0][1] = this->conjugate_bases[0][0];                                          // a*delta'
   add(this->conjugate_bases[0][1],this->conjugate_bases[0][1],to<PType>((this->defining_IBCF)[2]) );  // a*delta' + b
   mul(this->conjugate_bases[0][1], this->conjugate_bases[0][1], this->root_list[1]);                  // rho2' = a*delta'^2 + b*delta'
 
 
-  mul(this->conjugate_bases[1][0],to<PType>((this->defining_IBCF)[3]), this->root_list[2]);      // a*delta''
-  this->conjugate_bases[1][1] = this->conjugate_bases[1][0];                              // a*delta''
+  mul(this->conjugate_bases[1][0],to<PType>((this->defining_IBCF)[3]), this->root_list[2]);           // a*delta''
+  this->conjugate_bases[1][1] = this->conjugate_bases[1][0];                                          // a*delta''
   add(this->conjugate_bases[1][1],this->conjugate_bases[1][1], to<PType>( (this->defining_IBCF)[2]) ); // a*delta'' + b
-  mul(this->conjugate_bases[1][1], this->conjugate_bases[1][1], this->root_list[2]);                    // a*delta''^2 + b*delta''
+  mul(this->conjugate_bases[1][1], this->conjugate_bases[1][1], this->root_list[2]);                   // a*delta''^2 + b*delta''
 
   #ifdef DEBUG2
   std::cout << "Computing conjugate elements" << this->get_conjugate_bases(0,0) << " " << this->get_conjugate_bases(0,1)<< std::endl;
