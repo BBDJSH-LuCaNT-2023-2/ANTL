@@ -1,12 +1,16 @@
-To build:
+# ANTL
 
-1) Edit the CONFIG file:
- - SOFTWARE_INC and SOFTWARE_LIB should point to the directories where the
-inlude files and, respectively, libraries of GMP and NTL are installed
- - update the CFLAGS to whatever works best for the type of machine you
-are building this on.  I find it best to copy the ones that GMP selects
-automatically which building it.
+ANTL is a library which strives to extend and expand the functionality of NTL.
 
-2) make appl, to build the libarary and the applications in appl
+## Table of Contents
 
-3) doxygen ANTLdoc-config, to build the documentation in doc
+  - [Building](#Building)
+  - [Testing](#Testing)
+
+## Building
+
+To build ANTL, please refer to the ReadMe located in the build directory.
+
+## Testing
+
+ANTL uses the Catch2 framework for unit testing. For more information, please refer to the ReadMe located in the tests directory.
