@@ -46,7 +46,7 @@
 
 # http://www.gnu.org/software/automake
 
-
+Makefile
 Makefile.in
 
 # http://www.gnu.org/software/autoconf
@@ -56,7 +56,10 @@ Makefile.in
 /autoscan-*.log
 /aclocal.m4
 /compile
+/config.h
 /config.h.in
+/config.log
+/config.status
 /configure
 /configure.scan
 /depcomp
