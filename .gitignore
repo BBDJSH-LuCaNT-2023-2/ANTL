@@ -46,6 +46,7 @@
 
 # http://www.gnu.org/software/automake
 
+Makecache
 Makefile
 Makefile.in
 
