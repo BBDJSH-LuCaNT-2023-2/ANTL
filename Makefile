@@ -1,4 +1,3 @@
-
 # This is a non-recursive make file, implemented along the lines of:
 # Miller, P. (1997). Recursive Make Considered Harmful.
 # 	http://aegis.sourceforge.net/auug97.pdf
