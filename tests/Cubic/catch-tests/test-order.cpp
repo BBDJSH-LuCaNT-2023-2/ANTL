@@ -47,9 +47,9 @@ TEST_CASE("Double: Cubic Order accessor functions"){
     CubicOrderReal<long, double> ord4(poly4);
 
     REQUIRE(ord4.get_root1() - (-2.170086) < DOUBLE_TOLERANCE);
-    ord4.roots_swap_position(1,2);
+    ord4.roots_swap_position(0,1);
     REQUIRE(ord4.get_root1() - (-0.311108) < DOUBLE_TOLERANCE);
-    ord4.roots_swap_position(1,3);
+    ord4.roots_swap_position(0,2);
     REQUIRE(ord4.get_root1() - (1.48119430) < DOUBLE_TOLERANCE);
 
   }
