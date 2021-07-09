@@ -7,14 +7,16 @@
 #define QUADRATICIDEALBASE_H
 
 #include <string>
-#include <ANTL/utilities.hpp>
+#include <ANTL/common.hpp>
 #include <ANTL/Quadratic/QuadraticOrder.hpp>
 #include <ANTL/Quadratic/QuadraticNumber.hpp>
 
 template < class T > class QuadraticIdealBase;
+
+namespace ANTL {
 template < class T > class QuadraticOrder;
 template < class T > class QuadraticNumber;
-
+}
 
 // declare templated friend functions
 template < class T >
@@ -24,19 +26,19 @@ template < class T >
 void mul (QuadraticIdealBase<T> &C, const QuadraticIdealBase<T> &A, const QuadraticIdealBase<T> &B);
 
 template < class T >
-void mul (QuadraticIdealBase<T> &C, QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A, const QuadraticIdealBase<T> &B);
+void mul (QuadraticIdealBase<T> &C, ANTL::QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A, const QuadraticIdealBase<T> &B);
 
 template < class T >
 void sqr (QuadraticIdealBase<T> &C, const QuadraticIdealBase<T> &A);
 
 template < class T >
-void sqr (QuadraticIdealBase<T> &C, QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A);
+void sqr (QuadraticIdealBase<T> &C, ANTL::QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A);
 
 template < class T >
 void cube (QuadraticIdealBase<T> &C, const QuadraticIdealBase<T> &A);
 
 template < class T >
-void cube (QuadraticIdealBase<T> &C, QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A);
+void cube (QuadraticIdealBase<T> &C, ANTL::QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A);
 
 template < class T >
 bool operator == (const QuadraticIdealBase<T> &A, const QuadraticIdealBase<T> &B);
@@ -67,7 +69,7 @@ template < class T > class QuadraticIdealBase
   T a;
   T b;
   T c;
-  QuadraticOrder<T> *QO;
+  ANTL::QuadraticOrder<T> *QO;
 
 
 public:
@@ -75,7 +77,7 @@ public:
   // constructors and destructor
   //
 
-  QuadraticIdealBase (QuadraticOrder<T> & inQO);
+  QuadraticIdealBase (ANTL::QuadraticOrder<T> & inQO);
   ~QuadraticIdealBase ();
 
 
@@ -102,7 +104,7 @@ public:
   T get_a () const { return a; };
   T get_b () const { return b; };
   T get_c () const { return c; };
-  QuadraticOrder<T> * get_QO () const { return QO; };
+  ANTL::QuadraticOrder<T> * get_QO () const { return QO; };
 
 
   //
@@ -118,12 +120,12 @@ public:
   // arithmetic with relative generator
   //
 
-  friend void mul < T > (QuadraticIdealBase<T> &C, QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A, const QuadraticIdealBase<T> &B);
-  friend void sqr < T > (QuadraticIdealBase<T> &C, QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A);
-  friend void cube < T > (QuadraticIdealBase<T> &C, QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A); 
+  friend void mul < T > (QuadraticIdealBase<T> &C, ANTL::QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A, const QuadraticIdealBase<T> &B);
+  friend void sqr < T > (QuadraticIdealBase<T> &C, ANTL::QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A);
+  friend void cube < T > (QuadraticIdealBase<T> &C, ANTL::QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A);
 
   void reduce();
-  void reduce(QuadraticNumber<T> & gamma);
+  void reduce(ANTL::QuadraticNumber<T> & gamma);
 
 
 
