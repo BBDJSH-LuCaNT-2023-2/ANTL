@@ -439,14 +439,14 @@ namespace ANTL
   //      outputs a QuadraticOrder to the ostream out.
   //
 
-  /*
+
   template <>
   void
   QuadraticOrder<long>::write_to_file(std::ostream & out) const
   {
     out << "Quadratic order:" << endl;
     out << "   Delta = " << Delta << " (" << NumBits(Delta) << " bits)" << endl;
-
+    /*
     if (!is_zero ())
       {
 	if (is_R_computed () && is_real ())
@@ -469,8 +469,9 @@ namespace ANTL
 	if (is_L_computed ())
 	  out << "   L(1) = " << L << endl;
       }
+      */
   }
-*/
+
 
 } // ANTL
 
