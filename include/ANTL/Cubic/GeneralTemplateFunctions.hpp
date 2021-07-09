@@ -136,7 +136,6 @@ int cardano(polynomial<T> const &poly, PT * roots){
     PT realtemp1,realtemp2;
     PT disc, disc_root;
     const PT athird(PT(1)/PT(3));
-    cout << "cardano Poly1: " << poly << endl;
     // The code below transforms a generic cubic into one of the form x^3 + px+q
     // based on the writeup from https://brilliant.org/wiki/cardano-method/#_=_
     QQ<T> intermediate = QQ<T>(poly[2]);        // set as b
@@ -165,7 +164,6 @@ int cardano(polynomial<T> const &poly, PT * roots){
       div(q, q, poly[3]);
       div(p, p, poly[3]);
     }
-    cout << "cardano Poly2: " << p << "  " << q << endl;
     // at this point we will be working with the depressed monic cubic
     // x^3 + px + q, whose coefficients are rational numbers
 
@@ -179,7 +177,6 @@ int cardano(polynomial<T> const &poly, PT * roots){
     div(realtemp2, to<PT>(p3.getN()), to<PT>(p3.getD()));                         //real value of (p/3)^3
 
     add(disc, realtemp1, realtemp2);                                              // (q/2)^2 + (p/3)^3
-    std::cout << "cardano Discrim " << disc << std::endl;
 
 
     // make sure that the discriminant is not 0

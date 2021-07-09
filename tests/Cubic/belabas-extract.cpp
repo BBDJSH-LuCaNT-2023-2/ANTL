@@ -40,6 +40,8 @@ using NTL::RR;
 using boost::math::tools::polynomial;
 using boost::math::ntl::atan;
 
+#define DEBUG =1
+#define DEBUGVORONOI 
 
 int main(int argc,  char *argv[]){
 
@@ -78,27 +80,27 @@ int main(int argc,  char *argv[]){
     // now a,b,c,d are the coefficients of the IBCF, we can now do the work:
 
     //CubicOrderComplex<ZZ, RR> Order1(real_poly);
-    CubicOrder<ZZ, RR> * ro_point = CubicOrder<ZZ,RR>::make_order(real_poly); 
+    CubicOrder<ZZ, RR> * ro_point = CubicOrder<ZZ,RR>::make_order(real_poly);
 
-    CubicOrder<ZZ, RR> * Odessa = ro_point;
+    CubicOrder<ZZ, RR> * Ord1 = ro_point;
 
-    //cout << "order disc:  "<< Odessa->get_discriminant() << endl;
-    Odessa->roots_swap_position(1,2);//Odessa->roots_swap_position(1,2);
-    std::cout << Odessa->get_root1() << " " << Odessa->get_root2() << " " << Odessa->get_root3() << std::endl;
-    //cout << "conjugate elements" << Odessa->get_conjugate_bases(0,0) << " " << Odessa->get_conjugate_bases(0,1)<< endl;
-    //cout << "conjugate elements" << Odessa->get_conjugate_bases(1,0) << " " << Odessa->get_conjugate_bases(1,1)<< endl;
+    cout << "Disc of Order:  "<< Ord1->get_discriminant() << endl;
+    Ord1->roots_swap_position(1,2);//Ord1->roots_swap_position(1,2);
+    std::cout << Ord1->get_root1() << " " << Ord1->get_root2() << " " << Ord1->get_root3() << std::endl;
+    //cout << "conjugate elements" << Ord1->get_conjugate_bases(0,0) << " " << Ord1->get_conjugate_bases(0,1)<< endl;
+    //cout << "conjugate elements" << Ord1->get_conjugate_bases(1,0) << " " << Ord1->get_conjugate_bases(1,1)<< endl;
     cout << "               " << endl;
-    /*
+
     std::cout << "Calculating Fund. Units: " << std::endl;
-    std::cout << "[" <<Odessa->get_fundamental_unit(0)->get_u() << ", " << Odessa->get_fundamental_unit(0)->get_x() << " " \
-    << Odessa->get_fundamental_unit(0)->get_y() << "] ,  [" << Odessa->get_fundamental_unit(1)->get_u() << " "\
-    << Odessa->get_fundamental_unit(1)->get_x() << " " << Odessa->get_fundamental_unit(1)->get_y() << "]"<<std::endl;
-    std::cout << "Disc " << dis << " : FieldPoly: " << line.substr(pos1, pos2) << "  :  REGULATOR: "<< Odessa->get_regulator() << std::endl;
+    std::cout << "[" <<Ord1->get_fundamental_unit(0)->get_u() << ", " << Ord1->get_fundamental_unit(0)->get_x() << " " \
+    << Ord1->get_fundamental_unit(0)->get_y() << "] ,  [" << Ord1->get_fundamental_unit(1)->get_u() << " "\
+    << Ord1->get_fundamental_unit(1)->get_x() << " " << Ord1->get_fundamental_unit(1)->get_y() << "]"<<std::endl;
+    std::cout << "Disc " << dis << " : FieldPoly: " << line.substr(pos1, pos2) << "  :  REGULATOR: "<< Ord1->get_regulator() << std::endl;
     //std::cout << "Pointer practice1" << (*testptr)[0] << (*testptr)[1] << std::endl;
 
     cout << "                                        " << endl;
     cout << "                                        " << endl;
-    */
+
     num++;
   };
 

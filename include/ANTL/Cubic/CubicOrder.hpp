@@ -1,6 +1,9 @@
 #ifndef ANTL_CUBIC_ORDER_H
 #define ANTL_CUBIC_ORDER_H
 
+#define DEBUG 1
+#define DEBUG2 1
+#define DEBUGVORONOI 1
 /**
  * @file CubicOrder.hpp
  * @author Randy Yee
