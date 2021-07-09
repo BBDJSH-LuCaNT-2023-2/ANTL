@@ -27,7 +27,7 @@ void BSGSVoronoi<Type, PType> :: initialize_giant_baby(CubicOrder<Type, PType> *
 
   std::cout << "giantBound: " << giantBound << " Discriminant: " << ord->get_discriminant() << std::endl;
   babysteps.reserve(conv<size_t>(giantBound)); // makes the size of babysteps about disc^1/4
-  hash_function.set_modulus(to<Type>(giantBound));
+  hash_function.set_modulus(ANTL::to<Type>(giantBound));
   bigFoot.set_order(ord);
   L1.set_order(ord); L2.set_order(ord);
   L1.make_identity(); L2.make_identity();
@@ -277,7 +277,6 @@ std::cout<< "Warning, we haven't implemented this for totally real cubics! This 
         //At this point psi_bar (aka epsilon2) is equal to 1.
         // this should rotate the roots, and recompute the rho_i and conjugates
         ord->roots_swap_position(0,2);
-
 
         // it should be that L1 is already equal to the 0th entry of x_cycle
         // the code below is unnecessary

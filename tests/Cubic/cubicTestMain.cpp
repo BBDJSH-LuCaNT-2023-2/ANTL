@@ -39,7 +39,7 @@ using boost::multiprecision::mpfi_float;
 using std::cout;
 using std::endl;
 NTL_CLIENT
-
+#define DEBUG = 1;
 
 /*
 struct ZZEqual {
@@ -73,7 +73,7 @@ int main(){
   //std::unique_ptr< MultiplyStrategyWilliams<long,double> > pointo;
 
 
-  std::shared_ptr<MultiplyStrategyWilliams<long, double>> ims = std::make_shared<MultiplyStrategyWilliams<long, double>>();
+  //std::shared_ptr<MultiplyStrategyWilliams<long, double>> ims = std::make_shared<MultiplyStrategyWilliams<long, double>>();
 
 
   //mpfi_float mpfi_a = 2;
@@ -84,7 +84,7 @@ int main(){
   //a = 3; b= 5;
   //XGCD(g, r,s,a,b);
   //cout << "XGCD test: "<< g << " = " << a << "*" << r <<  " + " << b << "*" << s << endl;
-  ANTL::QQ<ZZ> rholder(to_ZZ(1),to_ZZ(2));
+  //ANTL::QQ<ZZ> rholder(to_ZZ(1),to_ZZ(2));
 
 /* COMPLEX LONG INT
   polynomial<mpz_int> test_poly{{2,1,1,1}};
@@ -105,13 +105,24 @@ int main(){
 
 
   ZZ ibcf[4];
+  /*
   ibcf[3] = 2;
   ibcf[2] = 3;
   ibcf[1] = 5;
   ibcf[0] = 9;
 
-  polynomial<ZZ> const test_poly{{ibcf[0],ibcf[1],ibcf[2],ibcf[3] }};
+  ibcf[3] = 1;
+  ibcf[2] = 1;
+  ibcf[1] = -3;
+  ibcf[0] = -1;
+*/
+  ibcf[3] = 3;
+  ibcf[2] = 3;
+  ibcf[1] = 3;
+  ibcf[0] = 1;
 
+  polynomial<ZZ> const test_poly{{ibcf[0],ibcf[1],ibcf[2],ibcf[3] }};
+  cout << "test_poly: "  << test_poly << endl;
 
   std::cout << test_poly[3] << "x^3 + " << test_poly[2]<< "x^2 + " << test_poly[1] << "x + " << test_poly[0]<< std::endl;
   CubicOrder<ZZ, RR> * co_point; co_point = CubicOrder<ZZ, RR>::make_order(test_poly);

@@ -128,7 +128,7 @@ int cardano(polynomial<T> const &poly, PT * roots){
   if (poly.degree() != 3){
     return -1;
   }else{
-    QQ<T> p = QQ<T>(poly[1]);
+    QQ<T> p = QQ<T>(poly[1]);                 // set as c
     QQ<T> q = QQ<T>(poly[0]);                 // set as d
     QQ<T> q2;
     QQ<T> p3;
@@ -136,13 +136,14 @@ int cardano(polynomial<T> const &poly, PT * roots){
     PT realtemp1,realtemp2;
     PT disc, disc_root;
     const PT athird(PT(1)/PT(3));
-
+    cout << "cardano Poly1: " << poly << endl;
     // The code below transforms a generic cubic into one of the form x^3 + px+q
+    // based on the writeup from https://brilliant.org/wiki/cardano-method/#_=_
     QQ<T> intermediate = QQ<T>(poly[2]);        // set as b
     sqr(intermediate, intermediate);            // b^2
     mul(temp, T(3), poly[3]);                   // 3a
     div(intermediate, intermediate, temp);      // b^2/3a
-    sub(p, p, intermediate);
+    sub(p, p, intermediate);                    //c - (b^2/3a)
 
 
     mul(temp, T(2), poly[2]);
@@ -164,6 +165,7 @@ int cardano(polynomial<T> const &poly, PT * roots){
       div(q, q, poly[3]);
       div(p, p, poly[3]);
     }
+    cout << "cardano Poly2: " << p << "  " << q << endl;
     // at this point we will be working with the depressed monic cubic
     // x^3 + px + q, whose coefficients are rational numbers
 
@@ -177,7 +179,7 @@ int cardano(polynomial<T> const &poly, PT * roots){
     div(realtemp2, to<PT>(p3.getN()), to<PT>(p3.getD()));                         //real value of (p/3)^3
 
     add(disc, realtemp1, realtemp2);                                              // (q/2)^2 + (p/3)^3
-    //std::cout << "Discrim " << disc << std::endl;
+    std::cout << "cardano Discrim " << disc << std::endl;
 
 
     // make sure that the discriminant is not 0
@@ -243,7 +245,6 @@ int cardano(polynomial<T> const &poly, PT * roots){
       return 1;
     }
     else{
-
       // This is where the complex case is handled
       PT omega_re(-1); div(omega_re, omega_re, to<PT>(2));
       PT omega_im(3);
@@ -253,7 +254,7 @@ int cardano(polynomial<T> const &poly, PT * roots){
                                               // oemga_re + omega_im = w^2
 
       SqrRoot(disc_root, disc);
-
+      cout << to<PT>(q.getD()) <<endl;
       div(realtemp1, to<PT>(q.getN()), to<PT>(q.getD()));
 
       //std::cout << "p " << p.getNumerator()<< "/"<< p.getDenominator() << std::endl;
@@ -270,11 +271,14 @@ int cardano(polynomial<T> const &poly, PT * roots){
         pow(realtemp1,realtemp1, athird);          // v1, one of the solutions
       }
 
-      // to get w1, such that w1 +v1 = root1, we find -p/3v1
-      div(realtemp2, to<PT>(p.getN()), to<PT>(p.getD()) );
-      realtemp2 = -realtemp2;               // this is -p/3
-      div(realtemp2, realtemp2, realtemp1); // -p/3v1         // this is w1
-
+      if( IsZero(p.getN()) ){
+        NTL::clear(realtemp2);
+      }else{
+        // to get w1, such that w1 +v1 = root1, we find -p/3v1
+        div(realtemp2, to<PT>(p.getN()), to<PT>(p.getD()) );
+        realtemp2 = -realtemp2;               // this is -p/3
+        div(realtemp2, realtemp2, realtemp1); // -p/3v1         // this is w1
+      }
 
       add(roots[0], realtemp2, realtemp1);                // this should be x1
 

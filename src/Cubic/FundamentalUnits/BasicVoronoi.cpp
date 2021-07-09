@@ -82,7 +82,6 @@ void BasicVoronoi<Type, PType> :: fundamental_unit_complex(std::vector<CubicElem
 
 template<typename Type, typename PType>
 void BasicVoronoi<Type, PType> :: fundamental_unit_real(std::vector<CubicElement<Type, PType>> &unitvec, CubicOrder<Type, PType> * ord){
-
         // We use this->x_cycle and adj_min_vec to hold the cycle of lattices and corresponding minima
 
     //////////////////////////////////////////////////////////////////////////////
@@ -161,7 +160,9 @@ void BasicVoronoi<Type, PType> :: fundamental_unit_real(std::vector<CubicElement
 
         //At this point psi_bar (aka epsilon2) is equal to 1.
         // this should rotate the roots, and recompute the rho_i and conjugates
+
         ord->roots_swap_position(0,2);
+
         #ifdef DEBUGVORONOI
         std::cout << "after swapping roots" << std::endl;
         std::cout << ord->get_root1() << " " << ord->get_root2() << " " << ord->get_root3() << std::endl;
@@ -181,7 +182,7 @@ void BasicVoronoi<Type, PType> :: fundamental_unit_real(std::vector<CubicElement
 
         // reset the bool for the Z-cycle
         completeCycle = false;
-
+        std::cout << "print 1" << std::endl;
         ////////////////////////////////////////////////////////////////////////////
         //                                                                        //
         //                    Step 5: Voronoi along the Z-axis                    //
@@ -191,9 +192,13 @@ void BasicVoronoi<Type, PType> :: fundamental_unit_real(std::vector<CubicElement
 
             // convert to Voronoi Basis and extract theta_g into adj_min
             L1.make_voronoi_basis();
+            std::cout << "print 2" << std::endl;
+            std::cout << L2.toString() << std::endl;
+            std::cout << adj_minimum.toString() << std::endl;
 
             // Obtain the adjacent ideal/lattice and swap so it is in L1.
             L1.divide_adjacent(L2, adj_minimum);
+            std::cout << "print 3" << std::endl;
             std::swap(L1,L2);
 
             // update psi_bar (epsilon2)
