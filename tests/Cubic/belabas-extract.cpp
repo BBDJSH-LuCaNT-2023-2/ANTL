@@ -40,8 +40,6 @@ using NTL::RR;
 using boost::math::tools::polynomial;
 using boost::math::ntl::atan;
 
-#define DEBUG =1
-#define DEBUGVORONOI 
 
 int main(int argc,  char *argv[]){
 
@@ -56,11 +54,17 @@ int main(int argc,  char *argv[]){
     exit(1);   // call system to stop
   }
 
+  ofstream outfile;
+  outfile.open("bin/regulators.txt");
+
   NTL::ZZ dis, a,b,c,d;
-  char waste; int num = 0;
+  char waste;
+  int num = 0;
+  int start = 0;
+  int end = 100;
 
-  while (std::getline(inFile, line) && (num < 100)){
-
+  while (std::getline(inFile, line) && (num < end )){
+    if(num >= start){
     std::istringstream iss(line);
     iss >> dis;
     pos1 = line.find(delimiter1);
@@ -85,7 +89,7 @@ int main(int argc,  char *argv[]){
     CubicOrder<ZZ, RR> * Ord1 = ro_point;
 
     cout << "Disc of Order:  "<< Ord1->get_discriminant() << endl;
-    Ord1->roots_swap_position(1,2);//Ord1->roots_swap_position(1,2);
+    //Ord1->roots_swap_position(1,2);//Ord1->roots_swap_position(1,2);
     std::cout << Ord1->get_root1() << " " << Ord1->get_root2() << " " << Ord1->get_root3() << std::endl;
     //cout << "conjugate elements" << Ord1->get_conjugate_bases(0,0) << " " << Ord1->get_conjugate_bases(0,1)<< endl;
     //cout << "conjugate elements" << Ord1->get_conjugate_bases(1,0) << " " << Ord1->get_conjugate_bases(1,1)<< endl;
@@ -95,16 +99,16 @@ int main(int argc,  char *argv[]){
     std::cout << "[" <<Ord1->get_fundamental_unit(0)->get_u() << ", " << Ord1->get_fundamental_unit(0)->get_x() << " " \
     << Ord1->get_fundamental_unit(0)->get_y() << "] ,  [" << Ord1->get_fundamental_unit(1)->get_u() << " "\
     << Ord1->get_fundamental_unit(1)->get_x() << " " << Ord1->get_fundamental_unit(1)->get_y() << "]"<<std::endl;
-    std::cout << "Disc " << dis << " : FieldPoly: " << line.substr(pos1, pos2) << "  :  REGULATOR: "<< Ord1->get_regulator() << std::endl;
+    outfile<< "Disc " << dis << " : FieldPoly: " << line.substr(pos1, pos2) << "  :  REGULATOR: "<< Ord1->get_regulator() << std::endl;
     //std::cout << "Pointer practice1" << (*testptr)[0] << (*testptr)[1] << std::endl;
 
     cout << "                                        " << endl;
     cout << "                                        " << endl;
-
+    }
     num++;
   };
 
-
+  outfile.close();
   inFile.close();
   return 0;
 }

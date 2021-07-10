@@ -117,13 +117,17 @@ int main(){
   ibcf[1] = 5;
   ibcf[0] = 9;
 
+  ibcf[3] = 1;
+  ibcf[2] = 4;
+  ibcf[1] = -2;
+  ibcf[0] = -2;
 
 */
+  ibcf[3] = 1;
+  ibcf[2] = 4;
+  ibcf[1] = -1;
+  ibcf[0] = -2;
 
-ibcf[3] = 1;
-ibcf[2] = 4;
-ibcf[1] = -2;
-ibcf[0] = -2;
 
   polynomial<ZZ> const test_poly{{ibcf[0],ibcf[1],ibcf[2],ibcf[3] }};
   cout << "test_poly: "  << test_poly << endl;
@@ -131,7 +135,7 @@ ibcf[0] = -2;
   std::cout << test_poly[3] << "x^3 + " << test_poly[2]<< "x^2 + " << test_poly[1] << "x + " << test_poly[0]<< std::endl;
   CubicOrder<ZZ, RR> * co_point; co_point = CubicOrder<ZZ, RR>::make_order(test_poly);
   CubicOrder<ZZ, RR> * Odie = co_point;
-  Odie->roots_swap_position(0,1);Odie->roots_swap_position(1,2);
+  //Odie->roots_swap_position(0,1);Odie->roots_swap_position(1,2);
   ZZ E,G;
   Odie->standard_form(E,G);
   polynomial<ZZ> const standard_poly{{G,E,ZZ(0),ZZ(1) }};
@@ -150,7 +154,8 @@ ibcf[0] = -2;
   std::cout << test_poly[3] << "*x^3 + " << test_poly[2]<< "*x^2 + " << test_poly[1] << "*x + " << test_poly[0]<< std::endl;
 
   std::cout << "Fundamental Units " << std::endl;
-  std::cout << Odie->get_fundamental_unit(0)->get_u() << " " << Odie->get_fundamental_unit(0)->get_x() << " " << Odie->get_fundamental_unit(0)->get_y() << " Reg: "<< NTL::log(val) << std::endl;
+  std::cout << Odie->get_fundamental_unit(0)->get_u() << " " << Odie->get_fundamental_unit(0)->get_x() << " " << Odie->get_fundamental_unit(0)->get_y() \
+  << " Reg: "<< Odie->get_regulator() << std::endl;
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////

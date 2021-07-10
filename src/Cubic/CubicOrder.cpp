@@ -164,7 +164,6 @@ void CubicOrder<Type, PType> :: set_integral_basis(){
 
   // rho1 = a*delta
   NTL::mul(this->rho1, this->root_list[0], to<PType>(this->defining_IBCF[3]) );
-  cout << "rho and ibcf3 "<< this->rho1 << "   " <<this->defining_IBCF[3]<<  endl;
   // rho2 = a*delta + b
   add(this->rho2, this->rho1, to<PType>(this->defining_IBCF[2]) );
   // rho2 = a*delta*delta + b*delta

@@ -92,6 +92,8 @@ void BasicVoronoi<Type, PType> :: fundamental_unit_real(std::vector<CubicElement
           adj_minimum.set_order(ord); adj_minimum.assign(Type(1));
           epsilon2.set_order(ord); epsilon2.assign(Type(1));
 
+          std::cout << epsilon2.get_order()->get_discriminant() << std::endl;
+          std::cout << "Initial eps2 = " << epsilon2.toString() << std::endl;
           completeCycle = false;              // flag to indicate whether one full lattice
                                               // period has been traversed.
 
@@ -152,6 +154,7 @@ void BasicVoronoi<Type, PType> :: fundamental_unit_real(std::vector<CubicElement
         std::cout << "-----------------------------------------------------" << std::endl;
         std::cout << "-------------------XCycle complete-------------------" << std::endl;
         std::cout << "-----------------------------------------------------" << std::endl;
+        cycleSize1 = 0;
         ////////////////////////////////////////////////////////////////////////////
         //                                                                        //
         //                    Step 4: Initialize epsilon2 and rotate axis          //
@@ -182,28 +185,33 @@ void BasicVoronoi<Type, PType> :: fundamental_unit_real(std::vector<CubicElement
 
         // reset the bool for the Z-cycle
         completeCycle = false;
-        std::cout << "print 1" << std::endl;
         ////////////////////////////////////////////////////////////////////////////
         //                                                                        //
         //                    Step 5: Voronoi along the Z-axis                    //
         //                                                                        //
         ////////////////////////////////////////////////////////////////////////////
         while (!completeCycle){
+            std::cout << "-----------------------------------------------------" << std::endl;
+            std::cout << "----------------ZCycle iteration: " << cycleSize1 << "------------------" << std::endl;
+            ++cycleSize1;
 
             // convert to Voronoi Basis and extract theta_g into adj_min
             L1.make_voronoi_basis();
-            std::cout << "print 2" << std::endl;
-            std::cout << L2.toString() << std::endl;
-            std::cout << adj_minimum.toString() << std::endl;
+            std::cout << "After make_voronoi: " << std::endl;
+            std::cout << L1.toString() << std::endl;
 
             // Obtain the adjacent ideal/lattice and swap so it is in L1.
             L1.divide_adjacent(L2, adj_minimum);
-            std::cout << "print 3" << std::endl;
+            std::cout << "After dividing adjacent_min: " << std::endl;
+            std::cout << L2.toString() << std::endl;
             std::swap(L1,L2);
 
+            std::cout << "eps2 = " << epsilon2.toString() << std::endl;
+            std::cout << "adj_min = " << adj_minimum.toString() << std::endl;
             // update psi_bar (epsilon2)
             ::mul(epsilon2, epsilon2, adj_minimum);
 
+            std::cout << "new eps2 = " << epsilon2.toString() << std::endl;
             // compare with the lattices of x_cycle
             for (int i = 0; i < this->x_cycle.size(); i++){
                 std::cout << "Comparing with stored lattice: " << i << " ..." << std::endl;
@@ -212,6 +220,7 @@ void BasicVoronoi<Type, PType> :: fundamental_unit_real(std::vector<CubicElement
 
                 // Once we've found a repeat lattice, we cave computed epsilon2
                 if (completeCycle){
+                    std::cout << "eps1 = " << epsilon1.toString() << std::endl;
                     //std::cout << "epsilon2 " << epsilon2.get_u() << " "<<epsilon2.get_x() << " "<< epsilon2.get_y() << std::endl;
 
                     // Using the cycle size, we compute epsilon1 as the product of all the elements of the vector adj_minima_vec
@@ -221,7 +230,9 @@ void BasicVoronoi<Type, PType> :: fundamental_unit_real(std::vector<CubicElement
                         if (j ==i){
                             //std::cout << "Intermediate theta: " << epsilon1.get_u() << " "<<epsilon1.get_x() << " "<< epsilon1.get_y() << std::endl;
                             epsilon1.inverse(adj_minimum);            //adj_minimum  = Inverse(epsilon1);
+                            std::cout << "theta " << adj_minimum.toString() << std::endl;
                             ::mul(epsilon2, epsilon2, adj_minimum);     //MatrixMultiplication(epsilon2, adj_minimum );
+                            std::cout << "epsilon2 " << epsilon2.toString() << std::endl;
                         }
                         ::mul(epsilon1, epsilon1, adj_minima_vec[j]);
                     }

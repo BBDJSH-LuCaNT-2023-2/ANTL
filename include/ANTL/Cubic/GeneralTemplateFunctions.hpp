@@ -166,7 +166,7 @@ int cardano(polynomial<T> const &poly, PT * roots){
     }
     // at this point we will be working with the depressed monic cubic
     // x^3 + px + q, whose coefficients are rational numbers
-
+    std::cout << "Depressed form: p,q " << p << "  " << q << endl;
     div(q, q, T(2));                         // obtain q/2
     div(p, p, T(3));                         // obtain p/3
 
@@ -251,54 +251,71 @@ int cardano(polynomial<T> const &poly, PT * roots){
                                               // oemga_re + omega_im = w^2
 
       SqrRoot(disc_root, disc);
-      cout << to<PT>(q.getD()) <<endl;
       div(realtemp1, to<PT>(q.getN()), to<PT>(q.getD()));
 
-      //std::cout << "p " << p.getNumerator()<< "/"<< p.getDenominator() << std::endl;
-      //std::cout << "q " << q.getNumerator()<< "/"<< q.getDenominator() << std::endl;
+      std::cout << "p " << p.getNumerator()<< "/"<< p.getDenominator() << std::endl;
+      std::cout << "q " << q.getNumerator()<< "/"<< q.getDenominator() << std::endl;
       realtemp1 = -realtemp1;      // -q/2
 
-      add(realtemp1, realtemp1, disc_root); // -q/2 + sqrt(disc)
 
-      if (realtemp1 < DOUBLE_TOL){
-        realtemp1 = -realtemp1;
-        pow(realtemp1,realtemp1, athird);
-        realtemp1 = -realtemp1;
-      }else{
-        pow(realtemp1,realtemp1, athird);          // v1, one of the solutions
-      }
-
+      // special case when p = 0
+      // see the description from brilliant.org for reference
       if( IsZero(p.getN()) ){
-        NTL::clear(realtemp2);
+        mul(realtemp1, realtemp1, PT(2));
+        std::cout << "realtemp1 " << realtemp1 << std::endl;
+        if (realtemp1 < DOUBLE_TOL){
+          realtemp1 = -realtemp1;
+          pow(realtemp1,realtemp1, athird);
+          realtemp1 = -realtemp1;
+        }else{
+          pow(realtemp1,realtemp1, athird);                   // S
+        }
+        roots[0] = realtemp1;
+        mul(roots[1], realtemp1, omega_re);                   //re(S, omega)
+
+        mul(roots[2], realtemp1, omega_im);                   // im(S, omega)
       }else{
+        add(realtemp1, realtemp1, disc_root); // -q/2 + sqrt(disc)
+        if (realtemp1 < DOUBLE_TOL){
+          realtemp1 = -realtemp1;
+          pow(realtemp1,realtemp1, athird);
+          realtemp1 = -realtemp1;
+        }else{
+          pow(realtemp1,realtemp1, athird);          // v1, one of the solutions
+        }
         // to get w1, such that w1 +v1 = root1, we find -p/3v1
         div(realtemp2, to<PT>(p.getN()), to<PT>(p.getD()) );
         realtemp2 = -realtemp2;               // this is -p/3
         div(realtemp2, realtemp2, realtemp1); // -p/3v1         // this is w1
+
+
+        add(roots[0], realtemp2, realtemp1);                // this should be x1
+
+        //std::cout << "root0 " << roots[0] << std::endl;
+
+        mul(roots[1], realtemp1, omega_re);                   //re(v1, omega)
+
+        mul(roots[2], realtemp1, omega_im);                   // im(v1, omega)
+
+        mul(realtemp1, realtemp2, omega_re);                  // re(w1, omega^2)
+
+        add(roots[1], realtemp1, roots[1]);
+
+        omega_im = -omega_im;
+        mul(realtemp1, omega_im, realtemp2);
+        add(roots[2], realtemp1, roots[2]);
       }
-
-      add(roots[0], realtemp2, realtemp1);                // this should be x1
-
-      //std::cout << "root0 " << roots[0] << std::endl;
-
-      mul(roots[1], realtemp1, omega_re);                   //re(v1, omega)
-
-      mul(roots[2], realtemp1, omega_im);                   // im(v1, omega)
-
-      mul(realtemp1, realtemp2, omega_re);                  // re(w1, omega^2)
-
-      add(roots[1], realtemp1, roots[1]);
-
-      omega_im = -omega_im;
-      mul(realtemp1, omega_im, realtemp2);
-      add(roots[2], realtemp1, roots[2]);
-
 
       // shift back to the original roots
       div(realtemp1, to<PT>(poly[2]), PT(3));
       div(realtemp1, realtemp1, to<PT>(poly[3]));
       sub(roots[0], roots[0] , realtemp1);
       sub(roots[1], roots[1] , realtemp1);
+
+      std::cout << "Cardano roots: " << std::endl;
+      std::cout << roots[0] <<std::endl;
+      std::cout << roots[1] <<std::endl;
+      std::cout << roots[2] <<std::endl;
 
       return 2;
     }
