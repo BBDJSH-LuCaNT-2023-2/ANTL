@@ -359,6 +359,184 @@ void eval_cubic_mod_p(Type & result, const Type & evaluand, const Type &a, const
 
 
 
+
+
+
+// based on code  obtained from  http://www.cplusplus.com/forum/general/85177/
+template<typename PT>
+PT myAtan(PT x, long n, PT& r_err )
+{
+	PT a, sum, tempvar, temp_pi;
+  a = 0.0;// 1st term
+	sum = 0.0;
+
+  ComputePi(temp_pi);
+	// special cases
+  abs(tempvar, x-1.0);
+	if( tempvar < to<PT>(DOUBLE_TOL) ) return (temp_pi/4.0);
+  abs(tempvar, x+1.0);
+	if( tempvar < to<PT>(DOUBLE_TOL) ) return (-temp_pi/4.0);
+
+	if(n > 0)
+	{
+	    if( (x < -1.0) || (x > 1.0) )
+	    {
+	        // constant term
+	        if( x > 1.0 )
+                sum = temp_pi/2.0;
+            else
+                sum = -temp_pi/2.0;
+            // initial value of a
+            a = -1.0/x;
+            for(int j=1; j<=n; j++)
+            {
+                sum += a;
+                a *= -1.0*(2.0*j-1)/((2.0*j+1)*x*x);// next term from last
+            }
+	    }
+	    else// -1 < x < 1
+	    {
+	        // constant term
+	        sum = 0.0;
+	        // initial value of a
+            a = x;
+            for(long j=1; j<=n; j++)
+            {
+                sum += a;
+                a *= -1.0*(2.0*j-1)*x*x/(2.0*j+1);// next term from last
+            }
+	    }
+		r_err = a;// max. error = 1st term not taken for alternating series
+	}
+
+	return sum;
+}// end of mySine()
+
+long getPrecision(const double & x){return 64;}
+long getPrecision(const RR & x){return RR::precision();}
+
+
+// finds atan(y/x) in the range -PI to +PI
+template<typename PT>
+PT myAtan2(PT y, PT x, int n, PT& r_err )
+{
+    PT temp_pi,u;
+    ComputePi(temp_pi);
+    u = myAtan( y/x, n, r_err );
+    if( x < 0.0 )// 2nd, 3rd quadrant
+    {
+        if( u > 0.0 )// will go to 3rd quadrant
+            u -= temp_pi;
+        else
+            u += temp_pi;
+    }
+    return u;
+}
+
+RR atan2(RR y, RR x){
+    RR temp_pi, u, temp;
+    ComputePi(temp_pi);
+
+    u = myAtan( y/x, getPrecision(y), temp );
+    if( x < 0.0 )// 2nd, 3rd quadrant
+    {
+        if( u > 0.0 )// will go to 3rd quadrant
+            u -= temp_pi;
+        else
+            u += temp_pi;
+    }
+    return u;
+}
+
+/**
+* @brief Computes the value of the Dedekind Eta function. This one seems slightly off from
+the Magma version so I don't know if its rounding or something
+* @param[out] result is the value of the dedekind eta function at z
+* @param[in] z a complex number on which to evalue eta(z)
+* @param[in] N the number of terms to compute using the method of Sokal[2002]
+* @param[in] result is a complex number to store the final value
+*/
+template<typename PT>
+void DedekindEtaSokal(complex<PT>& result, const complex<PT>& z, const long & N){
+    PT real_zero, real_one;
+    real_zero = 0;
+    real_one = 1;
+
+    if (N == 0){
+      result = complex<PT>(real_zero, real_zero);
+    }
+    if (N == 1){
+      result =  complex<PT>(real_one, real_zero);
+    }
+
+    complex<PT> eta = complex<PT>(real_one, real_zero);
+    complex<PT> imaginary = complex<PT>(real_zero, real_one);
+
+    ComputePi(real_one);
+    mul(real_one, real_one, 2);
+
+    result = exp(real_one*imaginary*z/to<PT>(24.0)); // e^{2 pi i z}
+
+    complex<PT> x_value = exp(real_one*imaginary*z);
+    complex<PT> x_power = x_value;
+    complex<PT> term = complex<PT>(real_one, real_zero);
+
+    for (int j = 1; j < N; j++){
+      term = -term;
+      term *= x_power;
+      term /= (real_one-x_power);
+
+      x_power *= x_value;           // on the jth iteration, updates x_value^j -> x_value^{j+1}
+
+      eta += term;
+    }//end for
+    result *= eta;
+}
+
+/**
+* @brief Computes the value of the Dedekind Eta function. Uses the same formula
+* described in Magma
+* @param[out] result is the value of the dedekind eta function at z
+* @param[in] z a complex number on which to evalue eta(z)
+* @param[in] N the number of terms to compute
+* @param[in] result is a complex number to store the final value
+*/
+template<typename PT>
+void DedekindEta(complex<PT>& result, const complex<PT>& z, const long & N){
+    PT real_zero, real_one, alt;
+    real_zero = 0;
+    real_one = 1;
+
+    if (N == 0){
+      result = complex<PT>(real_zero, real_zero);
+    }
+    if (N == 1){
+      result =  complex<PT>(real_one, real_zero);
+    }
+
+    complex<PT> eta = complex<PT>(real_one, real_zero);
+    complex<PT> imaginary = complex<PT>(real_zero, real_one);
+
+    ComputePi(real_one);
+    mul(real_one, real_one, 2);
+
+    result = exp(real_one*imaginary*z/to<PT>(24.0)); // e^{2 pi i z}
+
+    complex<PT> term = complex<PT>(real_one, real_zero);
+    alt = -1;
+    for (long j = 1; j < N; j++){
+      term = alt;
+      term *= exp(real_one*imaginary*z*to<PT>(j*(3*j-1)/2) )+exp(real_one*imaginary*z*to<PT>(j*(3*j+1)/2) );
+      mul(alt, alt, -1);
+      eta += term;
+    }//end for
+
+
+    result *= eta;
+
+
+}
+
 // our hash function! Used in the hash table construction in BSGSVoronoi
 namespace std {
 
@@ -428,7 +606,6 @@ inline std::string zToString(const long &z) {
     buffer << z;
     return buffer.str();
 }
-
 
 
 

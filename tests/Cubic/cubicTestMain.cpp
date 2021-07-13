@@ -28,6 +28,7 @@
 
 #include <boost/math/tools/polynomial.hpp>
 #include <boost/multiprecision/gmp.hpp>
+#include <complex>
 using namespace NTL;
 using namespace ANTL;
 using NTL::ZZ;
@@ -124,9 +125,9 @@ int main(){
 
 */
   ibcf[3] = 1;
-  ibcf[2] = 4;
-  ibcf[1] = -1;
-  ibcf[0] = -2;
+  ibcf[2] = -1;
+  ibcf[1] = 0;
+  ibcf[0] = 8;
 
 
   polynomial<ZZ> const test_poly{{ibcf[0],ibcf[1],ibcf[2],ibcf[3] }};
@@ -156,6 +157,10 @@ int main(){
   std::cout << "Fundamental Units " << std::endl;
   std::cout << Odie->get_fundamental_unit(0)->get_u() << " " << Odie->get_fundamental_unit(0)->get_x() << " " << Odie->get_fundamental_unit(0)->get_y() \
   << " Reg: "<< Odie->get_regulator() << std::endl;
+
+
+
+
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
@@ -268,17 +273,6 @@ polynomial<ZZ> const real_poly{{real_ibcf[0],real_ibcf[1],real_ibcf[2],real_ibcf
   cout << "        denom :"<< Ideal1.get_gen1()->get_denom() << endl;
 */
 
-
-  //std::complex<double> z1 = (1.0l, 1.0);
-  //std::complex<NTL::RR> z2 = (RR(1.0), RR(1.0));
-  //cout << dedekindEta(z1, 0) << endl;
-  //cout << dedekindEta(z1, 1) << endl;
-  //cout << dedekindEta(z1, 2) << endl;
-  //std::complex<RR> z3 = z2 + RR(1);
-
-
-  //std::hash<ZZ> h1;
-  //h1(ZZ(100));
 /*
   ZZHash h2(ZZ(100));
   std::unordered_multimap<ZZ, ZZ, ZZHash, ZZEqual> testmap{100, h2, ZZEqual()};

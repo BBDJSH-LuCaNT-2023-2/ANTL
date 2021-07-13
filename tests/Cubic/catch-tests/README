@@ -1,0 +1,12 @@
+Using Belabas's program from the cubic-1.3 folder, one can generate index form 
+polynomials for cubic fields. 
+
+It's simple enough for C++ to read this output, but pari can't. 
+The file belabas-to-pari.cpp is a program that will translate the output 
+of Belabas's program to a list of polynomials that pari can easily read.
+
+These are put in a file called "pari-formatted-polynomials.txt"
+
+It is then straightforward to write gp program to process these polynomials and output the desired data.
+
+
