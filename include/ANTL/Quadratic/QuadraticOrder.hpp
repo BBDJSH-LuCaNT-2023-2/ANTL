@@ -10,26 +10,28 @@
 #include <vector>
 #include <NTL/ZZ.h>
 
+#include <ANTL/Interface/OrderInvariants.hpp>
+
 // arithmetic classes
 //#include <ANTL/Quadratic/QuadraticIdealBase.hpp>
 
 #include <ANTL/Quadratic/Reduce/qo_reduce.hpp>
 #include <ANTL/Quadratic/Reduce/qo_reduce_plain_imag.hpp>
 #include <ANTL/Quadratic/Reduce/qo_reduce_plain_real.hpp>
-#include <ANTL/Quadratic/Reduce/qo_reduce_fast.hpp>
+// #include <ANTL/Quadratic/Reduce/qo_reduce_fast.hpp>
 
 #include <ANTL/Quadratic/Multiply/qo_multiply.hpp>
-#include <ANTL/Quadratic/Multiply/qo_multiply_plain.hpp>
-#include <ANTL/Quadratic/Multiply/qo_nucomp.hpp>
+// #include <ANTL/Quadratic/Multiply/qo_multiply_plain.hpp>
+// #include <ANTL/Quadratic/Multiply/qo_nucomp.hpp>
 
 #include <ANTL/Quadratic/Square/qo_square.hpp>
-#include <ANTL/Quadratic/Square/qo_square_plain.hpp>
-#include <ANTL/Quadratic/Square/qo_nudupl.hpp>
+// #include <ANTL/Quadratic/Square/qo_square_plain.hpp>
+// #include <ANTL/Quadratic/Square/qo_nudupl.hpp>
 
 #include <ANTL/Quadratic/Cube/qo_cube.hpp>
-#include <ANTL/Quadratic/Cube/qo_cube_plain.hpp>
-#include <ANTL/Quadratic/Cube/qo_nucube.hpp>
-#include <ANTL/Quadratic/Cube/qo_cube_mulsqr.hpp>
+// #include <ANTL/Quadratic/Cube/qo_cube_plain.hpp>
+// #include <ANTL/Quadratic/Cube/qo_nucube.hpp>
+// #include <ANTL/Quadratic/Cube/qo_cube_mulsqr.hpp>
 
 /*
 // class group classes
@@ -108,8 +110,7 @@ namespace ANTL {
    *       zz_pEX --- hyperelliptic function field over Fq (char <> 2, p < 2^64)
    *       GF2EX --- hyperelliptic function field (char = 2)
    */
-  template < class T >
-  class QuadraticOrder
+  template < class T > class QuadraticOrder : public IClassGroup, public IClassNumber, public IUnitGroup<T>, public IRegulator<T>
   {
   private:
 
@@ -128,23 +129,23 @@ namespace ANTL {
     // reduction
     qo_reduce<T> *red_best;
     //qo_reduce_plain<T> red_plain;     //Note that qo_reduce_plain is not a class, but there are separate classes for real and imag  -RL
-    qo_reduce_fast<T> red_fast;
+    // qo_reduce_fast<T> red_fast;
 
     // multiplication
     qo_multiply<T> *mul_best;
-    qo_multiply_plain<T> mul_plain;
-    qo_nucomp<T> mul_nucomp;
+    // qo_multiply_plain<T> mul_plain;
+    // qo_nucomp<T> mul_nucomp;
 
     // squaring
     qo_square<T> *sqr_best;
-    qo_square_plain<T> sqr_plain;
-    qo_nudupl<T> sqr_nudupl;
+    // qo_square_plain<T> sqr_plain;
+    // qo_nudupl<T> sqr_nudupl;
 
     // cubing
     qo_cube<T> *cube_best;
-    qo_cube_plain<T> cube_plain;
-    qo_nucube<T> cube_nucube;
-    qo_cube_mulsqr<T> cube_mulsqr;
+    // qo_cube_plain<T> cube_plain;
+    // qo_nucube<T> cube_nucube;
+    // qo_cube_mulsqr<T> cube_mulsqr;
 
 
 
@@ -256,6 +257,30 @@ namespace ANTL {
     bool IsImaginary () const;
     bool IsUnusual () const;
     bool IsReal () const;
+
+  //Inherited virtual methods
+
+
+  virtual std::vector<NTL::ZZ> class_group() {
+	std::vector<NTL::ZZ> classGroup = {ZZ(1), ZZ(2)};
+	return classGroup;
+  }
+
+  virtual NTL::ZZ class_number() {
+	ZZ classNumber = ZZ(0);
+	return classNumber;
+  }
+
+  virtual std::vector<T> unit_group() {
+	T object1, object2;
+	std::vector<T> unitGroup = {object1, object2};
+	return unitGroup;
+  }
+
+  virtual T regulator() {
+	T regulator;
+	return regulator;
+  }
 
     /*
     bool is_R_conditional () const
@@ -500,6 +525,8 @@ class QuadraticOrder<long> : public QuadraticOrder<long, long, double, double> {
 };
 */
 
+  template <>      QuadraticOrder<ZZ>::QuadraticOrder (const ZZ & D);
+  template <>      QuadraticOrder<long>::QuadraticOrder (const long & D);
 
   template <> bool QuadraticOrder<GF2EX>::IsEqual (const QuadraticOrder<GF2EX> &QO) const;
   template <> bool QuadraticOrder<GF2EX>::IsImaginary () const;

@@ -4,6 +4,8 @@
  * @remarks This file is to be included from QuadraticOrder.hpp only.
  */
 
+#include <iostream>
+
 namespace ANTL
 {
   //
@@ -11,8 +13,7 @@ namespace ANTL
   //     - sets resets all the class members which are vectors
   //
 
-  template < class T > 
-  QuadraticOrder < T>::QuadraticOrder (const T & D)
+  template < class T > QuadraticOrder <T>::QuadraticOrder (const T & D)
   {
     // test whether D is a valid discriminant
     if (deg (D) >! 3) {

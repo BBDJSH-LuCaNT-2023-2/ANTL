@@ -10,7 +10,7 @@
 //
 
 template < class T > 
-QuadraticIdealBase<T>::QuadraticIdealBase (QuadraticOrder<T> & inQO)
+QuadraticIdealBase<T>::QuadraticIdealBase (ANTL::QuadraticOrder<T> & inQO)
 {
   clear (a);
   clear (b);
@@ -193,7 +193,7 @@ mul(QuadraticIdealBase<T> &C, const QuadraticIdealBase<T> &A, const QuadraticIde
 
 template < class T >
 void 
-mul(QuadraticIdealBase<T> &C, QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A, const QuadraticIdealBase<T> &B) 
+mul(QuadraticIdealBase<T> &C, ANTL::QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A, const QuadraticIdealBase<T> &B)
 {
   C.QO->mul(C,gamma,A,B);
 }
@@ -207,7 +207,7 @@ void sqr(QuadraticIdealBase<T> &C, const QuadraticIdealBase<T> &A)
 }
 
 template < class T >
-void sqr(QuadraticIdealBase<T> &C, QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A) 
+void sqr(QuadraticIdealBase<T> &C, ANTL::QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A)
 {
   C.QO->sqr(C,gamma,A);
 }
@@ -221,7 +221,7 @@ void cube(QuadraticIdealBase<T> &C, const QuadraticIdealBase<T> &A)
 }
 
 template < class T >
-void cube(QuadraticIdealBase<T> &C, QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A) 
+void cube(QuadraticIdealBase<T> &C, ANTL::QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A)
 {
   C.QO->cube(C,gamma,A);
 }
@@ -237,7 +237,7 @@ QuadraticIdealBase<T>::reduce()
 
 template < class T >
 void
-QuadraticIdealBase<T>::reduce(QuadraticNumber<T> & gamma)
+QuadraticIdealBase<T>::reduce(ANTL::QuadraticNumber<T> & gamma)
 {
   QO->reduce(*this,gamma);
 }
