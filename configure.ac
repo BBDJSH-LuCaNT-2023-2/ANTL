@@ -26,8 +26,6 @@ AC_CHECK_LIB([mpfi], [main])
 AC_CHECK_LIB([mpfr], [main])
 # FIXME: Replace `main' with a function in `-lntl':
 AC_CHECK_LIB([ntl], [main])
-# FIXME: Replace `main' with a function in `-lpari':
-AC_CHECK_LIB([pari], [main])
 
 # Checks for header files.
 AC_CHECK_HEADERS([stdlib.h unistd.h])

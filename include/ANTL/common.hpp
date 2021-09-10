@@ -101,7 +101,6 @@ namespace NTL {
 
   inline void SqrRoot(double &x, const double &a) { x = std::sqrt(a); }
   inline void ComputePi(double & p){ p = 3.141592653589793;}
-  
   // procedural arithmetic operations for standard types, to increase compatibility with NTL
   inline void add ( long &C, const long &A, const long &B )     { C = A + B; }
   inline void add ( float &C, const float &A, const float &B )     { C = A + B; }
