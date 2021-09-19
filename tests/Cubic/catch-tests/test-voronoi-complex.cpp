@@ -30,7 +30,7 @@ const double DOUBLE_TOLERANCE = 0.000001;
 
 
 TEST_CASE("Eta Function for doubles"){
-  std::string myfile = "data/data-complex-regulator.txt";
+  std::string myfile = "TestInput/test-input-complex-regulator.txt";
   ZZ a,b,c,d, disc;
   RR test_regulator, temp;
   SECTION("equal tests"){

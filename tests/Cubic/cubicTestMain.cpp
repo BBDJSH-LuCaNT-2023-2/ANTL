@@ -124,6 +124,7 @@ int main(){
   ibcf[0] = -2;
 
 */
+/*
   ibcf[3] = 1;
   ibcf[2] = -1;
   ibcf[1] = 0;
@@ -158,7 +159,7 @@ int main(){
   std::cout << Odie->get_fundamental_unit(0)->get_u() << " " << Odie->get_fundamental_unit(0)->get_x() << " " << Odie->get_fundamental_unit(0)->get_y() \
   << " Reg: "<< Odie->get_regulator() << std::endl;
 
-
+*/
 
 
 
@@ -166,12 +167,12 @@ int main(){
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 // Real Order Testing
-/*
+//(-3,-3-,4,1)
 ZZ real_ibcf[4];
 real_ibcf[3] = 1;
-real_ibcf[2] = 4;
+real_ibcf[2] = 1;
 real_ibcf[1] = -3;
-real_ibcf[0] = -3;
+real_ibcf[0] = -1;
 
 polynomial<ZZ> const real_poly{{real_ibcf[0],real_ibcf[1],real_ibcf[2],real_ibcf[3] }};
 
@@ -191,7 +192,7 @@ polynomial<ZZ> const real_poly{{real_ibcf[0],real_ibcf[1],real_ibcf[2],real_ibcf
   //std::cout << "Pointer practice1" << (*testptr)[0] << (*testptr)[1] << std::endl;
   //polynomial<long> * pptr = CNF.get_defining_polynomial();
   //cout << (pptr)->degree()<< endl;
-*/
+
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
