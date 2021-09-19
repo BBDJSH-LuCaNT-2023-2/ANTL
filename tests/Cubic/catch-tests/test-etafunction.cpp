@@ -54,7 +54,7 @@ TEST_CASE("Eta Function for RR"){
   std::complex<RR> result;
   RR abdif;
   std::complex<RR> im(to<RR>(0.0),to<RR>(1.0));
-  std::string myfile = "etavalues.txt";
+  std::string myfile = "TestInput/test-eta-input.txt";
   SECTION("equal tests"){
 
     REQUIRE(im.imag() > 0 );

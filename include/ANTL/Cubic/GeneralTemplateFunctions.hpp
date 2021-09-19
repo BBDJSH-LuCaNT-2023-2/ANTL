@@ -413,8 +413,8 @@ PT myAtan(PT argument, long terms)
 	return sum;
 }// end of mySine()
 
-long getPrecision(const double & x){return 64;}
-long getPrecision(const RR & x){return RR::precision();}
+//long getPrecision(const double & x){return 64;}
+//long getPrecision(const RR & x){return RR::precision();}
 
 
 /**
