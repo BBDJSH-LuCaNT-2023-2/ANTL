@@ -205,7 +205,6 @@ int cardano(polynomial<T> const &poly, PT * roots){
       add(realtemp2, realtemp2, disc);                       // Delta^2 + (q/2)^2
 
 
-      //
       pow(realtemp2, realtemp2, asixth);
       mul (realtemp2, realtemp2, PT(2));                    // complex radius of roots
 
@@ -216,13 +215,12 @@ int cardano(polynomial<T> const &poly, PT * roots){
         arg = -arg;
         realtemp2 = -realtemp2;
       }
-      //arg = atan(arg).value();
+
       atan_val(arg, arg);
       div(arg, arg, PT(3));
-      //std::cout<< disc_root << " " << realtemp1 << std::endl;
 
       roots[0] = cos(arg);
-      //std::cout << roots[0] << " " << realtemp2<< std::endl;
+
       mul(roots[0], roots[0], realtemp2);
 
       add(arg, arg, argshift);
@@ -291,8 +289,6 @@ int cardano(polynomial<T> const &poly, PT * roots){
 
         add(roots[0], realtemp2, realtemp1);                // this should be x1
 
-        //std::cout << "root0 " << roots[0] << std::endl;
-
         mul(roots[1], realtemp1, omega_re);                   //re(v1, omega)
 
         mul(roots[2], realtemp1, omega_im);                   // im(v1, omega)
@@ -319,7 +315,7 @@ int cardano(polynomial<T> const &poly, PT * roots){
 
       return 2;
     }
-  } // close the else
+  }
 
 
 }
@@ -364,12 +360,12 @@ void eval_cubic_mod_p(Type & result, const Type & evaluand, const Type &a, const
 
 // based on code  obtained from  http://www.cplusplus.com/forum/general/85177/
 // see also http://www.cplusplus.com/reference/cmath/atan/
-// Only designed to work with reals and doubles
+// Only designed to work with RR and doubles
 template<typename PT>
 PT myAtan(PT argument, long terms)
 {
 	PT individual_term, sum, tempvar, temp_pi;
-  individual_term = 0.0;// 1st term
+  individual_term = 0.0;
 	sum = 0.0;
 
   ComputePi(temp_pi);
@@ -383,35 +379,32 @@ PT myAtan(PT argument, long terms)
 	{
 	    if( (argument < -1.0) || (argument > 1.0) )
 	    {
-	        // constant term
 	        if( argument > 1.0 )
                 sum = temp_pi/2.0;
             else
                 sum = -temp_pi/2.0;
-            // initial value of a
+
             individual_term = -1.0/argument;
             for(int j=1; j<=terms; j++)
             {
                 sum += individual_term;
-                individual_term *= -1.0*(2.0*j-1)/((2.0*j+1)*argument*argument);// next term from last
+                individual_term *= -1.0*(2.0*j-1)/((2.0*j+1)*argument*argument);
             }
 	    }
 	    else// -1 < x < 1
 	    {
-	        // constant term
 	        sum = 0.0;
-	        // initial value of a
             individual_term = argument;
             for(long j=1; j<=terms; j++)
             {
                 sum += individual_term;
-                individual_term *= -1.0*(2.0*j-1)*argument*argument/(2.0*j+1);// next term from last
+                individual_term *= -1.0*(2.0*j-1)*argument*argument/(2.0*j+1);
             }
 	    }
 	}
 
 	return sum;
-}// end of mySine()
+}
 
 //long getPrecision(const double & x){return 64;}
 //long getPrecision(const RR & x){return RR::precision();}
