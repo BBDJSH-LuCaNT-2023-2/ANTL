@@ -128,7 +128,7 @@ int cardano(polynomial<T> const &poly, PT * roots){
   if (poly.degree() != 3){
     return -1;
   }else{
-    QQ<T> p = QQ<T>(poly[1]);
+    QQ<T> p = QQ<T>(poly[1]);                 // set as c
     QQ<T> q = QQ<T>(poly[0]);                 // set as d
     QQ<T> q2;
     QQ<T> p3;
@@ -136,13 +136,13 @@ int cardano(polynomial<T> const &poly, PT * roots){
     PT realtemp1,realtemp2;
     PT disc, disc_root;
     const PT athird(PT(1)/PT(3));
-
     // The code below transforms a generic cubic into one of the form x^3 + px+q
+    // based on the writeup from https://brilliant.org/wiki/cardano-method/#_=_
     QQ<T> intermediate = QQ<T>(poly[2]);        // set as b
     sqr(intermediate, intermediate);            // b^2
     mul(temp, T(3), poly[3]);                   // 3a
     div(intermediate, intermediate, temp);      // b^2/3a
-    sub(p, p, intermediate);
+    sub(p, p, intermediate);                    //c - (b^2/3a)
 
 
     mul(temp, T(2), poly[2]);
@@ -166,7 +166,7 @@ int cardano(polynomial<T> const &poly, PT * roots){
     }
     // at this point we will be working with the depressed monic cubic
     // x^3 + px + q, whose coefficients are rational numbers
-
+    std::cout << "Depressed form: p,q " << p << "  " << q << endl;
     div(q, q, T(2));                         // obtain q/2
     div(p, p, T(3));                         // obtain p/3
 
@@ -177,7 +177,6 @@ int cardano(polynomial<T> const &poly, PT * roots){
     div(realtemp2, to<PT>(p3.getN()), to<PT>(p3.getD()));                         //real value of (p/3)^3
 
     add(disc, realtemp1, realtemp2);                                              // (q/2)^2 + (p/3)^3
-    //std::cout << "Discrim " << disc << std::endl;
 
 
     // make sure that the discriminant is not 0
@@ -206,7 +205,6 @@ int cardano(polynomial<T> const &poly, PT * roots){
       add(realtemp2, realtemp2, disc);                       // Delta^2 + (q/2)^2
 
 
-      //
       pow(realtemp2, realtemp2, asixth);
       mul (realtemp2, realtemp2, PT(2));                    // complex radius of roots
 
@@ -217,13 +215,12 @@ int cardano(polynomial<T> const &poly, PT * roots){
         arg = -arg;
         realtemp2 = -realtemp2;
       }
-      //arg = atan(arg).value();
+
       atan_val(arg, arg);
       div(arg, arg, PT(3));
-      //std::cout<< disc_root << " " << realtemp1 << std::endl;
 
       roots[0] = cos(arg);
-      //std::cout << roots[0] << " " << realtemp2<< std::endl;
+
       mul(roots[0], roots[0], realtemp2);
 
       add(arg, arg, argshift);
@@ -243,7 +240,6 @@ int cardano(polynomial<T> const &poly, PT * roots){
       return 1;
     }
     else{
-
       // This is where the complex case is handled
       PT omega_re(-1); div(omega_re, omega_re, to<PT>(2));
       PT omega_im(3);
@@ -253,45 +249,58 @@ int cardano(polynomial<T> const &poly, PT * roots){
                                               // oemga_re + omega_im = w^2
 
       SqrRoot(disc_root, disc);
-
       div(realtemp1, to<PT>(q.getN()), to<PT>(q.getD()));
 
-      //std::cout << "p " << p.getNumerator()<< "/"<< p.getDenominator() << std::endl;
-      //std::cout << "q " << q.getNumerator()<< "/"<< q.getDenominator() << std::endl;
+      std::cout << "p " << p.getNumerator()<< "/"<< p.getDenominator() << std::endl;
+      std::cout << "q " << q.getNumerator()<< "/"<< q.getDenominator() << std::endl;
       realtemp1 = -realtemp1;      // -q/2
 
-      add(realtemp1, realtemp1, disc_root); // -q/2 + sqrt(disc)
 
-      if (realtemp1 < DOUBLE_TOL){
-        realtemp1 = -realtemp1;
-        pow(realtemp1,realtemp1, athird);
-        realtemp1 = -realtemp1;
+      // special case when p = 0
+      // see the description from brilliant.org for reference
+      if( IsZero(p.getN()) ){
+        mul(realtemp1, realtemp1, PT(2));
+        std::cout << "realtemp1 " << realtemp1 << std::endl;
+        if (realtemp1 < DOUBLE_TOL){
+          realtemp1 = -realtemp1;
+          pow(realtemp1,realtemp1, athird);
+          realtemp1 = -realtemp1;
+        }else{
+          pow(realtemp1,realtemp1, athird);                   // S
+        }
+        roots[0] = realtemp1;
+        mul(roots[1], realtemp1, omega_re);                   //re(S, omega)
+
+        mul(roots[2], realtemp1, omega_im);                   // im(S, omega)
       }else{
-        pow(realtemp1,realtemp1, athird);          // v1, one of the solutions
+        add(realtemp1, realtemp1, disc_root); // -q/2 + sqrt(disc)
+        if (realtemp1 < DOUBLE_TOL){
+          realtemp1 = -realtemp1;
+          pow(realtemp1,realtemp1, athird);
+          realtemp1 = -realtemp1;
+        }else{
+          pow(realtemp1,realtemp1, athird);          // v1, one of the solutions
+        }
+        // to get w1, such that w1 +v1 = root1, we find -p/3v1
+        div(realtemp2, to<PT>(p.getN()), to<PT>(p.getD()) );
+        realtemp2 = -realtemp2;               // this is -p/3
+        div(realtemp2, realtemp2, realtemp1); // -p/3v1         // this is w1
+
+
+        add(roots[0], realtemp2, realtemp1);                // this should be x1
+
+        mul(roots[1], realtemp1, omega_re);                   //re(v1, omega)
+
+        mul(roots[2], realtemp1, omega_im);                   // im(v1, omega)
+
+        mul(realtemp1, realtemp2, omega_re);                  // re(w1, omega^2)
+
+        add(roots[1], realtemp1, roots[1]);
+
+        omega_im = -omega_im;
+        mul(realtemp1, omega_im, realtemp2);
+        add(roots[2], realtemp1, roots[2]);
       }
-
-      // to get w1, such that w1 +v1 = root1, we find -p/3v1
-      div(realtemp2, to<PT>(p.getN()), to<PT>(p.getD()) );
-      realtemp2 = -realtemp2;               // this is -p/3
-      div(realtemp2, realtemp2, realtemp1); // -p/3v1         // this is w1
-
-
-      add(roots[0], realtemp2, realtemp1);                // this should be x1
-
-      //std::cout << "root0 " << roots[0] << std::endl;
-
-      mul(roots[1], realtemp1, omega_re);                   //re(v1, omega)
-
-      mul(roots[2], realtemp1, omega_im);                   // im(v1, omega)
-
-      mul(realtemp1, realtemp2, omega_re);                  // re(w1, omega^2)
-
-      add(roots[1], realtemp1, roots[1]);
-
-      omega_im = -omega_im;
-      mul(realtemp1, omega_im, realtemp2);
-      add(roots[2], realtemp1, roots[2]);
-
 
       // shift back to the original roots
       div(realtemp1, to<PT>(poly[2]), PT(3));
@@ -299,9 +308,14 @@ int cardano(polynomial<T> const &poly, PT * roots){
       sub(roots[0], roots[0] , realtemp1);
       sub(roots[1], roots[1] , realtemp1);
 
+      std::cout << "Cardano roots: " << std::endl;
+      std::cout << roots[0] <<std::endl;
+      std::cout << roots[1] <<std::endl;
+      std::cout << roots[2] <<std::endl;
+
       return 2;
     }
-  } // close the else
+  }
 
 
 }
@@ -340,6 +354,150 @@ void eval_cubic_mod_p(Type & result, const Type & evaluand, const Type &a, const
 }
 
 
+
+
+
+
+// based on code  obtained from  http://www.cplusplus.com/forum/general/85177/
+// see also http://www.cplusplus.com/reference/cmath/atan/
+// Only designed to work with RR and doubles
+template<typename PT>
+PT myAtan(PT argument, long terms)
+{
+	PT individual_term, sum, tempvar, temp_pi;
+  individual_term = 0.0;
+	sum = 0.0;
+
+  ComputePi(temp_pi);
+	// special cases
+  abs(tempvar, argument-1.0);
+	if( tempvar < to<PT>(DOUBLE_TOL) ) return (temp_pi/4.0);
+  abs(tempvar, argument+1.0);
+	if( tempvar < to<PT>(DOUBLE_TOL) ) return (-temp_pi/4.0);
+
+	if(terms > 0)
+	{
+	    if( (argument < -1.0) || (argument > 1.0) )
+	    {
+	        if( argument > 1.0 )
+                sum = temp_pi/2.0;
+            else
+                sum = -temp_pi/2.0;
+
+            individual_term = -1.0/argument;
+            for(int j=1; j<=terms; j++)
+            {
+                sum += individual_term;
+                individual_term *= -1.0*(2.0*j-1)/((2.0*j+1)*argument*argument);
+            }
+	    }
+	    else// -1 < x < 1
+	    {
+	        sum = 0.0;
+            individual_term = argument;
+            for(long j=1; j<=terms; j++)
+            {
+                sum += individual_term;
+                individual_term *= -1.0*(2.0*j-1)*argument*argument/(2.0*j+1);
+            }
+	    }
+	}
+
+	return sum;
+}
+
+//long getPrecision(const double & x){return 64;}
+//long getPrecision(const RR & x){return RR::precision();}
+
+
+/**
+* @brief Computes the value of the Dedekind Eta function. This one seems slightly off from
+the Magma version
+* @param[out] result is the value of the dedekind eta function at z
+* @param[in] z a complex number on which to evalue eta(z)
+* @param[in] N the number of terms to compute using the method of Sokal[2002]
+* @param[in] result is a complex number to store the final value
+*/
+template<typename PT>
+void DedekindEtaSokal(complex<PT>& result, const complex<PT>& z, const long & N){
+    PT real_zero, real_num;
+    real_zero = 0;
+    real_num = 1;
+    if (N < 0){result = complex<PT>(real_zero, real_zero);}
+    if (N == 0){
+      result = complex<PT>(real_zero, real_zero);
+    }
+    if (N == 1){
+      result =  complex<PT>(real_num, real_zero);
+    }
+
+    complex<PT> eta = complex<PT>(real_num, real_zero);
+    complex<PT> imaginary = complex<PT>(real_zero, real_num);
+
+    ComputePi(real_num);
+    mul(real_num, real_num, 2);
+
+    result = exp(real_num*imaginary*z/to<PT>(24.0)); // e^{2 pi i z}
+
+    complex<PT> x_value = exp(real_num*imaginary*z);
+    complex<PT> x_power = x_value;
+    complex<PT> term = complex<PT>(real_num, real_zero);
+
+    for (int j = 1; j < N; j++){
+      term = -term;
+      term *= x_power;
+      term /= (real_num-x_power);
+
+      x_power *= x_value;           // on the jth iteration, updates x_value^j -> x_value^{j+1}
+
+      eta += term;
+    }
+    result *= eta;
+}
+
+/**
+* @brief Computes the value of the Dedekind Eta function. Uses the same formula
+* described in Magma
+* @param[out] result is the value of the dedekind eta function at z
+* @param[in] z a complex number on which to evalue eta(z)
+* @param[in] N the number of terms to compute
+* @param[in] result is a complex number to store the final value
+*/
+template<typename PT>
+void DedekindEta(complex<PT>& result, const complex<PT>& z, const long & N){
+    PT real_zero, real_num, alt;
+    real_zero = 0;
+    real_num = 1;
+
+    if (N == 0){
+      result = complex<PT>(real_zero, real_zero);
+    }
+    if (N == 1){
+      result =  complex<PT>(real_num, real_zero);
+    }
+
+    complex<PT> eta = complex<PT>(real_num, real_zero);
+    complex<PT> imaginary = complex<PT>(real_zero, real_num);
+
+    ComputePi(real_num);
+    mul(real_num, real_num, 2);
+
+    result = exp(real_num*imaginary*z/to<PT>(24.0)); // e^{2 pi i z}
+
+    complex<PT> term = complex<PT>(real_num, real_zero);
+    alt = -1;
+    for (long j = 1; j < N; j++){
+      term = alt;
+      term *= exp(real_num*imaginary*z*to<PT>(j*(3*j-1)/2) )+exp(real_num*imaginary*z*to<PT>(j*(3*j+1)/2) );
+      mul(alt, alt, -1);
+      eta += term;
+    }
+
+
+    result *= eta;
+
+
+}
 
 // our hash function! Used in the hash table construction in BSGSVoronoi
 namespace std {
@@ -410,7 +568,6 @@ inline std::string zToString(const long &z) {
     buffer << z;
     return buffer.str();
 }
-
 
 
 

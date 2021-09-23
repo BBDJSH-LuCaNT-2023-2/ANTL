@@ -46,15 +46,19 @@ TEST_CASE("Double: Cubic Order accessor functions"){
     boost::math::tools::polynomial<long> poly4{{-1,-3,1,1}};
     CubicOrderReal<long, double> ord4(poly4);
 
+    REQUIRE(ord4.is_real());
     REQUIRE(ord4.get_root1() - (-2.170086) < DOUBLE_TOLERANCE);
-    ord4.roots_swap_position(1,2);
-    REQUIRE(ord4.get_root1() - (-0.311108) < DOUBLE_TOLERANCE);
-    ord4.roots_swap_position(1,3);
-    REQUIRE(ord4.get_root1() - (1.48119430) < DOUBLE_TOLERANCE);
+    ord4.roots_swap_position(0,1);
+    REQUIRE(ord4.get_root1() - (1.481194304) < DOUBLE_TOLERANCE);
+    ord4.roots_swap_position(0,2);
+    REQUIRE(ord4.get_root1() - (-0.3111078) < DOUBLE_TOLERANCE);
+    //ord4.set_unit_strategy("BSGS");
+    REQUIRE(ord4.get_fundamental_unit(0)->get_u() != 0);
 
   }
 
   SECTION("Ideal Multiplying"){
+    REQUIRE(Rufio.get_fundamental_unit(0)->get_u() != 0);
 
   }
 }
