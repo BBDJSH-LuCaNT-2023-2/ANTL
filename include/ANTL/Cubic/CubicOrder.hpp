@@ -1,6 +1,8 @@
 #ifndef ANTL_CUBIC_ORDER_H
 #define ANTL_CUBIC_ORDER_H
 
+//#define DEBUG 1
+//#define DEBUGVORONOI 1
 /**
  * @file CubicOrder.hpp
  * @author Randy Yee
@@ -23,9 +25,9 @@
 #include "CubicOrderComplex.hpp"
 #include "Multiplication/IdealMultiplicationStrategy.hpp"
 #include "Multiplication/MultiplyStrategyWilliams.hpp"
-#include "fund_unit/FundUnitStrategy.hpp"
-#include "fund_unit/BasicVoronoi.hpp"
-#include "fund_unit/BSGSVoronoi.hpp"
+#include "FundamentalUnits/FundUnitStrategy.hpp"
+#include "FundamentalUnits/BasicVoronoi.hpp"
+#include "FundamentalUnits/BSGSVoronoi.hpp"
 #include "VoronoiMethods.hpp"
 #include "VoronoiComplex.hpp"
 #include "VoronoiReal.hpp"

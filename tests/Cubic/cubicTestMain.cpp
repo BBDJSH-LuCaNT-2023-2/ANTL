@@ -28,6 +28,7 @@
 
 #include <boost/math/tools/polynomial.hpp>
 #include <boost/multiprecision/gmp.hpp>
+#include <complex>
 using namespace NTL;
 using namespace ANTL;
 using NTL::ZZ;
@@ -73,7 +74,7 @@ int main(){
   //std::unique_ptr< MultiplyStrategyWilliams<long,double> > pointo;
 
 
-  std::shared_ptr<MultiplyStrategyWilliams<long, double>> ims = std::make_shared<MultiplyStrategyWilliams<long, double>>();
+  //std::shared_ptr<MultiplyStrategyWilliams<long, double>> ims = std::make_shared<MultiplyStrategyWilliams<long, double>>();
 
 
   //mpfi_float mpfi_a = 2;
@@ -84,7 +85,7 @@ int main(){
   //a = 3; b= 5;
   //XGCD(g, r,s,a,b);
   //cout << "XGCD test: "<< g << " = " << a << "*" << r <<  " + " << b << "*" << s << endl;
-  ANTL::QQ<ZZ> rholder(to_ZZ(1),to_ZZ(2));
+  //ANTL::QQ<ZZ> rholder(to_ZZ(1),to_ZZ(2));
 
 /* COMPLEX LONG INT
   polynomial<mpz_int> test_poly{{2,1,1,1}};
@@ -98,54 +99,22 @@ int main(){
   cout << "----------------------------------------" << endl;
 
   double val;
-  Odie->get_fund_unit(0)->get_real_value(val);
+  Odie->get_FundamentalUnits(0)->get_real_value(val);
   std::cout << "Fundamental Units " << std::endl;
-  std::cout << Odie->get_fund_unit(0)->get_u() << " " << Odie->get_fund_unit(0)->get_x() << " " << Odie->get_fund_unit(0)->get_y() << " Reg: "<< ANTL::log(val) << std::endl;
+  std::cout << Odie->get_FundamentalUnits(0)->get_u() << " " << Odie->get_FundamentalUnits(0)->get_x() << " " << Odie->get_FundamentalUnits(0)->get_y() << " Reg: "<< ANTL::log(val) << std::endl;
 */
 
-
-//  long ibcf[4];
-//  ibcf[3] = 2;
-//  ibcf[2] = 3;
-//  ibcf[1] = 5;
-//  ibcf[0] = 9;
-//  std::vector<long> coeffs {2,3,5,9};
-//  polynomial<ZZ> const test_poly{coeffs};
-//
-//  std::cout << test_poly[3] << "x^3 + " << test_poly[2]<< "x^2 + " << test_poly[1] << "x + " << test_poly[0]<< std::endl;
-//  CubicOrder<ZZ, RR> * co_point; co_point = CubicOrder<ZZ, RR>::make_order(test_poly);
-//  CubicOrder<ZZ, RR> * Odie = co_point;
-
-//  ZZ E,G;
-//  Odie->standard_form(E,G);
-//  polynomial<ZZ> const standard_poly{{G,E,ZZ(0),ZZ(1) }};
-//  cout << E << " " << G << endl;
-//  cout << calc_discriminant(standard_poly) << endl;
-//
-//  Odie->set_unit_strategy("BSGS");
-//  cout << "rho1:  " << Odie->get_rho1() << "     rho2:  " << Odie->get_rho2() << endl;
-//  cout << " root1 " << Odie->get_root1() << " root2 " << Odie->get_root2() << " root3 " << Odie->get_root3() << std::endl;
-//  cout << "order disc:  "<< Odie->get_discriminant() << endl;
-//  cout << "----------------------------------------" << endl;
-//
-//  RR val;
-//  Odie->get_fundamental_unit(0)->get_real_value(val);
-//
-//  std::cout << test_poly[3] << "x^3 + " << test_poly[2]<< "x^2 + " << test_poly[1] << "x + " << test_poly[0]<< std::endl;
-//
-//  std::cout << "Fundamental Units " << std::endl;
-//  std::cout << Odie->get_fundamental_unit(0)->get_u() << " " << Odie->get_fundamental_unit(0)->get_x() << " " << Odie->get_fundamental_unit(0)->get_y() << " Reg: "<< NTL::log(val) << std::endl;
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 // Real Order Testing
-/*
+//(-3,-3-,4,1)
 ZZ real_ibcf[4];
 real_ibcf[3] = 1;
-real_ibcf[2] = 4;
+real_ibcf[2] = 1;
 real_ibcf[1] = -3;
-real_ibcf[0] = -3;
+real_ibcf[0] = -1;
 
 polynomial<ZZ> const real_poly{{real_ibcf[0],real_ibcf[1],real_ibcf[2],real_ibcf[3] }};
 
@@ -161,10 +130,11 @@ polynomial<ZZ> const real_poly{{real_ibcf[0],real_ibcf[1],real_ibcf[2],real_ibcf
     std::cout << "Fundamental Units: " << std::endl;
   std::cout << Odessa->get_fundamental_unit(0)->get_u() << " " << Odessa->get_fundamental_unit(0)->get_x() << " " << Odessa->get_fundamental_unit(0)->get_y() << std::endl;
   std::cout << Odessa->get_fundamental_unit(1)->get_u() << " " << Odessa->get_fundamental_unit(1)->get_x() << " " << Odessa->get_fundamental_unit(1)->get_y() << std::endl;
+  std::cout << Odessa->get_regulator() << endl;
   //std::cout << "Pointer practice1" << (*testptr)[0] << (*testptr)[1] << std::endl;
   //polynomial<long> * pptr = CNF.get_defining_polynomial();
   //cout << (pptr)->degree()<< endl;
-*/
+
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
@@ -220,7 +190,7 @@ polynomial<ZZ> const real_poly{{real_ibcf[0],real_ibcf[1],real_ibcf[2],real_ibcf
   //Ideal1.make_prepared();
   //Ideal1.make_voronoi_basis();
 
-  //std::cout << Odie->get_fund_unit()->get_u() << " " << Odie->get_fund_unit()->get_x() << " " << Odie->get_fund_unit()->get_y() << std::endl;
+  //std::cout << Odie->get_FundamentalUnits()->get_u() << " " << Odie->get_FundamentalUnits()->get_x() << " " << Odie->get_FundamentalUnits()->get_y() << std::endl;
 
 
 /*
@@ -246,17 +216,6 @@ polynomial<ZZ> const real_poly{{real_ibcf[0],real_ibcf[1],real_ibcf[2],real_ibcf
   cout << "        denom :"<< Ideal1.get_gen1()->get_denom() << endl;
 */
 
-
-  //std::complex<double> z1 = (1.0l, 1.0);
-  //std::complex<NTL::RR> z2 = (RR(1.0), RR(1.0));
-  //cout << dedekindEta(z1, 0) << endl;
-  //cout << dedekindEta(z1, 1) << endl;
-  //cout << dedekindEta(z1, 2) << endl;
-  //std::complex<RR> z3 = z2 + RR(1);
-
-
-  //std::hash<ZZ> h1;
-  //h1(ZZ(100));
 /*
   ZZHash h2(ZZ(100));
   std::unordered_multimap<ZZ, ZZ, ZZHash, ZZEqual> testmap{100, h2, ZZEqual()};

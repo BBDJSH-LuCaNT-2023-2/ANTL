@@ -9,8 +9,8 @@
 #ifndef ANTL_QUADRATIC_QUADRATIC_IDEAL_H
 #define ANTL_QUADRATIC_QUADRATIC_IDEAL_H
 
-#include <ANTL/quadratic/quadratic_form.hpp>
-#include <ANTL/QQ.hpp>
+#include <ANTL/Quadratic/QuadraticForm.hpp>
+#include <ANTL/Arithmetic/QQ.hpp>
 
 namespace ANTL
 {
@@ -214,7 +214,7 @@ namespace ANTL
 } // ANTL
 
 // Unspecialized template definitions.
-#include "../../../src/quadratic/quadratic_ideal_impl.hpp"
+//#include "../../../src/quadratic/quadratic_ideal_impl.hpp"
 
 #endif // guard
 

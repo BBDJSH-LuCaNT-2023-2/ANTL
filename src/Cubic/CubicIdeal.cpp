@@ -397,7 +397,9 @@ void CubicIdeal<Type, PType> :: divide_adjacent(CubicIdeal<Type, PType> &B, Cubi
 
 
     // set this->gen to be theta_h
+    this->gen.set_order(this->my_order);
     this->gen.assign(this->get_coeff(0,2),this->get_coeff(1,2),this->get_coeff(2,2), this->get_coeff(0,0));
+
     #ifdef DEBUG
     std::cout << "adjacent_ideal: The adjacent min is: "<< std::endl;
     std::cout << adj_min.get_u()  << " " << adj_min.get_x() << " " << adj_min.get_y() << std::endl;

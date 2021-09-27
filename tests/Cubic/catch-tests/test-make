@@ -4,18 +4,24 @@ LFLAGS= -lntl -lgmp -lmpfi -lmpfr -lm -lpthread
 IFLAGS= -I/c/include -I/home/cs-gb2khv2/ANTL/include
 SRC_FILES := $(wildcard ../../src/Cubic/*.cpp)
 OBJ_FILES := $(notdir $(SRC_FILES:.cpp=.o))
-
-main: testingMain.o bin/test-cnf bin/test-element bin/test-order
+CORE_OBJ_FILES := ../generalFunctions.o ../CubicOrder.o ../CubicElement.o ../CubicIdeal.o
+MUL_OBJ_FILES := ../MultiplyStrategyWilliams.o ../IdealMultiplicationStrategy.o
+main: testingMain.o test-cnf test-element test-order test-eta
 
 test-cnf: test-cnf.cpp testingMain.o ../catch.hpp ../../../include/ANTL/Cubic/GeneralTemplateFunctions.hpp
-	$(CC) $(CFLAGS) -o 010-TestCase $(IFLAGS) testingMain.o test-cnf.cpp -L/c/lib $(LFLAGS)
+	$(CC) $(CFLAGS) -o bin/010-TestCase $(IFLAGS) testingMain.o test-cnf.cpp -L/c/lib $(LFLAGS)
 
 test-element: ../catch.hpp test-element.cpp
-	$(CC) $(CFLAGS) -o 020-TestCase test-element.cpp $(IFLAGS) testingMain.o ../generalFunctions.o ../CubicOrder.o ../CubicElement.o -L/c/lib $(LFLAGS)
+	$(CC) $(CFLAGS) -o bin/020-TestCase test-element.cpp $(IFLAGS) testingMain.o ../generalFunctions.o ../CubicOrder.o ../CubicElement.o -L/c/lib $(LFLAGS)
 
 test-order: ../catch.hpp test-order.cpp testingMain.o ../generalFunctions.o ../CubicOrder.o
-	$(CC) $(CFLAGS) -o 030-TestCase $(IFLAGS) testingMain.o ../CubicOrder.o test-order.cpp -L/c/lib $(LFLAGS)
+	$(CC) $(CFLAGS) -o bin/030-TestCase $(IFLAGS) testingMain.o ../CubicOrder.o test-order.cpp -L/c/lib $(LFLAGS)
 
+test-eta: ../catch.hpp test-etafunction.cpp testingMain.o ../../../include/ANTL/Cubic/GeneralTemplateFunctions.hpp
+	$(CC) $(CFLAGS) -o bin/040-TestCase $(IFLAGS) testingMain.o test-etafunction.cpp -L/c/lib $(LFLAGS)
+
+test-complex-voronoi: ../catch.hpp test-voronoi-complex.cpp testingMain.o ../../../include/ANTL/Cubic/GeneralTemplateFunctions.hpp
+	$(CC) $(CFLAGS) -o bin/050-TestCase $(IFLAGS) testingMain.o test-voronoi-complex.cpp $(CORE_OBJ_FILES) -L/c/lib $(LFLAGS)
 
 testingMain.o: testingMain.cpp
 	$(CC) $(CFLAGS) -Wall -c testingMain.cpp $(IFLAGS) -L/c/lib $(LFLAGS)

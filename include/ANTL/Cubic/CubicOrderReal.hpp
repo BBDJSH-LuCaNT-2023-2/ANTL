@@ -38,8 +38,8 @@ void roots_swap_position(int p1, int p2){
     std::swap(this->root_list[p1], this->root_list[p2]);
     std::swap(this->rho1, this->conjugate_bases[p2-1][0]);
     std::swap(this->rho2, this->conjugate_bases[p2-1][1]);
-    //this->set_integral_basis();
-    //compute_conjugate_elements();
+    this->set_integral_basis();
+    compute_conjugate_elements();
   }
 
 };

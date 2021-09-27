@@ -5,7 +5,7 @@
 #include <map>
 #include <iostream>
 #include <NTL/ZZ.h>
-#include "../UnitTests.hpp"
+#include "../catch.hpp"
 #include "ANTL/IndexCalculus/IndCalc/QuadIndCalc.hpp"
 #include "ANTL/Interface/OrderInvariants.hpp"
 #include "ANTL/Constants.hpp"
