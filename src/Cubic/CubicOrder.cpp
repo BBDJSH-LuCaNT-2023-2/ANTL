@@ -22,7 +22,10 @@ CubicOrder<Type, PType> :: CubicOrder(polynomial<Type> const &poly, std::string 
     else{
       std::cout << "Invalid multiplication strategy provided" << std::endl;
     }
+    //the problem ?
     defining_IBCF = poly;
+// if it is the poly then this should work
+//    defining_IBCF(poly);
 
     // this initiate the fund unit strategy, we only have one for now, but the if statement will
     // allow us to switch strategies possibly or just use the setter method

@@ -35,18 +35,18 @@ std::map<std::string, std::string> get_params(std::string max_num_tests_str) {
 
 /*** removing this test temporarily so I can investigate a segfault in it ***/
 /*** TESTS ***/
-//TEST_CASE("Parameters are read from the params map", "[capturing]") {
-//  IOrder order = IOrder();
-//  long expected_num_relations = 2;
-//  long expected_size_fb = 3;
-//  long expected_bound_fb = 5;
-//  long expected_max_num_tests = 7;
-//  QuadIndCalc<UT::unit_t , UT::reg_t> ind_calc1 =
-//    QuadIndCalc<UT::unit_t, UT::reg_t>::create(order, get_params("7"));
-//  REQUIRE(ind_calc1.get_relation_generator()->get_size_fb() == expected_size_fb);
-//  REQUIRE(ind_calc1.get_relation_generator()->get_max_num_tests() == expected_max_num_tests);
-//  REQUIRE(ind_calc1.get_factor_base()->get_size_fb() == expected_size_fb);
-//  REQUIRE(ind_calc1.get_factor_base()->get_bound() == expected_bound_fb);
-//}
+TEST_CASE("Parameters are read from the params map", "[capturing]") {
+  IOrder order = IOrder();
+  long expected_num_relations = 2;
+  long expected_size_fb = 3;
+  long expected_bound_fb = 5;
+  long expected_max_num_tests = 7;
+  QuadIndCalc<UT::unit_t , UT::reg_t> ind_calc1 =
+    QuadIndCalc<UT::unit_t, UT::reg_t>::create(order, get_params("7"));
+  REQUIRE(ind_calc1.get_relation_generator()->get_size_fb() == expected_size_fb);
+  REQUIRE(ind_calc1.get_relation_generator()->get_max_num_tests() == expected_max_num_tests);
+  REQUIRE(ind_calc1.get_factor_base()->get_size_fb() == expected_size_fb);
+  REQUIRE(ind_calc1.get_factor_base()->get_bound() == expected_bound_fb);
+}
 
 #endif

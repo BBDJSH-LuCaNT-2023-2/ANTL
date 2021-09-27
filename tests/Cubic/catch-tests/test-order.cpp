@@ -53,6 +53,7 @@ TEST_CASE("Double: Cubic Order accessor functions"){
     REQUIRE(ord4.get_root1() - (1.48119430) < DOUBLE_TOLERANCE);
 
   }
+  REQUIRE(Rufio.get_discriminant() == -379);
 
   SECTION("Ideal Multiplying"){
 

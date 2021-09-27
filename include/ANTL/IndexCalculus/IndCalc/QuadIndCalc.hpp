@@ -48,6 +48,10 @@ public:
   virtual RelationGenerator* get_relation_generator() override {return relation_generator.get();};
   virtual FactorBase* get_factor_base() override {return factor_base.get();};
 
+  ~QuadIndCalc() {
+    std::cout << "QuadIndCalc dest" << std::endl;
+  }
+
 protected:
   void compute_fac_base() override;
   void compute_relations() override;

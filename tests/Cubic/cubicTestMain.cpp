@@ -104,38 +104,38 @@ int main(){
 */
 
 
-  ZZ ibcf[4];
-  ibcf[3] = 2;
-  ibcf[2] = 3;
-  ibcf[1] = 5;
-  ibcf[0] = 9;
+//  long ibcf[4];
+//  ibcf[3] = 2;
+//  ibcf[2] = 3;
+//  ibcf[1] = 5;
+//  ibcf[0] = 9;
+//  std::vector<long> coeffs {2,3,5,9};
+//  polynomial<ZZ> const test_poly{coeffs};
+//
+//  std::cout << test_poly[3] << "x^3 + " << test_poly[2]<< "x^2 + " << test_poly[1] << "x + " << test_poly[0]<< std::endl;
+//  CubicOrder<ZZ, RR> * co_point; co_point = CubicOrder<ZZ, RR>::make_order(test_poly);
+//  CubicOrder<ZZ, RR> * Odie = co_point;
 
-  polynomial<ZZ> const test_poly{{ibcf[0],ibcf[1],ibcf[2],ibcf[3] }};
+//  ZZ E,G;
+//  Odie->standard_form(E,G);
+//  polynomial<ZZ> const standard_poly{{G,E,ZZ(0),ZZ(1) }};
+//  cout << E << " " << G << endl;
+//  cout << calc_discriminant(standard_poly) << endl;
+//
+//  Odie->set_unit_strategy("BSGS");
+//  cout << "rho1:  " << Odie->get_rho1() << "     rho2:  " << Odie->get_rho2() << endl;
+//  cout << " root1 " << Odie->get_root1() << " root2 " << Odie->get_root2() << " root3 " << Odie->get_root3() << std::endl;
+//  cout << "order disc:  "<< Odie->get_discriminant() << endl;
+//  cout << "----------------------------------------" << endl;
+//
+//  RR val;
+//  Odie->get_fundamental_unit(0)->get_real_value(val);
+//
+//  std::cout << test_poly[3] << "x^3 + " << test_poly[2]<< "x^2 + " << test_poly[1] << "x + " << test_poly[0]<< std::endl;
+//
+//  std::cout << "Fundamental Units " << std::endl;
+//  std::cout << Odie->get_fundamental_unit(0)->get_u() << " " << Odie->get_fundamental_unit(0)->get_x() << " " << Odie->get_fundamental_unit(0)->get_y() << " Reg: "<< NTL::log(val) << std::endl;
 
-
-  std::cout << test_poly[3] << "x^3 + " << test_poly[2]<< "x^2 + " << test_poly[1] << "x + " << test_poly[0]<< std::endl;
-  CubicOrder<ZZ, RR> * co_point; co_point = CubicOrder<ZZ, RR>::make_order(test_poly);
-  CubicOrder<ZZ, RR> * Odie = co_point;
-
-  ZZ E,G;
-  Odie->standard_form(E,G);
-  polynomial<ZZ> const standard_poly{{G,E,ZZ(0),ZZ(1) }};
-  cout << E << " " << G << endl;
-  cout << calc_discriminant(standard_poly) << endl;
-
-  Odie->set_unit_strategy("BSGS");
-  cout << "rho1:  " << Odie->get_rho1() << "     rho2:  " << Odie->get_rho2() << endl;
-  cout << " root1 " << Odie->get_root1() << " root2 " << Odie->get_root2() << " root3 " << Odie->get_root3() << std::endl;
-  cout << "order disc:  "<< Odie->get_discriminant() << endl;
-  cout << "----------------------------------------" << endl;
-
-  RR val;
-  Odie->get_fundamental_unit(0)->get_real_value(val);
-
-  std::cout << test_poly[3] << "x^3 + " << test_poly[2]<< "x^2 + " << test_poly[1] << "x + " << test_poly[0]<< std::endl;
-
-  std::cout << "Fundamental Units " << std::endl;
-  std::cout << Odie->get_fundamental_unit(0)->get_u() << " " << Odie->get_fundamental_unit(0)->get_x() << " " << Odie->get_fundamental_unit(0)->get_y() << " Reg: "<< NTL::log(val) << std::endl;
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
