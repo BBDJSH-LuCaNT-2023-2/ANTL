@@ -31,7 +31,7 @@ public:
   virtual FactorBase* get_factor_base() {return factor_base.get();};
   virtual RelationGenerator* get_relation_generator() {return relation_generator.get();};
 
-protected:
+//protected:
   void setup_fac_base();
   void setup_relations();
   void setup_mat();
@@ -44,13 +44,13 @@ protected:
   virtual void compute_mat() {};
 
   IndCalc<T,R>() = default;
-  IndCalc<T,R>(std::shared_ptr<FactorBase> factor_base, std::shared_ptr<RelationGenerator> relation_generator) :
-    factor_base(factor_base),
-    relation_generator(relation_generator) {}
+  IndCalc<T,R>(std::unique_ptr<FactorBase> factor_base, std::unique_ptr<RelationGenerator> relation_generator) :
+    factor_base(std::move(factor_base)),
+    relation_generator(std::move(relation_generator)) {}
 
 private:
-  std::shared_ptr<FactorBase> factor_base;
-  std::shared_ptr<RelationGenerator> relation_generator;
+  std::unique_ptr<FactorBase> factor_base;
+  std::unique_ptr<RelationGenerator> relation_generator;
 };
 
 template <class T, class R> void IndCalc<T,R>::setup_fac_base() {

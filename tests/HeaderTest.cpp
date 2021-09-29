@@ -43,11 +43,18 @@ int main() {
     long expected_max_num_tests = 7;
     std::map <std::string, std::string> x;
     x = get_params("7");
-    QuadIndCalc <double, double> ind_calc1 = QuadIndCalc<double, double>::create(order, x);
+//    auto ind_calc1 = QuadIndCalc<double, double>::create(order, x);
 
-    cout << ind_calc1.get_relation_generator()->get_size_fb() << endl;
-    cout << ind_calc1.get_relation_generator()->get_max_num_tests() << endl;
-    cout << ind_calc1.get_factor_base()->get_size_fb() << endl;
-    cout << ind_calc1.get_factor_base()->get_bound() << endl;
+    auto fac_base = std::make_unique<QuadFactorBase>(order, x);
+    auto reln_generator = std::make_unique<QuadRelationGenerator>(order, x, *fac_base);
+    auto ind_calc = new QuadIndCalc<double,double>();
+    ind_calc->relation_generator = std::move(reln_generator);
+    ind_calc->factor_base = std::move(fac_base);
+    ind_calc->setup_mat();
+
+    cout << ind_calc->get_relation_generator()->get_size_fb() << endl;
+    cout << ind_calc->get_relation_generator()->get_max_num_tests() << endl;
+    cout << ind_calc->get_factor_base()->get_size_fb() << endl;
+    cout << ind_calc->get_factor_base()->get_bound() << endl;
   }
 }

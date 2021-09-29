@@ -30,36 +30,38 @@ public:
   virtual R regulator() {R reg = {R()}; return reg;};
 
   QuadIndCalc<T,R>() = default;
-  QuadIndCalc<T,R>(std::shared_ptr<QuadFactorBase> factor_base, std::shared_ptr<QuadRelationGenerator> relation_generator) :
-    factor_base(factor_base),
-    relation_generator(relation_generator) {}
+  QuadIndCalc<T,R>(std::unique_ptr<QuadFactorBase> factor_base, std::unique_ptr<QuadRelationGenerator> relation_generator) :
+    factor_base(std::move(factor_base)),
+    relation_generator(std::move(relation_generator)) {}
 
-  static QuadIndCalc<T,R> create(IOrder const &order, std::map<std::string, std::string> const &params) {
-    // two-phase initialization
-    std::shared_ptr<QuadFactorBase> factor_base = std::make_shared<QuadFactorBase>(order, params);
-    std::shared_ptr<QuadRelationGenerator> relation_generator;
-    relation_generator = std::make_shared<QuadRelationGenerator>(order, params, *factor_base);
-
-    QuadIndCalc<T,R> ind_calc = QuadIndCalc<T,R>(factor_base, relation_generator);
-    ind_calc.setup_mat();
-    return ind_calc;
-  }
+//  static QuadIndCalc<T,R> *create(IOrder const &order, std::map<std::string, std::string> const &params) {
+//    // two-phase initialization
+//    std::unique_ptr<QuadFactorBase> factor_base = std::make_unique<QuadFactorBase>(order, params);
+//    std::unique_ptr<QuadRelationGenerator> relation_generator;
+//    relation_generator = std::make_unique<QuadRelationGenerator>(order, params, factor_base.get());
+//
+////    auto ind_calc = make_shared<QuadIndCalc<T,R>>(std::move(factor_base), std::move(relation_generator));
+//    auto ind_calc = new QuadIndCalc<T,R>(std::move(factor_base), std::move(relation_generator));
+//    ind_calc->setup_mat();
+//    return ind_calc;
+//  }
 
   virtual RelationGenerator* get_relation_generator() override {return relation_generator.get();};
   virtual FactorBase* get_factor_base() override {return factor_base.get();};
 
-  ~QuadIndCalc() {
-    std::cout << "QuadIndCalc dest" << std::endl;
-  }
+  QuadIndCalc(const QuadIndCalc&) = delete;
+  QuadIndCalc& operator=(const QuadIndCalc&) = delete;
+  ~QuadIndCalc() = default;
 
-protected:
+  std::unique_ptr<QuadFactorBase> factor_base;
+  std::unique_ptr<QuadRelationGenerator> relation_generator;
   void compute_fac_base() override;
   void compute_relations() override;
   void compute_mat() override;
 
-private:
-  std::shared_ptr<QuadFactorBase> factor_base;
-  std::shared_ptr<QuadRelationGenerator> relation_generator;
+//private:
+//  std::unique_ptr<QuadFactorBase> factor_base;
+//  std::unique_ptr<QuadRelationGenerator> relation_generator;
 };
 
 // For now these 3 functions stubs. The code in them is just to suggest what they need to do
