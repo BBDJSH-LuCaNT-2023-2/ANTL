@@ -50,6 +50,7 @@ CubicOrder<Type, PType> :: CubicOrder(polynomial<Type> const &poly, std::string 
 
     set_roots();
     set_integral_basis();
+    set_unit_rank();
     set_mul_table();
 
 
@@ -183,6 +184,16 @@ template <typename Type, typename PType>
 void CubicOrder<Type, PType> :: set_class_group( ){
 
     std::cout << "set class group"<< std::endl;
+}
+
+template <typename Type, typename PType>
+void CubicOrder<Type, PType> :: set_unit_rank( ){
+
+    if(this->discriminant < 0){
+      this->unit_rank = 1;
+    }else{
+      this->unit_rank = 2;
+    }
 }
 
 /*

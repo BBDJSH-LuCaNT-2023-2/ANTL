@@ -251,19 +251,19 @@ std::shared_ptr<BSGSVoronoi<Type, PType>>  voronoi_bsgs;
 std::shared_ptr<VoronoiMethods<Type, PType>>  vmethods;
 
 PType root_list[3];
+PType rho1, rho2; // 2nd and 3rd elements of the integral basis
 
 Type discriminant;
 Type E =Type(0); Type G = Type(0);
-// 2nd and 3rd elements of the integral basis
-PType rho1, rho2;
 
 long index; // The number f such that disc(O) = f^2 * Delta, Delta = field discriminant
-
+int unit_rank;
 
 // See the issue link below regarding the four members below
 // https://gitlab.cpsc.ucalgary.ca/jacobs/ANTL/-/issues/11
 Type class_number = Type(0);
 std::vector<Type> cg_structure;
+
 PType regulator = PType(0);
 std::vector<CubicElement<Type, PType>> fundamentalUnits;
 
@@ -273,8 +273,8 @@ std::vector<CubicElement<Type, PType>> fundamentalUnits;
 Type mul_table[3][3];
 
 static PType order_temp;
-
 CubicElement<Type, PType> temp_element = CubicElement<Type, PType>(this, Type(1), Type(0), Type(0), Type(1));
+
 
 void set_roots();
 
@@ -286,6 +286,9 @@ void set_integral_basis();
 void set_class_number();
 
 void set_class_group();
+
+void set_unit_rank();
+
 
 virtual void set_regulator() = 0;
 
