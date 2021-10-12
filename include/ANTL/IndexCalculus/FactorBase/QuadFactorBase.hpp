@@ -4,15 +4,15 @@
 #include "ANTL/IndexCalculus/FactorBase/FactorBase.hpp"
 #include "ANTL/Interface/OrderInvariants.hpp"
 
-template < class T >
-class QuadraticOrder; // an order that inherits from IOrder
-
 namespace ANTL {
 
   class QuadFactorBase : public FactorBase {
   public:
+//    ~QuadFactorBase() {
+//      std::cout << "desc for QuadFB " << this << std::endl;
+//    }
+//    QuadFactorBase & operator = (const QuadFactorBase &fb);
     using FactorBase::FactorBase; // inherit the construtors
-    QuadFactorBase & operator = (const QuadFactorBase &fb);
   };
 }
 

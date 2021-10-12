@@ -6,23 +6,22 @@
 #include "ANTL/IndexCalculus/FactorBase/QuadFactorBase.hpp"
 #include "ANTL/Constants.hpp"
 
-template < class T >
-class QuadraticOrder; // an order that inherits from IOrder
-
 namespace ANTL
 {
 
 class QuadRelationGenerator : public RelationGenerator {
 public:
-  QuadRelationGenerator(IOrder const &order, std::map<std::string, std::string> const &params, QuadFactorBase const &fb) :
-  FB(fb), RelationGenerator(order, params) {};
+  QuadRelationGenerator(IOrder<NTL::ZZ, NTL::RR> const &order,
+                        std::map<std::string, std::string> const &params,
+                        QuadFactorBase const *fb) :
+  FB(std::move(fb)), RelationGenerator(order, params) {};
 
   QuadRelationGenerator & operator = (const QuadRelationGenerator &fb);
 
   virtual bool get_relation(Relation &rel, long &num_tests) {};
 private:
   // factor base associated to this relation generator
-  QuadFactorBase const &FB;
+  QuadFactorBase const *FB;
 };
 
 } // ANTL

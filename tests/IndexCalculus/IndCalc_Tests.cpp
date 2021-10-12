@@ -20,11 +20,11 @@ namespace UT {
   typedef int reg_t; // fake type for the regulator
 
 // use a mock QuadraticOrder so we dont need to introduce the dependencies from ANTL/Quadratic/QuadraticOrder
-  template<class T>
-  class QuadraticOrder : public IOrder {
-  public:
-    QuadraticOrder(IOrder const &order) {}
-  };
+//  template<class T>
+//  class QuadraticOrder : public IOrder {
+//  public:
+//    QuadraticOrder(IOrder const &order) {}
+//  };
 }
 
 std::map<std::string, std::string> get_params(std::string max_num_tests_str) {

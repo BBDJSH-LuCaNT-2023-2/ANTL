@@ -17,7 +17,7 @@
 using namespace ANTL;
 
 template <class T, class R> // type of unit, type of regulator
-class IndCalc: IClassGroup, IClassNumber, IUnitGroup<T>, IRegulator<R> {
+class IndCalc : IOrder<T,R> {
 public:
   std::vector<Relation> relations;
   NTL::Mat<ZZ> rels_mat;
