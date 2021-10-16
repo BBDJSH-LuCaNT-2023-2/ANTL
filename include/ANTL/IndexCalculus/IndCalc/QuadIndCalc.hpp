@@ -33,12 +33,12 @@ public:
   QuadIndCalc(const QuadIndCalc&) = delete;
   QuadIndCalc& operator=(const QuadIndCalc&) = delete;
   ~QuadIndCalc() = default;
+
   QuadIndCalc<T,R>(std::unique_ptr<QuadFactorBase> factor_base, std::unique_ptr<QuadRelationGenerator> relation_generator) :
     factor_base(std::move(factor_base)),
     relation_generator(std::move(relation_generator)) {}
 
   static std::unique_ptr<QuadIndCalc<ZZ,RR>> create(IOrder<ZZ,RR> const &order, std::map<std::string, std::string> const &params) {
-    // two-phase initialization
     // TODO: make this function general
 
     unique_ptr<QuadFactorBase> fac_base{ new QuadFactorBase(std::move(order), params) };
@@ -48,14 +48,15 @@ public:
     return ind_calc;
   }
 
-  virtual RelationGenerator* get_relation_generator() override {return relation_generator.get();};
-  virtual FactorBase* get_factor_base() override {return factor_base.get();};
+  //TODO make protected
+  RelationGenerator* const get_relation_generator() override {return this->relation_generator.get();};
+  FactorBase* const get_factor_base() override {return this->factor_base.get();};
 
   void compute_fac_base() override;
   void compute_relations() override;
   void compute_mat() override;
 
-private:
+//TODO make private
   std::unique_ptr<QuadFactorBase> factor_base;
   std::unique_ptr<QuadRelationGenerator> relation_generator;
 };
@@ -66,8 +67,8 @@ template <class T, class R>
 void QuadIndCalc<T,R>::compute_fac_base() {
   IMultiplicative fb_elem = IMultiplicative();
 
-  for(int i=0; i < factor_base->get_size(); i++) {
-    factor_base->push_to_fb(fb_elem);
+  for(int i=0; i < get_factor_base()->get_size(); i++) {
+    get_factor_base()->push_to_fb(fb_elem);
   }
 };
 
@@ -77,8 +78,9 @@ void QuadIndCalc<T,R>::compute_relations() {
   /* compute_relations does sieving or random exponents to construct a relation */
 
   Relation quad_relation = Relation();
-  for(long i=0; i < get_relation_generator()->get_max_num_tests(); i++) {
-    result = get_relation_generator()->get_relation(quad_relation, i);
+  auto reln_gen = get_relation_generator();
+  for(long i=0; i < reln_gen->get_max_num_tests(); i++) {
+    result = reln_gen->get_relation(quad_relation, i);
     if (result) {
       IndCalc<T,R>::relations.push_back(quad_relation);
     }
@@ -88,7 +90,7 @@ void QuadIndCalc<T,R>::compute_relations() {
 template <class T, class R>
 void QuadIndCalc<T,R>::compute_mat() {
   //cf ANTL/include/ANTL/quadratic/index_calculus/qo_relation_matrix.hpp
-  IndCalc<T,R>::rels_mat.SetDims(IndCalc<T,R>::relations.size(), factor_base->get_size());
+  IndCalc<T,R>::rels_mat.SetDims(IndCalc<T,R>::relations.size(), get_factor_base()->get_size());
 
   // set matrix using functions in QuadRelation
 };

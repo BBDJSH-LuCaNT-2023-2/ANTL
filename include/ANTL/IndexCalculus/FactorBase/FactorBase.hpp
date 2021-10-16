@@ -47,6 +47,7 @@ namespace ANTL
       if ( params.find(Constants::size_fb) == params.end() ) {
         std::cout << "FactorBase: size_fb should be set" << std::endl;
       } else {
+        std::cout << "size_fb is" << params.find(Constants::size_fb)->second << std::endl;
         size_fb = std::stoi(params.find(Constants::size_fb)->second);
       }
       if ( params.find(Constants::bound_fb) == params.end() ) {

@@ -8,9 +8,9 @@ namespace ANTL {
 
   class QuadFactorBase : public FactorBase {
   public:
-//    ~QuadFactorBase() {
-//      std::cout << "desc for QuadFB " << this << std::endl;
-//    }
+    ~QuadFactorBase() {
+      std::cout << "desc for QuadFB " << this << std::endl;
+    }
 //    QuadFactorBase & operator = (const QuadFactorBase &fb);
     using FactorBase::FactorBase; // inherit the construtors
   };

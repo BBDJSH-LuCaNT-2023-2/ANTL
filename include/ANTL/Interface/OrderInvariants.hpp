@@ -19,9 +19,9 @@ public:
 //  IOrder() = default;
 //  IOrder(const IOrder& rhs) = default;
 //  IOrder &operator = (IOrder const &order);
-//  ~IOrder() {
-//    std::cout << "desc for IOrder " << this << std::endl;
-//  }
+  ~IOrder() {
+    std::cout << "desc for IOrder " << this << std::endl;
+  }
 
   // subclasses may implement class_group, class_number, unit_group, regulator
   virtual std::vector<NTL::ZZ> class_group() {

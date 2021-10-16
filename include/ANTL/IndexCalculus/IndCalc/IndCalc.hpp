@@ -28,10 +28,10 @@ public:
   std::vector<T> unit_group() {}
   R regulator() {}
 
-  virtual FactorBase* get_factor_base() {return factor_base.get();};
-  virtual RelationGenerator* get_relation_generator() {return relation_generator.get();};
+  virtual FactorBase* const get_factor_base() = 0;
+  virtual RelationGenerator* const get_relation_generator() = 0;
 
-//protected:
+//TODO protected:
   void setup_fac_base();
   void setup_relations();
   void setup_mat();
@@ -44,13 +44,6 @@ public:
   virtual void compute_mat() {};
 
   IndCalc<T,R>() = default;
-  IndCalc<T,R>(std::unique_ptr<FactorBase> factor_base, std::unique_ptr<RelationGenerator> relation_generator) :
-    factor_base(std::move(factor_base)),
-    relation_generator(std::move(relation_generator)) {}
-
-private:
-  std::unique_ptr<FactorBase> factor_base;
-  std::unique_ptr<RelationGenerator> relation_generator;
 };
 
 template <class T, class R> void IndCalc<T,R>::setup_fac_base() {

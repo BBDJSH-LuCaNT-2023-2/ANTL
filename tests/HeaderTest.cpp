@@ -54,11 +54,16 @@ int main() {
 //    ind_calc->factor_base = std::move(fac_base);
 //    ind_calc->setup_mat();
 
-    cout << ind_calc->get_relation_generator()->get_size_fb() << endl;
-    cout << ind_calc->get_relation_generator()->get_max_num_tests() << endl;
-    cout << ind_calc->get_factor_base()->get_size_fb() << endl;
-    cout << ind_calc->get_factor_base()->get_bound() << endl;
+//    cout << ind_calc->get_relation_generator()->get_size_fb() << endl;
+//    cout << ind_calc->get_relation_generator()->get_max_num_tests() << endl;
+//    cout << ind_calc->get_factor_base()->get_size_fb() << endl;
+//    cout << ind_calc->get_factor_base()->get_bound() << endl;
+//    cout << "I should be able to call the destructor on ind_calc" << endl;
+
+//    ind_calc.reset(); // this by itself is ok
+//    ind_calc->get_relation_generator().reset(); // this by itself is ok
+//    ind_calc->get_relation_generator().reset(); // this by itself is ok
   }
-//  cout << "I live" << endl;
+  cout << "ind calc destroyed but order still alive" << endl;
 //  cout << &order << endl;
 }

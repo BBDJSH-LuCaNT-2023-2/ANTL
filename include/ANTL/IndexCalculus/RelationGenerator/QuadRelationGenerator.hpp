@@ -18,7 +18,7 @@ public:
 
   QuadRelationGenerator & operator = (const QuadRelationGenerator &fb);
 
-  virtual bool get_relation(Relation &rel, long &num_tests) {};
+  bool get_relation(Relation &rel, long &num_tests) {return true;};
 private:
   // factor base associated to this relation generator
   QuadFactorBase const *FB;
