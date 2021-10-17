@@ -15,14 +15,11 @@ AC_PROG_LN_S
 # this macro figures out how to build with pthreads 
 AX_PTHREAD(, )
 
-# Checks for libraries.
-# FIXME: Replace `main' with a function in `-lgmp':
+# Checks for libraries. They all have a main function
 AC_CHECK_LIB([gmp], [main])
-# FIXME: Replace `main' with a function in `-lm':
 AC_CHECK_LIB([m], [main])
-# FIXME: Replace `main' with a function in `-lmpfi':
+AC_CHECK_LIB([mpfr], [main])
 AC_CHECK_LIB([mpfi], [main])
-# FIXME: Replace `main' with a function in `-lntl':
 AC_CHECK_LIB([ntl], [main])
 
 # see https://www.gnu.org/software/autoconf/manual/autoconf-2.60/html_node/External-Software.html
@@ -36,7 +33,7 @@ AC_ARG_WITH([mpfr],
 LIBMPFR=
 AS_IF([test "x$with_mpfr" != xno],
   [AC_CHECK_LIB([mpfr], [main],
-    [AC_SUBST([LIBmpfr], ["-lmpfr"])
+    [AC_SUBST([LIBMPFR], ["-lmpfr"])
      AC_DEFINE([HAVE_LIBMPFR], [1],
                [Define if you have libmpfr])
     ],
