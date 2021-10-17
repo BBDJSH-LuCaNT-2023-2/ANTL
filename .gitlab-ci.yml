@@ -27,7 +27,7 @@ build:
     paths:
       - build/test
       - build/main
-    expire_in: 1 month
+    expire_in: 1 day
 
 # run tests using the binary built before
 test:
@@ -42,4 +42,5 @@ test:
     when: always
     reports:
       junit: build/report.xml
+    expire_in: 1 month
 
