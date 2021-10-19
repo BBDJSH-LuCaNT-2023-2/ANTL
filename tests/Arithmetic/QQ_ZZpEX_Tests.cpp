@@ -1,10 +1,12 @@
 /*
- * @file QQ_ZZ_pEX_Tests.cpp
+ * @file QQ_zz_pEX_Tests.cpp
  * @author Reginald Lybbert
- * @brief Test program for QQ<ZZ_pEX> class for rational numbers and functions
+ * @brief Test program for QQ<zz_pEX> class for rational numbers and functions
  */
 
-#include <NTL/ZZ_pXFactoring.h>
+#include <stdlib.h>
+#include <time.h>
+#include <NTL/lzz_pXFactoring.h>
 #include <ANTL/Arithmetic/QQ.hpp>
 
 
@@ -15,18 +17,23 @@ int main(){
   
   int failureCount = 0;
 
-  // Base type ZZ_pEX
-  ZZ modulus;
-  GenPrime(modulus,128);
+  // Base type zz_pEX
+  PrimeSeq s;
+  long p;
+  srand (time(NULL));
+  p = rand() % 100;
+  s.reset(p);
+  p = s.next(); 
+  zz_p::init(p);
 
-  ZZ_p::init(modulus);
-  ZZ_pX polyModulus;
+  zz_pX polyModulus;
   BuildIrred(polyModulus, 5);
-  ZZ_pE::init(polyModulus);
-  
-  ZZ_pEX a,b,c,d,g;
+  zz_pE::init(polyModulus);
   
 
+
+  zz_pEX a,b,c,d,g;
+ 
 
   //get random values for a,b,c,d
   random(a,5);
@@ -34,21 +41,21 @@ int main(){
   random(c,7);
   random(d,8);
 
- //Currently, as I know not how non-monic polynomials should act, only testing on monics.
+  //Currently, as I know not how non-monic polynomials should act, only testing on monics.
   MakeMonic(a);
   MakeMonic(b);
   MakeMonic(c);
   MakeMonic(d);
-
+  
   GCD(g,c,d);
 
   //Test all constructors
-  QQ<ZZ_pEX> zeroq;
-  QQ<ZZ_pEX> aq(a);
-  QQ<ZZ_pEX> bq(b);
-  QQ<ZZ_pEX> cdq(c,d);
-  QQ<ZZ_pEX> aCopyq(aq); 
-  QQ<ZZ_pEX> rq(a,a*b);
+  QQ<zz_pEX> zeroq;
+  QQ<zz_pEX> aq(a);
+  QQ<zz_pEX> bq(b);
+  QQ<zz_pEX> cdq(c,d);
+  QQ<zz_pEX> aCopyq(aq); 
+  QQ<zz_pEX> rq(a,a*b);
 
   if(IsZero(zeroq.getNumerator()) && IsOne(zeroq.getDenominator())){
       cout << "Empty Constructor: Success" << endl;
@@ -338,18 +345,18 @@ int main(){
   
 
   //addition
-  QQ<ZZ_pEX> addend1(a,b);
-  QQ<ZZ_pEX> addend2(c,d);
-  ZZ_pEX addend3 = a;  
-  QQ<ZZ_pEX> sum1,sum2,sum3,sum4,sum5,sum6;
+  QQ<zz_pEX> addend1(a,b);
+  QQ<zz_pEX> addend2(c,d);
+  zz_pEX addend3 = a;  
+  QQ<zz_pEX> sum1,sum2,sum3,sum4,sum5,sum6;
  
-  ZZ_pEX expectedNumer1 = a*d + b*c;
-  ZZ_pEX expectedDenom1 = b*d;
-  ZZ_pEX expectedNumer2 = a + a*b;
-  ZZ_pEX expectedDenom2 = b;
+  zz_pEX expectedNumer1 = a*d + b*c;
+  zz_pEX expectedDenom1 = b*d;
+  zz_pEX expectedNumer2 = a + a*b;
+  zz_pEX expectedDenom2 = b;
 
-  QQ<ZZ_pEX> addResult1(expectedNumer1,expectedDenom1);
-  QQ<ZZ_pEX> addResult2(expectedNumer2,expectedDenom2);
+  QQ<zz_pEX> addResult1(expectedNumer1,expectedDenom1);
+  QQ<zz_pEX> addResult2(expectedNumer2,expectedDenom2);
 
   add(sum1,addend1,addend2);
   add(sum2,addend1,addend3);
@@ -403,8 +410,8 @@ int main(){
   sum5 += a;
   sum6 += sum4;
 
-  QQ<ZZ_pEX> addResult3(sum4.getN()*addResult2.getD() + addResult2.getN()*sum4.getD(), sum4.getD()*addResult2.getD());
-  QQ<ZZ_pEX> addResult4(a*addResult2.getD() + addResult2.getN(), addResult2.getD());
+  QQ<zz_pEX> addResult3(sum4.getN()*addResult2.getD() + addResult2.getN()*sum4.getD(), sum4.getD()*addResult2.getD());
+  QQ<zz_pEX> addResult4(a*addResult2.getD() + addResult2.getN(), addResult2.getD());
   
   if(sum5 == addResult4){
      cout << "QQ += T: Success" << endl;
@@ -422,18 +429,18 @@ int main(){
 
 
  //subtraction
-  QQ<ZZ_pEX> addend4(a,b);
-  QQ<ZZ_pEX> addend5(c,d);
-  ZZ_pEX addend6 = a;  
-  QQ<ZZ_pEX> diff1,diff2,diff3,diff4,diff5,diff6;
+  QQ<zz_pEX> addend4(a,b);
+  QQ<zz_pEX> addend5(c,d);
+  zz_pEX addend6 = a;  
+  QQ<zz_pEX> diff1,diff2,diff3,diff4,diff5,diff6;
 
   expectedNumer1 = a*d - b*c;
   expectedDenom1 = b*d;
   expectedNumer2 = a - a*b;
   expectedDenom2 = b;
 
-  QQ<ZZ_pEX> subResult1(expectedNumer1,expectedDenom1);
-  QQ<ZZ_pEX> subResult2(expectedNumer2,expectedDenom2);
+  QQ<zz_pEX> subResult1(expectedNumer1,expectedDenom1);
+  QQ<zz_pEX> subResult2(expectedNumer2,expectedDenom2);
 
   sub(diff1,addend4,addend5);
   sub(diff2,addend4,addend6);
@@ -487,8 +494,8 @@ int main(){
   diff6 -= diff4;
   diff5 -= a;
 
-  QQ<ZZ_pEX> subResult5(subResult2.getN() - a*subResult2.getD(),subResult2.getD()); 
-  QQ<ZZ_pEX> subResult6(-subResult2.getN()*diff4.getD() - diff4.getN()*subResult2.getD(), diff4.getD()*subResult2.getD());
+  QQ<zz_pEX> subResult5(subResult2.getN() - a*subResult2.getD(),subResult2.getD()); 
+  QQ<zz_pEX> subResult6(-subResult2.getN()*diff4.getD() - diff4.getN()*subResult2.getD(), diff4.getD()*subResult2.getD());
 
   if(diff5 == subResult5){
      cout << "QQ -= T: Success" << endl;
@@ -508,18 +515,18 @@ int main(){
 
 
   //multiplication
-  QQ<ZZ_pEX> factor1(a,b);
-  QQ<ZZ_pEX> factor2(c,d);
-  ZZ_pEX factor3 = a;  
-  QQ<ZZ_pEX> prod1,prod2,prod3,prod4,prod5,prod6;
+  QQ<zz_pEX> factor1(a,b);
+  QQ<zz_pEX> factor2(c,d);
+  zz_pEX factor3 = a;  
+  QQ<zz_pEX> prod1,prod2,prod3,prod4,prod5,prod6;
 
   expectedNumer1 = a*c;
   expectedDenom1 = b*d;
   expectedNumer2 = a*a;
   expectedDenom2 = b;
 
-  QQ<ZZ_pEX> mulResult1(expectedNumer1,expectedDenom1);
-  QQ<ZZ_pEX> mulResult2(expectedNumer2,expectedDenom2);
+  QQ<zz_pEX> mulResult1(expectedNumer1,expectedDenom1);
+  QQ<zz_pEX> mulResult2(expectedNumer2,expectedDenom2);
 
 
   mul(prod1,factor1,factor2);
@@ -574,8 +581,8 @@ int main(){
   prod6 *= prod4;
   prod5 *= a;
 
-  QQ<ZZ_pEX> mulResult5(a*a*a,b);
-  QQ<ZZ_pEX> mulResult6(a*a*a*c,b*b*d);
+  QQ<zz_pEX> mulResult5(a*a*a,b);
+  QQ<zz_pEX> mulResult6(a*a*a*c,b*b*d);
   if(prod5 == mulResult5){
      cout << "QQ *= T: Success" << endl;
   }else{
@@ -592,15 +599,15 @@ int main(){
 
 
  //division
-  QQ<ZZ_pEX> factor4(a,b);
-  QQ<ZZ_pEX> factor5(c,d);
-  ZZ_pEX factor6 = a;  
-  QQ<ZZ_pEX> quot1,quot2,quot3,quot4,quot5,quot6;
+  QQ<zz_pEX> factor4(a,b);
+  QQ<zz_pEX> factor5(c,d);
+  zz_pEX factor6 = a;  
+  QQ<zz_pEX> quot1,quot2,quot3,quot4,quot5,quot6;
 
-  QQ<ZZ_pEX> divResult1(a*d,b*c);
-  QQ<ZZ_pEX> divResult2(b);
+  QQ<zz_pEX> divResult1(a*d,b*c);
+  QQ<zz_pEX> divResult2(b);
   divResult2.invert();
-  QQ<ZZ_pEX> divResult3(b);
+  QQ<zz_pEX> divResult3(b);
 
   div(quot1,factor4,factor5);
   div(quot2,factor4,factor6);
@@ -654,9 +661,9 @@ int main(){
   quot6 /= quot4;
   quot5 /= a;
 
-  QQ<ZZ_pEX> divResult5(a*b);
+  QQ<zz_pEX> divResult5(a*b);
   divResult5.invert();
-  QQ<ZZ_pEX> divResult6(b*b*c,a*d);
+  QQ<zz_pEX> divResult6(b*b*c,a*d);
 
   if(quot5 == divResult5){
      cout << "QQ /= T: Success" << endl;
@@ -675,14 +682,14 @@ int main(){
 
   //square and cube
 
-  QQ<ZZ_pEX> toSquare(a,b);
-  QQ<ZZ_pEX> square, cubed;
+  QQ<zz_pEX> toSquare(a,b);
+  QQ<zz_pEX> square, cubed;
 
   sqr(square,toSquare);
   cube(cubed, toSquare);
 
-  QQ<ZZ_pEX> expectedSquare(a*a,b*b);
-  QQ<ZZ_pEX> expectedCube(a*a*a,b*b*b);
+  QQ<zz_pEX> expectedSquare(a*a,b*b);
+  QQ<zz_pEX> expectedCube(a*a*a,b*b*b);
 
   if(square == expectedSquare){
      cout << "square: Success" << endl;
