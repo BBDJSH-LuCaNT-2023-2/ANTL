@@ -6,7 +6,7 @@
 #include <NTL/ZZ.h>
 #include <NTL/RR.h>
 #include "ANTL/IndexCalculus/Relation/Relation.hpp"
-#include "ANTL/Interface/OrderInvariants.hpp"
+#include <ANTL/Interface/OrderInvariants.hpp>
 #include "ANTL/Constants.hpp"
 #include <ANTL/common.hpp>
 
@@ -15,10 +15,6 @@ using namespace ANTL;
 namespace ANTL {
   class RelationGenerator {
   public:
-    ~RelationGenerator() {
-      std::cout << "desc for Relation Generator " << this << std::endl;
-    }
-
     // constructors
     RelationGenerator(IOrder<NTL::ZZ, NTL::RR> const &order, std::map<std::string, std::string> const &params) :
     order(order) {

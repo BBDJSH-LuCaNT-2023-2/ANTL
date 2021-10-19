@@ -1,9 +1,9 @@
 #ifndef QUAD_RELATION_GENERATOR_H
 #define QUAD_RELATION_GENERATOR_H
 
-#include "ANTL/IndexCalculus/RelationGenerator/RelationGenerator.hpp"
-#include "ANTL/IndexCalculus/Relation/QuadRelation.hpp"
-#include "ANTL/IndexCalculus/FactorBase/QuadFactorBase.hpp"
+#include <ANTL/IndexCalculus/RelationGenerator/RelationGenerator.hpp>
+#include <ANTL/IndexCalculus/Relation/QuadRelation.hpp>
+#include <ANTL/IndexCalculus/FactorBase/QuadFactorBase.hpp>
 #include "ANTL/Constants.hpp"
 
 namespace ANTL
@@ -14,7 +14,7 @@ public:
   QuadRelationGenerator(IOrder<NTL::ZZ, NTL::RR> const &order,
                         std::map<std::string, std::string> const &params,
                         QuadFactorBase const *fb) :
-  FB(std::move(fb)), RelationGenerator(order, params) {};
+  FB(fb), RelationGenerator(order, params) {};
 
   QuadRelationGenerator & operator = (const QuadRelationGenerator &fb);
 

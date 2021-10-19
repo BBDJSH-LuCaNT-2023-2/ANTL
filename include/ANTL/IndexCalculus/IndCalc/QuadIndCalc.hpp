@@ -1,27 +1,32 @@
 #ifndef QUADCLASSGROUPINDCALC_H
 #define QUADCLASSGROUPINDCALC_H
 #include <string>
-#include "IndCalc.hpp"
-#include "ANTL/IndexCalculus/IndCalc/IndCalc.hpp"
-#include "ANTL/Interface/OrderInvariants.hpp"
-#include <NTL/ZZ.h>
-#include "ANTL/Interface/OrderInvariants.hpp"
-#include "ANTL/IndexCalculus/RelationGenerator/QuadRelationGenerator.hpp"
-#include "ANTL/IndexCalculus/Relation/Relation.hpp"
-#include "ANTL/IndexCalculus/Relation/QuadRelation.hpp"
-#include "ANTL/IndexCalculus/FactorBase/QuadFactorBase.hpp"
-#include "ANTL/Constants.hpp"
 #include <vector>
 #include <memory>
+#include <NTL/ZZ.h>
+#include <ANTL/IndexCalculus/IndCalc/IndCalc.hpp>
+#include <ANTL/Interface/OrderInvariants.hpp>
+#include <ANTL/IndexCalculus/RelationGenerator/QuadRelationGenerator.hpp>
+#include <ANTL/IndexCalculus/Relation/QuadRelation.hpp>
+#include <ANTL/IndexCalculus/FactorBase/QuadFactorBase.hpp>
 
-template <class T, class R> // type of Order
+template <class T, class R>
 class QuadIndCalc:public IndCalc<T,R> {
-  /*TODO this class is an example to show which functions a class inheriting from IndCalc needs to implement.
-  When we have a fully developed class inheriting from ClassGroupIndCalc this file can be deleted */
+  /*TODO this class is an example to show which functions a class inheriting from IndCalc needs to implement */
 
 public:
-  using IndCalc<T,R>::IndCalc; // inherit the constructors
-  friend void FactorBase::push_to_fb(IMultiplicative &fb_elem); // ind calc can add stuff to the factor base
+  // initialization
+  static std::unique_ptr<QuadIndCalc<T,R>> create(IOrder<T,R> const &order, std::map<std::string, std::string> const &params) {
+    // Because of the inheritance structure of IndCalc, we need to do a two step initialization.
+    // This initializes an IndCalc with shared pointers for FactorBase and RelationGenerator as member variables
+    unique_ptr<QuadFactorBase> fac_base{ new QuadFactorBase(order, params) };
+    unique_ptr<QuadRelationGenerator> reln_generator{ new QuadRelationGenerator(order, params, fac_base.get())};
+    unique_ptr<QuadIndCalc<T,R>> ind_calc {new QuadIndCalc<T,R>(std::move(fac_base), std::move(reln_generator))};
+    ind_calc->setup_mat();
+    return ind_calc;
+  }
+
+  friend void FactorBase::push_to_fb(IMultiplicative &fb_elem); // ind calc can add elems to the factor base
 
   //TODO fill in these stubs after we have implemented an index calculus algorithm for this class
   virtual NTL::ZZ class_number() {return NTL::ZZ(0);};
@@ -29,34 +34,27 @@ public:
   virtual std::vector<T> unit_group() {std::vector<T> ug = {T()}; return ug;};
   virtual R regulator() {R reg = {R()}; return reg;};
 
-  QuadIndCalc<T,R>() = default;
-  QuadIndCalc(const QuadIndCalc&) = delete;
-  QuadIndCalc& operator=(const QuadIndCalc&) = delete;
-  ~QuadIndCalc() = default;
+  // implement pure virtual functions from base class
+  RelationGenerator* const get_relation_generator() override {return this->relation_generator.get();};
+  FactorBase* const get_factor_base() override {return this->factor_base.get();};
 
+  virtual ~QuadIndCalc() = default;
+protected:
+  // initialization
+  using IndCalc<T,R>::IndCalc; // inherit the constructors
   QuadIndCalc<T,R>(std::unique_ptr<QuadFactorBase> factor_base, std::unique_ptr<QuadRelationGenerator> relation_generator) :
     factor_base(std::move(factor_base)),
     relation_generator(std::move(relation_generator)) {}
 
-  static std::unique_ptr<QuadIndCalc<ZZ,RR>> create(IOrder<ZZ,RR> const &order, std::map<std::string, std::string> const &params) {
-    // TODO: make this function general
+  QuadIndCalc<T,R>() = default;
+  QuadIndCalc(const QuadIndCalc&) = delete;
+  QuadIndCalc& operator=(const QuadIndCalc&) = delete;
 
-    unique_ptr<QuadFactorBase> fac_base{ new QuadFactorBase(std::move(order), params) };
-    unique_ptr<QuadRelationGenerator> reln_generator{ new QuadRelationGenerator(std::move(order), params, fac_base.get())};
-    unique_ptr<QuadIndCalc<ZZ,RR>> ind_calc {new QuadIndCalc<ZZ,RR>(std::move(fac_base), std::move(reln_generator))};
-    ind_calc->setup_mat();
-    return ind_calc;
-  }
-
-  //TODO make protected
-  RelationGenerator* const get_relation_generator() override {return this->relation_generator.get();};
-  FactorBase* const get_factor_base() override {return this->factor_base.get();};
-
+  // these pure virtual function implementations are defined outside this class declaration
   void compute_fac_base() override;
   void compute_relations() override;
   void compute_mat() override;
-
-//TODO make private
+private:
   std::unique_ptr<QuadFactorBase> factor_base;
   std::unique_ptr<QuadRelationGenerator> relation_generator;
 };

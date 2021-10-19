@@ -13,15 +13,7 @@
 template <class T, class R> // type of unit, type of regulator
 class IOrder {
 public:
-  // interface for objects that behave like orders in algebraic number fields
-  // and have invariants like class number and regulator
-
-//  IOrder() = default;
-//  IOrder(const IOrder& rhs) = default;
-//  IOrder &operator = (IOrder const &order);
-  ~IOrder() {
-    std::cout << "desc for IOrder " << this << std::endl;
-  }
+  // interface for objects that have getters for number field invariants like class number and regulator
 
   // subclasses may implement class_group, class_number, unit_group, regulator
   virtual std::vector<NTL::ZZ> class_group() {
@@ -44,7 +36,6 @@ public:
 	R regulator;
 	return regulator;
   }
-
 };
 
 #endif //ORDERINVARIANTS_H

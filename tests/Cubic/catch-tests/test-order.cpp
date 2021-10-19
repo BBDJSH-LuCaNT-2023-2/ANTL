@@ -56,7 +56,6 @@ TEST_CASE("Double: Cubic Order accessor functions"){
     REQUIRE(ord4.get_fundamental_unit(0)->get_u() != 0);
 
   }
-  REQUIRE(Rufio.get_discriminant() == -379);
 
   SECTION("Ideal Multiplying"){
     REQUIRE(Rufio.get_fundamental_unit(0)->get_u() != 0);
