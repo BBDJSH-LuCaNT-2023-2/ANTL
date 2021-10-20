@@ -17,8 +17,8 @@ build:
       - ./configure
       - make
       - make install
-      - source ci_before_build.sh
       - cd ../..
+      - source ci_before_build.sh
   script:
     - autoreconf -vi
     - cd build
