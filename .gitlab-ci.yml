@@ -21,7 +21,7 @@ build:
   script:
     - autoreconf -vi
     - cd build
-    - sh ../configure --without-mpfr
+    - sh ../configure "CXXFLAGS=$CXXFLAGS -fdiagnostics-color" --without-mpfr 
     - make
   artifacts:
     paths:
