@@ -5,8 +5,8 @@ build:
     - build
   stage: build
   before_script:
-      # step 1: install dynamically linked libraries that are required by the static dependencies:
-      - dnf -y install glibc-devel gcc-c++ gmp-devel automake autoconf autoconf-archive
+      # step 1: install external utilities, libraries that are required by the dependencies, and dynamically linked dependencies
+      - dnf -y install glibc-devel gcc-c++ gmp-devel automake autoconf autoconf-archive pari-gp
       # step 2: install statically linked libraries
       - dnf -y install boost-static mpfi-static
       # step 3: install static dependencies that don't have a DNF package
