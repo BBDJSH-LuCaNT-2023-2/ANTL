@@ -48,6 +48,7 @@ CubicOrder<Type, PType> :: CubicOrder(polynomial<Type> const &poly, std::string 
       this->vmethods = std::static_pointer_cast <VoronoiMethods<Type, PType> > (this->vreal);
     }
 
+    set_max_minima_dist();
     set_roots();
     set_integral_basis();
     set_unit_rank();
@@ -191,10 +192,28 @@ void CubicOrder<Type, PType> :: set_unit_rank( ){
 
     if(this->discriminant < 0){
       this->unit_rank = 1;
+      r1 = 1;
+      r2 = 1;
     }else{
       this->unit_rank = 2;
+      r1 = 3;
+      r2 = 0;
     }
 }
+
+template <typename Type, typename PType>
+void CubicOrder<Type, PType> :: set_max_minima_dist( ){
+    PType tempval, tempval2;
+
+    NTL::abs(tempval, to<PType>(this->discriminant));
+    SqrRoot(tempval, tempval);
+
+    ComputePi(tempval2);
+    div(tempval2, PType(2), tempval2);
+    pow(tempval2, tempval2, PType(this->r1));
+    mul(this->max_minima_dist, tempval, tempval2);
+}
+
 
 /*
 template <typename Type, typename PType>

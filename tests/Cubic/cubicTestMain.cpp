@@ -25,10 +25,14 @@
 
 #include "../../include/ANTL/Cubic/Multiplication/IdealMultiplicationStrategy.hpp"
 #include "../../include/ANTL/Cubic/Multiplication/MultiplyStrategyWilliams.hpp"
-
+#include "../../include/ANTL/Cubic/CubicIdeal.hpp"
+#include <ANTL/Cubic/VectorFunctions.hpp>
 #include <boost/math/tools/polynomial.hpp>
 #include <boost/multiprecision/gmp.hpp>
 #include <complex>
+#include <vector>
+
+
 using namespace NTL;
 using namespace ANTL;
 using NTL::ZZ;
@@ -42,33 +46,6 @@ using std::endl;
 NTL_CLIENT
 
 
-/*
-struct ZZEqual {
- bool operator()(const ZZ& lhs, const ZZ& rhs) const
- {
-    return lhs == rhs;
- }
-};
-
-struct ZZHash {
-
-  ZZHash(NTL::ZZ m = ZZ(100)){
-    modulus = m;
-  }
-
-  std::size_t operator()(const ZZ& a) const {
-    std::size_t endvalue;
-    ZZ value_holder;
-    NTL::rem(value_holder, a, modulus);
-
-    conv(endvalue, value_holder);
-    return endvalue;
-  }
-
-
-  ZZ modulus;
-};
-*/
 
 int main(){
   //std::unique_ptr< MultiplyStrategyWilliams<long,double> > pointo;
@@ -91,17 +68,17 @@ int main(){
   polynomial<mpz_int> test_poly{{2,1,1,1}};
   cout << " Poly (C): " << test_poly[0]<< " + " << test_poly[1] << "x + " << test_poly[2]<< " x^2 + " << test_poly[3] << "x^3" << endl;
   CubicOrder<long, double> * co_point; co_point = CubicOrder<long, double>::make_order(test_poly);
-  CubicOrder<long, double> * Odie = co_point;
+  CubicOrder<long, double> * complex_order_int = co_point;
 
-  cout << "rho1:  " << Odie->get_rho1() << "     rho2:  " << Odie->get_rho2() << endl;
-  cout << " root1 " << Odie->get_root1() << " root2 " << Odie->get_root2() << " root3 " << Odie->get_root3() << std::endl;
-  cout << "order disc:  "<< Odie->get_discriminant() << endl;
+  cout << "rho1:  " << complex_order_int->get_rho1() << "     rho2:  " << complex_order_int->get_rho2() << endl;
+  cout << " root1 " << complex_order_int->get_root1() << " root2 " << complex_order_int->get_root2() << " root3 " << complex_order_int->get_root3() << std::endl;
+  cout << "order disc:  "<< complex_order_int->get_discriminant() << endl;
   cout << "----------------------------------------" << endl;
 
   double val;
-  Odie->get_FundamentalUnits(0)->get_real_value(val);
+  complex_order_int->get_FundamentalUnits(0)->get_real_value(val);
   std::cout << "Fundamental Units " << std::endl;
-  std::cout << Odie->get_FundamentalUnits(0)->get_u() << " " << Odie->get_FundamentalUnits(0)->get_x() << " " << Odie->get_FundamentalUnits(0)->get_y() << " Reg: "<< ANTL::log(val) << std::endl;
+  std::cout << complex_order_int->get_FundamentalUnits(0)->get_u() << " " << complex_order_int->get_FundamentalUnits(0)->get_x() << " " << complex_order_int->get_FundamentalUnits(0)->get_y() << " Reg: "<< ANTL::log(val) << std::endl;
 */
 
 
@@ -124,11 +101,11 @@ int main(){
   ibcf[0] = -2;
 
 */
-/*
+
   ibcf[3] = 1;
-  ibcf[2] = -1;
-  ibcf[1] = 0;
-  ibcf[0] = 8;
+  ibcf[2] = 0;
+  ibcf[1] = 3;
+  ibcf[0] = -12;
 
 
   polynomial<ZZ> const test_poly{{ibcf[0],ibcf[1],ibcf[2],ibcf[3] }};
@@ -150,6 +127,8 @@ int main(){
   cout << "order disc:  "<< Odie->get_discriminant() << endl;
   cout << "----------------------------------------" << endl;
 
+
+
   RR val;
   Odie->get_fundamental_unit(0)->get_real_value(val);
 
@@ -159,15 +138,24 @@ int main(){
   std::cout << Odie->get_fundamental_unit(0)->get_u() << " " << Odie->get_fundamental_unit(0)->get_x() << " " << Odie->get_fundamental_unit(0)->get_y() \
   << " Reg: "<< Odie->get_regulator() << std::endl;
 
-*/
+  std::vector<RR> v1 = {RR(16.0)};
+  CubicIdeal<ZZ,RR> ideal1 = CubicIdeal(Odie);
+  std::cout << "just before" << ideal1.toString() << endl;
+  Odie->close_minimum(ideal1, v1);
 
+
+  //bool bob = positive_func(-1.1);
+  //cout << bob << endl;
+  //std::cout << "is close test " <<is_close(vec1, vec2, dist) << std::endl;
 
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
-// Real Order Testing
+// REAL ORDER TESTING
 //(-3,-3-,4,1)
+
+/*
 ZZ real_ibcf[4];
 real_ibcf[3] = 1;
 real_ibcf[2] = 1;
@@ -178,22 +166,29 @@ polynomial<ZZ> const real_poly{{real_ibcf[0],real_ibcf[1],real_ibcf[2],real_ibcf
 
   cout << " Poly (R): " << real_poly[0]<< " + " << real_poly[1] << "x + " << real_poly[2]<< " x^2 + " << real_poly[3] << "x^3" << endl;
   CubicOrder<ZZ, RR> * ro_point; ro_point = CubicOrder<ZZ, RR>::make_order(real_poly);
-  CubicOrder<ZZ, RR> * Odessa = ro_point;
+  CubicOrder<ZZ, RR> * real_order3 = ro_point;
 
-  Odessa->roots_swap_position(0,1);Odessa->roots_swap_position(1,2);
-  cout << "rho1:  " << Odessa->get_rho1() << "     rho2:  " << Odessa->get_rho2() << endl;
-  cout << " root1 " << Odessa->get_root1() << " root2 " << Odessa->get_root2() << " root3 " << Odessa->get_root3() << std::endl;
-  cout << "order disc:  "<< Odessa->get_discriminant() << endl;
+  real_order3->roots_swap_position(0,1);real_order3->roots_swap_position(1,2);
+  cout << "rho1:  " << real_order3->get_rho1() << "     rho2:  " << real_order3->get_rho2() << endl;
+  cout << " root1 " << real_order3->get_root1() << " root2 " << real_order3->get_root2() << " root3 " << real_order3->get_root3() << std::endl;
+  cout << "order disc:  "<< real_order3->get_discriminant() << endl;
   cout << "----------------------------------------" << endl;
     std::cout << "Fundamental Units: " << std::endl;
-  std::cout << Odessa->get_fundamental_unit(0)->get_u() << " " << Odessa->get_fundamental_unit(0)->get_x() << " " << Odessa->get_fundamental_unit(0)->get_y() << std::endl;
-  std::cout << Odessa->get_fundamental_unit(1)->get_u() << " " << Odessa->get_fundamental_unit(1)->get_x() << " " << Odessa->get_fundamental_unit(1)->get_y() << std::endl;
-  std::cout << Odessa->get_regulator() << endl;
+  std::cout << real_order3->get_fundamental_unit(0)->get_u() << " " << real_order3->get_fundamental_unit(0)->get_x() << " " << real_order3->get_fundamental_unit(0)->get_y() << std::endl;
+  std::cout << real_order3->get_fundamental_unit(1)->get_u() << " " << real_order3->get_fundamental_unit(1)->get_x() << " " << real_order3->get_fundamental_unit(1)->get_y() << std::endl;
+  std::cout << real_order3->get_regulator() << endl;
   //std::cout << "Pointer practice1" << (*testptr)[0] << (*testptr)[1] << std::endl;
   //polynomial<long> * pptr = CNF.get_defining_polynomial();
   //cout << (pptr)->degree()<< endl;
 
+std::vector<double> vec1 = {1.1, 2,2, 3.3};
+std::vector<double> vec2 = {1.1,2,2, 3.33};
+double dist = 0.1;
 
+
+
+
+*/
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////

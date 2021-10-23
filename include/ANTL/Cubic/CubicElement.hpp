@@ -78,20 +78,16 @@ CubicElement(const CubicOrder<Type,PType> * cnfo, const Type &U, const Type &X, 
 /*********** Accessor functions **************/
 inline const CubicOrder<Type, PType> * get_order() const {return my_order;}
 
-inline Type get_denom () const {return denom;}
-inline Type get_u () const {return u;}
-inline Type get_x () const {return x;}
-inline Type get_y () const {return y;}
+Type get_denom () const {return denom;}
+Type get_u () const {return u;}
+Type get_x () const {return x;}
+Type get_y () const {return y;}
 
-inline void set_order(const CubicOrder<Type, PType> * ord){
+void set_order(const CubicOrder<Type, PType> * ord){
   my_order = ord;
 }
 /******calculator functions****/
 //these should calculate and set into the provided variable the specified value
-
-//virtual void norm(ANTL::QQ<Type> & newVal) = 0;
-//virtual void trace(ANTL::QQ<Type> & newVal) = 0;
-
 
 /**
 * @brief Sets this CubicElementNF equal to C.
@@ -143,7 +139,7 @@ bool is_equal(const CubicElement <Type, PType> & B);
 
 /** @brief Checks if the element is the zero element and returns appropriate bool
 */
-inline bool is_zero() const {
+bool is_zero() const {
   return (this->u ==Type(0)) && (this->x ==Type(0)) && (this->y == Type(0));
 }
 

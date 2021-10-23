@@ -49,7 +49,11 @@ void CubicIdeal<Type,PType> :: check_rank(){
 
 }
 
-
+template<typename Type,typename PType>
+void CubicIdeal<Type,PType> :: get_basis_element( CubicElement<Type, PType> & elt1, int pos) const{
+  elt1.set_order(my_order);
+  elt1.assign(coeff_matrix[0][pos], coeff_matrix[1][pos],coeff_matrix[2][pos], this->denom);
+}
 
 template<typename Type,typename PType>
 void CubicIdeal<Type,PType> :: assign(const CubicElement<Type, PType> g1, const CubicElement<Type, PType> g2, const CubicElement<Type, PType> g3){
@@ -63,7 +67,7 @@ const Type U3, const Type X3, const Type Y3, const Type D3){
 
 
   mul(this->ci_temp, D2, D3);
-  mul(coeff_matrix[0][0],this->ci_temp, U1  );
+  mul(coeff_matrix[0][0],this->ci_temp, U1 );
   mul(coeff_matrix[1][0],this->ci_temp, X1 );
   mul(coeff_matrix[2][0],this->ci_temp, Y1 );
   mul(this->ci_temp, D1, D3);
@@ -321,6 +325,16 @@ if ( !(IsZero(coeff_matrix[1][0]) && IsZero(coeff_matrix[2][0]) && IsZero(coeff_
 
       //ensures that m_12 is in the appropriate range
       while ( (temp_mat[0][1] >= this->coeff_matrix[0][0]) || (temp_mat[0][1] < 0) ){
+
+          /*
+          cout << "inf loop" << endl;
+          cout << temp_mat[0][0] << temp_mat[0][1] << endl;
+          cout << temp_mat[1][0] << temp_mat[1][1] << endl;
+
+          cout << this->coeff_matrix[0][0] << " "<< this->coeff_matrix[0][1] << " "<< this->coeff_matrix[0][2] <<endl;
+          cout << this->coeff_matrix[1][0] << " "<< this->coeff_matrix[1][1] << " "<< this->coeff_matrix[1][2] <<endl;
+          cout << this->coeff_matrix[2][0] << " "<< this->coeff_matrix[2][1] << " "<< this->coeff_matrix[2][2] <<endl;
+          */
           if (temp_mat[0][1] < 0){
               temp_mat[0][1] += this->coeff_matrix[0][0];
           }
@@ -499,41 +513,45 @@ bool CubicIdeal<Type, PType> :: is_canonical(){
 template<typename Type,typename PType>
 void CubicIdeal<Type, PType> :: reduce(CubicIdeal<Type, PType> & rIdeal,CubicElement<Type, PType> & relatingElement ){
 
-  // relating element is to hold the element which you need to multiply the reduced ideal with the get back to the original
+  // relating element holds the element used to multiply the reduced ideal with the get back to the original
+
   // initialize by setting its order to this->ideal's, and assigning its value to 1.
   relatingElement.set_order(this->get_order());
   relatingElement.assign(Type(1));
 
   // copy the current element, rIdeal will hold the reduced ideal
   rIdeal.assign(*this);
+
+  if(this->reduced == 1){
+    rIdeal.set_reduction_state(1);
+    return;
+  }
   rIdeal.set_reduction_state(2);
 
+  cout << "before loop: \n" << rIdeal.toString() << endl;
   // This is going to hold an element which sits inside the normed body of 1
   CubicElement<Type, PType> interloper(this->get_order());
 
   while (rIdeal.is_reduced() != char(1)){
-    // typical voronoi approach for reduction: Obtain a  Voronoi and divide by the adjacent minima
-    // the behaviour of the make_voronoi algorithm is dependent on the ideal objects flag
+    // typical voronoi approach for reduction: Obtain a Voronoi and divide by the adjacent minima
+    // the behaviour of the make_voronoi algorithm is dependent on the ideal object's reduce flag
+    // make_voronoi_basis also checks if the ideal is reduced and changes the flag if needed.
     rIdeal.make_voronoi_basis();
 
+    cout << "after voronoi: \n" << rIdeal.toString() << endl;
     // because the is_reduced flag is not 1, the element in column 1 is an element
     // inside the norm body of 1. Set interloper to be this
     interloper.assign(rIdeal.get_coeff(0,1),rIdeal.get_coeff(1,1),rIdeal.get_coeff(2,1), rIdeal.get_coeff(0,0));
-
 
 
     rIdeal.divide_adjacent(rIdeal, interloper);
     mul(relatingElement, relatingElement,interloper);
     rIdeal.make_canonical();
 
-    // for testing, print the real value of this element
     relatingElement.get_real_value(p_temp);
-    //std::cout << " Ideal reduction: adj_min value before neg: "<< p_temp<< std::endl;
     if (p_temp < to<PType>(0)){
       relatingElement.negate(relatingElement);
     }
-      //relatingElement.get_real_value(p_temp);
-    //std::cout << " Ideal reduction: adj_min value: "<< p_temp<< std::endl;
   }
 }
 
@@ -555,16 +573,16 @@ void CubicIdeal<Type, PType> :: make_voronoi_basis(char axis){
     this->get_order()->roots_swap_position(0,1);
     this->get_order()->get_voronoi()->make_voronoi_basis(*this);
     this->get_order()->roots_swap_position(0,1);
+  }else{
+    std::cout<< "No valid axis input" << std::endl;
   }
-
-
-
 
 }
 
 
 /// Friend definitions
-// This function might modify the ideal representation!
+// This function might modify the ideal representation since we need to convert to canonical form.
+// NOTE: may want to modify so that A,B are const and comparision is done with a copy.
 template<typename T,typename PT>
 bool is_equal(CubicIdeal<T,PT> & A, CubicIdeal <T,PT> & B){
   #ifdef DEBUG
@@ -631,7 +649,7 @@ bool is_equal(CubicIdeal<T,PT> & A, CubicIdeal <T,PT> & B){
     else {
       return true;
     }
-} //close function compareLattice3
+} //close function is_equal
 
 
 template <typename Type, typename PType>
