@@ -15,17 +15,35 @@ AC_PROG_LN_S
 # this macro figures out how to build with pthreads 
 AX_PTHREAD(, )
 
-# Checks for libraries.
-# FIXME: Replace `main' with a function in `-lgmp':
+# Checks for libraries. They all have a main function
 AC_CHECK_LIB([gmp], [main])
-# FIXME: Replace `main' with a function in `-lm':
 AC_CHECK_LIB([m], [main])
-# FIXME: Replace `main' with a function in `-lmpfi':
-AC_CHECK_LIB([mpfi], [main])
-# FIXME: Replace `main' with a function in `-lmpfr':
 AC_CHECK_LIB([mpfr], [main])
-# FIXME: Replace `main' with a function in `-lntl':
+AC_CHECK_LIB([mpfi], [main])
 AC_CHECK_LIB([ntl], [main])
+
+# see https://www.gnu.org/software/autoconf/manual/autoconf-2.60/html_node/External-Software.html
+# run ./configure --help in the top level directory to list all options for configure
+AC_ARG_WITH([mpfr],
+  [AS_HELP_STRING([--with-mpfr],
+    [support using mpfr as a multi precision backend @<:@default=check@:>@])],
+  [],
+  [with_mpfr=check])
+
+LIBMPFR=
+AS_IF([test "x$with_mpfr" != xno],
+  [AC_CHECK_LIB([mpfr], [main],
+    [AC_SUBST([LIBMPFR], ["-lmpfr"])
+     AC_DEFINE([HAVE_LIBMPFR], [1],
+               [Define if you have libmpfr])
+    ],
+    [if test "x$with_mpfr" != xcheck; then
+       AC_MSG_FAILURE(
+         [--with-mpfr was given, but test for mpfr failed])
+     fi
+    ], -lncurses)])
+# see https://autotools.io/automake/conditional.html
+AM_CONDITIONAL([EXTRADEPS], [test "x$with_mpfr" != xno])
 
 # Checks for header files.
 AC_CHECK_HEADERS([stdlib.h unistd.h])
