@@ -6,28 +6,32 @@
 #include <functional>
 #include <iterator>
 #include <unordered_map>
-// qvm matrix headers
-//#include <boost/qvm/mat.hpp>
-//#include <boost/qvm/mat_traits.hpp>
-//#include <boost/qvm/mat_access.hpp>
-//#include <boost/qvm/mat_operations.hpp>
+
+
+
+/*
+The includes below are used if we want to use gmp multiprecision
 
 #include <boost/multiprecision/mpfi.hpp>
-
-#include "../../include/ANTL/Cubic/generalFunctions.hpp"
-#include "../../include/ANTL/Cubic/GeneralTemplateFunctions.hpp"
-#include "../../include/ANTL/Cubic/CubicNumberField.hpp"
-#include "../../include/ANTL/Cubic/RealCubicNumberField.hpp"
-#include "../../include/ANTL/Cubic/ComplexCubicNumberField.hpp"
-#include "../../include/ANTL/Cubic/CubicOrder.hpp"
-#include "../../include/ANTL/Cubic/CubicElement.hpp"
-#include "../../include/ANTL/Cubic/CubicIdeal.hpp"
-
-#include "../../include/ANTL/Cubic/Multiplication/IdealMultiplicationStrategy.hpp"
-#include "../../include/ANTL/Cubic/Multiplication/MultiplyStrategyWilliams.hpp"
-#include "../../include/ANTL/Cubic/CubicIdeal.hpp"
-#include <boost/math/tools/polynomial.hpp>
 #include <boost/multiprecision/gmp.hpp>
+using boost::multiprecision::mpf_float;
+using boost::multiprecision::mpfi_float;
+*/
+
+#include <ANTL/Cubic/generalFunctions.hpp>
+#include <ANTL/Cubic/GeneralTemplateFunctions.hpp>
+#include <ANTL/Cubic/CubicNumberField.hpp>
+#include <ANTL/Cubic/RealCubicNumberField.hpp>
+#include <ANTL/Cubic/ComplexCubicNumberField.hpp>
+#include <ANTL/Cubic/CubicOrder.hpp>
+#include <ANTL/Cubic/CubicElement.hpp>
+#include <ANTL/Cubic/CubicIdeal.hpp>
+
+#include <ANTL/Cubic/Multiplication/IdealMultiplicationStrategy.hpp>
+#include <ANTL/Cubic/Multiplication/MultiplyStrategyWilliams.hpp>
+#include <ANTL/Cubic/CubicIdeal.hpp>
+#include <boost/math/tools/polynomial.hpp>
+
 #include <complex>
 #include <vector>
 
@@ -38,8 +42,7 @@ using NTL::ZZ;
 using NTL::RR;
 using namespace boost::multiprecision;
 using boost::math::tools::polynomial;
-using boost::multiprecision::mpf_float;
-using boost::multiprecision::mpfi_float;
+
 using std::cout;
 using std::endl;
 NTL_CLIENT

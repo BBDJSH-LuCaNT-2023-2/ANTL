@@ -64,13 +64,11 @@ int main(){
     std::cout << ideal_list[i][0].get_coeff(0,0) << " " << ideal_list[i][0].get_coeff(1,0) << " " << ideal_list[i][0].get_coeff(2,0) << " " << std::endl;
   }
 
-  
+
     std::cout << "Fundamental Units: " << std::endl;
   std::cout << "[" << Odessa->get_fundamental_unit(0)->get_u() << " " << Odessa->get_fundamental_unit(0)->get_x() << " " << Odessa->get_fundamental_unit(0)->get_y() << "]" <<std::endl;
   std::cout << "[" << Odessa->get_fundamental_unit(1)->get_u() << " " << Odessa->get_fundamental_unit(1)->get_x() << " " << Odessa->get_fundamental_unit(1)->get_y() << "]" <<std::endl;
   std::cout <<  "Regulator: " << Odessa->get_regulator() << std::endl;
-  //std::cout << "Pointer practice1" << (*testptr)[0] << (*testptr)[1] << std::endl;
-  //polynomial<long> * pptr = CNF.get_defining_polynomial();
-  //cout << (pptr)->degree()<< endl;
+
   return 0;
 }

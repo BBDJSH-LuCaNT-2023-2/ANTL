@@ -4,8 +4,8 @@
 #include <iostream>
 #include <complex>
 #include <cmath>
-#include <mpfr.h>
-#include <mpc.h>
+//#include <mpfr.h>
+//#include <mpc.h>
 
 
 #include "../../include/ANTL/Cubic/generalFunctions.hpp"
