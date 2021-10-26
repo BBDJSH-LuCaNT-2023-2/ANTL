@@ -5,7 +5,7 @@ IFLAGS= -I/c/include -I/home/cs-gb2khv2/ANTL/include
 SRC_FILES := $(wildcard ../../src/Cubic/*.cpp)
 OBJ_FILES := $(notdir $(SRC_FILES:.cpp=.o))
 
-main: cubicTestMain.o generalFunctions.o VectorFunctions.o GlobalCubicField.o CubicNumberField.o\
+main: cubicTestMain.o generalFunctions.o GlobalCubicField.o CubicNumberField.o\
 					RealCubicNumberField.o ComplexCubicNumberField.o CubicOrder.o CubicOrderReal.o\
 					CubicElement.o CubicIdeal.o IdealMultiplicationStrategy.o MultiplyStrategyWilliams.o \
 					VoronoiMethods.o VoronoiReal.o VoronoiComplex.o BasicVoronoi.o BSGSVoronoi.o

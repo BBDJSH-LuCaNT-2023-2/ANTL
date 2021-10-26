@@ -26,7 +26,6 @@
 #include "../../include/ANTL/Cubic/Multiplication/IdealMultiplicationStrategy.hpp"
 #include "../../include/ANTL/Cubic/Multiplication/MultiplyStrategyWilliams.hpp"
 #include "../../include/ANTL/Cubic/CubicIdeal.hpp"
-#include <ANTL/Cubic/VectorFunctions.hpp>
 #include <boost/math/tools/polynomial.hpp>
 #include <boost/multiprecision/gmp.hpp>
 #include <complex>

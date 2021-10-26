@@ -1,203 +1,1097 @@
-# This is a non-recursive make file, implemented along the lines of:
-# Miller, P. (1997). Recursive Make Considered Harmful.
-# 	http://aegis.sourceforge.net/auug97.pdf
-
-# This file was adapted from the example given by:
-# Crosby, S. (2001): A build system using "Recursive Make Considered harmful."
-# http://lists.gnu.org/archive/html/autoconf/2001-08/msg00011.html
-
-# Run all make commands from the directory containing this makefile.
-
-# To make everything, run:			make all
-# To make programs, run:			make appl
-# To make library libantl.a, run:	make lib (or just make, with no args)
-# To make an individual app, run:  	make appl/my_path_to/my_application
-# To make an individual .o, run:	make src/my_path_to/my_obj_module.o
-
-# "make clean" deletes all compiled files.
-# "make veryclean" deletes all compiled files and all dependency (.d) files.
-
-# Author: John Lees-Miller (2005-06-06).
-# Version: $Header: /scrinium/ANTL/ANTL/Makefile,v 1.16 2013/07/27 06:49:20 jacobs Exp $
-
-
-#
-# Project Options
-#
-
-# include user-defined flags and paths
-# include CONFIG
-
-# MPI flags -- cannot compile statically
-# MFLAGS := $(CFLAGS)
-# MFLAGS += -DMPICH_IGNORE_CXX_SEEK -DPARALLEL #MPI Stuff
-# CFLAGS += -static
-
-
-
-# Declare all subdirectories w/ files needing attention from make.
-# These paths are relative to the location of this Makefile.
-
-# DIRS := appl/Tests/Exponentiation
-# DIRS += appl/Tests/Arithmetic
-# DIRS += appl/Tests/Quadratic
-# DIRS := tests/Exponentiation
-# DIRS += tests/Arithmetic
-# DIRS += tests/Quadratic
-# DIRS += src
-# DIRS += src/Arithmetic
-# DIRS += src/Quadratic
-# DIRS += src/Quadratic/Cube
-# DIRS += src/Quadratic/Multiply
-# DIRS += src/Quadratic/Reduce
-# DIRS += src/Quadratic/Square
-# DIRS += src/XGCD
-
-#
-# Non-Recursive Makefile Implementation
-# (You shouldn't need to change anything below this line unless making major
-# changes to the structure of the project.)
-#
-
-# Make sure that 'lib' is the default rule (first in file).
-# lib:
-
-# Flush suffixes to prevent make from using implicit suffix rules.
-# .SUFFIXES:
-
-
-# Configure source groups (group by libs and compile flags).
-
-
-# ANTL_ Source Group: Source files to be compiled into the libantl.a library.
-# ANTL_SRC := # Empty; added in submakefiles.
-# ANTL_INC  := -I./include $(GMP_INC) $(NTL_INC) $(BLAS_INC) $(IML_INC) $(GIVARO_INC) $(LINBOX_INC)
-# ANTL_CFLAGS := $(ANTL_INC) $(CFLAGS)
-
-# APPL_ Source Group: Source files to be compiled as applications, and linked
-# against libantl.a
-# APPL_SRC := #Empty; added in submakefiles.
-# APPL_INC := -I./include $(GMP_INC) $(NTL_INC) $(BLAS_INC) $(IML_INC) $(GIVARO_INC) $(LINBOX_INC)
-# APPL_CFLAGS := $(APPL_INC) $(CFLAGS)
-# APPL_LFLAGS := -L./lib/$(ARCH) -lantl $(LINBOX_LIB) $(GIVARO_LIB) $(IML_LIB) $(BLAS_LIB) $(NTL_LIB) $(GMP_LIB) -lm
-# APPL_LFLAGS := -L./lib/$(ARCH) -lantl $(LINBOX_LIB) $(GIVARO_LIB) $(IML_LIB) $(BLAS_LIB) $(NTL_LIB) -Wl,--rpath -Wl,/scratch/lib/gmp/lib $(GMP_LIB) -lm
-# APPL_LFLAGS := -L./lib/$(ARCH) -lantl $(LINBOX_LIB) $(GIVARO_LIB) $(IML_LIB) $(BLAS_LIB) $(NTL_LIB) $(GMP_LIB) -lm
-# APPL_MFLAGS := $(APPL_INC) $(MFLAGS)
-# APPL_LFLAGS += $(LFLAGS)
-# APPL_MPI := #Empty; added in submakefiles.
-
-
-# Include submakefiles in subdirectories (Makefile.dir files).
-# They will add to the CLEANFILES and *_SRC variables, depending on what
-# flags are needed by the compiler.
-
-# CLEANFILES := # Empty; added in submakefiles.
-
-# include $(patsubst %,%/Makefile.dir,$(DIRS))
-
-
-# Find object files for each source group, and aggregate them.
-
-
-# ANTL_OBJ := $(patsubst %.cpp,%.o,$(filter %.cpp,$(ANTL_SRC)))
-# APPL_OBJ := $(patsubst %.cpp,%.o,$(filter %.cpp,$(APPL_SRC)))
-# MPI_OBJ := $(patsubst %.cpp,%.o,$(filter %.cpp,$(APPL_MPI)))
-
-# SRC := $(ANTL_SRC) $(APPL_SRC) $(APPL_MPI)
-# OBJ := $(ANTL_OBJ) $(APPL_OBJ) $(MPI_OBJ)
-# BIN := $(patsubst %.cpp, %, $(APPL_SRC))
-# MPI := $(patsubst %.cpp, %, $(APPL_MPI))
-
-# $(info $(OBJ))
-# $(info $(BIN))
-
-
-# Define rule for building dependencies, then include .d(ependency) files.
-
-
-# Flags to pass for dependency-finding. All and only include files that are
-# _not_ part of 3rd party libraries should be in this path.
-# DEPFLAGS := -I./include -DMPICH_IGNORE_CXX_SEEK $(IML_INC)
-
-# This beast is the actual rule that finds the dependencies.
-# $(patsubst %.cpp,%.d,$(filter %.cpp,$(SRC))) : %.d: %.cpp
-# 	@echo "***** Doing dependencies for $<"
-# 	@set -e; b=`basename $* .cpp` ; d=`dirname $*` ; \
-# 			$(CXX) -MM $(DEPFLAGS) $< \
-# 		| sed "s%\\($$b\\)\\.o[ :]*%$${d}/\\1.o $${d}/\\1.d : %g" > $@; \
-# 		[ -s $@ ] || rm -f $@
-
-# Dependencies are computed for all object files.
-# DEPS := $(patsubst %.o, %.d, $(OBJ))
-
-# Note: using -include to suppress warnings due to missing .d files.
-# -include $(DEPS)
-
-# $(MPI): CXX := $(MPICXX)
-# $(MPI): ANTL_CFLAGS := $(ANTL_INC) $(MFLAGS)
-
-
-# Source group build rules.
-
-
-# $(ANTL_OBJ): %.o : %.cpp %.d
-# 	$(CXX) $(ANTL_CFLAGS) -o $@ -c $<
-
-
-# Library build rule.
-
-
-# LIB_NAME := libantl.a
-# LIB_PATH := ./lib/$(ARCH)
-# LIB_FULL_NAME := $(LIB_PATH)/$(LIB_NAME)
-
-# $(LIB_FULL_NAME) : $(ANTL_OBJ)
-# 	mkdir -p $(LIB_PATH)
-# 	ar cru $@ $^
-
-
-# Application build rule
-
-
-# $(BIN) : % : %.cpp $(LIB_FULL_NAME)
-# 	$(CXX) $(APPL_CFLAGS) $< $(APPL_LFLAGS) -o $@
-
-
-# MPI files build rule
-
-
-# $(MPI) : % : %.cpp $(LIB_FULL_NAME)
-# 	$(MPICXX) $(APPL_MFLAGS) $< $(APPL_LFLAGS) -o $@
-
-
-
-# Aggregate rules.
-
-
-# all: appl lib
-# appl: $(BIN)
-# lib: $(LIB_FULL_NAME)
-# mpiappl: $(MPI)
-# obj: $(OBJ)
-# dep: $(DEPS)
-
-# cleandep:
-# 	rm -f $(DEPS)
-
-# cleanobj:
-# 	rm -f $(OBJ)
-
-# cleanlib:
-# 	rm -f $(LIB_FULL_NAME)
-
-# cleanappl:
-# 	rm -f $(BIN) $(MPI)
-
-# Clean objects, binaries, libraries and any submakefile-specific files.
-# clean: cleanobj cleanappl cleanlib
-# 	rm -f $(CLEANFILES)
-
-# Cleans and destroys dependencies and all libraries.
-# veryclean: clean cleandep
-# 	rm -rf ./lib/*
-
+# Makefile.in generated by automake 1.16.2 from Makefile.am.
+# Makefile.  Generated from Makefile.in by configure.
+
+# Copyright (C) 1994-2020 Free Software Foundation, Inc.
+
+# This Makefile.in is free software; the Free Software Foundation
+# gives unlimited permission to copy and/or distribute it,
+# with or without modifications, as long as this notice is preserved.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+# even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
+
+
+
+
+am__is_gnu_make = { \
+  if test -z '$(MAKELEVEL)'; then \
+    false; \
+  elif test -n '$(MAKE_HOST)'; then \
+    true; \
+  elif test -n '$(MAKE_VERSION)' && test -n '$(CURDIR)'; then \
+    true; \
+  else \
+    false; \
+  fi; \
+}
+am__make_running_with_option = \
+  case $${target_option-} in \
+      ?) ;; \
+      *) echo "am__make_running_with_option: internal error: invalid" \
+              "target option '$${target_option-}' specified" >&2; \
+         exit 1;; \
+  esac; \
+  has_opt=no; \
+  sane_makeflags=$$MAKEFLAGS; \
+  if $(am__is_gnu_make); then \
+    sane_makeflags=$$MFLAGS; \
+  else \
+    case $$MAKEFLAGS in \
+      *\\[\ \	]*) \
+        bs=\\; \
+        sane_makeflags=`printf '%s\n' "$$MAKEFLAGS" \
+          | sed "s/$$bs$$bs[$$bs $$bs	]*//g"`;; \
+    esac; \
+  fi; \
+  skip_next=no; \
+  strip_trailopt () \
+  { \
+    flg=`printf '%s\n' "$$flg" | sed "s/$$1.*$$//"`; \
+  }; \
+  for flg in $$sane_makeflags; do \
+    test $$skip_next = yes && { skip_next=no; continue; }; \
+    case $$flg in \
+      *=*|--*) continue;; \
+        -*I) strip_trailopt 'I'; skip_next=yes;; \
+      -*I?*) strip_trailopt 'I';; \
+        -*O) strip_trailopt 'O'; skip_next=yes;; \
+      -*O?*) strip_trailopt 'O';; \
+        -*l) strip_trailopt 'l'; skip_next=yes;; \
+      -*l?*) strip_trailopt 'l';; \
+      -[dEDm]) skip_next=yes;; \
+      -[JT]) skip_next=yes;; \
+    esac; \
+    case $$flg in \
+      *$$target_option*) has_opt=yes; break;; \
+    esac; \
+  done; \
+  test $$has_opt = yes
+am__make_dryrun = (target_option=n; $(am__make_running_with_option))
+am__make_keepgoing = (target_option=k; $(am__make_running_with_option))
+pkgdatadir = $(datadir)/antl
+pkgincludedir = $(includedir)/antl
+pkglibdir = $(libdir)/antl
+pkglibexecdir = $(libexecdir)/antl
+am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
+install_sh_DATA = $(install_sh) -c -m 644
+install_sh_PROGRAM = $(install_sh) -c
+install_sh_SCRIPT = $(install_sh) -c
+INSTALL_HEADER = $(INSTALL_DATA)
+transform = $(program_transform_name)
+NORMAL_INSTALL = :
+PRE_INSTALL = :
+POST_INSTALL = :
+NORMAL_UNINSTALL = :
+PRE_UNINSTALL = :
+POST_UNINSTALL = :
+build_triplet = x86_64-pc-linux-gnu
+host_triplet = x86_64-pc-linux-gnu
+#bin_PROGRAMS = test$(EXEEXT) main$(EXEEXT)
+bin_PROGRAMS = test$(EXEEXT) main$(EXEEXT) \
+	cubic$(EXEEXT) testorder$(EXEEXT)
+subdir = .
+ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+am__aclocal_m4_deps = $(top_srcdir)/configure.ac
+am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
+	$(ACLOCAL_M4)
+DIST_COMMON = $(srcdir)/Makefile.am $(top_srcdir)/configure \
+	$(am__configure_deps) $(am__DIST_COMMON)
+am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
+ configure.lineno config.status.lineno
+mkinstalldirs = $(install_sh) -d
+CONFIG_HEADER = config.h
+CONFIG_CLEAN_FILES =
+CONFIG_CLEAN_VPATH_FILES =
+am__installdirs = "$(DESTDIR)$(bindir)"
+PROGRAMS = $(bin_PROGRAMS)
+am__dirstamp = $(am__leading_dot)dirstamp
+am_cubic_OBJECTS = tests/Cubic/cubicTestMain.$(OBJEXT) \
+	src/Cubic/generalFunctions.$(OBJEXT) \
+	src/Cubic/GlobalCubicField.$(OBJEXT) \
+	src/Cubic/CubicNumberField.$(OBJEXT) \
+	src/Cubic/RealCubicNumberField.$(OBJEXT) \
+	src/Cubic/ComplexCubicNumberField.$(OBJEXT) \
+	src/Cubic/CubicOrder.$(OBJEXT) \
+	src/Cubic/CubicOrderReal.$(OBJEXT) \
+	src/Cubic/CubicElement.$(OBJEXT) \
+	src/Cubic/CubicIdeal.$(OBJEXT) \
+	src/Cubic/Multiplication/IdealMultiplicationStrategy.$(OBJEXT) \
+	src/Cubic/Multiplication/MultiplyStrategyWilliams.$(OBJEXT) \
+	src/Cubic/VoronoiMethods.$(OBJEXT) \
+	src/Cubic/VoronoiReal.$(OBJEXT) \
+	src/Cubic/VoronoiComplex.$(OBJEXT) \
+	src/Cubic/FundamentalUnits/BasicVoronoi.$(OBJEXT) \
+	src/Cubic/FundamentalUnits/BSGSVoronoi.$(OBJEXT)
+cubic_OBJECTS = $(am_cubic_OBJECTS)
+cubic_LDADD = $(LDADD)
+am_main_OBJECTS = tests/HeaderTest.$(OBJEXT) \
+	src/Quadratic/QuadraticOrder_ZZ.$(OBJEXT) \
+	src/Quadratic/QuadraticOrder_long.$(OBJEXT)
+main_OBJECTS = $(am_main_OBJECTS)
+main_LDADD = $(LDADD)
+am_test_OBJECTS = tests/UnitTests.$(OBJEXT) \
+	tests/IndexCalculus/IndCalc_Tests.$(OBJEXT) \
+	tests/Quadratic/QuadraticOrder_ZZ_Tests.$(OBJEXT) \
+	tests/Quadratic/QuadraticOrder_long_Tests.$(OBJEXT) \
+	src/Quadratic/QuadraticOrder_ZZ.$(OBJEXT) \
+	src/Quadratic/QuadraticOrder_long.$(OBJEXT)
+test_OBJECTS = $(am_test_OBJECTS)
+test_LDADD = $(LDADD)
+am_testorder_OBJECTS = tests/Cubic/catch-tests/test-order.$(OBJEXT) \
+	tests/Cubic/catch-tests/testingMain.$(OBJEXT) \
+	src/Cubic/generalFunctions.$(OBJEXT) \
+	src/Cubic/CubicOrder.$(OBJEXT)
+testorder_OBJECTS = $(am_testorder_OBJECTS)
+testorder_LDADD = $(LDADD)
+AM_V_P = $(am__v_P_$(V))
+am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
+am__v_P_0 = false
+am__v_P_1 = :
+AM_V_GEN = $(am__v_GEN_$(V))
+am__v_GEN_ = $(am__v_GEN_$(AM_DEFAULT_VERBOSITY))
+am__v_GEN_0 = @echo "  GEN     " $@;
+am__v_GEN_1 = 
+AM_V_at = $(am__v_at_$(V))
+am__v_at_ = $(am__v_at_$(AM_DEFAULT_VERBOSITY))
+am__v_at_0 = @
+am__v_at_1 = 
+DEFAULT_INCLUDES = -I.
+depcomp = $(SHELL) $(top_srcdir)/build/depcomp
+am__maybe_remake_depfiles = depfiles
+am__depfiles_remade = src/Cubic/$(DEPDIR)/ComplexCubicNumberField.Po \
+	src/Cubic/$(DEPDIR)/CubicElement.Po \
+	src/Cubic/$(DEPDIR)/CubicIdeal.Po \
+	src/Cubic/$(DEPDIR)/CubicNumberField.Po \
+	src/Cubic/$(DEPDIR)/CubicOrder.Po \
+	src/Cubic/$(DEPDIR)/CubicOrderReal.Po \
+	src/Cubic/$(DEPDIR)/GlobalCubicField.Po \
+	src/Cubic/$(DEPDIR)/RealCubicNumberField.Po \
+	src/Cubic/$(DEPDIR)/VoronoiComplex.Po \
+	src/Cubic/$(DEPDIR)/VoronoiMethods.Po \
+	src/Cubic/$(DEPDIR)/VoronoiReal.Po \
+	src/Cubic/$(DEPDIR)/generalFunctions.Po \
+	src/Cubic/FundamentalUnits/$(DEPDIR)/BSGSVoronoi.Po \
+	src/Cubic/FundamentalUnits/$(DEPDIR)/BasicVoronoi.Po \
+	src/Cubic/Multiplication/$(DEPDIR)/IdealMultiplicationStrategy.Po \
+	src/Cubic/Multiplication/$(DEPDIR)/MultiplyStrategyWilliams.Po \
+	src/Quadratic/$(DEPDIR)/QuadraticOrder_ZZ.Po \
+	src/Quadratic/$(DEPDIR)/QuadraticOrder_long.Po \
+	tests/$(DEPDIR)/HeaderTest.Po tests/$(DEPDIR)/UnitTests.Po \
+	tests/Cubic/$(DEPDIR)/cubicTestMain.Po \
+	tests/Cubic/catch-tests/$(DEPDIR)/test-order.Po \
+	tests/Cubic/catch-tests/$(DEPDIR)/testingMain.Po \
+	tests/IndexCalculus/$(DEPDIR)/IndCalc_Tests.Po \
+	tests/Quadratic/$(DEPDIR)/QuadraticOrder_ZZ_Tests.Po \
+	tests/Quadratic/$(DEPDIR)/QuadraticOrder_long_Tests.Po
+am__mv = mv -f
+CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+AM_V_CXX = $(am__v_CXX_$(V))
+am__v_CXX_ = $(am__v_CXX_$(AM_DEFAULT_VERBOSITY))
+am__v_CXX_0 = @echo "  CXX     " $@;
+am__v_CXX_1 = 
+CXXLD = $(CXX)
+CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) \
+	-o $@
+AM_V_CXXLD = $(am__v_CXXLD_$(V))
+am__v_CXXLD_ = $(am__v_CXXLD_$(AM_DEFAULT_VERBOSITY))
+am__v_CXXLD_0 = @echo "  CXXLD   " $@;
+am__v_CXXLD_1 = 
+SOURCES = $(cubic_SOURCES) $(main_SOURCES) $(test_SOURCES) \
+	$(testorder_SOURCES)
+DIST_SOURCES = $(cubic_SOURCES) $(main_SOURCES) $(test_SOURCES) \
+	$(testorder_SOURCES)
+am__can_run_installinfo = \
+  case $$AM_UPDATE_INFO_DIR in \
+    n|no|NO) false;; \
+    *) (install-info --version) >/dev/null 2>&1;; \
+  esac
+am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP) \
+	config.h.in
+# Read a list of newline-separated strings from the standard input,
+# and print each of them once, without duplicates.  Input order is
+# *not* preserved.
+am__uniquify_input = $(AWK) '\
+  BEGIN { nonempty = 0; } \
+  { items[$$0] = 1; nonempty = 1; } \
+  END { if (nonempty) { for (i in items) print i; }; } \
+'
+# Make sure the list of sources is unique.  This is necessary because,
+# e.g., the same source file might be shared among _SOURCES variables
+# for different programs/libraries.
+am__define_uniq_tagged_files = \
+  list='$(am__tagged_files)'; \
+  unique=`for i in $$list; do \
+    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
+  done | $(am__uniquify_input)`
+ETAGS = etags
+CTAGS = ctags
+CSCOPE = cscope
+AM_RECURSIVE_TARGETS = cscope
+am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/config.h.in \
+	$(top_srcdir)/build/compile $(top_srcdir)/build/config.guess \
+	$(top_srcdir)/build/config.sub $(top_srcdir)/build/depcomp \
+	$(top_srcdir)/build/install-sh $(top_srcdir)/build/missing \
+	build/compile build/config.guess build/config.sub \
+	build/depcomp build/install-sh build/missing
+DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+distdir = $(PACKAGE)-$(VERSION)
+top_distdir = $(distdir)
+am__remove_distdir = \
+  if test -d "$(distdir)"; then \
+    find "$(distdir)" -type d ! -perm -200 -exec chmod u+w {} ';' \
+      && rm -rf "$(distdir)" \
+      || { sleep 5 && rm -rf "$(distdir)"; }; \
+  else :; fi
+am__post_remove_distdir = $(am__remove_distdir)
+DIST_ARCHIVES = $(distdir).tar.gz
+GZIP_ENV = --best
+DIST_TARGETS = dist-gzip
+distuninstallcheck_listfiles = find . -type f -print
+am__distuninstallcheck_listfiles = $(distuninstallcheck_listfiles) \
+  | sed 's|^\./|$(prefix)/|' | grep -v '$(infodir)/dir$$'
+distcleancheck_listfiles = find . -type f -print
+ACLOCAL = ${SHELL} /home/cs-gb2khv2/ANTL/build/missing aclocal-1.16
+AMTAR = $${TAR-tar}
+AM_DEFAULT_VERBOSITY = 1
+AUTOCONF = ${SHELL} /home/cs-gb2khv2/ANTL/build/missing autoconf
+AUTOHEADER = ${SHELL} /home/cs-gb2khv2/ANTL/build/missing autoheader
+AUTOMAKE = ${SHELL} /home/cs-gb2khv2/ANTL/build/missing automake-1.16
+AWK = gawk
+CC = gcc
+CCDEPMODE = depmode=gcc3
+CFLAGS = -g -O2
+CPP = gcc -E
+CPPFLAGS = 
+CXX = g++
+CXXDEPMODE = depmode=gcc3
+CXXFLAGS = -g -O2
+CYGPATH_W = echo
+DEFS = -DHAVE_CONFIG_H
+DEPDIR = .deps
+ECHO_C = 
+ECHO_N = -n
+ECHO_T = 
+EGREP = /usr/bin/grep -E
+EXEEXT = 
+GREP = /usr/bin/grep
+INSTALL = /usr/bin/install -c
+INSTALL_DATA = ${INSTALL} -m 644
+INSTALL_PROGRAM = ${INSTALL}
+INSTALL_SCRIPT = ${INSTALL}
+INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
+LDFLAGS = 
+LIBMPFR = -lmpfr
+LIBOBJS = 
+LIBS = -lntl -lmpfi -lmpfr -lm -lgmp 
+LN_S = ln -s
+LTLIBOBJS = 
+MAKEINFO = ${SHELL} /home/cs-gb2khv2/ANTL/build/missing makeinfo
+MKDIR_P = /usr/bin/mkdir -p
+OBJEXT = o
+PACKAGE = antl
+PACKAGE_BUGREPORT = test@gmail.com
+PACKAGE_NAME = ANTL
+PACKAGE_STRING = ANTL 1.0
+PACKAGE_TARNAME = antl
+PACKAGE_URL = 
+PACKAGE_VERSION = 1.0
+PATH_SEPARATOR = :
+PTHREAD_CC = gcc
+PTHREAD_CFLAGS = -pthread
+PTHREAD_LIBS = 
+SED = /usr/bin/sed
+SET_MAKE = 
+SHELL = /bin/sh
+STRIP = 
+VERSION = 1.0
+abs_builddir = /home/cs-gb2khv2/ANTL
+abs_srcdir = /home/cs-gb2khv2/ANTL
+abs_top_builddir = /home/cs-gb2khv2/ANTL
+abs_top_srcdir = /home/cs-gb2khv2/ANTL
+ac_ct_CC = gcc
+ac_ct_CXX = g++
+am__include = include
+am__leading_dot = .
+am__quote = 
+am__tar = $${TAR-tar} chof - "$$tardir"
+am__untar = $${TAR-tar} xf -
+ax_pthread_config = 
+bindir = ${exec_prefix}/bin
+build = x86_64-pc-linux-gnu
+build_alias = 
+build_cpu = x86_64
+build_os = linux-gnu
+build_vendor = pc
+builddir = .
+datadir = ${datarootdir}
+datarootdir = ${prefix}/share
+docdir = ${datarootdir}/doc/${PACKAGE_TARNAME}
+dvidir = ${docdir}
+exec_prefix = ${prefix}
+host = x86_64-pc-linux-gnu
+host_alias = 
+host_cpu = x86_64
+host_os = linux-gnu
+host_vendor = pc
+htmldir = ${docdir}
+includedir = ${prefix}/include
+infodir = ${datarootdir}/info
+install_sh = ${SHELL} /home/cs-gb2khv2/ANTL/build/install-sh
+libdir = ${exec_prefix}/lib
+libexecdir = ${exec_prefix}/libexec
+localedir = ${datarootdir}/locale
+localstatedir = ${prefix}/var
+mandir = ${datarootdir}/man
+mkdir_p = $(MKDIR_P)
+oldincludedir = /usr/include
+pdfdir = ${docdir}
+prefix = /usr/local
+program_transform_name = s,x,x,
+psdir = ${docdir}
+runstatedir = ${localstatedir}/run
+sbindir = ${exec_prefix}/sbin
+sharedstatedir = ${prefix}/com
+srcdir = .
+sysconfdir = ${prefix}/etc
+target_alias = 
+top_build_prefix = 
+top_builddir = .
+top_srcdir = .
+AUTOMAKE_OPTIONS = subdir-objects
+AM_LIBS =  -lntl -lmpfi -lmpfr -lm -lgmp 
+AM_CXXFLAGS = -g -O2 -pthread -g
+AM_CC = gcc
+AM_CPPFLAGS =  -I$(top_srcdir)/include
+test_SOURCES = tests/UnitTests.cpp tests/IndexCalculus/IndCalc_Tests.cpp tests/Quadratic/QuadraticOrder_ZZ_Tests.cpp tests/Quadratic/QuadraticOrder_long_Tests.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp
+main_SOURCES = tests/HeaderTest.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp
+cubic_SOURCES = tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/FundamentalUnits/BasicVoronoi.cpp src/Cubic/FundamentalUnits/BSGSVoronoi.cpp
+testorder_SOURCES = tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp
+all: config.h
+	$(MAKE) $(AM_MAKEFLAGS) all-am
+
+.SUFFIXES:
+.SUFFIXES: .cpp .o .obj
+am--refresh: Makefile
+	@:
+$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
+	@for dep in $?; do \
+	  case '$(am__configure_deps)' in \
+	    *$$dep*) \
+	      echo ' cd $(srcdir) && $(AUTOMAKE) --foreign'; \
+	      $(am__cd) $(srcdir) && $(AUTOMAKE) --foreign \
+		&& exit 0; \
+	      exit 1;; \
+	  esac; \
+	done; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign Makefile'; \
+	$(am__cd) $(top_srcdir) && \
+	  $(AUTOMAKE) --foreign Makefile
+Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+	@case '$?' in \
+	  *config.status*) \
+	    echo ' $(SHELL) ./config.status'; \
+	    $(SHELL) ./config.status;; \
+	  *) \
+	    echo ' cd $(top_builddir) && $(SHELL) ./config.status $@ $(am__maybe_remake_depfiles)'; \
+	    cd $(top_builddir) && $(SHELL) ./config.status $@ $(am__maybe_remake_depfiles);; \
+	esac;
+
+$(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
+	$(SHELL) ./config.status --recheck
+
+$(top_srcdir)/configure:  $(am__configure_deps)
+	$(am__cd) $(srcdir) && $(AUTOCONF)
+$(ACLOCAL_M4):  $(am__aclocal_m4_deps)
+	$(am__cd) $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
+$(am__aclocal_m4_deps):
+
+config.h: stamp-h1
+	@test -f $@ || rm -f stamp-h1
+	@test -f $@ || $(MAKE) $(AM_MAKEFLAGS) stamp-h1
+
+stamp-h1: $(srcdir)/config.h.in $(top_builddir)/config.status
+	@rm -f stamp-h1
+	cd $(top_builddir) && $(SHELL) ./config.status config.h
+$(srcdir)/config.h.in:  $(am__configure_deps) 
+	($(am__cd) $(top_srcdir) && $(AUTOHEADER))
+	rm -f stamp-h1
+	touch $@
+
+distclean-hdr:
+	-rm -f config.h stamp-h1
+install-binPROGRAMS: $(bin_PROGRAMS)
+	@$(NORMAL_INSTALL)
+	@list='$(bin_PROGRAMS)'; test -n "$(bindir)" || list=; \
+	if test -n "$$list"; then \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(bindir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(bindir)" || exit 1; \
+	fi; \
+	for p in $$list; do echo "$$p $$p"; done | \
+	sed 's/$(EXEEXT)$$//' | \
+	while read p p1; do if test -f $$p \
+	  ; then echo "$$p"; echo "$$p"; else :; fi; \
+	done | \
+	sed -e 'p;s,.*/,,;n;h' \
+	    -e 's|.*|.|' \
+	    -e 'p;x;s,.*/,,;s/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/' | \
+	sed 'N;N;N;s,\n, ,g' | \
+	$(AWK) 'BEGIN { files["."] = ""; dirs["."] = 1 } \
+	  { d=$$3; if (dirs[d] != 1) { print "d", d; dirs[d] = 1 } \
+	    if ($$2 == $$4) files[d] = files[d] " " $$1; \
+	    else { print "f", $$3 "/" $$4, $$1; } } \
+	  END { for (d in files) print "f", d, files[d] }' | \
+	while read type dir files; do \
+	    if test "$$dir" = .; then dir=; else dir=/$$dir; fi; \
+	    test -z "$$files" || { \
+	      echo " $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) $$files '$(DESTDIR)$(bindir)$$dir'"; \
+	      $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) $$files "$(DESTDIR)$(bindir)$$dir" || exit $$?; \
+	    } \
+	; done
+
+uninstall-binPROGRAMS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(bin_PROGRAMS)'; test -n "$(bindir)" || list=; \
+	files=`for p in $$list; do echo "$$p"; done | \
+	  sed -e 'h;s,^.*/,,;s/$(EXEEXT)$$//;$(transform)' \
+	      -e 's/$$/$(EXEEXT)/' \
+	`; \
+	test -n "$$list" || exit 0; \
+	echo " ( cd '$(DESTDIR)$(bindir)' && rm -f" $$files ")"; \
+	cd "$(DESTDIR)$(bindir)" && rm -f $$files
+
+clean-binPROGRAMS:
+	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
+tests/Cubic/$(am__dirstamp):
+	@$(MKDIR_P) tests/Cubic
+	@: > tests/Cubic/$(am__dirstamp)
+tests/Cubic/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) tests/Cubic/$(DEPDIR)
+	@: > tests/Cubic/$(DEPDIR)/$(am__dirstamp)
+tests/Cubic/cubicTestMain.$(OBJEXT): tests/Cubic/$(am__dirstamp) \
+	tests/Cubic/$(DEPDIR)/$(am__dirstamp)
+src/Cubic/$(am__dirstamp):
+	@$(MKDIR_P) src/Cubic
+	@: > src/Cubic/$(am__dirstamp)
+src/Cubic/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) src/Cubic/$(DEPDIR)
+	@: > src/Cubic/$(DEPDIR)/$(am__dirstamp)
+src/Cubic/generalFunctions.$(OBJEXT): src/Cubic/$(am__dirstamp) \
+	src/Cubic/$(DEPDIR)/$(am__dirstamp)
+src/Cubic/GlobalCubicField.$(OBJEXT): src/Cubic/$(am__dirstamp) \
+	src/Cubic/$(DEPDIR)/$(am__dirstamp)
+src/Cubic/CubicNumberField.$(OBJEXT): src/Cubic/$(am__dirstamp) \
+	src/Cubic/$(DEPDIR)/$(am__dirstamp)
+src/Cubic/RealCubicNumberField.$(OBJEXT): src/Cubic/$(am__dirstamp) \
+	src/Cubic/$(DEPDIR)/$(am__dirstamp)
+src/Cubic/ComplexCubicNumberField.$(OBJEXT):  \
+	src/Cubic/$(am__dirstamp) src/Cubic/$(DEPDIR)/$(am__dirstamp)
+src/Cubic/CubicOrder.$(OBJEXT): src/Cubic/$(am__dirstamp) \
+	src/Cubic/$(DEPDIR)/$(am__dirstamp)
+src/Cubic/CubicOrderReal.$(OBJEXT): src/Cubic/$(am__dirstamp) \
+	src/Cubic/$(DEPDIR)/$(am__dirstamp)
+src/Cubic/CubicElement.$(OBJEXT): src/Cubic/$(am__dirstamp) \
+	src/Cubic/$(DEPDIR)/$(am__dirstamp)
+src/Cubic/CubicIdeal.$(OBJEXT): src/Cubic/$(am__dirstamp) \
+	src/Cubic/$(DEPDIR)/$(am__dirstamp)
+src/Cubic/Multiplication/$(am__dirstamp):
+	@$(MKDIR_P) src/Cubic/Multiplication
+	@: > src/Cubic/Multiplication/$(am__dirstamp)
+src/Cubic/Multiplication/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) src/Cubic/Multiplication/$(DEPDIR)
+	@: > src/Cubic/Multiplication/$(DEPDIR)/$(am__dirstamp)
+src/Cubic/Multiplication/IdealMultiplicationStrategy.$(OBJEXT):  \
+	src/Cubic/Multiplication/$(am__dirstamp) \
+	src/Cubic/Multiplication/$(DEPDIR)/$(am__dirstamp)
+src/Cubic/Multiplication/MultiplyStrategyWilliams.$(OBJEXT):  \
+	src/Cubic/Multiplication/$(am__dirstamp) \
+	src/Cubic/Multiplication/$(DEPDIR)/$(am__dirstamp)
+src/Cubic/VoronoiMethods.$(OBJEXT): src/Cubic/$(am__dirstamp) \
+	src/Cubic/$(DEPDIR)/$(am__dirstamp)
+src/Cubic/VoronoiReal.$(OBJEXT): src/Cubic/$(am__dirstamp) \
+	src/Cubic/$(DEPDIR)/$(am__dirstamp)
+src/Cubic/VoronoiComplex.$(OBJEXT): src/Cubic/$(am__dirstamp) \
+	src/Cubic/$(DEPDIR)/$(am__dirstamp)
+src/Cubic/FundamentalUnits/$(am__dirstamp):
+	@$(MKDIR_P) src/Cubic/FundamentalUnits
+	@: > src/Cubic/FundamentalUnits/$(am__dirstamp)
+src/Cubic/FundamentalUnits/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) src/Cubic/FundamentalUnits/$(DEPDIR)
+	@: > src/Cubic/FundamentalUnits/$(DEPDIR)/$(am__dirstamp)
+src/Cubic/FundamentalUnits/BasicVoronoi.$(OBJEXT):  \
+	src/Cubic/FundamentalUnits/$(am__dirstamp) \
+	src/Cubic/FundamentalUnits/$(DEPDIR)/$(am__dirstamp)
+src/Cubic/FundamentalUnits/BSGSVoronoi.$(OBJEXT):  \
+	src/Cubic/FundamentalUnits/$(am__dirstamp) \
+	src/Cubic/FundamentalUnits/$(DEPDIR)/$(am__dirstamp)
+
+cubic$(EXEEXT): $(cubic_OBJECTS) $(cubic_DEPENDENCIES) $(EXTRA_cubic_DEPENDENCIES) 
+	@rm -f cubic$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(cubic_OBJECTS) $(cubic_LDADD) $(LIBS)
+tests/$(am__dirstamp):
+	@$(MKDIR_P) tests
+	@: > tests/$(am__dirstamp)
+tests/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) tests/$(DEPDIR)
+	@: > tests/$(DEPDIR)/$(am__dirstamp)
+tests/HeaderTest.$(OBJEXT): tests/$(am__dirstamp) \
+	tests/$(DEPDIR)/$(am__dirstamp)
+src/Quadratic/$(am__dirstamp):
+	@$(MKDIR_P) src/Quadratic
+	@: > src/Quadratic/$(am__dirstamp)
+src/Quadratic/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) src/Quadratic/$(DEPDIR)
+	@: > src/Quadratic/$(DEPDIR)/$(am__dirstamp)
+src/Quadratic/QuadraticOrder_ZZ.$(OBJEXT):  \
+	src/Quadratic/$(am__dirstamp) \
+	src/Quadratic/$(DEPDIR)/$(am__dirstamp)
+src/Quadratic/QuadraticOrder_long.$(OBJEXT):  \
+	src/Quadratic/$(am__dirstamp) \
+	src/Quadratic/$(DEPDIR)/$(am__dirstamp)
+
+main$(EXEEXT): $(main_OBJECTS) $(main_DEPENDENCIES) $(EXTRA_main_DEPENDENCIES) 
+	@rm -f main$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(main_OBJECTS) $(main_LDADD) $(LIBS)
+tests/UnitTests.$(OBJEXT): tests/$(am__dirstamp) \
+	tests/$(DEPDIR)/$(am__dirstamp)
+tests/IndexCalculus/$(am__dirstamp):
+	@$(MKDIR_P) tests/IndexCalculus
+	@: > tests/IndexCalculus/$(am__dirstamp)
+tests/IndexCalculus/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) tests/IndexCalculus/$(DEPDIR)
+	@: > tests/IndexCalculus/$(DEPDIR)/$(am__dirstamp)
+tests/IndexCalculus/IndCalc_Tests.$(OBJEXT):  \
+	tests/IndexCalculus/$(am__dirstamp) \
+	tests/IndexCalculus/$(DEPDIR)/$(am__dirstamp)
+tests/Quadratic/$(am__dirstamp):
+	@$(MKDIR_P) tests/Quadratic
+	@: > tests/Quadratic/$(am__dirstamp)
+tests/Quadratic/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) tests/Quadratic/$(DEPDIR)
+	@: > tests/Quadratic/$(DEPDIR)/$(am__dirstamp)
+tests/Quadratic/QuadraticOrder_ZZ_Tests.$(OBJEXT):  \
+	tests/Quadratic/$(am__dirstamp) \
+	tests/Quadratic/$(DEPDIR)/$(am__dirstamp)
+tests/Quadratic/QuadraticOrder_long_Tests.$(OBJEXT):  \
+	tests/Quadratic/$(am__dirstamp) \
+	tests/Quadratic/$(DEPDIR)/$(am__dirstamp)
+
+test$(EXEEXT): $(test_OBJECTS) $(test_DEPENDENCIES) $(EXTRA_test_DEPENDENCIES) 
+	@rm -f test$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(test_OBJECTS) $(test_LDADD) $(LIBS)
+tests/Cubic/catch-tests/$(am__dirstamp):
+	@$(MKDIR_P) tests/Cubic/catch-tests
+	@: > tests/Cubic/catch-tests/$(am__dirstamp)
+tests/Cubic/catch-tests/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) tests/Cubic/catch-tests/$(DEPDIR)
+	@: > tests/Cubic/catch-tests/$(DEPDIR)/$(am__dirstamp)
+tests/Cubic/catch-tests/test-order.$(OBJEXT):  \
+	tests/Cubic/catch-tests/$(am__dirstamp) \
+	tests/Cubic/catch-tests/$(DEPDIR)/$(am__dirstamp)
+tests/Cubic/catch-tests/testingMain.$(OBJEXT):  \
+	tests/Cubic/catch-tests/$(am__dirstamp) \
+	tests/Cubic/catch-tests/$(DEPDIR)/$(am__dirstamp)
+
+testorder$(EXEEXT): $(testorder_OBJECTS) $(testorder_DEPENDENCIES) $(EXTRA_testorder_DEPENDENCIES) 
+	@rm -f testorder$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(testorder_OBJECTS) $(testorder_LDADD) $(LIBS)
+
+mostlyclean-compile:
+	-rm -f *.$(OBJEXT)
+	-rm -f src/Cubic/*.$(OBJEXT)
+	-rm -f src/Cubic/FundamentalUnits/*.$(OBJEXT)
+	-rm -f src/Cubic/Multiplication/*.$(OBJEXT)
+	-rm -f src/Quadratic/*.$(OBJEXT)
+	-rm -f tests/*.$(OBJEXT)
+	-rm -f tests/Cubic/*.$(OBJEXT)
+	-rm -f tests/Cubic/catch-tests/*.$(OBJEXT)
+	-rm -f tests/IndexCalculus/*.$(OBJEXT)
+	-rm -f tests/Quadratic/*.$(OBJEXT)
+
+distclean-compile:
+	-rm -f *.tab.c
+
+include src/Cubic/$(DEPDIR)/ComplexCubicNumberField.Po # am--include-marker
+include src/Cubic/$(DEPDIR)/CubicElement.Po # am--include-marker
+include src/Cubic/$(DEPDIR)/CubicIdeal.Po # am--include-marker
+include src/Cubic/$(DEPDIR)/CubicNumberField.Po # am--include-marker
+include src/Cubic/$(DEPDIR)/CubicOrder.Po # am--include-marker
+include src/Cubic/$(DEPDIR)/CubicOrderReal.Po # am--include-marker
+include src/Cubic/$(DEPDIR)/GlobalCubicField.Po # am--include-marker
+include src/Cubic/$(DEPDIR)/RealCubicNumberField.Po # am--include-marker
+include src/Cubic/$(DEPDIR)/VoronoiComplex.Po # am--include-marker
+include src/Cubic/$(DEPDIR)/VoronoiMethods.Po # am--include-marker
+include src/Cubic/$(DEPDIR)/VoronoiReal.Po # am--include-marker
+include src/Cubic/$(DEPDIR)/generalFunctions.Po # am--include-marker
+include src/Cubic/FundamentalUnits/$(DEPDIR)/BSGSVoronoi.Po # am--include-marker
+include src/Cubic/FundamentalUnits/$(DEPDIR)/BasicVoronoi.Po # am--include-marker
+include src/Cubic/Multiplication/$(DEPDIR)/IdealMultiplicationStrategy.Po # am--include-marker
+include src/Cubic/Multiplication/$(DEPDIR)/MultiplyStrategyWilliams.Po # am--include-marker
+include src/Quadratic/$(DEPDIR)/QuadraticOrder_ZZ.Po # am--include-marker
+include src/Quadratic/$(DEPDIR)/QuadraticOrder_long.Po # am--include-marker
+include tests/$(DEPDIR)/HeaderTest.Po # am--include-marker
+include tests/$(DEPDIR)/UnitTests.Po # am--include-marker
+include tests/Cubic/$(DEPDIR)/cubicTestMain.Po # am--include-marker
+include tests/Cubic/catch-tests/$(DEPDIR)/test-order.Po # am--include-marker
+include tests/Cubic/catch-tests/$(DEPDIR)/testingMain.Po # am--include-marker
+include tests/IndexCalculus/$(DEPDIR)/IndCalc_Tests.Po # am--include-marker
+include tests/Quadratic/$(DEPDIR)/QuadraticOrder_ZZ_Tests.Po # am--include-marker
+include tests/Quadratic/$(DEPDIR)/QuadraticOrder_long_Tests.Po # am--include-marker
+
+$(am__depfiles_remade):
+	@$(MKDIR_P) $(@D)
+	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
+
+am--depfiles: $(am__depfiles_remade)
+
+.cpp.o:
+	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
+	$(CXXCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
+	$(am__mv) $$depbase.Tpo $$depbase.Po
+#	$(AM_V_CXX)source='$<' object='$@' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXXCOMPILE) -c -o $@ $<
+
+.cpp.obj:
+	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.obj$$||'`;\
+	$(CXXCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ `$(CYGPATH_W) '$<'` &&\
+	$(am__mv) $$depbase.Tpo $$depbase.Po
+#	$(AM_V_CXX)source='$<' object='$@' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+ID: $(am__tagged_files)
+	$(am__define_uniq_tagged_files); mkid -fID $$unique
+tags: tags-am
+TAGS: tags
+
+tags-am: $(TAGS_DEPENDENCIES) $(am__tagged_files)
+	set x; \
+	here=`pwd`; \
+	$(am__define_uniq_tagged_files); \
+	shift; \
+	if test -z "$(ETAGS_ARGS)$$*$$unique"; then :; else \
+	  test -n "$$unique" || unique=$$empty_fix; \
+	  if test $$# -gt 0; then \
+	    $(ETAGS) $(ETAGSFLAGS) $(AM_ETAGSFLAGS) $(ETAGS_ARGS) \
+	      "$$@" $$unique; \
+	  else \
+	    $(ETAGS) $(ETAGSFLAGS) $(AM_ETAGSFLAGS) $(ETAGS_ARGS) \
+	      $$unique; \
+	  fi; \
+	fi
+ctags: ctags-am
+
+CTAGS: ctags
+ctags-am: $(TAGS_DEPENDENCIES) $(am__tagged_files)
+	$(am__define_uniq_tagged_files); \
+	test -z "$(CTAGS_ARGS)$$unique" \
+	  || $(CTAGS) $(CTAGSFLAGS) $(AM_CTAGSFLAGS) $(CTAGS_ARGS) \
+	     $$unique
+
+GTAGS:
+	here=`$(am__cd) $(top_builddir) && pwd` \
+	  && $(am__cd) $(top_srcdir) \
+	  && gtags -i $(GTAGS_ARGS) "$$here"
+cscope: cscope.files
+	test ! -s cscope.files \
+	  || $(CSCOPE) -b -q $(AM_CSCOPEFLAGS) $(CSCOPEFLAGS) -i cscope.files $(CSCOPE_ARGS)
+clean-cscope:
+	-rm -f cscope.files
+cscope.files: clean-cscope cscopelist
+cscopelist: cscopelist-am
+
+cscopelist-am: $(am__tagged_files)
+	list='$(am__tagged_files)'; \
+	case "$(srcdir)" in \
+	  [\\/]* | ?:[\\/]*) sdir="$(srcdir)" ;; \
+	  *) sdir=$(subdir)/$(srcdir) ;; \
+	esac; \
+	for i in $$list; do \
+	  if test -f "$$i"; then \
+	    echo "$(subdir)/$$i"; \
+	  else \
+	    echo "$$sdir/$$i"; \
+	  fi; \
+	done >> $(top_builddir)/cscope.files
+
+distclean-tags:
+	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
+	-rm -f cscope.out cscope.in.out cscope.po.out cscope.files
+
+distdir: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) distdir-am
+
+distdir-am: $(DISTFILES)
+	$(am__remove_distdir)
+	test -d "$(distdir)" || mkdir "$(distdir)"
+	@srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g'`; \
+	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g'`; \
+	list='$(DISTFILES)'; \
+	  dist_files=`for file in $$list; do echo $$file; done | \
+	  sed -e "s|^$$srcdirstrip/||;t" \
+	      -e "s|^$$topsrcdirstrip/|$(top_builddir)/|;t"`; \
+	case $$dist_files in \
+	  */*) $(MKDIR_P) `echo "$$dist_files" | \
+			   sed '/\//!d;s|^|$(distdir)/|;s,/[^/]*$$,,' | \
+			   sort -u` ;; \
+	esac; \
+	for file in $$dist_files; do \
+	  if test -f $$file || test -d $$file; then d=.; else d=$(srcdir); fi; \
+	  if test -d $$d/$$file; then \
+	    dir=`echo "/$$file" | sed -e 's,/[^/]*$$,,'`; \
+	    if test -d "$(distdir)/$$file"; then \
+	      find "$(distdir)/$$file" -type d ! -perm -700 -exec chmod u+rwx {} \;; \
+	    fi; \
+	    if test -d $(srcdir)/$$file && test $$d != $(srcdir); then \
+	      cp -fpR $(srcdir)/$$file "$(distdir)$$dir" || exit 1; \
+	      find "$(distdir)/$$file" -type d ! -perm -700 -exec chmod u+rwx {} \;; \
+	    fi; \
+	    cp -fpR $$d/$$file "$(distdir)$$dir" || exit 1; \
+	  else \
+	    test -f "$(distdir)/$$file" \
+	    || cp -p $$d/$$file "$(distdir)/$$file" \
+	    || exit 1; \
+	  fi; \
+	done
+	-test -n "$(am__skip_mode_fix)" \
+	|| find "$(distdir)" -type d ! -perm -755 \
+		-exec chmod u+rwx,go+rx {} \; -o \
+	  ! -type d ! -perm -444 -links 1 -exec chmod a+r {} \; -o \
+	  ! -type d ! -perm -400 -exec chmod a+r {} \; -o \
+	  ! -type d ! -perm -444 -exec $(install_sh) -c -m a+r {} {} \; \
+	|| chmod -R a+r "$(distdir)"
+dist-gzip: distdir
+	tardir=$(distdir) && $(am__tar) | eval GZIP= gzip $(GZIP_ENV) -c >$(distdir).tar.gz
+	$(am__post_remove_distdir)
+
+dist-bzip2: distdir
+	tardir=$(distdir) && $(am__tar) | BZIP2=$${BZIP2--9} bzip2 -c >$(distdir).tar.bz2
+	$(am__post_remove_distdir)
+
+dist-lzip: distdir
+	tardir=$(distdir) && $(am__tar) | lzip -c $${LZIP_OPT--9} >$(distdir).tar.lz
+	$(am__post_remove_distdir)
+
+dist-xz: distdir
+	tardir=$(distdir) && $(am__tar) | XZ_OPT=$${XZ_OPT--e} xz -c >$(distdir).tar.xz
+	$(am__post_remove_distdir)
+
+dist-zstd: distdir
+	tardir=$(distdir) && $(am__tar) | zstd -c $${ZSTD_CLEVEL-$${ZSTD_OPT--19}} >$(distdir).tar.zst
+	$(am__post_remove_distdir)
+
+dist-tarZ: distdir
+	@echo WARNING: "Support for distribution archives compressed with" \
+		       "legacy program 'compress' is deprecated." >&2
+	@echo WARNING: "It will be removed altogether in Automake 2.0" >&2
+	tardir=$(distdir) && $(am__tar) | compress -c >$(distdir).tar.Z
+	$(am__post_remove_distdir)
+
+dist-shar: distdir
+	@echo WARNING: "Support for shar distribution archives is" \
+	               "deprecated." >&2
+	@echo WARNING: "It will be removed altogether in Automake 2.0" >&2
+	shar $(distdir) | eval GZIP= gzip $(GZIP_ENV) -c >$(distdir).shar.gz
+	$(am__post_remove_distdir)
+
+dist-zip: distdir
+	-rm -f $(distdir).zip
+	zip -rq $(distdir).zip $(distdir)
+	$(am__post_remove_distdir)
+
+dist dist-all:
+	$(MAKE) $(AM_MAKEFLAGS) $(DIST_TARGETS) am__post_remove_distdir='@:'
+	$(am__post_remove_distdir)
+
+# This target untars the dist file and tries a VPATH configuration.  Then
+# it guarantees that the distribution is self-contained by making another
+# tarfile.
+distcheck: dist
+	case '$(DIST_ARCHIVES)' in \
+	*.tar.gz*) \
+	  eval GZIP= gzip $(GZIP_ENV) -dc $(distdir).tar.gz | $(am__untar) ;;\
+	*.tar.bz2*) \
+	  bzip2 -dc $(distdir).tar.bz2 | $(am__untar) ;;\
+	*.tar.lz*) \
+	  lzip -dc $(distdir).tar.lz | $(am__untar) ;;\
+	*.tar.xz*) \
+	  xz -dc $(distdir).tar.xz | $(am__untar) ;;\
+	*.tar.Z*) \
+	  uncompress -c $(distdir).tar.Z | $(am__untar) ;;\
+	*.shar.gz*) \
+	  eval GZIP= gzip $(GZIP_ENV) -dc $(distdir).shar.gz | unshar ;;\
+	*.zip*) \
+	  unzip $(distdir).zip ;;\
+	*.tar.zst*) \
+	  zstd -dc $(distdir).tar.zst | $(am__untar) ;;\
+	esac
+	chmod -R a-w $(distdir)
+	chmod u+w $(distdir)
+	mkdir $(distdir)/_build $(distdir)/_build/sub $(distdir)/_inst
+	chmod a-w $(distdir)
+	test -d $(distdir)/_build || exit 0; \
+	dc_install_base=`$(am__cd) $(distdir)/_inst && pwd | sed -e 's,^[^:\\/]:[\\/],/,'` \
+	  && dc_destdir="$${TMPDIR-/tmp}/am-dc-$$$$/" \
+	  && am__cwd=`pwd` \
+	  && $(am__cd) $(distdir)/_build/sub \
+	  && ../../configure \
+	    $(AM_DISTCHECK_CONFIGURE_FLAGS) \
+	    $(DISTCHECK_CONFIGURE_FLAGS) \
+	    --srcdir=../.. --prefix="$$dc_install_base" \
+	  && $(MAKE) $(AM_MAKEFLAGS) \
+	  && $(MAKE) $(AM_MAKEFLAGS) dvi \
+	  && $(MAKE) $(AM_MAKEFLAGS) check \
+	  && $(MAKE) $(AM_MAKEFLAGS) install \
+	  && $(MAKE) $(AM_MAKEFLAGS) installcheck \
+	  && $(MAKE) $(AM_MAKEFLAGS) uninstall \
+	  && $(MAKE) $(AM_MAKEFLAGS) distuninstallcheck_dir="$$dc_install_base" \
+	        distuninstallcheck \
+	  && chmod -R a-w "$$dc_install_base" \
+	  && ({ \
+	       (cd ../.. && umask 077 && mkdir "$$dc_destdir") \
+	       && $(MAKE) $(AM_MAKEFLAGS) DESTDIR="$$dc_destdir" install \
+	       && $(MAKE) $(AM_MAKEFLAGS) DESTDIR="$$dc_destdir" uninstall \
+	       && $(MAKE) $(AM_MAKEFLAGS) DESTDIR="$$dc_destdir" \
+	            distuninstallcheck_dir="$$dc_destdir" distuninstallcheck; \
+	      } || { rm -rf "$$dc_destdir"; exit 1; }) \
+	  && rm -rf "$$dc_destdir" \
+	  && $(MAKE) $(AM_MAKEFLAGS) dist \
+	  && rm -rf $(DIST_ARCHIVES) \
+	  && $(MAKE) $(AM_MAKEFLAGS) distcleancheck \
+	  && cd "$$am__cwd" \
+	  || exit 1
+	$(am__post_remove_distdir)
+	@(echo "$(distdir) archives ready for distribution: "; \
+	  list='$(DIST_ARCHIVES)'; for i in $$list; do echo $$i; done) | \
+	  sed -e 1h -e 1s/./=/g -e 1p -e 1x -e '$$p' -e '$$x'
+distuninstallcheck:
+	@test -n '$(distuninstallcheck_dir)' || { \
+	  echo 'ERROR: trying to run $@ with an empty' \
+	       '$$(distuninstallcheck_dir)' >&2; \
+	  exit 1; \
+	}; \
+	$(am__cd) '$(distuninstallcheck_dir)' || { \
+	  echo 'ERROR: cannot chdir into $(distuninstallcheck_dir)' >&2; \
+	  exit 1; \
+	}; \
+	test `$(am__distuninstallcheck_listfiles) | wc -l` -eq 0 \
+	   || { echo "ERROR: files left after uninstall:" ; \
+	        if test -n "$(DESTDIR)"; then \
+	          echo "  (check DESTDIR support)"; \
+	        fi ; \
+	        $(distuninstallcheck_listfiles) ; \
+	        exit 1; } >&2
+distcleancheck: distclean
+	@if test '$(srcdir)' = . ; then \
+	  echo "ERROR: distcleancheck can only run from a VPATH build" ; \
+	  exit 1 ; \
+	fi
+	@test `$(distcleancheck_listfiles) | wc -l` -eq 0 \
+	  || { echo "ERROR: files left in build directory after distclean:" ; \
+	       $(distcleancheck_listfiles) ; \
+	       exit 1; } >&2
+check-am: all-am
+check: check-am
+all-am: Makefile $(PROGRAMS) config.h
+installdirs:
+	for dir in "$(DESTDIR)$(bindir)"; do \
+	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
+	done
+install: install-am
+install-exec: install-exec-am
+install-data: install-data-am
+uninstall: uninstall-am
+
+install-am: all-am
+	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
+
+installcheck: installcheck-am
+install-strip:
+	if test -z '$(STRIP)'; then \
+	  $(MAKE) $(AM_MAKEFLAGS) INSTALL_PROGRAM="$(INSTALL_STRIP_PROGRAM)" \
+	    install_sh_PROGRAM="$(INSTALL_STRIP_PROGRAM)" INSTALL_STRIP_FLAG=-s \
+	      install; \
+	else \
+	  $(MAKE) $(AM_MAKEFLAGS) INSTALL_PROGRAM="$(INSTALL_STRIP_PROGRAM)" \
+	    install_sh_PROGRAM="$(INSTALL_STRIP_PROGRAM)" INSTALL_STRIP_FLAG=-s \
+	    "INSTALL_PROGRAM_ENV=STRIPPROG='$(STRIP)'" install; \
+	fi
+mostlyclean-generic:
+
+clean-generic:
+
+distclean-generic:
+	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
+	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
+	-rm -f src/Cubic/$(DEPDIR)/$(am__dirstamp)
+	-rm -f src/Cubic/$(am__dirstamp)
+	-rm -f src/Cubic/FundamentalUnits/$(DEPDIR)/$(am__dirstamp)
+	-rm -f src/Cubic/FundamentalUnits/$(am__dirstamp)
+	-rm -f src/Cubic/Multiplication/$(DEPDIR)/$(am__dirstamp)
+	-rm -f src/Cubic/Multiplication/$(am__dirstamp)
+	-rm -f src/Quadratic/$(DEPDIR)/$(am__dirstamp)
+	-rm -f src/Quadratic/$(am__dirstamp)
+	-rm -f tests/$(DEPDIR)/$(am__dirstamp)
+	-rm -f tests/$(am__dirstamp)
+	-rm -f tests/Cubic/$(DEPDIR)/$(am__dirstamp)
+	-rm -f tests/Cubic/$(am__dirstamp)
+	-rm -f tests/Cubic/catch-tests/$(DEPDIR)/$(am__dirstamp)
+	-rm -f tests/Cubic/catch-tests/$(am__dirstamp)
+	-rm -f tests/IndexCalculus/$(DEPDIR)/$(am__dirstamp)
+	-rm -f tests/IndexCalculus/$(am__dirstamp)
+	-rm -f tests/Quadratic/$(DEPDIR)/$(am__dirstamp)
+	-rm -f tests/Quadratic/$(am__dirstamp)
+
+maintainer-clean-generic:
+	@echo "This command is intended for maintainers to use"
+	@echo "it deletes files that may require special tools to rebuild."
+clean: clean-am
+
+clean-am: clean-binPROGRAMS clean-generic mostlyclean-am
+
+distclean: distclean-am
+	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
+		-rm -f src/Cubic/$(DEPDIR)/ComplexCubicNumberField.Po
+	-rm -f src/Cubic/$(DEPDIR)/CubicElement.Po
+	-rm -f src/Cubic/$(DEPDIR)/CubicIdeal.Po
+	-rm -f src/Cubic/$(DEPDIR)/CubicNumberField.Po
+	-rm -f src/Cubic/$(DEPDIR)/CubicOrder.Po
+	-rm -f src/Cubic/$(DEPDIR)/CubicOrderReal.Po
+	-rm -f src/Cubic/$(DEPDIR)/GlobalCubicField.Po
+	-rm -f src/Cubic/$(DEPDIR)/RealCubicNumberField.Po
+	-rm -f src/Cubic/$(DEPDIR)/VoronoiComplex.Po
+	-rm -f src/Cubic/$(DEPDIR)/VoronoiMethods.Po
+	-rm -f src/Cubic/$(DEPDIR)/VoronoiReal.Po
+	-rm -f src/Cubic/$(DEPDIR)/generalFunctions.Po
+	-rm -f src/Cubic/FundamentalUnits/$(DEPDIR)/BSGSVoronoi.Po
+	-rm -f src/Cubic/FundamentalUnits/$(DEPDIR)/BasicVoronoi.Po
+	-rm -f src/Cubic/Multiplication/$(DEPDIR)/IdealMultiplicationStrategy.Po
+	-rm -f src/Cubic/Multiplication/$(DEPDIR)/MultiplyStrategyWilliams.Po
+	-rm -f src/Quadratic/$(DEPDIR)/QuadraticOrder_ZZ.Po
+	-rm -f src/Quadratic/$(DEPDIR)/QuadraticOrder_long.Po
+	-rm -f tests/$(DEPDIR)/HeaderTest.Po
+	-rm -f tests/$(DEPDIR)/UnitTests.Po
+	-rm -f tests/Cubic/$(DEPDIR)/cubicTestMain.Po
+	-rm -f tests/Cubic/catch-tests/$(DEPDIR)/test-order.Po
+	-rm -f tests/Cubic/catch-tests/$(DEPDIR)/testingMain.Po
+	-rm -f tests/IndexCalculus/$(DEPDIR)/IndCalc_Tests.Po
+	-rm -f tests/Quadratic/$(DEPDIR)/QuadraticOrder_ZZ_Tests.Po
+	-rm -f tests/Quadratic/$(DEPDIR)/QuadraticOrder_long_Tests.Po
+	-rm -f Makefile
+distclean-am: clean-am distclean-compile distclean-generic \
+	distclean-hdr distclean-tags
+
+dvi: dvi-am
+
+dvi-am:
+
+html: html-am
+
+html-am:
+
+info: info-am
+
+info-am:
+
+install-data-am:
+
+install-dvi: install-dvi-am
+
+install-dvi-am:
+
+install-exec-am: install-binPROGRAMS
+
+install-html: install-html-am
+
+install-html-am:
+
+install-info: install-info-am
+
+install-info-am:
+
+install-man:
+
+install-pdf: install-pdf-am
+
+install-pdf-am:
+
+install-ps: install-ps-am
+
+install-ps-am:
+
+installcheck-am:
+
+maintainer-clean: maintainer-clean-am
+	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
+	-rm -rf $(top_srcdir)/autom4te.cache
+		-rm -f src/Cubic/$(DEPDIR)/ComplexCubicNumberField.Po
+	-rm -f src/Cubic/$(DEPDIR)/CubicElement.Po
+	-rm -f src/Cubic/$(DEPDIR)/CubicIdeal.Po
+	-rm -f src/Cubic/$(DEPDIR)/CubicNumberField.Po
+	-rm -f src/Cubic/$(DEPDIR)/CubicOrder.Po
+	-rm -f src/Cubic/$(DEPDIR)/CubicOrderReal.Po
+	-rm -f src/Cubic/$(DEPDIR)/GlobalCubicField.Po
+	-rm -f src/Cubic/$(DEPDIR)/RealCubicNumberField.Po
+	-rm -f src/Cubic/$(DEPDIR)/VoronoiComplex.Po
+	-rm -f src/Cubic/$(DEPDIR)/VoronoiMethods.Po
+	-rm -f src/Cubic/$(DEPDIR)/VoronoiReal.Po
+	-rm -f src/Cubic/$(DEPDIR)/generalFunctions.Po
+	-rm -f src/Cubic/FundamentalUnits/$(DEPDIR)/BSGSVoronoi.Po
+	-rm -f src/Cubic/FundamentalUnits/$(DEPDIR)/BasicVoronoi.Po
+	-rm -f src/Cubic/Multiplication/$(DEPDIR)/IdealMultiplicationStrategy.Po
+	-rm -f src/Cubic/Multiplication/$(DEPDIR)/MultiplyStrategyWilliams.Po
+	-rm -f src/Quadratic/$(DEPDIR)/QuadraticOrder_ZZ.Po
+	-rm -f src/Quadratic/$(DEPDIR)/QuadraticOrder_long.Po
+	-rm -f tests/$(DEPDIR)/HeaderTest.Po
+	-rm -f tests/$(DEPDIR)/UnitTests.Po
+	-rm -f tests/Cubic/$(DEPDIR)/cubicTestMain.Po
+	-rm -f tests/Cubic/catch-tests/$(DEPDIR)/test-order.Po
+	-rm -f tests/Cubic/catch-tests/$(DEPDIR)/testingMain.Po
+	-rm -f tests/IndexCalculus/$(DEPDIR)/IndCalc_Tests.Po
+	-rm -f tests/Quadratic/$(DEPDIR)/QuadraticOrder_ZZ_Tests.Po
+	-rm -f tests/Quadratic/$(DEPDIR)/QuadraticOrder_long_Tests.Po
+	-rm -f Makefile
+maintainer-clean-am: distclean-am maintainer-clean-generic
+
+mostlyclean: mostlyclean-am
+
+mostlyclean-am: mostlyclean-compile mostlyclean-generic
+
+pdf: pdf-am
+
+pdf-am:
+
+ps: ps-am
+
+ps-am:
+
+uninstall-am: uninstall-binPROGRAMS
+
+.MAKE: all install-am install-strip
+
+.PHONY: CTAGS GTAGS TAGS all all-am am--depfiles am--refresh check \
+	check-am clean clean-binPROGRAMS clean-cscope clean-generic \
+	cscope cscopelist-am ctags ctags-am dist dist-all dist-bzip2 \
+	dist-gzip dist-lzip dist-shar dist-tarZ dist-xz dist-zip \
+	dist-zstd distcheck distclean distclean-compile \
+	distclean-generic distclean-hdr distclean-tags distcleancheck \
+	distdir distuninstallcheck dvi dvi-am html html-am info \
+	info-am install install-am install-binPROGRAMS install-data \
+	install-data-am install-dvi install-dvi-am install-exec \
+	install-exec-am install-html install-html-am install-info \
+	install-info-am install-man install-pdf install-pdf-am \
+	install-ps install-ps-am install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic pdf pdf-am ps ps-am tags tags-am uninstall \
+	uninstall-am uninstall-binPROGRAMS
+
+.PRECIOUS: Makefile
+
+
+# Tell versions [3.59,3.63) of GNU make to not export all variables.
+# Otherwise a system limit (for SysV at least) may be exceeded.
+.NOEXPORT:
