@@ -1,5 +1,5 @@
-#ifndef GUARD_test_etafunction_cpp
-#define GUARD_test_etafunction_cpp
+#ifndef GUARD_test_voronoi_complex_cpp
+#define GUARD_test_voronoi_complex_cpp
 
 #include <cmath>
 #include <ctime>
@@ -30,7 +30,7 @@ const double DOUBLE_TOLERANCE = 0.000001;
 
 
 TEST_CASE("Eta Function for doubles"){
-  std::string myfile = "TestInput/test-input-complex-regulator.txt";
+  std::string myfile = "ANTL/tests/Cubic/catch-tests/TestInput/test-input-complex-regulator.txt";
   ZZ a,b,c,d, disc;
   RR test_regulator, temp;
   SECTION("equal tests"){

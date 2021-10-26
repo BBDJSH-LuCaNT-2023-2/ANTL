@@ -103,9 +103,9 @@ int main(){
 */
 
   ibcf[3] = 1;
-  ibcf[2] = 0;
-  ibcf[1] = 3;
-  ibcf[0] = -12;
+  ibcf[2] = 5;
+  ibcf[1] = 5;
+  ibcf[0] = 11;
 
 
   polynomial<ZZ> const test_poly{{ibcf[0],ibcf[1],ibcf[2],ibcf[3] }};
@@ -138,12 +138,26 @@ int main(){
   std::cout << Odie->get_fundamental_unit(0)->get_u() << " " << Odie->get_fundamental_unit(0)->get_x() << " " << Odie->get_fundamental_unit(0)->get_y() \
   << " Reg: "<< Odie->get_regulator() << std::endl;
 
-  std::vector<RR> v1 = {RR(16.0)};
+  CubicIdeal<ZZ, RR> reduced_ideal1 = CubicIdeal<ZZ, RR>(NULL);
+  CubicElement<ZZ, RR> minima       = CubicElement<ZZ, RR>(NULL);
+  std::vector<RR> v1 = {RR(3)};
   CubicIdeal<ZZ,RR> ideal1 = CubicIdeal(Odie);
   std::cout << "just before" << ideal1.toString() << endl;
-  Odie->close_minimum(ideal1, v1);
+  Odie->close_minimum(reduced_ideal1,minima, ideal1, v1);
+  cout << reduced_ideal1.toString() << "\n" <<endl;
+  RR realval;
+  minima.get_real_value(realval);
+  cout << minima.toString() << "  "<< realval << endl;
+  cout << reduced_ideal1.get_gen_numeric(0) << endl;
+  cout << reduced_ideal1.get_gen_numeric(1) << endl;
+  cout << reduced_ideal1.get_gen_numeric(2) << endl;
 
-
+  minima.assign(ZZ(0), ZZ(-6), ZZ(1),ZZ(1));
+  minima.get_real_value(realval);
+  cout << realval<<endl;
+  minima.assign(ZZ(11), ZZ(-1), ZZ(2),ZZ(1));
+  minima.get_real_value(realval);
+  cout << realval <<endl;
   //bool bob = positive_func(-1.1);
   //cout << bob << endl;
   //std::cout << "is close test " <<is_close(vec1, vec2, dist) << std::endl;

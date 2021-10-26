@@ -96,7 +96,15 @@ void CubicIdeal<Type,PType> :: assign(const CubicIdeal<Type, PType> & A){
 
 template<typename Type,typename PType>
 PType CubicIdeal<Type,PType> :: get_gen_numeric(int i){
-  return this->coeff_matrix[0][i] + this->coeff_matrix[1][i]*(this.get_order()->get_rho1()) + this->coeff_matrix[2][i]*(this.get_order()->get_rho2());
+  PType var1, result;
+  var1 = to<PType>(this->coeff_matrix[1][i]);
+  mul(var1, var1, (this->get_order()->get_rho1()) );
+  result = to<PType>(this->coeff_matrix[2][i]);
+  mul(result, result, (this->get_order()->get_rho2()));
+  add(result, result, var1);
+  add(result, result, to<PType>(this->coeff_matrix[0][i]));
+  return result;
+  //return this->coeff_matrix[0][i] + this->coeff_matrix[1][i]*(this->get_order()->get_rho1()) + this->coeff_matrix[2][i]*(this->get_order()->get_rho2());
 }
 
 
@@ -401,10 +409,9 @@ void CubicIdeal<Type, PType> :: adjacent_ideal(CubicIdeal<Type, PType> &B, Cubic
 // Assumes this ideal is already a Voronoi basis
 template<typename Type, typename PType>
 void CubicIdeal<Type, PType> :: divide_adjacent(CubicIdeal<Type, PType> &B, CubicElement<Type, PType> &adj_min){
-
     adj_min.set_order( this->my_order );
+    // this is a big problem, should I be using coeff(0,0) here, or should I be using this->denom ?
     adj_min.assign(this->get_coeff(0,1),this->get_coeff(1,1),this->get_coeff(2,1), this->get_coeff(0,0));
-
     // spare_ideal_element is set to be 1/theta_g
     this->spare_ideal_element.set_order(this->my_order);
     adj_min.inverse(this->spare_ideal_element);
@@ -451,7 +458,6 @@ void CubicIdeal<Type, PType> :: divide_adjacent(CubicIdeal<Type, PType> &B, Cubi
       std::cout << Type(0)  << " " << this->spare_ideal_element.get_x() << " " << this->gen.get_x() << std::endl;
       std::cout << Type(0)  << " " << this->spare_ideal_element.get_y() << " " << this->gen.get_y() << std::endl;
     #endif
-
 
 }
 

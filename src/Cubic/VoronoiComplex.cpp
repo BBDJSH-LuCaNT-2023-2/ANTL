@@ -55,17 +55,19 @@ void VoronoiComplex<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> &
       //std::cout <<  gammaMatrix[2][0] << "  " << gammaMatrix[2][1] << "  " <<gammaMatrix[2][2]<< std::endl;
 
       // Step 1: make sure basis is in canonical form
+      #ifdef DEBUG_VORONOI
       std::cout << "VoronoiBasis: Initial input matrix: " << std::endl;
       std::cout <<  ideal1.coeff_matrix[0][1] << "  " << ideal1.coeff_matrix[0][2] <<  std::endl;
       std::cout <<  ideal1.coeff_matrix[1][1] << "  " << ideal1.coeff_matrix[1][2] <<  std::endl;
       std::cout <<  ideal1.coeff_matrix[2][1] << "  " << ideal1.coeff_matrix[2][2] <<  std::endl;
-
+      #endif
       ideal1.make_canonical();
+      #ifdef DEBUG_VORONOI
       std::cout << "VoronoiBasis: The canonical form: " <<  std::endl;
       std::cout <<  ideal1.coeff_matrix[0][1] << "  " << ideal1.coeff_matrix[0][2] <<  std::endl;
       std::cout <<  ideal1.coeff_matrix[1][1] << "  " << ideal1.coeff_matrix[1][2] <<  std::endl;
       std::cout <<  ideal1.coeff_matrix[2][1] << "  " << ideal1.coeff_matrix[2][2] <<  std::endl;
-
+      #endif
 
       // STEP 2: Obtain the puncture lattice of B
       // Step 3: convert B, PuncB to a prepared basis, {1, phi, psi}
@@ -74,22 +76,24 @@ void VoronoiComplex<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> &
       // the corresponding puncture lattice is stored in CubicIdeal.p_lat
       ideal1.make_prepared();
 
-
+      #ifdef DEBUG_VORONOI
       std::cout << "VoronoiBasis: Now Prepared: " <<  std::endl;
       std::cout <<  ideal1.coeff_matrix[0][1] << "  " << ideal1.coeff_matrix[0][2] <<  std::endl;
       std::cout <<  ideal1.coeff_matrix[1][1] << "  " << ideal1.coeff_matrix[1][2] <<  std::endl;
       std::cout <<  ideal1.coeff_matrix[2][1] << "  " << ideal1.coeff_matrix[2][2] <<  std::endl;
 
+      #endif
       //std::cout << "VoronoiBasis: Check if prepared basis is the same lattice: "  << compareLattice3(B, Ltest)<<std::endl;
       //std::cout << "VoronoiBasis: Redundancy check (ensure sameness after comparison)" << std::endl;
       //std::cout <<  ideal1.coeff_matrix[0][1] << "  " << ideal1.coeff_matrix[0][2] <<  std::endl;
       //std::cout <<  ideal1.coeff_matrix[1][1] << "  " << ideal1.coeff_matrix[1][2] <<  std::endl;
       //std::cout <<  ideal1.coeff_matrix[2][1] << "  " << ideal1.coeff_matrix[2][2] <<  std::endl;
       //std::cout <<  ideal1.coeff_matrix[0][0] << std::endl;
-
+      #ifdef DEBUG_VORONOI
       std::cout << "VoronoiBasis: PB's puncture Lattice:" << std::endl;
       std::cout <<  ideal1.p_lat[0][0] << "  " << ideal1.p_lat[0][1] <<  std::endl;
       std::cout <<  ideal1.p_lat[1][0] << "  " << ideal1.p_lat[1][1] <<  std::endl;
+      #endif
       #ifdef DEBUG
       std::cout << ( to<PType>(ideal1.coeff_matrix[0][1])
                     + to<PType>(ideal1.coeff_matrix[1][1]) *ideal1.get_order()->get_rho1()
