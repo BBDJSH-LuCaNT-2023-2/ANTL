@@ -62,14 +62,15 @@ namespace NTL {
   //
   // NTL-like methods, for completeness. There exists a "set" and "clear" for most (all?) NTL types.
   // The below definitions extend this functionality for other types.
-  inline void clear (long &X)	        { X = 0; }
+
+  inline void clear (long &X)        { X = 0; }
   inline void set (long &X)          { X = 1; }
   inline void clear (float &i)       { i = 0.0f; }
   inline void set (float &i)         { i = 1.0f; }
   inline void clear (double &i)      { i = double(0); }
-  inline void set (double &i)	        { i = double(1); }
+  inline void set (double &i)        { i = double(1); }
   inline void clear (quad_float & i) { i = double(0); }
-  inline void set (quad_float & i)	{ i = double(1); }
+  inline void set (quad_float & i)   { i = double(1); }
 
 
   inline long IsOne (const long &X)         { return (X == 1); }
@@ -147,7 +148,6 @@ namespace ANTL {
   void DivRem (long &q, long &r, long a, long b);
   inline long SqrRoot (const long &a) { return (long) ::floor(::sqrt((double) a)); }
 
-
   //
   // cmath-like methods, for completeness.
   // Most of these exist because of problems where gcc doesn't find the
@@ -166,6 +166,38 @@ namespace ANTL {
   inline float pow(float x, float e) { return (float)std::pow((double)x, (double)e ); }
   inline double pow(double x, float e) { return std::pow(x,e); }
 
+  //
+  // quadratic residuosity functions
+  //
+
+  /* Jacobi functions - assumes a is reduced mod n */
+  long Jacobi_base (const long & a, const long & n);
+  long Jacobi_base (const long long & a, const long long & n);
+  long Jacobi_base (const ZZ & a, const ZZ & n);
+
+  /* Jacobi functions - no preconditions on a and n */
+  long Jacobi(const long & a, const long & n);
+  long Jacobi(const long long & a, const long long & n);
+  long Jacobi(const long long & a, const long & n);
+  long Jacobi(const ZZ & a, const ZZ & n);
+  long Jacobi(const ZZ & a, const long & n);
+  long Jacobi(const ZZ_pX & a, const ZZ_pX & n);
+  long Jacobi(const zz_pX & a, const zz_pX & n);
+  long Jacobi(const ZZ_pEX & a, const ZZ_pEX & n);
+  long Jacobi(const zz_pEX & a, const zz_pEX & n);
+//   long Jacobi(const GF2EX & h, const GF2EX & a, const GF2EX & n);
+
+  /* Kronecker functions - no preconditions on a and n */
+  long Kronecker(const long & a, const long & n);
+  long Kronecker(const long long & a, const long long & n);
+  long Kronecker(const long long & a, const long & n);
+  long Kronecker(const ZZ & a, const ZZ & n);
+  long Kronecker(const ZZ & a, const long & n);
+  long Kronecker(const ZZ_pX & a, const ZZ_pX & n);
+  long Kronecker(const zz_pX & a, const zz_pX & n);
+  long Kronecker(const ZZ_pEX & a, const ZZ_pEX & n);
+  long Kronecker(const zz_pEX & a, const zz_pEX & n);
+  long Kronecker(const GF2EX & h, const GF2EX & f, const GF2EX & n);
 
   // finite field cardinality macros
   template <class> ZZ CARDINALITY(void);
@@ -357,8 +389,8 @@ long Jacobi_base (const ZZ & a, const ZZ & n);
 long Jacobi_base (const long & a, const long & n);
 
 /* Jacobi functions - no preconditions on a and n */
-long Jacobi(const ZZ & a, const ZZ & n);
-long Jacobi(const long & a, const long & n);
+//long Jacobi(const ZZ & a, const ZZ & n);
+//long Jacobi(const long & a, const long & n) { return long(Jacobi( to_ZZ(a), to_ZZ(n))); }
 long Jacobi(const ZZ_pX & a, const ZZ_pX & n);
 long Jacobi(const zz_pX & a, const zz_pX & n);
 long Jacobi(const ZZ_pEX & a, const ZZ_pEX & n);

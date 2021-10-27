@@ -11,17 +11,15 @@
 #include <ANTL/Arithmetic/QQ.hpp>
 #include <ANTL/Quadratic/QuadraticOrder.hpp>
 
-namespace ANTL
-{
+using namespace ANTL;
+
+namespace ANTL {
   // Forward Declarations
-  template<class T>
-    class QuadraticNumber;
+  template <class T> class QuadraticNumber;
 
-  template < class T >
-  class QuadraticOrder;
+  template <class T> class QuadraticOrder;
 
-  template<class T>
-    void
+  template<class T> void
     clear (QuadraticNumber<T> & x);
 
   template<class T>

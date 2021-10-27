@@ -6,6 +6,8 @@
 
 namespace ANTL {
 
+  template < class T > class QuadraticOrder; // an order that inherits from IOrder
+
   class QuadFactorBase : public FactorBase {
   public:
     using FactorBase::FactorBase; // inherit the construtors

@@ -62,6 +62,7 @@ void XGCD_PARTIAL(GF2EX & R2, GF2EX & R1, GF2EX & C2, GF2EX & C1, long bound);
 
 // integer version uses a ZZ bound and Lehmer's variation (also no flag)
 void XGCD_PARTIAL(ZZ & R2, ZZ & R1, ZZ & C2, ZZ & C1, const ZZ & bound);
+void XGCD_PARTIAL(long & R2, long & R1, long & C2, long & C1, const ZZ & bound);
 
 
 
@@ -81,7 +82,8 @@ void XGCD_PARTIAL_REDUCE(GF2EX & R2, GF2EX & R1, GF2EX & B2, GF2EX & B1, long bo
 // Declare specialized methods
 //
 
-template <> void XGCD_LEFT(ZZ & G, ZZ & X, const ZZ & A, const ZZ & B);
+template <> void XGCD_LEFT<ZZ>(ZZ & G, ZZ & X, const ZZ & A, const ZZ & B);
+template <> void XGCD_LEFT<long>(long & G, long & X, const long & A, const long & B);
 template <> void XGCD_PARTIAL(ZZ & R2, ZZ & R1, ZZ & C2, ZZ & C1, long bound, bool & flag);
 
 

@@ -1,6 +1,6 @@
 /**
- * @file quadratic_ideal.hpp
- * @version $Header: /scrinium/ANTL/ANTL/include/ANTL/quadratic/quadratic_ideal.hpp,v 1.1 2013/02/26 06:29:10 jacobs Exp $
+ * @file QuadraticIdeal.hpp
+ * @version $Header: /scrinium/ANTL/ANTL/include/ANTL/quadratic/QuadraticIdeal.hpp,v 1.1 2013/02/26 06:29:10 jacobs Exp $
  *
  * Basically a quadratic form, but with additional q, so that the ideal is
  * I = (num/dem)(aZ + ((b+Sqrt(Delta))/2) Z)
@@ -9,55 +9,55 @@
 #ifndef ANTL_QUADRATIC_QUADRATIC_IDEAL_H
 #define ANTL_QUADRATIC_QUADRATIC_IDEAL_H
 
-#include <ANTL/Quadratic/QuadraticForm.hpp>
+#include <ANTL/Quadratic/QuadraticIdealBase.hpp>
 #include <ANTL/Arithmetic/QQ.hpp>
 
 namespace ANTL
 {
 
-  template < class T> class quadratic_ideal;
+  template < class T> class QuadraticIdeal;
 
   template <class T>
-  void multiply(quadratic_ideal<T> & C,
-		const quadratic_ideal<T> & A, const quadratic_ideal<T> &B);
+  void multiply(QuadraticIdeal<T> & C,
+		const QuadraticIdeal<T> & A, const QuadraticIdeal<T> &B);
 
   template < class T >
-  void multiply_real(quadratic_ideal<T> & C, const quadratic_ideal<T> & A,
-		     const quadratic_ideal<T> & B, quadratic_number<T> & gamma,
-		     const quadratic_number<T> & alpha, const quadratic_number<T> & beta);
+  void multiply_real(QuadraticIdeal<T> & C, const QuadraticIdeal<T> & A,
+		     const QuadraticIdeal<T> & B, QuadraticNumber<T> & gamma,
+		     const QuadraticNumber<T> & alpha, const QuadraticNumber<T> & beta);
 
   //similarly, needed for squaring, powers
   template <class T>
-  void square(quadratic_ideal<T> & C, const quadratic_ideal<T> & A);
+  void square(QuadraticIdeal<T> & C, const QuadraticIdeal<T> & A);
 
   template <class T>
-  void power (quadratic_ideal<T> &C, const quadratic_ideal<T> & A, const ZZ & n);
+  void power (QuadraticIdeal<T> &C, const QuadraticIdeal<T> & A, const ZZ & n);
 
 
   template <class T>
-  quadratic_ideal<T> inverse(const quadratic_ideal<T> & A);
+  QuadraticIdeal<T> inverse(const QuadraticIdeal<T> & A);
 
   template <class T>
-  quadratic_ideal<T> operator - (const quadratic_ideal<T> & A);
+  QuadraticIdeal<T> operator - (const QuadraticIdeal<T> & A);
 
   template <class T>
-  quadratic_ideal<T> operator * (const quadratic_ideal<T> & A,
-				 const quadratic_ideal<T> & B);
+  QuadraticIdeal<T> operator * (const QuadraticIdeal<T> & A,
+				 const QuadraticIdeal<T> & B);
 
   template <class T>
-  void swap (quadratic_ideal<T> & A, quadratic_ideal<T> & B);
+  void swap (QuadraticIdeal<T> & A, QuadraticIdeal<T> & B);
 
   template <class T>
-  bool operator == (const quadratic_ideal<T> & A, const quadratic_ideal<T> & B);
+  bool operator == (const QuadraticIdeal<T> & A, const QuadraticIdeal<T> & B);
 
   template <class T>
-  bool operator != (const quadratic_ideal<T> & A, const quadratic_ideal<T> & B);
+  bool operator != (const QuadraticIdeal<T> & A, const QuadraticIdeal<T> & B);
 
   template <class T>
-  std::istream & operator >> (std::istream & in, quadratic_ideal<T> & A);
+  std::istream & operator >> (std::istream & in, QuadraticIdeal<T> & A);
 
   template <class T>
-  std::ostream & operator << (std::ostream & out, const quadratic_ideal<T> & A);
+  std::ostream & operator << (std::ostream & out, const QuadraticIdeal<T> & A);
 
 
   //
@@ -70,22 +70,22 @@ namespace ANTL
   //
 
   template <class T>
-  class quadratic_ideal: public quadratic_form<T>
+  class QuadraticIdeal: public QuadraticIdealBase<T>
   {
   protected:
     QQ<T> q; // (num/dem) coefficient
 		
   public:
-    quadratic_ideal();
-    quadratic_ideal(const quadratic_ideal<T> & quad_i);
-    ~quadratic_ideal();
+    QuadraticIdeal();
+    QuadraticIdeal(const QuadraticIdeal<T> & quad_i);
+    ~QuadraticIdeal();
 
-    quadratic_ideal(const quadratic_form<T> & quad_f);
-    quadratic_ideal(const quadratic_number<T> & quad_n);
-    quadratic_ideal(const QQ<T> & q_in, const quadratic_form<T> & quad_f);
-    quadratic_ideal(const T & num, const T& den,
-		    const quadratic_form<T> & quad_f);
-    quadratic_ideal(const T & num, const T& den,
+    QuadraticIdeal(const QuadraticIdealBase<T> & quad_f);
+    QuadraticIdeal(const QuadraticNumber<T> & quad_n);
+    QuadraticIdeal(const QQ<T> & q_in, const QuadraticIdealBase<T> & quad_f);
+    QuadraticIdeal(const T & num, const T& den,
+		    const QuadraticIdealBase<T> & quad_f);
+    QuadraticIdeal(const T & num, const T& den,
 		    const T & a_in, const T & b_in);
 
     void assign_one();
@@ -96,13 +96,13 @@ namespace ANTL
       }
     */
     bool assign(const T & a_in, const T & b_in);
-    void assign(const quadratic_form<T> & quad_f);
-    bool assign(const quadratic_number<T> & quad_n);
-    bool assign(const QQ<T> & q_in, const quadratic_form<T> & quad_f);
-    bool assign(const T & num, const T & den, const quadratic_form<T> & quad_f);
+    void assign(const QuadraticIdealBase<T> & quad_f);
+    bool assign(const QuadraticNumber<T> & quad_n);
+    bool assign(const QQ<T> & q_in, const QuadraticIdealBase<T> & quad_f);
+    bool assign(const T & num, const T & den, const QuadraticIdealBase<T> & quad_f);
     bool assign(const QQ<T> & q_in, const T & a_in, const T & b_in);
     bool assign(const T & num, const T & den, const T & a_in, const T & b_in);
-    void assign(const quadratic_ideal<T> & quad_i);
+    void assign(const QuadraticIdeal<T> & quad_i);
 
     /// Sets \p n and \p d to the numerator and denominator.
     void get_q(T& n, T& d);
@@ -112,10 +112,10 @@ namespace ANTL
     void set_inv_q(const T & d);
 
     void reduce_imag();
-    void reduce_imag(quadratic_number<T> &quad_n);
+    void reduce_imag(QuadraticNumber<T> &quad_n);
     void reduce_real();
-    void reduce_real(quadratic_number<T> &quad_n);
-    void reduce_real(vector< quadratic_number<T> > &quad_n);
+    void reduce_real(QuadraticNumber<T> &quad_n);
+    void reduce_real(vector< QuadraticNumber<T> > &quad_n);
     void reduce();
 
     /**
@@ -142,33 +142,33 @@ namespace ANTL
      */
     bool is_reduced() const;
 
-    friend void multiply<T>(quadratic_ideal<T> & C,
-			    const quadratic_ideal<T> & A, const quadratic_ideal<T> &B);
+    friend void multiply<T>(QuadraticIdeal<T> & C,
+			    const QuadraticIdeal<T> & A, const QuadraticIdeal<T> &B);
 
-    friend void multiply_real<T>(quadratic_ideal<T> & C,
-				 const quadratic_ideal<T> & A,
-				 const quadratic_ideal<T> & B,
-				 quadratic_number<T> & gamma,
-				 const quadratic_number<T> & alpha,
-				 const quadratic_number<T> & beta);
+    friend void multiply_real<T>(QuadraticIdeal<T> & C,
+				 const QuadraticIdeal<T> & A,
+				 const QuadraticIdeal<T> & B,
+				 QuadraticNumber<T> & gamma,
+				 const QuadraticNumber<T> & alpha,
+				 const QuadraticNumber<T> & beta);
 
 		
-    friend void square<T>(quadratic_ideal<T> & C,
-			  const quadratic_ideal<T> & A);
+    friend void square<T>(QuadraticIdeal<T> & C,
+			  const QuadraticIdeal<T> & A);
 
 
-    friend void power<T> (quadratic_ideal<T> &C,
-			  const quadratic_ideal<T> & A, const ZZ & n);
+    friend void power<T> (QuadraticIdeal<T> &C,
+			  const QuadraticIdeal<T> & A, const ZZ & n);
 
-    friend quadratic_ideal<T> inverse<T> (const quadratic_ideal<T>
+    friend QuadraticIdeal<T> inverse<T> (const QuadraticIdeal<T>
 					  &A);
 
-    friend quadratic_ideal<T> operator - <T>(const quadratic_ideal<T> & A);
+    friend QuadraticIdeal<T> operator - <T>(const QuadraticIdeal<T> & A);
 
-    friend quadratic_ideal<T> operator * <T>(const quadratic_ideal<T> & A,
-					     const quadratic_ideal<T> & B);
+    friend QuadraticIdeal<T> operator * <T>(const QuadraticIdeal<T> & A,
+					     const QuadraticIdeal<T> & B);
 
-    quadratic_ideal<T> & operator *= (const quadratic_ideal<T> & A);
+    QuadraticIdeal<T> & operator *= (const QuadraticIdeal<T> & A);
 
 
     void norm(T & n, T & d);
@@ -176,45 +176,45 @@ namespace ANTL
 
 
 
-    friend void swap<T> (quadratic_ideal<T> & A, quadratic_ideal<T> & B);
+    friend void swap<T> (QuadraticIdeal<T> & A, QuadraticIdeal<T> & B);
 
 
 
     bool is_one() const;
-    bool is_equal(const quadratic_ideal<T> & B) const;
+    bool is_equal(const QuadraticIdeal<T> & B) const;
 
-    friend bool operator == <T> (const quadratic_ideal<T> & A,
-				 const quadratic_ideal<T> & B);
+    friend bool operator == <T> (const QuadraticIdeal<T> & A,
+				 const QuadraticIdeal<T> & B);
 
-    friend bool operator != <T> (const quadratic_ideal<T> & A,
-				 const quadratic_ideal<T> & B);
+    friend bool operator != <T> (const QuadraticIdeal<T> & A,
+				 const QuadraticIdeal<T> & B);
 
     friend std::istream & operator >> <T> (std::istream & in,
-					   quadratic_ideal<T> & A);
+					   QuadraticIdeal<T> & A);
     friend std::ostream & operator << <T> (std::ostream & out,
-					   const quadratic_ideal<T> & A);
+					   const QuadraticIdeal<T> & A);
 
   };
 
   //
   // Declare Specialized Methods
   //
-  template <> quadratic_ideal<ZZ>::quadratic_ideal(const quadratic_number<ZZ> & quad_n);
-  //	template <> bool quadratic_ideal<long>::assign_prime(const long p);
-  //	template <> bool quadratic_ideal<ZZ>::assign_prime(const long p);
-  template <> bool quadratic_ideal<ZZ>::assign(const quadratic_number<ZZ> & quad_n);
-  template <> bool quadratic_ideal<ZZ>::is_normal() const;
-  template <> bool quadratic_ideal<ZZ>::is_standard_representation() const;
-  template <> bool quadratic_ideal<ZZ>::is_reduced() const;
-  template <> bool quadratic_ideal<long long>::assign(const quadratic_number<long long> & quad_n);
-  template <> bool quadratic_ideal<GF2EX>::assign(const quadratic_number<GF2EX> & quad_n);
-  template <> quadratic_ideal<GF2EX> inverse(const quadratic_ideal<GF2EX> &A);
+  template <> QuadraticIdeal<ZZ>::QuadraticIdeal(const QuadraticNumber<ZZ> & quad_n);
+  //	template <> bool QuadraticIdeal<long>::assign_prime(const long p);
+  //	template <> bool QuadraticIdeal<ZZ>::assign_prime(const long p);
+  template <> bool QuadraticIdeal<ZZ>::assign(const QuadraticNumber<ZZ> & quad_n);
+  template <> bool QuadraticIdeal<ZZ>::is_normal() const;
+  template <> bool QuadraticIdeal<ZZ>::is_standard_representation() const;
+  template <> bool QuadraticIdeal<ZZ>::is_reduced() const;
+  template <> bool QuadraticIdeal<long long>::assign(const QuadraticNumber<long long> & quad_n);
+  template <> bool QuadraticIdeal<GF2EX>::assign(const QuadraticNumber<GF2EX> & quad_n);
+  template <> QuadraticIdeal<GF2EX> inverse(const QuadraticIdeal<GF2EX> &A);
 
 
 } // ANTL
 
 // Unspecialized template definitions.
-//#include "../../../src/quadratic/quadratic_ideal_impl.hpp"
+//#include "../../../src/quadratic/QuadraticIdeal_impl.hpp"
 
 #endif // guard
 

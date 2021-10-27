@@ -4,65 +4,36 @@
  * @remark Primitive quadratic ideal function specializations (ZZ base type).
  */
 
-#include <QuadraticIdealBase.hpp>
+#include <ANTL/Quadratic/QuadraticIdealBase.hpp>
 
+using namespace ANTL;
 
-template <>
-void
-QuadraticIdealBase<ZZ>::test_ideal(string msg)
-{
-  ZZ tval = b*b - 4*a*c;
-  if (tval != QO->getDiscriminant()) {
-    cout << "ERROR " << msg << "!  wrong discriminant!" << endl;
-    cout << "a = " << a << ", b = " << b << ", c = " << c << endl;
-    cout << "Delta = " << QO->getDiscriminant() << endl;
-    cout << "b^2 - 4ac = " << tval << endl;
-    exit(1);
-  }
-}
-
-
-
-//
 // QuadraticIdealBase<T>::assign_one()
 //
-// Task:
-//      set to the unit ideal of the current quadratic_order
-//
+// Task: set to the unit ideal of the current quadratic_order
 
-template <>
-void
-QuadraticIdealBase<ZZ>::assign_one()
-{
+template <> void QuadraticIdealBase<ZZ>::assign_one() {
   set(a);
+
   if (rem(QO->getDiscriminant(),4) == 1) {
     set(b);
     sub(c,1,QO->getDiscriminant());
   }
+
   else {
     clear(b);
-    negate(c,QO->getDiscriminant());
+    NTL::negate(c,QO->getDiscriminant());
   }
+
   div(c,c,a);
   RightShift(c,c,2);
 }
 
-
-
-
-//
 // assign_prime()
 //
-// Task:
-//      computes a reduced representative of the equivalence class containing
-//      the ideal lying over the prime p.  If such an ideal doesnot exist,
-//      false is returned.
-//
+// Task: Computes an ideal lying over the prime p. If such an ideal does not exist, false is returned.
 
-template <>
-bool
-QuadraticIdealBase<ZZ>::assign_prime (const ZZ & p)
-{
+template <> bool QuadraticIdealBase<ZZ>::assign_prime (const ZZ & p) {
   ZZ temp, Dp;
   long jac;
 
@@ -76,14 +47,14 @@ QuadraticIdealBase<ZZ>::assign_prime (const ZZ & p)
   if (p == 2) {
     if (IsZero(Dp)) {
       rem(QO->getDiscriminant(),4);
-      if (Dp < 0)
-	add(Dp,Dp,4);
+        if (Dp < 0)
+          add(Dp,Dp,4);
 
       if (IsZero(Dp)) {
-	RightShift(temp,QO->getDiscriminant(),2);
-	Dp = rem(temp,4);
+        RightShift(temp,QO->getDiscriminant(),2);
+        Dp = rem(temp,4);
         if (Dp < 0)
-	  add(Dp,Dp,4);
+          add(Dp,Dp,4);
         if (Dp != 3)
           return false;
       }
@@ -93,17 +64,18 @@ QuadraticIdealBase<ZZ>::assign_prime (const ZZ & p)
       RightShift(c,c,3);
       return true;
     }
-    else
-      {
-	long D8 = rem(QO->getDiscriminant(),8);
 
-	if (D8 < 0)
-	  add(D8,D8,8);
+    else {
+      ZZ D8;
+      rem(D8, QO->getDiscriminant(),ZZ(8));
 
-	if (D8 == 1)
-	  jac = 1;
-        else
-          jac = -1;
+      if (D8 < 0)
+        add(D8,D8,ZZ(8));
+
+      if (D8 == 1)
+        jac = 1;
+      else
+        jac = -1;
       }
   }
   else {
@@ -120,7 +92,7 @@ QuadraticIdealBase<ZZ>::assign_prime (const ZZ & p)
 
       rem(temp,QO->getDiscriminant(),p*p);
       if (IsZero (temp))
-	return false;
+        return false;
       else
         return true;
     }
@@ -146,4 +118,28 @@ QuadraticIdealBase<ZZ>::assign_prime (const ZZ & p)
   RightShift(c,c,2);
 
   return true;
+}
+
+// QuadraticIdealBase<T>::IsReduced()
+//
+// Task: tests if the ideal is reduced.
+template <> bool QuadraticIdealBase<ZZ>::IsReduced () const {
+  ZZ D_ZZ = b^2 - 4*a*c;
+  long D = to_long(D_ZZ);
+
+  if(D < 0) {
+    bool cond1 = ((abs(b) <= a) && (a <= c));
+    bool cond2 = true;
+    if( ((abs(b) == a) || (c == a)) && (b < 0))
+      cond2 = false;
+
+    return cond1 && cond2;
+  }
+
+  else if (D > 0) {
+    long lbound = abs(std::sqrt(D) - to_long(2*abs(c)));
+    long ubound = std::sqrt(D);
+
+    return (lbound < b && b < ubound);
+  };
 }
