@@ -5,7 +5,6 @@ AM_CXXFLAGS = @CXXFLAGS@ @PTHREAD_CFLAGS@ -g
 AM_CC = @PTHREAD_CC@
 AM_CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/include
 
-<<<<<<< HEAD
 if EXTRADEPS
 bin_PROGRAMS = test main cubic testorder
 else
@@ -27,16 +26,8 @@ test_SOURCES = tests/UnitTests.cpp                                    \
                tests/Quadratic/QuadraticOrder_long_Tests.cpp          \
                tests/Quadratic/Cube/CubePlain_ZZ_Tests.cpp            \
                tests/Quadratic/Cube/CubePlain_long_Tests.cpp          \
-               tests/Quadratic/Cube/CubeNucube_ZZ_Tests.cpp           \
-               tests/Quadratic/Cube/CubeNucube_long_Tests.cpp         \
-               tests/Quadratic/Multiply/MultiplyNucomp_long_Tests.cpp \
-               tests/Quadratic/Multiply/MultiplyNucomp_ZZ_Tests.cpp   \
                tests/Quadratic/Multiply/MultiplyPlain_long_Tests.cpp  \
                tests/Quadratic/Multiply/MultiplyPlain_ZZ_Tests.cpp    \
-               tests/Quadratic/Reduce/ReducePlainReal_long_Tests.cpp  \
-               tests/Quadratic/Reduce/ReducePlainReal_ZZ_Tests.cpp    \
-               tests/Quadratic/Square/SquareNudupl_ZZ_Tests.cpp       \
-               tests/Quadratic/Square/SquareNudupl_long_Tests.cpp     \
                tests/Quadratic/Square/SquarePlain_ZZ_Tests.cpp        \
                tests/Quadratic/Square/SquarePlain_long_Tests.cpp      \
                src/common.cpp                                         \
