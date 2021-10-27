@@ -9,7 +9,7 @@
 
 #include <vector>
 #include <NTL/ZZ.h>
-
+#include <NTL/RR.h>
 #include <ANTL/Interface/OrderInvariants.hpp>
 
 // arithmetic classes
@@ -110,7 +110,7 @@ namespace ANTL {
    *       zz_pEX --- hyperelliptic function field over Fq (char <> 2, p < 2^64)
    *       GF2EX --- hyperelliptic function field (char = 2)
    */
-  template < class T > class QuadraticOrder : public IClassGroup, public IClassNumber, public IUnitGroup<T>, public IRegulator<T>
+template < class T > class QuadraticOrder : public IOrder<T,NTL::RR>
   {
   private:
 
@@ -277,8 +277,8 @@ namespace ANTL {
 	return unitGroup;
   }
 
-  virtual T regulator() {
-	T regulator;
+  virtual NTL::RR regulator() {
+	NTL::RR regulator;
 	return regulator;
   }
 

@@ -1,56 +1,46 @@
 #ifndef CLASSGROUPINDCALC_H
 #define CLASSGROUPINDCALC_H
 
-#include <NTL/ZZX.h>
 #include <vector>
 #include <string>
 #include <map>
 #include <memory>
-#include "ANTL/Interface/OrderInvariants.hpp"
-#include "ANTL/Interface/Multiplicative.hpp"
-#include "ANTL/IndexCalculus/FactorBase/FactorBase.hpp"
-#include "ANTL/IndexCalculus/Relation/Relation.hpp"
-#include "ANTL/IndexCalculus/RelationGenerator/RelationGenerator.hpp"
-#include "ANTL/Interface/OrderInvariants.hpp"
 #include <ANTL/common.hpp>
+#include <ANTL/Interface/OrderInvariants.hpp>
+#include <ANTL/IndexCalculus/FactorBase/FactorBase.hpp>
+#include <ANTL/IndexCalculus/RelationGenerator/RelationGenerator.hpp>
 
 using namespace ANTL;
 
 template <class T, class R> // type of unit, type of regulator
-class IndCalc: IClassGroup, IClassNumber, IUnitGroup<T>, IRegulator<R> {
+class IndCalc : IOrder<T,R> {
 public:
   std::vector<Relation> relations;
   NTL::Mat<ZZ> rels_mat;
 
-  // subclasses must implement class_number, class group, unit group, regulator
-  NTL::ZZ class_number() {};
-  std::vector<NTL::ZZ> class_group() {}
-  std::vector<T> unit_group() {}
-  R regulator() {}
+  // subclasses must implement all four invariants class_number, class group, unit group, regulator
+  virtual NTL::ZZ class_number() = 0;
+  virtual std::vector<NTL::ZZ> class_group() = 0;
+  virtual std::vector<T> unit_group() = 0;
+  virtual R regulator() = 0;
 
-  virtual FactorBase* get_factor_base() {return factor_base.get();};
-  virtual RelationGenerator* get_relation_generator() {return relation_generator.get();};
+  // subclasses need to choose the member variables that are returned by these getters
+  virtual FactorBase* const get_factor_base() = 0;
+  virtual RelationGenerator* const get_relation_generator() = 0;
 
+  virtual ~IndCalc() = default;
 protected:
-  void setup_fac_base();
-  void setup_relations();
+  // derived class calls setup_mat to start the index calculus computation
   void setup_mat();
-
-  // subclasses should implement compute_fac_base
-  virtual void compute_fac_base() {};
-  // subclasses should implement compute_relations
-  virtual void compute_relations() {};
-  // subclasses should implement compute_mat
-  virtual void compute_mat() {};
+  // these functions are called by setup_mat and must be implemented by the subclasses
+  virtual void compute_fac_base() = 0;
+  virtual void compute_relations() = 0;
+  virtual void compute_mat() = 0;
 
   IndCalc<T,R>() = default;
-  IndCalc<T,R>(std::shared_ptr<FactorBase> factor_base, std::shared_ptr<RelationGenerator> relation_generator) :
-    factor_base(factor_base),
-    relation_generator(relation_generator) {}
-
 private:
-  std::shared_ptr<FactorBase> factor_base;
-  std::shared_ptr<RelationGenerator> relation_generator;
+  void setup_fac_base();
+  void setup_relations();
 };
 
 template <class T, class R> void IndCalc<T,R>::setup_fac_base() {
