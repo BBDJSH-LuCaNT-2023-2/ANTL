@@ -20,7 +20,7 @@ TEST_CASE("ReducePlainReal<long>: Ideals should be reduced upon calling reduce",
 
     quad_order1.get_red_plain_real()->reduce(quad_ideal_base1);
 
-    REQUIRE(quad_ideal_base1.IsReduced());
+    REQUIRE(quad_ideal_base1.is_reduced());
 
 }
 

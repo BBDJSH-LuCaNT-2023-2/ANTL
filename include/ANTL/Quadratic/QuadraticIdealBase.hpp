@@ -44,8 +44,7 @@ namespace ANTL {
 
   // Class: QuadraticIdealBase<T>
   //
-  // This class represents a primtive, integral binary quadratic ideal (a,b,c)
-  // whose coefficients are of type T.
+  // This class represents a primtive integral ideal as a binary quadratic form with coefficients a,b,c of type T.
   template <class T> class QuadraticIdealBase {
     protected:
       // BQF coefficients
@@ -68,7 +67,7 @@ namespace ANTL {
       QuadraticIdealBase<T> &operator = (const QuadraticIdealBase<T> &A);
 
       // Checks whether ideal coeffs are valid (b^2 + bh - ac = Delta)
-      void test_ideal (string msg);
+      void ensure_valid (std::string msg);
 
       // Getters and Setters
       T get_a () const;
@@ -99,7 +98,7 @@ namespace ANTL {
       bool IsOne () const;
       bool IsEqual (const QuadraticIdealBase<T> &B) const;
 
-      bool IsReduced() const;
+      bool is_reduced();
 
       friend bool operator == < T > (const QuadraticIdealBase<T> &A, const QuadraticIdealBase<T> &B);
       friend bool operator != < T > (const QuadraticIdealBase<T> &A, const QuadraticIdealBase<T> &B);
@@ -110,17 +109,17 @@ namespace ANTL {
     };
 
   // Declare specialized methods
-  template <> void QuadraticIdealBase<ZZ>::test_ideal(string msg);
+  template <> void QuadraticIdealBase<ZZ>::ensure_valid(std::string msg);
   template <> void QuadraticIdealBase<ZZ>::assign_one();
   template <> bool QuadraticIdealBase<ZZ>::assign_prime (const ZZ & p);
-  template <> bool QuadraticIdealBase<ZZ>::IsReduced() const;
+  template <> bool QuadraticIdealBase<ZZ>::is_reduced();
 
-  template <> void QuadraticIdealBase<long>::test_ideal(string msg);
+  template <> void QuadraticIdealBase<long>::ensure_valid(std::string msg);
   template <> void QuadraticIdealBase<long>::assign_one();
   template <> bool QuadraticIdealBase<long>::assign_prime (const long & p);
-  template <> bool QuadraticIdealBase<long>::IsReduced() const;
+  template <> bool QuadraticIdealBase<long>::is_reduced();
 
-  template <> void QuadraticIdealBase<GF2EX>::test_ideal(string msg);
+  template <> void QuadraticIdealBase<GF2EX>::ensure_valid(std::string msg);
   template <> void QuadraticIdealBase<GF2EX>::assign_one();
   template <> bool QuadraticIdealBase<GF2EX>::assign_prime (const GF2EX & p);
   template <> void conjugate (QuadraticIdealBase<GF2EX> &C, const QuadraticIdealBase<GF2EX> &A);

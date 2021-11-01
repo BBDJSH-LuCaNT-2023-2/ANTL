@@ -124,10 +124,10 @@ template <> bool QuadraticIdealBase<long>::assign_prime (const long & p) {
   return true;
 }
 
-// QuadraticIdealBase<T>::IsReduced()
+// QuadraticIdealBase<T>::is_reduced()
 //
 // Task: tests if the ideal is reduced.
-template <> bool QuadraticIdealBase<long>::IsReduced () const {
+template <> bool QuadraticIdealBase<long>::is_reduced () {
   long D = b^2 - 4*a*c;
 
   if(D < 0) {

@@ -12,7 +12,7 @@ AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_LN_S
 
-# this macro figures out how to build with pthreads
+# this macro figures out how to build with pthreads 
 AX_PTHREAD(, )
 
 # Checks for libraries. They all have a main function

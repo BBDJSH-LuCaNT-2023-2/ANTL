@@ -20,7 +20,7 @@ TEST_CASE("QuadraticIdealBase<ZZ>: Ideal Bases within different orders should no
 
     quad_order1.get_red_fast()->reduce(quad_ideal_base1);
 
-    REQUIRE(quad_ideal_base1.IsReduced());
+    REQUIRE(quad_ideal_base1.is_reduced());
 
 }
 

@@ -27,7 +27,7 @@ template <class T> void QuadraticIdealBase<T>::set_c  (T x) {c = x;}
 template <class T> QuadraticOrder<T>* QuadraticIdealBase<T>::get_QO () const {return QO;}
 template <class T> void QuadraticIdealBase<T>::set_QO (QuadraticOrder<T> *x) {QO = x;}
 
-// template <class T> void QuadraticIdealBase<T>::test_ideal (string msg) {
+// template <class T> void QuadraticIdealBase<T>::ensure_valid (std::string msg) {
 //   T temp = b * b - 4 * a * c;
 //   if (temp != QO->getDiscriminant())
 //     {
