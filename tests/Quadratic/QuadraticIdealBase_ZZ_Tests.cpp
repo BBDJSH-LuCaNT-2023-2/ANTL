@@ -32,4 +32,18 @@ TEST_CASE("QuadraticIdealBase<ZZ>: Testing assign_prime()", "[QuadraticIdealBase
 
 }
 
+TEST_CASE("QuadraticIdealBase<ZZ>: Testing is_reduced()", "[QuadraticIdealBase]") {
+
+    QuadraticOrder<ZZ> quad_order1 = QuadraticOrder<ZZ>(ZZ(13));
+
+    QuadraticIdealBase<ZZ> quad_ideal_base1 = QuadraticIdealBase<ZZ>(quad_order1);
+    QuadraticIdealBase<ZZ> quad_ideal_base2 = QuadraticIdealBase<ZZ>(quad_order1);
+
+    quad_ideal_base1.assign(ZZ(5), ZZ(3), ZZ(-1)); //A form which is not reduced [BV07, pg. 109]
+    quad_ideal_base2.assign(ZZ(1), ZZ(5), ZZ(-1)); //A form which is reduced     [BV07, pg. 109]
+
+    REQUIRE(quad_ideal_base1.is_reduced() == false);
+    REQUIRE(quad_ideal_base2.is_reduced() == true);
+}
+
 #endif

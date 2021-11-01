@@ -128,21 +128,32 @@ template <> bool QuadraticIdealBase<long>::assign_prime (const long & p) {
 //
 // Task: tests if the ideal is reduced.
 template <> bool QuadraticIdealBase<long>::is_reduced () {
-  long D = b^2 - 4*a*c;
+  long delta;
 
-  if(D < 0) {
+  delta = b*b - 4*a*c;
+
+  if(delta > 0) {
+    long lbound, ubound, rootD;
+
+    // rootD = floor(sqrt(delta)) - [Recall  ANTL::SqrRoot(long a) = long floor(sqrt(a))]
+    rootD = SqrRoot(abs(delta));
+
+    // lbound = abs(rootD - 2*abs(a))
+    lbound = abs(rootD - 2*abs(a));
+
+    // We assume the form is irrational, so there ought to be no case where delta is square
+    ubound = rootD;
+
+    return (lbound < b && b <= rootD);
+  }
+
+  // TODO: The case when delta < 0 remains untested!
+  else if (delta < 0) {
     bool cond1 = ((abs(b) <= a) && (a <= c));
     bool cond2 = true;
     if( ((abs(b) == a) || (c == a)) && (b < 0))
       cond2 = false;
 
     return cond1 && cond2;
-  }
-
-  else if (D > 0) {
-    long lbound = abs(std::sqrt(D) - 2*abs(c));
-    long ubound = std::sqrt(D);
-
-    return (lbound < b && b < ubound);
   };
 }
