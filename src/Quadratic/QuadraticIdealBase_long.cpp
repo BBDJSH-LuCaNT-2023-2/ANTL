@@ -8,7 +8,7 @@
 
 using namespace ANTL;
 
-template <> void QuadraticIdealBase<long>::test_ideal(string msg) {
+template <> void QuadraticIdealBase<long>::ensure_valid(std::string msg) {
     long tval = b*b - 4*a*c;
     if (tval != QO->getDiscriminant()) {
       cout << "ERROR " << msg << "!  wrong discriminant!" << endl;
