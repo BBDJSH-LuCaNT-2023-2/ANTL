@@ -84,7 +84,7 @@ int main(){
 */
 
 
-  ZZ ibcf[4];
+  ZZ ibcf[4] {ZZ(1),ZZ(5),ZZ(5),ZZ(11)};
   /*
 
   ibcf[3] = 1;
@@ -104,10 +104,7 @@ int main(){
 
 */
 
-  ibcf[3] = 1;
-  ibcf[2] = 5;
-  ibcf[1] = 5;
-  ibcf[0] = 11;
+
 
 
   polynomial<ZZ> const test_poly{{ibcf[0],ibcf[1],ibcf[2],ibcf[3] }};

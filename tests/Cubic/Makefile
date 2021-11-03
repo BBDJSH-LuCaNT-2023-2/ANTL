@@ -1,10 +1,10 @@
 CC=g++
-CFLAGS= -g -O2
+CFLAGS= -g -O2 -Werror
 LFLAGS= -lntl -lgmp -lmpfi -lm -lpthread
 IFLAGS= -I/c/include -I/home/cs-gb2khv2/ANTL/include
 SRC_FILES := $(wildcard ../../src/Cubic/*.cpp)
 OBJ_FILES := $(notdir $(SRC_FILES:.cpp=.o))
-
+#For GCC/G++, you can pass compiler flags -std=c++11, -std=c++14, -std=c++17, or -std=c++2a to enable C++11/14/17/2a support respectively.
 main: cubicTestMain.o generalFunctions.o GlobalCubicField.o CubicNumberField.o\
 					RealCubicNumberField.o ComplexCubicNumberField.o CubicOrder.o CubicOrderReal.o\
 					CubicElement.o CubicIdeal.o IdealMultiplicationStrategy.o MultiplyStrategyWilliams.o \

@@ -297,10 +297,10 @@ static QQ<Type> rational_temp;
 CubicElement<Type, PType> gen;
 
 Type coeff_matrix[3][3];
-Type denom = Type(1);
+Type denom{1};
 PType p_lat[2][2];
 
-char reduced = 2;
+char reduced{2};
 
 /**
 * @ brief, returns an indicator whether the ideal is reduced (= 1), not reduced ( = 0),
