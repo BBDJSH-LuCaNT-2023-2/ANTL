@@ -1,4 +1,4 @@
-image: fedora
+image: fedora-34
 
 build:
   tags: 
