@@ -76,6 +76,7 @@ namespace NTL {
   inline long IsOne (const long &X)         { return (X == 1); }
   inline long IsZero (const long &X)        { return (X == 0); }
   inline long IsOdd (const long &X)         { return (X & 1); }
+  inline long sign (const long &X)          { return (X > 0) ? 1 : ((X < 0) ? -1 : 0); }
 
   inline long IsOne (const float &X)         { return (X == 1.0f); }
   inline long IsZero (const float &X)        { return (X == 0.0f); }

@@ -28,6 +28,8 @@ test_SOURCES = tests/UnitTests.cpp                                    \
                tests/Quadratic/Cube/CubePlain_long_Tests.cpp          \
                tests/Quadratic/Multiply/MultiplyPlain_long_Tests.cpp  \
                tests/Quadratic/Multiply/MultiplyPlain_ZZ_Tests.cpp    \
+               tests/Quadratic/Reduce/ReducePlainReal_long_Tests.cpp  \
+               tests/Quadratic/Reduce/ReducePlainReal_ZZ_Tests.cpp    \
                tests/Quadratic/Square/SquarePlain_ZZ_Tests.cpp        \
                tests/Quadratic/Square/SquarePlain_long_Tests.cpp      \
                src/common.cpp                                         \

@@ -124,6 +124,24 @@ template <> bool QuadraticIdealBase<long>::assign_prime (const long & p) {
   return true;
 }
 
+// QuadraticIdealBase<T>::is_normal()
+// Note: Not defined for positive definite forms.
+// Task: tests if the ideal is normal.
+template <> bool QuadraticIdealBase<long>::is_normal() {
+  long delta, rootD;
+
+  delta = b*b - 4*a*c;
+
+  // rootD = floor(sqrt(delta)) - [Recall  ANTL::SqrRoot(long a) = long floor(sqrt(a))]
+  rootD = SqrRoot(abs(delta));
+
+  if(abs(a) > rootD)
+    return (-1*(abs(a)) < b && b <= abs(a));
+
+  else
+    return (rootD - 2*abs(a) < b && b <= rootD);
+}
+
 // QuadraticIdealBase<T>::is_reduced()
 //
 // Task: tests if the ideal is reduced.

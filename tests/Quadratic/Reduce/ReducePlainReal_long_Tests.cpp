@@ -16,7 +16,7 @@ TEST_CASE("ReducePlainReal<long>: Ideals should be reduced upon calling reduce",
 
     QuadraticIdealBase<long> quad_ideal_base1 = QuadraticIdealBase<long>(quad_order1);
 
-    quad_ideal_base1.assign(17, 9, 1);
+    quad_ideal_base1.assign(5, -3, 1);
 
     quad_order1.get_red_plain_real()->reduce(quad_ideal_base1);
 
@@ -25,5 +25,3 @@ TEST_CASE("ReducePlainReal<long>: Ideals should be reduced upon calling reduce",
 }
 
 #endif
-
-

@@ -120,10 +120,32 @@ template <> bool QuadraticIdealBase<ZZ>::assign_prime (const ZZ & p) {
   return true;
 }
 
+// QuadraticIdealBase<T>::is_normal()
+// Note: Not defined for positive definite forms.
+// Task: tests if the ideal is normal.
+template <> bool QuadraticIdealBase<ZZ>::is_normal() {
+  ZZ delta, temp, rootD;
+
+  // delta = b^2 - 4ac
+  mul(temp, a, c);
+  mul(temp, temp, 4);
+  sqr(delta, b);
+  sub(delta, delta, temp);
+
+  // rootD = floor(sqrt(delta)) - [Recall NTL::SqrRoot(ZZ a) = ZZ floor(sqrt(a))]
+  rootD = SqrRoot(abs(delta));
+
+  if(abs(a) > rootD)
+    return (-1*(abs(a)) < b && b <= abs(a));
+
+  else
+    return (rootD - 2*abs(a) < b && b <= rootD);
+}
+
 // QuadraticIdealBase<T>::is_reduced()
 //
 // Task: tests if the ideal is reduced.
-template <> bool QuadraticIdealBase<ZZ>::is_reduced () {
+template <> bool QuadraticIdealBase<ZZ>::is_reduced() {
   ZZ delta, temp;
 
   // delta = b^2 - 4ac
@@ -139,8 +161,7 @@ template <> bool QuadraticIdealBase<ZZ>::is_reduced () {
     rootD = SqrRoot(abs(delta));
 
     // lbound = abs(rootD - 2*abs(a))
-    abs(a, a);
-    mul(temp, a, 2);
+    mul(temp, abs(a), 2);
     sub(lbound, rootD, temp);
     abs(lbound, lbound);
 

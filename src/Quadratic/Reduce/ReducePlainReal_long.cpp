@@ -9,62 +9,69 @@
 // reduce
 //
 // Task: reduces the ideal
-
 template <> void ReducePlainReal<long>::reduce(QuadraticIdealBase<long> & A) {
   static long a, b, c, na, nb, q, r, a2, temp;
+
+  // normalize ideal
+  if (!A.is_normal()) {
+    normalize(A);
+  }
+
+  // reduce
+  while (!A.is_reduced()) {
+    a = A.get_a();
+    b = A.get_b();
+    c = A.get_c();
+
+    A.assign(c, -1*b, a);
+    normalize(A);
+  }
+
+  //account for special case
+  if ((a == c) && (b < 0)) {
+    b = -1*b;
+    A.set_b(b);
+  }
+}
+
+template <> void ReducePlainReal<long>::normalize(QuadraticIdealBase<long> & A) {
+  static long a, b, c, a2, delta, rootDelta, s;
 
   a = A.get_a();
   b = A.get_b();
   c = A.get_c();
 
-  // normalize ideal
-  if (b <= -a || b > a) {
-    a2 = a << 1;  
-  
-    // q = b/2a
-    //DivRem(q, r, b, a2);
-    q = b / (a2);
-    r = b % (a2);
+  delta = b*b - 4*a*c;
 
-    if (r > a) {
-      r -= a2;
-      ++q;
-    }
+  rootDelta = SqrRoot(delta);
 
-    // c -= q (b + r) / 2
-    c -= q*(b+2) >> 1;
+  if(a <= rootDelta) {
+    a2 = 2*abs(a);
 
-    // b = r
-    b = r;
+    // Computing s, the normalizing integer,  per [BV07, pg. 108]
+    s = sign(a)*((rootDelta - b)/a2);
+
+    //c = a*s^2 + b*s + c
+    c = a*s*s + b*s + c;
+
+    //b = b + 2sa
+    b = b + 2*s*a;
+
+    A.assign(a, b, c);
   }
 
-  // reduce
-  while (a > c) {
-    na = c;
+  else {
+    a2 = 2*abs(a);
 
-    a2 = na << 1;
+    // Computing s, the normalizing integer,  per [BV07, pg. 108]
+    s = sign(a)*((abs(a) - b)/a2);
 
-    // -b = 2q * na + nb
-    //DivRem (q, nb, -b, a2);
-    q = (-b) / a2;
-    nb = (-b) % a2;
+    //c = a*s^2 + b*s + c
+    c = a*s*s + b*s + c;
 
-    if (nb > na)
-      {
-	nb -= a2;
-	++q;
-      }
+    //b = b + 2sa
+    b = b + 2*s*a;
 
-    // c = a - q * (nb - b)/2
-    c = a - q*(nb - b) >> 1;
-
-    b = nb;
-    a = na;
+    A.assign(a, b, c);
   }
-
-  // account for special case
-  if ((a == c) && (b < 0))
-    b = -b;
-
-  A.assign(a,b,c);
 }

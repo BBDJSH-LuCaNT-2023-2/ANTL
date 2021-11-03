@@ -9,65 +9,89 @@
 // reduce
 //
 // Task: reduces the ideal
-
 template <> void ReducePlainReal<ZZ>::reduce(QuadraticIdealBase<ZZ> & A) {
   static ZZ a, b, c, na, nb, q, r, a2, temp;
+
+  // normalize ideal
+  if (!A.is_normal()) {
+    normalize(A);
+  }
+
+  // reduce
+  while (!A.is_reduced()) {
+    a = A.get_a();
+    b = A.get_b();
+    c = A.get_c();
+
+    A.assign(c, -1*b, a);
+    normalize(A);
+  }
+
+  //account for special case
+  if ((a == c) && (b < 0)) {
+    NTL::negate(b,b);
+    A.set_b(b);
+  }
+}
+
+template <> void ReducePlainReal<ZZ>::normalize(QuadraticIdealBase<ZZ> & A) {
+  static ZZ a, b, c, a2, delta, rootDelta, temp, s;
 
   a = A.get_a();
   b = A.get_b();
   c = A.get_c();
 
-  // normalize ideal
-  if (b <= -a || b > a) {
-    LeftShift(a2,a,1);
-  
-    // q = b/2a
-    DivRem(q, r, b, a2);
+  // delta = b^2 - 4ac
+  mul(temp, a, c);
+  mul(temp, temp, 4);
+  sqr(delta, b);
+  sub(delta, delta, temp);
 
-    if (r > a) {
-      sub(r,r,a2);
-      ++q;
-    }
+  rootDelta = SqrRoot(delta);
 
-    // c -= q (b + r) / 2
-    add(temp,b,r);
-    RightShift(temp,temp,1);
-    mul(temp,temp,q);
-    sub(c,c,temp);
+  if(a <= rootDelta) {
+    mul(a2, 2, abs(a));
 
-    // b = r
-    b = r;
+    // Computing s, the normalizing integer,  per [BV07, pg. 108]
+    sub(temp, rootDelta, b);
+    div(s, temp, a2);
+    mul(s, s, sign(a));
+
+    //c = a*s^2 + b*s + c
+    mul(temp, s, s);
+    mul(temp, temp, a);
+    add(c, c, temp);
+    mul(temp, b, s);
+    add(c, c, temp);
+
+    //b = b + 2sa
+    mul(temp, a, 2);
+    mul(temp, temp, s);
+    add(b, b, temp);
+
+    A.assign(a, b, c);
   }
 
-  // reduce
-  while (a > c) {
-    na = c;
+  else {
+    mul(a2, 2, abs(a));
 
-    LeftShift(a2,na,1);
+    // Computing s, the normalizing integer,  per [BV07, pg. 108]
+    sub(temp, abs(a), b);
+    div(s, temp, a2);
+    mul(s, s, sign(a));
 
-    // -b = 2q * na + nb
-    NTL::negate(temp,b);
-    DivRem (q, nb, temp, a2);
+    //c = a*s^2 + b*s + c
+    mul(temp, s, s);
+    mul(temp, temp, a);
+    add(c, c, temp);
+    mul(temp, b, s);
+    add(c, c, temp);
 
-    if (nb > na)
-      {
-    sub(nb,nb,a2);
-    ++q;
-      }
+    //b = b + 2sa
+    mul(temp, a, 2);
+    mul(temp, temp, s);
+    add(b, b, temp);
 
-    // c = a - q * (nb - b)/2
-    sub(temp,nb,b);
-    RightShift(temp,temp,1);
-    mul(temp,temp,q);
-    sub(c,a,temp);
-
-    b = nb;
-    a = na;
+    A.assign(a, b, c);
   }
-
-  // account for special case
-  if ((a == c) && (b < 0))
-    NTL::negate(b,b);
-
-  A.assign(a,b,c);
 }
