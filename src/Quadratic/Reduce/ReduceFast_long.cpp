@@ -10,7 +10,7 @@
 
 template <> void ReduceFast<long>::init(const long & delta_in, const long & h_in, long g_in) {
   qo_reduce<long>::init(delta_in,h_in,0);
-  SQRT_DELTA = FloorTolong(sqrt(abs(to_RR(Delta))));
+  sqrt_delta = FloorTolong(sqrt(abs(to_RR(Delta))));
 }
 
 
@@ -21,7 +21,7 @@ template <> void ReduceFast<long>::reduce(QuadraticIdealBase<long> & A) {
   b = A.get_b();
   c = A.get_c();
 
-  if (a < SQRT_DELTA) {
+  if (a < sqrt_delta) {
     // just normalize - close to reduced
     if (b <= -a || b > a) {
       a2 = a << 1;
@@ -51,7 +51,7 @@ template <> void ReduceFast<long>::reduce(QuadraticIdealBase<long> & A) {
     R = b;
 
     // use bound sqrt(a) D^1/4 / 2
-    mul(N, SQRT_DELTA, a);
+    mul(N, sqrt_delta, a);
     RightShift(N,N,1);
     SqrRoot(N, N);
 

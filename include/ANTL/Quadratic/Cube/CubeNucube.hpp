@@ -27,7 +27,7 @@ namespace ANTL {
     using CubeStrategy<T>::is_init;
 
     protected:
-      ZZ SQRT_DELTA;   // = floor(SquareRoot(abs(Delta)))
+      ZZ sqrt_delta;   // = floor(SquareRoot(abs(Delta)))
 
     public:
       ~CubeNucube() { };

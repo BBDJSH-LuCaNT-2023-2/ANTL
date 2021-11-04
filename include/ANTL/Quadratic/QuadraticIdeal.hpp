@@ -70,7 +70,7 @@ namespace ANTL
   //
 
   template <class T>
-  class QuadraticIdeal: public QuadraticIdealBase<T>
+  class QuadraticIdeal
   {
   protected:
     QQ<T> q; // (num/dem) coefficient

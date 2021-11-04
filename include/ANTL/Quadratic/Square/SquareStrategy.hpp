@@ -38,7 +38,7 @@ namespace ANTL {
 
     public:
       SquareStrategy() { is_init = false; };
-      virtual ~SquareStrategy() {};
+      virtual ~SquareStrategy() = default;
 
       // Initialize field invariants
       void init(const T & delta_in, const T & h_in, long g_in=0) {

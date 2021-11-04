@@ -10,7 +10,7 @@
 
 template <> void CubeNucube<long>::init(const long & delta_in, const long & h_in, long g_in) {
   CubeStrategy<long>::init(delta_in,h_in,0);
-  SQRT_DELTA = FloorToZZ(sqrt(abs(to_RR(delta_in))));
+  sqrt_delta = FloorToZZ(sqrt(abs(to_RR(delta_in))));
 }
 
 
@@ -71,7 +71,7 @@ template <> void CubeNucube<long>::cube(QuadraticIdealBase<long> &C, const Quadr
   }
 
   // Compute NUCOMP termination bound
-  B = to_long(SQRT_DELTA) * a;
+  B = to_long(sqrt_delta) * a;
   B = B >> 1;
   B = SqrRoot(B);
  

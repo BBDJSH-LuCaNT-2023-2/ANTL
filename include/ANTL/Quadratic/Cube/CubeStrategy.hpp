@@ -38,8 +38,8 @@ namespace ANTL {
       bool is_init;
 
     public:
-      CubeStrategy() { is_init=false; };
-      virtual ~CubeStrategy() {};
+      CubeStrategy() { is_init = false; };
+      virtual ~CubeStrategy() = default;
 
       // Initialize field invariants
       void init(const T & delta_in, const T & h_in, long g_in=0) {

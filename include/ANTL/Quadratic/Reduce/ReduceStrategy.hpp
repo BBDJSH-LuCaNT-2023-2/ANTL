@@ -38,14 +38,14 @@ namespace ANTL {
 
     public:
       ReduceStrategy() { is_init = false; };
-      virtual ~ReduceStrategy() {};
+      virtual ~ReduceStrategy() = default;
 
       // Initialize field invariants
       void init(const T & delta_in, const T & h_in, long g_in=0) {
-        if (is_init) {
-          Delta.kill();
-          hx.kill();
-        }
+//         if (is_init) {
+//           Delta.kill();
+//           hx.kill();
+//         }
 
         Delta = delta_in;
         hx = h_in;

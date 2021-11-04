@@ -32,14 +32,14 @@ namespace ANTL {
 
   template <class T> class MultiplyStrategy {
     protected:
-      T    Delta;
-      T    hx;
+      T Delta;
+      T hx;
       long genus;
       bool is_init;
 
     public:
-               MultiplyStrategy() {}
-      virtual ~MultiplyStrategy() {}
+               MultiplyStrategy() {is_init = false;}
+      virtual ~MultiplyStrategy() = default;
 
       // Initialize field invariants
       void init(const T & delta_in, const T & h_in, long g_in=0) {

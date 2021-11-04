@@ -135,6 +135,7 @@ using namespace ANTL;
 template < class T > class QuadraticOrder : public IOrder<T,NTL::RR> {
   private:
 
+    // TODO: Rename all instances of Delta (and discriminant, etc) to delta throughout codebase
     T hx;    // definition of the order:  y^2 + h(x) y = Delta
     T Delta;
     long g;  // genus (if an order in a function field)
