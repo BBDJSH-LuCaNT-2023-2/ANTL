@@ -8,8 +8,8 @@
 #include <NTL/RR.h>
 
 
-template <> void SquareNudupl<long>::init(const long & Din, const long & hin, long gin) {
-  SquareStrategy<long>::init(Din,hin,0);
+template <> void SquareNudupl<long>::init(const long & delta_in, const long & h_in, long g_in) {
+  SquareStrategy<long>::init(delta_in,h_in,0);
   NC_BOUND = FloorToZZ(sqrt(sqrt(abs(to_RR(Delta)))));
 }
 

@@ -32,8 +32,8 @@ namespace ANTL {
     public:
       ~SquareNudupl() { };
 
-      void init(const T & Din, const T & hin, long gin=0) {
-        SquareStrategy<T>::init(Din,hin,gin);
+      void init(const T & delta_in, const T & h_in, long g_in=0) {
+        SquareStrategy<T>::init(delta_in,h_in,g_in);
       };
 
       // nudupl
@@ -41,10 +41,10 @@ namespace ANTL {
   };
 
 // Declare specialized methods
-template <> void SquareNudupl<ZZ>::init(const ZZ & Din, const ZZ & hin, long gin);
+template <> void SquareNudupl<ZZ>::init(const ZZ & delta_in, const ZZ & h_in, long g_in);
 template <> void SquareNudupl<ZZ>::square(QuadraticIdealBase<ZZ> & C, const QuadraticIdealBase<ZZ> & A);
 
-template <> void SquareNudupl<long>::init(const long & Din, const long & hin, long gin);
+template <> void SquareNudupl<long>::init(const long & delta_in, const long & h_in, long g_in);
 template <> void SquareNudupl<long>::square(QuadraticIdealBase<long> & C, const QuadraticIdealBase<long> & A);
 
 template <> void SquareNudupl<GF2EX>::square(QuadraticIdealBase<GF2EX> & C, const QuadraticIdealBase<GF2EX> & A);

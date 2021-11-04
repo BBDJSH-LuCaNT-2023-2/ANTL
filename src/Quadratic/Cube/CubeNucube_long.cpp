@@ -8,9 +8,9 @@
 #include <NTL/RR.h>
 
 
-template <> void CubeNucube<long>::init(const long & Din, const long & hin, long gin) {
-  CubeStrategy<long>::init(Din,hin,0);
-  SQRT_DELTA = FloorToZZ(sqrt(abs(to_RR(Din))));
+template <> void CubeNucube<long>::init(const long & delta_in, const long & h_in, long g_in) {
+  CubeStrategy<long>::init(delta_in,h_in,0);
+  SQRT_DELTA = FloorToZZ(sqrt(abs(to_RR(delta_in))));
 }
 
 

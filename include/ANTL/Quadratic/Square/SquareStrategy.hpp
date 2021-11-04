@@ -41,15 +41,15 @@ namespace ANTL {
       virtual ~SquareStrategy() {};
 
       // Initialize field invariants
-      void init(const T & Din, const T & hin, long gin=0) {
+      void init(const T & delta_in, const T & h_in, long g_in=0) {
 //         if (is_init) {
 //           Delta.kill();
 //           hx.kill();
 //         }
 
-        Delta = Din;
-        hx = hin;
-        genus = gin;
+        Delta = delta_in;
+        hx = h_in;
+        genus = g_in;
         is_init = true;
       };
 

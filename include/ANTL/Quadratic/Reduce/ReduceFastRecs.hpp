@@ -30,8 +30,8 @@ namespace ANTL {
     public:
       ~ReduceFastRecs() {};
 
-      void init(T Din, T hin, long gin=0) {
-        ReduceStrategy<T>::init(Din,hin,gin);
+      void init(T delta_in, T h_in, long g_in=0) {
+        ReduceStrategy<T>::init(delta_in,h_in,g_in);
       };
 
       void reduce(QuadraticIdealBase<T> & A);

@@ -7,8 +7,8 @@
 #include <ANTL/Quadratic/Multiply/MultiplyNucomp.hpp>
 #include <NTL/RR.h>
 
-template <> void MultiplyNucomp<long>::init(const long & Din, const long & hin, long gin) {
-  MultiplyStrategy<long>::init(Din,hin,0);
+template <> void MultiplyNucomp<long>::init(const long & delta_in, const long & h_in, long g_in) {
+  MultiplyStrategy<long>::init(delta_in,h_in,0);
   NC_BOUND = FloorToZZ(sqrt(sqrt(abs(to_RR(Delta)))));
 }
 

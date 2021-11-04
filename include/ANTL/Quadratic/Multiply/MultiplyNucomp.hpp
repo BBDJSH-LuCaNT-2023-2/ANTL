@@ -34,8 +34,8 @@ namespace ANTL {
     public:
       ~MultiplyNucomp() { };
 
-    void init(const T & Din, const T & hin, long gin=0) {
-      MultiplyStrategy<T>::init(Din,hin,gin);
+    void init(const T & delta_in, const T & h_in, long g_in=0) {
+      MultiplyStrategy<T>::init(delta_in,h_in,g_in);
     };
 
 //     nucomp();
@@ -51,8 +51,8 @@ namespace ANTL {
 // Declare specialized methods
 //
 
-template <> void MultiplyNucomp<ZZ>::init(const ZZ & Din, const ZZ & hin, long gin);
-template <> void MultiplyNucomp<long>::init(const long & Din, const long & hin, long gin);
+template <> void MultiplyNucomp<ZZ>::init(const ZZ & delta_in, const ZZ & h_in, long g_in);
+template <> void MultiplyNucomp<long>::init(const long & delta_in, const long & h_in, long g_in);
 
 template <> void MultiplyNucomp<ZZ>::multiply(QuadraticIdealBase<ZZ> & C, const QuadraticIdealBase<ZZ> & A, const QuadraticIdealBase<ZZ> & B);
 

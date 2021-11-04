@@ -8,8 +8,8 @@
 #include <NTL/RR.h>
 
 
-template <> void ReduceFast<long>::init(const long & Din, const long & hin, long gin) {
-  qo_reduce<long>::init(Din,hin,0);
+template <> void ReduceFast<long>::init(const long & delta_in, const long & h_in, long g_in) {
+  qo_reduce<long>::init(delta_in,h_in,0);
   SQRT_DELTA = FloorTolong(sqrt(abs(to_RR(Delta))));
 }
 
