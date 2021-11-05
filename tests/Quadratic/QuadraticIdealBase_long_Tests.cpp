@@ -53,8 +53,8 @@ TEST_CASE("QuadraticIdealBase<long>: Testing is_normal()", "[QuadraticIdealBase]
     QuadraticIdealBase<long> quad_ideal_base1 = QuadraticIdealBase<long>(quad_order1);
     QuadraticIdealBase<long> quad_ideal_base2 = QuadraticIdealBase<long>(quad_order1);
 
-    quad_ideal_base1.assign(5, 5, 1);  //A form which is normal     [BV07, pg. 109]
-    quad_ideal_base2.assign(-3, 5, 4); //A form which is not normal [BV07, pg. 109]
+    quad_ideal_base1.assign(5, 5, 1);  //A form which is normal [BV07, pg. 109]
+    quad_ideal_base2.assign(-3, 5, 4); //A form which is normal [BV07, pg. 109]
 
     REQUIRE(quad_ideal_base1.is_normal() == true);
     REQUIRE(quad_ideal_base2.is_normal() == true);

@@ -28,7 +28,6 @@ namespace ANTL {
     public:
       ~ReducePlainReal() {};
 
-      void normalize(QuadraticIdealBase<T> & A);
       void reduce(QuadraticIdealBase<T> & A);
   };
 
@@ -37,9 +36,6 @@ namespace ANTL {
 template <> void ReducePlainReal<ZZ>::reduce(ANTL::QuadraticIdealBase<ZZ> & A);
 template <> void ReducePlainReal<long>::reduce(ANTL::QuadraticIdealBase<long> & A);
 template <> void ReducePlainReal<GF2EX>::reduce(ANTL::QuadraticIdealBase<GF2EX> & A);
-
-template <> void ReducePlainReal<ZZ>::normalize(ANTL::QuadraticIdealBase<ZZ> & A);
-template <> void ReducePlainReal<long>::normalize(ANTL::QuadraticIdealBase<long> & A);
 
 } // ANTL
 

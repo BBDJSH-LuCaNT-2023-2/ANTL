@@ -132,14 +132,16 @@ template <> bool QuadraticIdealBase<ZZ>::is_normal() {
   sqr(delta, b);
   sub(delta, delta, temp);
 
-  // rootD = floor(sqrt(delta)) - [Recall NTL::SqrRoot(ZZ a) = ZZ floor(sqrt(a))]
-  rootD = SqrRoot(abs(delta));
+  if(delta > 0) {
+    // rootD = floor(sqrt(delta)) - [Recall NTL::SqrRoot(ZZ a) = ZZ floor(sqrt(a))]
+    rootD = SqrRoot(abs(delta));
 
-  if(abs(a) > rootD)
-    return (-1*(abs(a)) < b && b <= abs(a));
+    if(abs(a) > rootD)
+      return (-1*(abs(a)) < b && b <= abs(a));
 
-  else
-    return (rootD - 2*abs(a) < b && b <= rootD);
+    else
+      return (rootD - 2*abs(a) < b && b <= rootD);
+  }
 }
 
 // QuadraticIdealBase<T>::is_reduced()
@@ -183,4 +185,58 @@ template <> bool QuadraticIdealBase<ZZ>::is_reduced() {
     return cond1 && cond2;
   };
 
+}
+
+template <> void QuadraticIdealBase<ZZ>::normalize() {
+  static ZZ a2, delta, rootDelta, temp, s;
+
+  // delta = b^2 - 4ac
+  mul(temp, a, c);
+  mul(temp, temp, 4);
+  sqr(delta, b);
+  sub(delta, delta, temp);
+
+  rootDelta = SqrRoot(delta);
+
+  if(a <= rootDelta) {
+    mul(a2, 2, abs(a));
+
+    // Computing s, the normalizing integer,  per [BV07, pg. 108]
+    sub(temp, rootDelta, b);
+    div(s, temp, a2);
+    mul(s, s, sign(a));
+
+    //c = a*s^2 + b*s + c
+    mul(temp, s, s);
+    mul(temp, temp, a);
+    add(c, c, temp);
+    mul(temp, b, s);
+    add(c, c, temp);
+
+    //b = b + 2sa
+    mul(temp, a, 2);
+    mul(temp, temp, s);
+    add(b, b, temp);
+  }
+
+  else {
+    mul(a2, 2, abs(a));
+
+    // Computing s, the normalizing integer,  per [BV07, pg. 108]
+    sub(temp, abs(a), b);
+    div(s, temp, a2);
+    mul(s, s, sign(a));
+
+    //c = a*s^2 + b*s + c
+    mul(temp, s, s);
+    mul(temp, temp, a);
+    add(c, c, temp);
+    mul(temp, b, s);
+    add(c, c, temp);
+
+    //b = b + 2sa
+    mul(temp, a, 2);
+    mul(temp, temp, s);
+    add(b, b, temp);
+  }
 }

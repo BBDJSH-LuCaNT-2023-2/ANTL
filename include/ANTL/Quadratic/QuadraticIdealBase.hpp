@@ -101,6 +101,8 @@ namespace ANTL {
       bool is_normal();
       bool is_reduced();
 
+      void normalize();
+
       friend bool operator == < T > (const QuadraticIdealBase<T> &A, const QuadraticIdealBase<T> &B);
       friend bool operator != < T > (const QuadraticIdealBase<T> &A, const QuadraticIdealBase<T> &B);
 
@@ -116,11 +118,13 @@ namespace ANTL {
   template <> bool QuadraticIdealBase<ZZ>::is_normal();
   template <> bool QuadraticIdealBase<ZZ>::is_reduced();
 
+
   template <> void QuadraticIdealBase<long>::ensure_valid(std::string msg);
   template <> void QuadraticIdealBase<long>::assign_one();
   template <> bool QuadraticIdealBase<long>::assign_prime (const long & p);
   template <> bool QuadraticIdealBase<long>::is_normal();
   template <> bool QuadraticIdealBase<long>::is_reduced();
+  template <> void QuadraticIdealBase<ZZ>::normalize();
 
   template <> void QuadraticIdealBase<GF2EX>::ensure_valid(std::string msg);
   template <> void QuadraticIdealBase<GF2EX>::assign_one();

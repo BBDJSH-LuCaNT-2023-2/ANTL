@@ -132,14 +132,16 @@ template <> bool QuadraticIdealBase<long>::is_normal() {
 
   delta = b*b - 4*a*c;
 
-  // rootD = floor(sqrt(delta)) - [Recall  ANTL::SqrRoot(long a) = long floor(sqrt(a))]
-  rootD = SqrRoot(abs(delta));
+  if(delta > 0) {
+    // rootD = floor(sqrt(delta)) - [Recall  ANTL::SqrRoot(long a) = long floor(sqrt(a))]
+    rootD = SqrRoot(abs(delta));
 
-  if(abs(a) > rootD)
-    return (-1*(abs(a)) < b && b <= abs(a));
+    if(abs(a) > rootD)
+      return (-1*(abs(a)) < b && b <= abs(a));
 
-  else
-    return (rootD - 2*abs(a) < b && b <= rootD);
+    else
+      return (rootD - 2*abs(a) < b && b <= rootD);
+  }
 }
 
 // QuadraticIdealBase<T>::is_reduced()
@@ -174,4 +176,38 @@ template <> bool QuadraticIdealBase<long>::is_reduced () {
 
     return cond1 && cond2;
   };
+}
+
+template <> void QuadraticIdealBase<long>::normalize() {
+  static long a2, delta, rootDelta, s;
+
+  delta = b*b - 4*a*c;
+
+  rootDelta = SqrRoot(delta);
+
+  if(a <= rootDelta) {
+    a2 = 2*abs(a);
+
+    // Computing s, the normalizing integer,  per [BV07, pg. 108]
+    s = sign(a)*((rootDelta - b)/a2);
+
+    //c = a*s^2 + b*s + c
+    c = a*s*s + b*s + c;
+
+    //b = b + 2sa
+    b = b + 2*s*a;
+  }
+
+  else {
+    a2 = 2*abs(a);
+
+    // Computing s, the normalizing integer,  per [BV07, pg. 108]
+    s = sign(a)*((abs(a) - b)/a2);
+
+    //c = a*s^2 + b*s + c
+    c = a*s*s + b*s + c;
+
+    //b = b + 2sa
+    b = b + 2*s*a;
+  }
 }
