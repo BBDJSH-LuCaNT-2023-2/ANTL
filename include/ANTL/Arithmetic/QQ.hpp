@@ -80,6 +80,9 @@ namespace ANTL
     inv (QQ<T> & x, const QQ<T> & y);
 
   template<class T>
+  void abs (QQ<T> x, const QQ<T> & y);
+
+  template<class T>
     void
     add (QQ<T> & z, const QQ<T> & x, const QQ<T> & y);
 
@@ -401,6 +404,22 @@ namespace ANTL
       }
 
       /**
+       * @brief Sets the QQ z equal to x
+       * @param[out] z result of assignment
+       * @param[in] x value to be assigned
+       */
+      void assign(const T& newnum, const T& newden)
+      {
+        if (::IsZero(newden)) {
+          //ANTL_FATAL("ANTL: QQ divide by zero");
+        }
+        a = newnum;
+        d = newden;
+        normalize();
+      }
+
+
+      /**
        * @brief Assignment operator
        * @param[in] x value to give the QQ
        */
@@ -635,6 +654,17 @@ namespace ANTL
 	z.a = x.d;
 	z.d = x.a;
         z.normalize();
+      }
+
+      /**
+       * @brief Computes the sum of x and y
+       * @param[out] x = x + y
+       * @param[in] y first summand
+       */
+      friend void
+      abs (QQ<T> x, const QQ<T> & y)
+      {
+        x.assign(abs(y.a), abs(y.d));
       }
 
       /**
@@ -1204,5 +1234,8 @@ namespace ANTL
 
 
 } // ANTL
+
+// Unspecialized template definitions.
+//#include "../src/Arithmetic/QQ_impl.hpp"
 
 #endif // ANTL_QQ_H

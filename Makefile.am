@@ -6,22 +6,23 @@ AM_CC = @PTHREAD_CC@
 AM_CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/include
 
 if EXTRADEPS
-bin_PROGRAMS = test main cubic testorder
+bin_PROGRAMS = test main
 else
 bin_PROGRAMS = test main
 endif
 
 main_SOURCES= tests/HeaderTest.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quadratic/QuadraticOrder_long.cpp
 
-cubic_SOURCES=tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/FundamentalUnits/BasicVoronoi.cpp src/Cubic/FundamentalUnits/BSGSVoronoi.cpp
+#cubic_SOURCES=tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/FundamentalUnits/BasicVoronoi.cpp src/Cubic/FundamentalUnits/BSGSVoronoi.cpp
 
-testorder_SOURCES=tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp
+#testorder_SOURCES=tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp
 
 test_SOURCES = tests/UnitTests.cpp                                    \
                tests/IndexCalculus/IndCalc_Tests.cpp                  \
                tests/common_Tests.cpp                                 \
                tests/Quadratic/QuadraticIdealBase_long_Tests.cpp      \
                tests/Quadratic/QuadraticIdealBase_ZZ_Tests.cpp        \
+               tests/Quadratic/QuadraticNumber_ZZ_Tests.cpp           \
                tests/Quadratic/QuadraticOrder_ZZ_Tests.cpp            \
                tests/Quadratic/QuadraticOrder_long_Tests.cpp          \
                tests/Quadratic/Cube/CubePlain_ZZ_Tests.cpp            \
@@ -35,6 +36,7 @@ test_SOURCES = tests/UnitTests.cpp                                    \
                src/common.cpp                                         \
                src/Quadratic/QuadraticIdealBase_long.cpp              \
                src/Quadratic/QuadraticIdealBase_ZZ.cpp                \
+               src/Quadratic/QuadraticNumber_ZZ.cpp                   \
                src/Quadratic/QuadraticOrder_ZZ.cpp                    \
                src/Quadratic/QuadraticOrder_long.cpp                  \
                src/Quadratic/Cube/CubePlain_ZZ.cpp                    \

@@ -4,32 +4,31 @@
  * @remark Quadratic number function specializations (ZZ base type).
  */
 
-#include <QuadraticNumber.hpp>
+#include <ANTL/Quadratic/QuadraticNumber.hpp>
 
 
 template <>
-void
-QuadraticNumber<ZZ>::normalize()
+void QuadraticNumber<ZZ>::normalize()
 {
-	if(d < 0){
-	  negate(a,a);
-	  negate(b,b);
-	  negate(d,d);
-	}
-	ZZ g = GCD(GCD(a,b),d);
-	if (g != 1) {
-	  div(a,a,g);
-	  div(b,b,g);
-	  div(d,d,g);
-	}
-      }
+    if(d < 0) {
+      NTL::negate(a,a);
+      NTL::negate(b,b);
+      NTL::negate(d,d);
+    }
+    ZZ g = GCD(GCD(a,b),d);
+    if (g != 1) {
+      div(a,a,g);
+      div(b,b,g);
+      div(d,d,g);
+    }
 }
 
 
 
 template <>
-void
-QuadraticNumber<ZZ>::isUnit()
+bool QuadraticNumber<ZZ>::isUnit() const
 {
-  return ::abs(getNorm()) == 1; 
+  QQ<ZZ> tempQ = QQ<ZZ>();
+  abs(tempQ, getNorm());
+  return tempQ == ZZ(1);
 }
