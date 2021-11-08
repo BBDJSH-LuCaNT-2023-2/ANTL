@@ -16,7 +16,6 @@ using namespace ANTL;
 namespace ANTL {
   // Forward Declarations
   template <class T> class QuadraticNumber;
-
   template <class T> class QuadraticOrder;
 
   template<class T> void
@@ -264,26 +263,23 @@ namespace ANTL {
     private:
       QuadraticOrder<T> *QO; /**< order to which the QuadraticNumber belongs */
       T a, b, d; /**< coefficients of the QuadraticNumber */
-
-      static T newA,newB,newD,temp;	// temporary variables for arithmetic operations
-
       void
       normalize ()
       {
-	// remove common factors
-	T g = GCD(GCD(a,b),d);
-	if (!::IsOne(g)) {
-	    ::div(a,a,g);
-	    ::div(b,b,g);
-	    ::div(d,d,g);
-	}
+        // remove common factors
+        T g = GCD(GCD(a,b),d);
+        if (!::IsOne(g)) {
+            ::div(a,a,g);
+            ::div(b,b,g);
+            ::div(d,d,g);
+        }
 
-	// normalize leading coefficients
-	MakeMonic(d);
-	if (deg(a) > (deg(b) + QO->getGenus()))
-	  MakeMonic(a);
-	else
-	  MakeMonic(b);
+        // normalize leading coefficients
+        MakeMonic(d);
+        if (deg(a) > (deg(b) + QO->getGenus()))
+          MakeMonic(a);
+        else
+          MakeMonic(b);
       }
 
 
@@ -294,41 +290,41 @@ namespace ANTL {
        */
       QuadraticNumber (QuadraticOrder<T> & inQO)
       {
-	QO = &inQO;
-	::clear (a);
-	::clear (b);
-	::set (d);
+        QO = &inQO;
+        ::clear (a);
+        ::clear (b);
+        ::set (d);
       }
 
       /**
        * @brief Copy constructor
        * @param[in] n the constant to copy
        */
-      QuadraticNumber (QuadraticOrder<T> & inQO, T & n)
+      QuadraticNumber (const QuadraticOrder<T> & inQO, T & n)
       {
-	QO = &inQO;
-	a = n;
-	::clear(b);
-	::set(d);
+        QO = &inQO;
+        a = n;
+        ::clear(b);
+        ::set(d);
       }
 
       /**
        * @brief Copy constructor
        * @param[in] q the rational number or function to copy
        */
-      QuadraticNumber (QuadraticOrder<T> & inQO, QQ<T> & q)
+      QuadraticNumber (const QuadraticOrder<T> & inQO, const QQ<T> & q)
       {
-	QO = &inQO;
-	a = q.getNumerator();
-	::clear(b);
-	d = q.getDenominator();
+        QO = &inQO;
+        a = q.getNumerator();
+        ::clear(b);
+        d = q.getDenominator();
       }
 
        /**
        * @brief Copy constructor
        * @param[in] x the QuadraticNumber to copy
        */
-      QuadraticNumber (QuadraticNumber<T> & x)
+      QuadraticNumber (const QuadraticNumber<T> & x)
       {
 	QO = x.QO;
 	a = x.a;
@@ -374,20 +370,18 @@ namespace ANTL {
        * @brief Computes the norm of this QuadraticNumber
        * @return the norm as a QQ (rational number or function)
        */
-      QQ<T> &
-      getNorm () const
+      QQ<T> getNorm () const
       {
-	QQ<T> q;
+        T newA, newB, newD, temp;
+        QQ<T> q;
 
-	::sqr(newA,a);
-	::sqr(temp,b);
-	::mul(temp,temp,QO->getDiscriminant());
-	::sub(newA,newA,temp);
-
-	::sqr(newD,d);
-
-	q.assign(newA,newD);
-	return q;
+        NTL::sqr(newA,a);
+        NTL::sqr(temp,b);
+        NTL::mul(temp,temp,QO->getDiscriminant());
+        NTL::sub(newA,newA,temp);
+        NTL::sqr(newD,d);
+        q.assign(newA,newD);
+        return q;
       }
 
       /**
@@ -397,11 +391,12 @@ namespace ANTL {
       QQ<T> &
       getTrace () const
       {
-	QQ<T> q;
+        T newA;
+        QQ<T> q;
 
-	::add(newA,a,a);
-	q.assign(newA,d);
-	return q;
+        ::add(newA,a,a);
+        q.assign(newA,d);
+        return q;
       }
 
 
@@ -412,22 +407,22 @@ namespace ANTL {
       void
       set_a (const T & inA)
       {
-	a = inA;
-	normalize ();
+        a = inA;
+        normalize ();
       }
 
       void
       set_b (const T & inB)
       {
-	b = inB;
-	normalize ();
+        b = inB;
+        normalize ();
       }
 
       void
       set_d (const T & inD)
       {
-	d = inD;
-	normalize ();
+        d = inD;
+        normalize ();
       }
 
       /**
@@ -437,9 +432,9 @@ namespace ANTL {
       friend void
       clear (QuadraticNumber<T> & z)
       {
-	::clear (z.a);
-	::clear (z.b);
-	::set (z.d);
+        ::clear (z.a);
+        ::clear (z.b);
+        ::set (z.d);
       }
 
       /**
@@ -449,9 +444,9 @@ namespace ANTL {
       friend void
       set (QuadraticNumber<T> & z)
       {
-	::set (z.a);
-	::clear (z.b);
-	::set (z.d);
+        ::set (z.a);
+        ::clear (z.b);
+        ::set (z.d);
       }
 
       /**
@@ -462,13 +457,13 @@ namespace ANTL {
       void
       assign (const QuadraticNumber<T> & x)
       {
-	if (QO != x.QO)
-	  {
-	    // TODO:  THROW AN EXCEPTION!!!
-	  }
-	a = x.a;
-	b = x.b;
-	d = x.d;
+        if (QO != x.QO)
+          {
+            // TODO:  THROW AN EXCEPTION!!!
+          }
+        a = x.a;
+        b = x.b;
+        d = x.d;
       }
 
       /**
@@ -478,9 +473,9 @@ namespace ANTL {
       void
       assign (const T & n)
       {
-	a = n;
-	::clear (b);
-	::set (d);
+        a = n;
+        ::clear (b);
+        ::set (d);
       }
 
       /**
@@ -490,9 +485,9 @@ namespace ANTL {
       void
       assign (const QQ<T> & q)
       {
-	a = q.getNumerator ();
-	::clear (b);
-	d = q.getDenominator ();
+        a = q.getNumerator ();
+        ::clear (b);
+        d = q.getDenominator ();
       }
 
       /**
@@ -504,14 +499,14 @@ namespace ANTL {
       friend void
       assign (QuadraticNumber<T> & z, const QuadraticNumber<T> & x)
       {
-	if (z.QO != x.QO)
-	{
-	    // TODO: THROW AN EXCEPTION HERE!!!
-	}
+        if (z.QO != x.QO)
+        {
+            // TODO: THROW AN EXCEPTION HERE!!!
+        }
 
-	z.a = x.a;
-	z.b = x.b;
-	z.d = x.d;
+        z.a = x.a;
+        z.b = x.b;
+        z.d = x.d;
       }
 
       /**
@@ -521,9 +516,8 @@ namespace ANTL {
       const QuadraticNumber<T> &
       operator= (const QuadraticNumber<T> & x)
       {
-	this->assign (x);
-	return *this;
-
+        this->assign (x);
+        return *this;
       }
 
 
@@ -539,7 +533,7 @@ namespace ANTL {
       bool
       isZero () const
       {
-	return (::IsZero (a) && ::IsZero (b) && ::IsOne (d));
+        return (::IsZero (a) && ::IsZero (b) && ::IsOne (d));
       }
       ;
 
@@ -550,7 +544,7 @@ namespace ANTL {
       bool
       isOne () const
       {
-	return (::IsOne (a) && ::IsZero (b) && ::IsOne (d));
+        return (::IsOne (a) && ::IsZero (b) && ::IsOne (d));
       }
 
       /**
@@ -561,7 +555,7 @@ namespace ANTL {
       friend bool
       IsZero (const QuadraticNumber<T> & x)
       {
-	return (::IsZero (x.a) && ::IsZero (x.b) && ::IsOne (x.d));
+        return (::IsZero (x.a) && ::IsZero (x.b) && ::IsOne (x.d));
       }
 
       /**
@@ -572,7 +566,7 @@ namespace ANTL {
       friend bool
       IsOne (const QuadraticNumber<T> & x)
       {
-	return (::IsOne (x.a) && ::IsZero (x.b) && ::IsOne (x.d));
+        return (::IsOne (x.a) && ::IsZero (x.b) && ::IsOne (x.d));
       }
 
       /**
@@ -582,7 +576,7 @@ namespace ANTL {
       bool
       isIntegral () const
       {
-	return IsInteger(getNorm());
+        return IsInteger(getNorm());
       }
 
       /**
@@ -590,13 +584,7 @@ namespace ANTL {
        * @return true if this is a unit (norm = 1)
        */
       bool
-      isUnit () const
-      {
-	// Note that in the function field case, the normalization we have imposed implies that if this is
-	// a unit, then the norm will be equal to 1 (not just a constant)
-
-	return deg(getNorm()) == 0;
-      }
+      isUnit () const;
 
       /**
        * @brief Tests whether this QuadraticNumber is equal to y
@@ -606,7 +594,7 @@ namespace ANTL {
       bool
       isEqual (const QuadraticNumber<T> & x)
       {
-	return (QO == x.QO && a == x.a && b = x.b && d = x.d);
+        return ((QO == x.QO) && (a == x.a) && (b = x.b) && (d = x.d));
       }
 
       /**
@@ -617,7 +605,7 @@ namespace ANTL {
       bool
       isEqual (const T & n)
       {
-	return (a == n && IsZero (b) && IsOne (d));
+        return (a == n && IsZero (b) && IsOne (d));
       }
 
       /**
@@ -628,7 +616,7 @@ namespace ANTL {
       bool
       isEqual (const QQ<T> & q)
       {
-	return (a == q.getNumerator () && IsZero (b) && d == q.getDenominator ());
+        return (a == q.getNumerator () && IsZero (b) && d == q.getDenominator ());
       }
 
       /**
@@ -640,7 +628,7 @@ namespace ANTL {
       friend bool
       IsEqual (const QuadraticNumber<T> & x, const QuadraticNumber<T> & y)
       {
-	return (x.QO == y.QO && x.a == y.a && x.b = y.b && x.d = y.d);
+        return (x.QO == y.QO && x.a == y.a && x.b = y.b && x.d = y.d);
       }
 
       /**
@@ -652,7 +640,7 @@ namespace ANTL {
       friend bool
       IsEqual (const QuadraticNumber<T> & x, const T & n)
       {
-	return (x.a == n && IsZero (x.b) && IsOne (x.d));
+        return (x.a == n && IsZero (x.b) && IsOne (x.d));
       }
 
       /**
@@ -664,7 +652,7 @@ namespace ANTL {
       friend bool
       IsEqual (const T & n, const QuadraticNumber<T> & x)
       {
-	return (x.a == n && IsZero (x.b) && IsOne (x.d));
+        return (x.a == n && IsZero (x.b) && IsOne (x.d));
       }
 
       /**
@@ -676,7 +664,7 @@ namespace ANTL {
       friend bool
       IsEqual (const QuadraticNumber<T> & x, const QQ<T> & q)
       {
-	return (x.a == q.getNumerator () && IsZero (x.b) && x.d == q.getDenominator ());
+        return (x.a == q.getNumerator () && IsZero (x.b) && x.d == q.getDenominator ());
       }
 
       /**
@@ -688,7 +676,7 @@ namespace ANTL {
       friend bool
       IsEqual (const QQ<T> & q, const QuadraticNumber<T> & x)
       {
-	return (x.a == q.getNumerator () && IsZero (x.b) && x.d == q.getDenominator ());
+        return (x.a == q.getNumerator () && IsZero (x.b) && x.d == q.getDenominator ());
       }
 
       /**
@@ -698,10 +686,9 @@ namespace ANTL {
        * @return True if x is equal to y
        */
       friend bool
-      operator == (const QuadraticNumber<T> & x,
-		      const QuadraticNumber<T> & y)
+      operator == (const QuadraticNumber<T> & x, const QuadraticNumber<T> & y)
       {
-	return (x.QO == y.QO && x.a == y.a && x.b = y.b && x.d = y.d);
+        return (x.QO->getDiscriminant() == y.QO->getDiscriminant() && x.a == y.a && x.b == y.b && x.d == y.d);
       }
 
       /**
@@ -713,7 +700,7 @@ namespace ANTL {
       friend bool
       operator == (const QuadraticNumber<T> & x, const T & n)
       {
-	return (x.a == n && IsZero (x.b) && IsOne (x.d));
+        return (x.a == n && IsZero (x.b) && IsOne (x.d));
       }
 
       /**
@@ -725,7 +712,7 @@ namespace ANTL {
       friend bool
       operator == (const T & n, const QuadraticNumber<T> & x)
       {
-	return (x.a == n && IsZero (x.b) && IsOne (x.d));
+        return (x.a == n && IsZero (x.b) && IsOne (x.d));
       }
 
       /**
@@ -737,7 +724,7 @@ namespace ANTL {
       friend bool
       operator == (const QuadraticNumber<T> & x, const QQ<T> & q)
       {
-	return (x.a == q.getNumerator () && IsZero (x.b) && x.d == q.getDenominator ());
+        return (x.a == q.getNumerator () && IsZero (x.b) && x.d == q.getDenominator ());
       }
 
       /**
@@ -749,7 +736,7 @@ namespace ANTL {
       friend bool
       operator == (const QQ<T> & q, const QuadraticNumber<T> & x)
       {
-	return (x.a == q.getNumerator () && IsZero (x.b) && x.d == q.getDenominator ());
+        return (x.a == q.getNumerator () && IsZero (x.b) && x.d == q.getDenominator ());
       }
 
       /**
@@ -761,7 +748,7 @@ namespace ANTL {
       friend bool
       operator != (const QuadraticNumber<T> & x, const QuadraticNumber<T> & y)
       {
-	return !(x == y);
+        return !(x == y);
       }
 
       /**
@@ -773,7 +760,7 @@ namespace ANTL {
       friend bool
       operator != (const QuadraticNumber<T> & x, const T & n)
       {
-	return !(x == n);
+        return !(x == n);
       }
 
       /**
@@ -785,7 +772,7 @@ namespace ANTL {
       friend bool
       operator != (const T & n, const QuadraticNumber<T> & x)
       {
-	return !(x == n);
+        return !(x == n);
       }
 
       /**
@@ -797,7 +784,7 @@ namespace ANTL {
       friend bool
       operator != (const QuadraticNumber<T> & x, const QQ<T> & q)
       {
-	return !(x == q);
+        return !(x == q);
       }
 
       /**
@@ -809,7 +796,7 @@ namespace ANTL {
       friend bool
       operator != (const QQ<T> & q, const QuadraticNumber<T> & x)
       {
-	return !(x == q);
+        return !(x == q);
       }
 
 
@@ -824,9 +811,9 @@ namespace ANTL {
       void
       negate ()
       {
-	a = -a;
-	b = -b;
-	normalize();
+        a = -a;
+        b = -b;
+        normalize();
       }
 
       /**
@@ -835,21 +822,22 @@ namespace ANTL {
       void
       invert ()
       {
-	// ((a + b rho) / d)^-1 = (ad - bd rho) / (a^2 - b^2 Delta)
-	::mul(newA,a,d);
+        T newA,newB,newD,temp;
+        // ((a + b rho) / d)^-1 = (ad - bd rho) / (a^2 - b^2 Delta)
+        ::mul(newA,a,d);
 
-	::mul(newB,b,d);
+        ::mul(newB,b,d);
 
-	::sqr(newD,a);
-	::sqr(temp,b);
-	::mul(temp,temp,QO->getDiscriminant());
-	::sub(newD,newD,temp);
+        ::sqr(newD,a);
+        ::sqr(temp,b);
+        ::mul(temp,temp,QO->getDiscriminant());
+        ::sub(newD,newD,temp);
 
-	a = newA;
-	b = -newB;
-	d = newD;
+        a = newA;
+        b = -newB;
+        d = newD;
 
-	normalize ();
+        normalize ();
       }
 
 
@@ -863,13 +851,13 @@ namespace ANTL {
       friend void
       conjugate (QuadraticNumber<T> & z, const QuadraticNumber<T> & x)
       {
-	if (z.QO != x.QO) {
-	  // TODO:  THROW AN EXCEPTION!!!
-	}
+        if (z.QO != x.QO) {
+          // TODO:  THROW AN EXCEPTION!!!
+        }
 
-	z.a = x.a;
-	z.b = -x.b;
-	z.d = x.d;
+        z.a = x.a;
+        z.b = -x.b;
+        z.d = x.d;
       }
 
       /**
@@ -881,21 +869,22 @@ namespace ANTL {
       friend void
       inv (QuadraticNumber<T> & z, const QuadraticNumber<T> & x)
       {
-	if (z.QO != x.QO) {
-	  // TODO:  THROW AN EXCEPTION!!!
-	}
+        T temp;
+        if (z.QO != x.QO) {
+          // TODO:  THROW AN EXCEPTION!!!
+        }
 
-	// ((a + b rho) / d)^-1 = (ad - bd rho) / (a^2 - b^2 Delta)
-	::mul(z.a,x.a,x.d);
+        // ((a + b rho) / d)^-1 = (ad - bd rho) / (a^2 - b^2 Delta)
+        ::mul(z.a,x.a,x.d);
 
-	::mul(z.b,x.b,x.d);
+        ::mul(z.b,x.b,x.d);
 
-	::sqr(z.d,x.a);
-	::sqr(temp,x.b);
-	::mul(temp,temp,x.QO->getDiscriminant());
-	::sub(z.d,z.d,temp);
+        ::sqr(z.d,x.a);
+        ::sqr(temp,x.b);
+        ::mul(temp,temp,x.QO->getDiscriminant());
+        ::sub(z.d,z.d,temp);
 
-	z.normalize ();
+        z.normalize ();
       }
 
       /**
@@ -906,39 +895,39 @@ namespace ANTL {
        * @pre z, x, and y must belong to the same QuadraticOrder
        */
       friend void
-      add (QuadraticNumber<T> & z, const QuadraticNumber<T> & x,
-	   const QuadraticNumber<T> & y)
+      add (QuadraticNumber<T> & z, const QuadraticNumber<T> & x, const QuadraticNumber<T> & y)
       {
-	if (z.QO != x.QO || z.QO != y.QO)
-	  {
-	    // TODO:  THROW AN EXCEPTION!!!
-	  }
+        T newA,newB,newD,temp;
+        if (z.QO != x.QO || z.QO != y.QO)
+          {
+            // TODO:  THROW AN EXCEPTION!!!
+          }
 
-	if (x.isZero())
-	  z.assign (y);
-	else if (y.isZero())
-	  z.assign (x);
-	else
-	  {
-	    //     y.d * x.a + x.d * y.a + rho * (y.d * x.b + x.d * y.b)
-	    // z = ---------------------------------------------------------
-	    //                     x.d * y.d
+        if (x.isZero())
+          z.assign (y);
+        else if (y.isZero())
+          z.assign (x);
+        else
+          {
+            //     y.d * x.a + x.d * y.a + rho * (y.d * x.b + x.d * y.b)
+            // z = ---------------------------------------------------------
+            //                     x.d * y.d
 
-	    ::mul(newA,x.a,y.d);
-	    ::mul(temp,y.a,x.d);
-	    ::add(newA,newA,temp);
+            ::mul(newA,x.a,y.d);
+            ::mul(temp,y.a,x.d);
+            ::add(newA,newA,temp);
 
-	    ::mul(newB,x.b,y.d);
-	    ::mul(temp,y.b,x.d);
-	    ::add(newB,newB,temp);
+            ::mul(newB,x.b,y.d);
+            ::mul(temp,y.b,x.d);
+            ::add(newB,newB,temp);
 
-	    ::mul(newD,x.d,y.d);
+            ::mul(newD,x.d,y.d);
 
-	    z.a = newA;
-	    z.b = newB;
-	    z.d = newD;
-	    z.normalize();
-	  }
+            z.a = newA;
+            z.b = newB;
+            z.d = newD;
+            z.normalize();
+          }
       }
 
       /**
@@ -951,27 +940,28 @@ namespace ANTL {
       friend void
       add (QuadraticNumber<T> & z, const QuadraticNumber<T> & x, const T & n)
       {
-	if (z.QO != x.QO)
-	  {
-	    // TODO:  THROW AN EXCEPTION!!!
-	  }
+        T temp;
+        if (z.QO != x.QO)
+          {
+            // TODO:  THROW AN EXCEPTION!!!
+          }
 
-	if (x.isZero())
-	  z.assign (n);
-	else if (IsZero(n))
-	  z.assign (x);
-	else
-	  {
-	    //     (x.a + x.d * n) + x.b * rho
-	    // z = ---------------------------------------------------------
-	    //                x.d
+        if (x.isZero())
+          z.assign (n);
+        else if (IsZero(n))
+          z.assign (x);
+        else
+          {
+            //     (x.a + x.d * n) + x.b * rho
+            // z = ---------------------------------------------------------
+            //                x.d
 
-	    ::mul(temp,x.d,n);
-	    ::add(z.a,z.a,temp);
-	    z.b = x.b;
-	    z.d = x.d;
-	    z.normalize();
-	  }
+            ::mul(temp,x.d,n);
+            ::add(z.a,z.a,temp);
+            z.b = x.b;
+            z.d = x.d;
+            z.normalize();
+          }
 
       }
 
@@ -983,37 +973,37 @@ namespace ANTL {
        * @pre z and x must belong to the same QuadraticOrder
        */
       friend void
-      add (QuadraticNumber<T> & z, const QuadraticNumber<T> & x,
-	   const QQ<T> & q)
+      add (QuadraticNumber<T> & z, const QuadraticNumber<T> & x, const QQ<T> & q)
       {
-	if (z.QO != x.QO)
-	  {
-	    // TODO:  THROW AN EXCEPTION!!!
-	  }
+        T newA,newB,newD,temp;
+        if (z.QO != x.QO)
+          {
+            // TODO:  THROW AN EXCEPTION!!!
+          }
 
-	if (x.isZero())
-	  z.assign (q);
-	else if (IsZero(q))
-	  z.assign (x);
-	else
-	  {
-	    //     q.d * x.a + x.d * q.n + rho * (q.d * x.b)
-	    // z = ---------------------------------------------------------
-	    //                     x.d * q.d
+        if (x.isZero())
+          z.assign (q);
+        else if (IsZero(q))
+          z.assign (x);
+        else
+          {
+            //     q.d * x.a + x.d * q.n + rho * (q.d * x.b)
+            // z = ---------------------------------------------------------
+            //                     x.d * q.d
 
-	    ::mul(newA,x.a,q.getDenominator());
-	    ::mul(temp,q.getNumerator(),x.d);
-	    ::add(newA,newA,temp);
+            ::mul(newA,x.a,q.getDenominator());
+            ::mul(temp,q.getNumerator(),x.d);
+            ::add(newA,newA,temp);
 
-	    ::mul(newB,x.b,q.getDenominator());
+            ::mul(newB,x.b,q.getDenominator());
 
-	    ::mul(newD,x.d,q.getDenominator());
+            ::mul(newD,x.d,q.getDenominator());
 
-	    z.a = newA;
-	    z.b = newB;
-	    z.d = newD;
-	    z.normalize();
-	  }
+            z.a = newA;
+            z.b = newB;
+            z.d = newD;
+            z.normalize();
+          }
       }
 
 
@@ -1025,41 +1015,41 @@ namespace ANTL {
        * @pre z, x, and y must belong to the same QuadraticOrder
        */
       friend void
-      sub (QuadraticNumber<T> & z, const QuadraticNumber<T> & x,
-	   const QuadraticNumber<T> & y)
+      sub (QuadraticNumber<T> & z, const QuadraticNumber<T> & x, const QuadraticNumber<T> & y)
       {
-	if (z.QO != x.QO || z.QO != y.QO)
-	  {
-	    // TODO:  THROW AN EXCEPTION!!!
-	  }
+        T newA,newB,newD,temp;
+        if (z.QO != x.QO || z.QO != y.QO)
+          {
+            // TODO:  THROW AN EXCEPTION!!!
+          }
 
-	if (x.isZero()) {
-	    z.assign(y);
-	    z.negate();
-	}
-	else if (y.isZero())
-	  z.assign (x);
-	else
-	  {
-	    //     y.d * x.a - x.d * y.a + rho * (y.d * x.b - x.d * y.b)
-	    // z = ---------------------------------------------------------
-	    //                     x.d * y.d
+        if (x.isZero()) {
+            z.assign(y);
+            z.negate();
+        }
+        else if (y.isZero())
+          z.assign (x);
+        else
+          {
+            //     y.d * x.a - x.d * y.a + rho * (y.d * x.b - x.d * y.b)
+            // z = ---------------------------------------------------------
+            //                     x.d * y.d
 
-	    ::mul(newA,x.a,y.d);
-	    ::mul(temp,y.a,x.d);
-	    ::sub(newA,newA,temp);
+            ::mul(newA,x.a,y.d);
+            ::mul(temp,y.a,x.d);
+            ::sub(newA,newA,temp);
 
-	    ::mul(newB,x.b,y.d);
-	    ::mul(temp,y.b,x.d);
-	    ::sub(newB,newB,temp);
+            ::mul(newB,x.b,y.d);
+            ::mul(temp,y.b,x.d);
+            ::sub(newB,newB,temp);
 
-	    ::mul(newD,x.d,y.d);
+            ::mul(newD,x.d,y.d);
 
-	    z.a = newA;
-	    z.b = newB;
-	    z.d = newD;
-	    z.normalize();
-	  }
+            z.a = newA;
+            z.b = newB;
+            z.d = newD;
+            z.normalize();
+          }
       }
 
       /**
@@ -1072,29 +1062,30 @@ namespace ANTL {
       friend void
       sub (QuadraticNumber<T> & z, const QuadraticNumber<T> & x, const T & n)
       {
-	if (z.QO != x.QO)
-	  {
-	    // TODO:  THROW AN EXCEPTION!!!
-	  }
+        T temp;
+        if (z.QO != x.QO)
+          {
+            // TODO:  THROW AN EXCEPTION!!!
+          }
 
-	if (x.isZero()) {
-	  z.assign(n);
-	  z.negate();
-	}
-	else if (IsZero(n))
-	  z.assign (x);
-	else
-	  {
-	    //     (x.a - x.d * n) + x.b * rho
-	    // z = ---------------------------------------------------------
-	    //                x.d
+        if (x.isZero()) {
+          z.assign(n);
+          z.negate();
+        }
+        else if (IsZero(n))
+          z.assign (x);
+        else
+          {
+            //     (x.a - x.d * n) + x.b * rho
+            // z = ---------------------------------------------------------
+            //                x.d
 
-	    ::mul(temp,x.d,n);
-	    ::sub(z.a,z.a,temp);
-	    z.b = x.b;
-	    z.d = x.d;
-	    z.normalize();
-	  }
+            ::mul(temp,x.d,n);
+            ::sub(z.a,z.a,temp);
+            z.b = x.b;
+            z.d = x.d;
+            z.normalize();
+          }
 
       }
 
@@ -1106,41 +1097,40 @@ namespace ANTL {
        * @pre z and x must belong to the same QuadraticOrder
        */
       friend void
-      sub (QuadraticNumber<T> & z, const QuadraticNumber<T> & x,
-	   const QQ<T> & q)
+      sub (QuadraticNumber<T> & z, const QuadraticNumber<T> & x, const QQ<T> & q)
       {
-	if (z.QO != x.QO)
-	  {
-	    // TODO:  THROW AN EXCEPTION!!!
-	  }
+        T newA,newB,newD,temp;
+        if (z.QO != x.QO)
+          {
+            // TODO:  THROW AN EXCEPTION!!!
+          }
 
-	if (x.isZero()) {
-	  z.assign (q);
-	  z.negate();
-	}
-	else if (IsZero(q))
-	  z.assign (x);
-	else
-	  {
-	    //     q.d * x.a - x.d * q.n + rho * (q.d * x.b)
-	    // z = ---------------------------------------------------------
-	    //                     x.d * q.d
+        if (x.isZero()) {
+          z.assign (q);
+          z.negate();
+        }
+        else if (IsZero(q))
+          z.assign (x);
+        else
+          {
+            //     q.d * x.a - x.d * q.n + rho * (q.d * x.b)
+            // z = ---------------------------------------------------------
+            //                     x.d * q.d
 
-	    ::mul(newA,x.a,q.getDenominator());
-	    ::mul(temp,q.getNumerator(),x.d);
-	    ::sub(newA,newA,temp);
+            ::mul(newA,x.a,q.getDenominator());
+            ::mul(temp,q.getNumerator(),x.d);
+            ::sub(newA,newA,temp);
 
-	    ::mul(newB,x.b,q.getDenominator());
+            ::mul(newB,x.b,q.getDenominator());
 
-	    ::mul(newD,x.d,q.getDenominator());
+            ::mul(newD,x.d,q.getDenominator());
 
-	    z.a = newA;
-	    z.b = newB;
-	    z.d = newD;
-	    z.normalize();
-	  }
+            z.a = newA;
+            z.b = newB;
+            z.d = newD;
+            z.normalize();
+          }
       }
-
 
       /**
        * @brief Computes the product of x and y
@@ -1150,33 +1140,33 @@ namespace ANTL {
        * @pre z, x, and y must belong to the same QuadraticOrder
        */
       friend void
-      mul (QuadraticNumber<T> & z, const QuadraticNumber<T> & x,
-	   const QuadraticNumber<T> & y)
+      mul (QuadraticNumber<T> & z, const QuadraticNumber<T> & x, const QuadraticNumber<T> & y)
       {
-	if (z.QO != x.QO || z.QO != y.QO) {
-	  // TODO:  THROW AN EXCEPTION
-        }
+        T newA,newB,newD,temp;
+        if (z.QO != x.QO || z.QO != y.QO) {
+          // TODO:  THROW AN EXCEPTION
+            }
 
-	// z = (x.a y.a + x.b y.b N(rho)) + rho(x.a y.b + y.a x.b + x.b y.b Tr(rho))
-	//     ---------------------------------------------------------------------
-	//                              x.d y.d
+        // z = (x.a y.a + x.b y.b N(rho)) + rho(x.a y.b + y.a x.b + x.b y.b Tr(rho))
+        //     ---------------------------------------------------------------------
+        //                              x.d y.d
 
-	::mul(newA,x.a,y.a);
-	::mul(temp,x.b,y.b);
-	::mul(temp,temp,z.QO->getDiscriminant());
-	::add(newA,newA,temp);
+        ::mul(newA,x.a,y.a);
+        ::mul(temp,x.b,y.b);
+        ::mul(temp,temp,z.QO->getDiscriminant());
+        ::add(newA,newA,temp);
 
-	::mul(newB,x.a,y.b);
-	::mul(temp,x.b,y.a);
-	::add(newB,newB,temp);
+        ::mul(newB,x.a,y.b);
+        ::mul(temp,x.b,y.a);
+        ::add(newB,newB,temp);
 
-	::mul(newD,x.d,y.d);
+        ::mul(newD,x.d,y.d);
 
-	z.a = newA;
-	z.b = newB;
-	z.d = newD;
-	z.normalize ();
-      }
+        z.a = newA;
+        z.b = newB;
+        z.d = newD;
+        z.normalize ();
+          }
 
       /**
        * @brief Computes the product of x and n (a constant)
@@ -1188,15 +1178,15 @@ namespace ANTL {
       friend void
       mul (QuadraticNumber<T> & z, const QuadraticNumber<T> & x, const T & n)
       {
-	if (z.QO != x.QO)
-	  {
-	    // TODO:  THROW AN EXCEPTION!!!
-	  }
+        if (z.QO != x.QO)
+          {
+            // TODO:  THROW AN EXCEPTION!!!
+          }
 
-	::mul(z.a,x.a,n);
-	::mul(z.b,x.b,n);
-	z.d = x.d;
-	z.normalize();
+        ::mul(z.a,x.a,n);
+        ::mul(z.b,x.b,n);
+        z.d = x.d;
+        z.normalize();
       }
 
       /**
@@ -1207,18 +1197,17 @@ namespace ANTL {
        * @pre z and x must belong to the same QuadraticOrder
        */
       friend void
-      mul (QuadraticNumber<T> & z, const QuadraticNumber<T> & x,
-	   const QQ<T> & q)
+      mul (QuadraticNumber<T> & z, const QuadraticNumber<T> & x, const QQ<T> & q)
       {
-	if (z.QO != x.QO)
-	  {
-	    // TODO:  THROW AN EXCEPTION!!!
-	  }
+        if (z.QO != x.QO)
+          {
+            // TODO:  THROW AN EXCEPTION!!!
+          }
 
-	::mul(z.a,x.a,q.getNumerator());
-	::mul(z.b,x.b,q.getNumerator());
-	::mul(z.d,z.d,q.getDenominator());
-	z.normalize();
+        ::mul(z.a,x.a,q.getNumerator());
+        ::mul(z.b,x.b,q.getNumerator());
+        ::mul(z.d,z.d,q.getDenominator());
+        z.normalize();
       }
 
       /**
@@ -1229,37 +1218,37 @@ namespace ANTL {
        * @pre z, x, and y must belong to the same QuadraticOrder
        */
       friend void
-      div (QuadraticNumber<T> & z, const QuadraticNumber<T> & x,
-	   const QuadraticNumber<T> & y)
+      div (QuadraticNumber<T> & z, const QuadraticNumber<T> & x, const QuadraticNumber<T> & y)
       {
-	if (z.QO != x.QO || z.QO != y.QO) {
-	  // TODO:  THROW AN EXCEPTION
-        }
+        T newA,newB,newD,temp;
+        if (z.QO != x.QO || z.QO != y.QO) {
+          // TODO:  THROW AN EXCEPTION
+            }
 
-	// z = y.d (x.a y.a - x.b y.b N(rho)) - y.d (x.b y.a - x.a y.b) rho
-	//     ------------------------------------------------------------
-	//                   x.d (y.a^2 - y.b^2 N(rho)
+        // z = y.d (x.a y.a - x.b y.b N(rho)) - y.d (x.b y.a - x.a y.b) rho
+        //     ------------------------------------------------------------
+        //                   x.d (y.a^2 - y.b^2 N(rho)
 
-	::mul(newA,x.a,y.a);
-	::mul(temp,x.b,y.b);
-	::mul(temp,temp,z.QO->getDiscriminant());
-	::sub(newA,newA,temp);
-	::mul(newA,newA,y.d);
+        ::mul(newA,x.a,y.a);
+        ::mul(temp,x.b,y.b);
+        ::mul(temp,temp,z.QO->getDiscriminant());
+        ::sub(newA,newA,temp);
+        ::mul(newA,newA,y.d);
 
-	::mul(newB,x.b,y.a);
-	::mul(temp,x.a,y.b);
-	::sub(newB,newB,temp);
-	::mul(newB,newB,y.d);
+        ::mul(newB,x.b,y.a);
+        ::mul(temp,x.a,y.b);
+        ::sub(newB,newB,temp);
+        ::mul(newB,newB,y.d);
 
-	::sqr(newD,y.a);
-	::sqr(temp,y.b);
-	::mul(temp,temp,z.QO->getDiscriminant());
-	::mul(newD,temp,x.d);
+        ::sqr(newD,y.a);
+        ::sqr(temp,y.b);
+        ::mul(temp,temp,z.QO->getDiscriminant());
+        ::mul(newD,temp,x.d);
 
-	z.a = newA;
-	z.b = newB;
-	z.d = newD;
-	z.normalize ();
+        z.a = newA;
+        z.b = newB;
+        z.d = newD;
+        z.normalize ();
       }
 
       /**
@@ -1272,15 +1261,15 @@ namespace ANTL {
       friend void
       div (QuadraticNumber<T> & z, const QuadraticNumber<T> & x, const T & n)
       {
-	if (z.QO != x.QO)
-	  {
-	    // TODO:  THROW AN EXCEPTION!!!
-	  }
+      if (z.QO != x.QO)
+        {
+          // TODO:  THROW AN EXCEPTION!!!
+        }
 
-	z.a = x.a;
-	z.b = x.b;
-	::mul(z.d,x.d,n);
-	z.normalize();
+      z.a = x.a;
+      z.b = x.b;
+      ::mul(z.d,x.d,n);
+      z.normalize();
       }
 
       /**
@@ -1291,19 +1280,18 @@ namespace ANTL {
        * @pre z and x must belong to the same QuadraticOrder
        */
       friend void
-      div (QuadraticNumber<T> & z, const QuadraticNumber<T> & x,
-	   const QQ<T> & q)
+      div (QuadraticNumber<T> & z, const QuadraticNumber<T> & x, const QQ<T> & q)
       {
-	if (z.QO != x.QO)
-	  {
-	    // TODO:  THROW AN EXCEPTION!!!
-	  }
+        if (z.QO != x.QO)
+          {
+            // TODO:  THROW AN EXCEPTION!!!
+          }
 
-	::mul(z.a,x.a,q.getDenominator());
-	::mul(z.b,x.b,q.getDenominator());
-	::mul(z.d,x.d,q.getNumerator());
-	z.QO = x.QO;
-	z.normalize();
+        ::mul(z.a,x.a,q.getDenominator());
+        ::mul(z.b,x.b,q.getDenominator());
+        ::mul(z.d,x.d,q.getNumerator());
+        z.QO = x.QO;
+        z.normalize();
       }
 
       /**
@@ -1315,29 +1303,30 @@ namespace ANTL {
       friend void
       sqr (QuadraticNumber<T> & z, const QuadraticNumber<T> & x)
       {
-	if (z.QO != x.QO)
-	  {
-	    // TODO:  THROW AN EXCEPTION!!!
-	  }
+        T newA,newB,newD,temp;
+        if (z.QO != x.QO)
+          {
+            // TODO:  THROW AN EXCEPTION!!!
+          }
 
-	// z = (x.a^2 + y.b^2 N(rho)) + rho( 2 x.a y.b + x.b y.b Tr(rho))
-	//     ----------------------------------------------------------
-	//                         x.d^2
+        // z = (x.a^2 + y.b^2 N(rho)) + rho( 2 x.a y.b + x.b y.b Tr(rho))
+        //     ----------------------------------------------------------
+        //                         x.d^2
 
-	::sqr(newA,x.a);
-	::sqr(temp,x.b);
-	::mul(temp,temp,z.QO->getDiscriminant());
-	::add(newA,newA,temp);
+        ::sqr(newA,x.a);
+        ::sqr(temp,x.b);
+        ::mul(temp,temp,z.QO->getDiscriminant());
+        ::add(newA,newA,temp);
 
-	::mul(newB,x.a,x.b);
-	::add(newB,newB,newB);
+        ::mul(newB,x.a,x.b);
+        ::add(newB,newB,newB);
 
-	::sqr(newD,x.d);
+        ::sqr(newD,x.d);
 
-	z.a = newA;
-	z.b = newB;
-	z.d = newD;
-	z.normalize ();
+        z.a = newA;
+        z.b = newB;
+        z.d = newD;
+        z.normalize ();
       }
 
       /**
@@ -1349,203 +1338,203 @@ namespace ANTL {
       friend void
       cube (QuadraticNumber<T> & z, const QuadraticNumber<T> & x)
       {
-	if (z.QO != x.QO)
-	  {
-	    // TODO:  THROW AN EXCEPTION!!!
-	  }
+        if (z.QO != x.QO)
+          {
+            // TODO:  THROW AN EXCEPTION!!!
+          }
 
-	QuadraticNumber<T> zz;
-	sqr(zz,x);
-	mul(z,zz,x);
+        QuadraticNumber<T> zz;
+        sqr(zz,x);
+        mul(z,zz,x);
       }
 
 
       friend QuadraticNumber<T>
       operator - (const QuadraticNumber<T> & a)
       {
-	QuadraticNumber<T> c (a);
-	c.negate ();
-	return c;
+        QuadraticNumber<T> c (a);
+        c.negate ();
+        return c;
       }
 
       friend QuadraticNumber<T>
       operator + (const QuadraticNumber<T> & x, const QuadraticNumber<T> & y)
       {
-	QuadraticNumber<T> c;
-	add (c, x, y);
-	return c;
+        QuadraticNumber<T> c;
+        add (c, x, y);
+        return c;
       }
 
       friend QuadraticNumber<T>
       operator + (const QuadraticNumber<T> & x, const T & n)
       {
-	QuadraticNumber<T> c;
-	add (c, x, n);
-	return c;
+        QuadraticNumber<T> c;
+        add (c, x, n);
+        return c;
       }
 
       friend QuadraticNumber<T>
       operator + (const QuadraticNumber<T> & x, const QQ<T> & q)
       {
-	QuadraticNumber<T> c;
-	add (c, x, q);
-	return c;
+        QuadraticNumber<T> c;
+        add (c, x, q);
+        return c;
       }
 
       friend QuadraticNumber<T>
       operator - (const QuadraticNumber<T> & x, const QuadraticNumber<T> & y)
       {
-	QuadraticNumber<T> c;
-	sub (c, x, y);
-	return c;
+        QuadraticNumber<T> c;
+        sub (c, x, y);
+        return c;
       }
 
       friend QuadraticNumber<T>
       operator - (const QuadraticNumber<T> & x, const T & n)
       {
-	QuadraticNumber<T> c;
-	sub (c, x, n);
-	return c;
+        QuadraticNumber<T> c;
+        sub (c, x, n);
+        return c;
       }
 
       friend QuadraticNumber<T>
       operator - (const QuadraticNumber<T> & x, const QQ<T> & q)
       {
-	QuadraticNumber<T> c;
-	sub (c, x, q);
-	return c;
+        QuadraticNumber<T> c;
+        sub (c, x, q);
+        return c;
       }
 
       friend QuadraticNumber<T>
       operator * (const QuadraticNumber<T> & x, const QuadraticNumber<T> & y)
       {
-	QuadraticNumber<T> c;
-	mul (c, x, y);
-	return c;
+        QuadraticNumber<T> c;
+        mul (c, x, y);
+        return c;
       }
 
       friend QuadraticNumber<T>
       operator * (const QuadraticNumber<T> & x, const T & n)
       {
-	QuadraticNumber<T> c;
-	mul (c, x, n);
-	return c;
+        QuadraticNumber<T> c;
+        mul (c, x, n);
+        return c;
       }
 
       friend QuadraticNumber<T>
       operator * (const QuadraticNumber<T> & x, const QQ<T> & q)
       {
-	QuadraticNumber<T> c;
-	mul (c, x, q);
-	return c;
+        QuadraticNumber<T> c;
+        mul (c, x, q);
+        return c;
       }
 
       friend QuadraticNumber<T>
       operator / (const QuadraticNumber<T> & x, const QuadraticNumber<T> & y)
       {
-	QuadraticNumber<T> c;
-	div (c, x, y);
-	return c;
+        QuadraticNumber<T> c;
+        div (c, x, y);
+        return c;
       }
 
       friend QuadraticNumber<T>
       operator / (const QuadraticNumber<T> & a, const T & n)
       {
-	QuadraticNumber<T> c;
-	div (c, a, n);
-	return c;
+      QuadraticNumber<T> c;
+      div (c, a, n);
+      return c;
       }
 
       friend QuadraticNumber<T>
       operator / (const QuadraticNumber<T> & x, const QQ<T> & q)
       {
-	QuadraticNumber<T> c;
-	div (c, x, q);
-	return c;
+        QuadraticNumber<T> c;
+        div (c, x, q);
+        return c;
       }
 
       const QuadraticNumber<T> &
       operator += (const QuadraticNumber<T> & x)
       {
-	add (*this, *this, x);
-	return *this;
+        add (*this, *this, x);
+        return *this;
       }
 
       const QuadraticNumber<T> &
       operator += (const T & n)
       {
-	add (*this, *this, n);
-	return *this;
+        add (*this, *this, n);
+        return *this;
       }
 
       const QuadraticNumber<T> &
       operator += (const QQ<T> & q)
       {
-	add (*this, *this, q);
-	return *this;
+        add (*this, *this, q);
+        return *this;
       }
 
       const QuadraticNumber<T> &
       operator -= (const QuadraticNumber<T> & x)
       {
-	sub (*this, *this, x);
-	return *this;
+        sub (*this, *this, x);
+        return *this;
       }
 
       const QuadraticNumber<T> &
       operator -= (const T & n)
       {
-	sub (*this, *this, n);
-	return *this;
+        sub (*this, *this, n);
+        return *this;
       }
 
       const QuadraticNumber<T> &
       operator -= (const QQ<T> & q)
       {
-	sub (*this, *this, q);
-	return *this;
+        sub (*this, *this, q);
+        return *this;
       }
 
       const QuadraticNumber<T> &
       operator *= (const QuadraticNumber<T> & x)
       {
-	mul (*this, *this, x);
-	return *this;
+        mul (*this, *this, x);
+        return *this;
       }
 
       const QuadraticNumber<T> &
       operator *= (const T & n)
       {
-	mul (*this, *this, n);
-	return *this;
+        mul (*this, *this, n);
+        return *this;
       }
 
       const QuadraticNumber<T> &
       operator *= (const QQ<T> & q)
       {
-	mul (*this, *this, q);
-	return *this;
+        mul (*this, *this, q);
+        return *this;
       }
 
       const QuadraticNumber<T> &
       operator /= (const QuadraticNumber<T> & x)
       {
-	div (*this, *this, x);
-	return *this;
+        div (*this, *this, x);
+        return *this;
       }
 
       const QuadraticNumber<T> &
       operator /= (const T & n)
       {
-	div (*this, *this, n);
-	return *this;
+        div (*this, *this, n);
+        return *this;
       }
 
       const QuadraticNumber<T> &
       operator /= (const QQ<T> & q)
       {
-	div (*this, *this, q);
-	return *this;
+        div (*this, *this, q);
+        return *this;
       }
 
 
@@ -1646,17 +1635,23 @@ namespace ANTL {
     void
     sqr<GF2EX> (QuadraticNumber<GF2EX> & z, const QuadraticNumber<GF2EX> & x);
 
-  template<>
-    QQ<GF2EX> &
-    QuadraticNumber<GF2EX>::getNorm () const;
+//   template<>
+//     QQ<GF2EX> &
+//     QuadraticNumber<GF2EX>::getNorm () const;
 
   template<>
     QQ<GF2EX> &
     QuadraticNumber<GF2EX>::getTrace () const;
 
+  template <>
+  bool QuadraticNumber<ZZ>::isUnit() const;
+
+  template<>
+  bool QuadraticNumber<long>::isUnit () const;
 } // ANTL
 
 // Unspecialized template definitions.
-//#include "../src/Quadratic/QuadraticNumber_impl.hpp"
+
+#include "../src/Quadratic/QuadraticNumber_impl.hpp"
 
 #endif // ANTL_QUADRATIC_NUMBER_H
