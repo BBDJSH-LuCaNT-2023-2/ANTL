@@ -213,8 +213,8 @@ virtual CubicElement<Type, PType> * get_fundamental_unit(int i = 0) = 0;
 * @brief given an ideal1, and a log vector vec1 (length r), return a reduced ideal J and a minima
 * whose logarithm vector is close to vec1, and such that J = 1/minimum * ideal1
 */
-virtual void close_minimum(CubicIdeal<Type, PType> & reduced_ideal1, \
-  CubicElement<Type, PType> & minimum, CubicIdeal<Type, PType> & ideal1, std::vector<PType> & vec1) = 0;
+virtual void close_minimum(CubicIdeal<Type, PType> & reduced_ideal, \
+  CubicElement<Type, PType> & minimum, CubicIdeal<Type, PType> & ideal1, const std::vector<PType> & vec1) = 0;
 // **************************************************************************  /
 // ******************* Friend classes and functions *************************  /
 
