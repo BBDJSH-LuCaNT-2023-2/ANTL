@@ -50,9 +50,12 @@ void CubicIdeal<Type,PType> :: check_rank(){
 }
 
 template<typename Type,typename PType>
-void CubicIdeal<Type,PType> :: get_basis_element( CubicElement<Type, PType> & elt1, int pos) const{
-  elt1.set_order(my_order);
-  elt1.assign(coeff_matrix[0][pos], coeff_matrix[1][pos],coeff_matrix[2][pos], this->denom);
+void CubicIdeal<Type,PType> :: copy_basis_element( CubicElement<Type, PType> & elt, int pos) const{
+  if(pos <0 || pos >2){
+    throw("Requested element index is out of range");
+  }
+  elt.set_order(my_order);
+  elt.assign(coeff_matrix[0][pos], coeff_matrix[1][pos],coeff_matrix[2][pos], this->denom);
 }
 
 template<typename Type,typename PType>
@@ -104,11 +107,9 @@ PType CubicIdeal<Type,PType> :: get_gen_numeric(int i){
   add(result, result, var1);
   add(result, result, to<PType>(this->coeff_matrix[0][i]));
   return result;
-  //return this->coeff_matrix[0][i] + this->coeff_matrix[1][i]*(this->get_order()->get_rho1()) + this->coeff_matrix[2][i]*(this->get_order()->get_rho2());
 }
 
 
-// Note I'm ignoring the ideal's true denominator and using
 template<typename Type,typename PType>
 void CubicIdeal<Type,PType> :: puncture(int i, PType & xi, PType & eta){
 
@@ -122,9 +123,6 @@ void CubicIdeal<Type,PType> :: puncture(int i, PType & xi, PType & eta){
   mul(xi, xi, to<PType>(3));
   gen.trace( this->rational_temp);
 
-  //std::cout << gen.get_u() << " " << gen.get_x() << " " << gen.get_y() << " " << gen.get_denom() << std::endl;
-  //std::cout << xi << std::endl;
-  //std::cout << this->rational_temp.getNumerator() << " / " << this->rational_temp.getDenominator() << std::endl;
   div(this->p_temp, to<PType>(this->rational_temp.getNumerator()), to<PType>(this->rational_temp.getDenominator()) );
   sub(xi, xi, this->p_temp);
   mul(xi, xi, 0.5);
@@ -223,9 +221,6 @@ void CubicIdeal<Type,PType> :: make_triangular(){
 };
 
 
-
-
-
 template<typename Type,typename PType>
 void CubicIdeal<Type, PType> :: normalize(){
 
@@ -246,7 +241,7 @@ void CubicIdeal<Type, PType> :: normalize(){
       }
     div(this->denom, this->denom, this->ci_temp);
     }
-} // close normalize
+}
 
 
 
@@ -261,17 +256,17 @@ if ( !(IsZero(coeff_matrix[1][0]) && IsZero(coeff_matrix[2][0]) && IsZero(coeff_
 }
 
     Type g, r, s;          // store gcd g and integer multipliers r,s which
-                                 // satisfy r*m_32 + s*m_33 = g
+                           // satisfy r*m_32 + s*m_33 = g
 
     Type dummy, j,k,       //dummy is extraneous, j,k satisfy jr-ks = 1
          q,                // transitory value
          minorDet;         // determinant of minor matrix
 
-    Type temp_mat[3][3]; //variable for the canonical matrix
+    Type temp_mat[3][3];   //variable for the canonical matrix
 
 
-    this->normalize();             // function which removes any common factors
-                                  // in the denominator and numerators of entries
+    this->normalize();     // removes common factors
+                           // in the denominator and numerators of entries
 
     // This if statement checks whether the properties of canonical basis are already
     //    satisfied
@@ -315,9 +310,7 @@ if ( !(IsZero(coeff_matrix[1][0]) && IsZero(coeff_matrix[2][0]) && IsZero(coeff_
           temp_mat[1][1] = -temp_mat[1][1];
           temp_mat[0][1] = - temp_mat[0][1];
       }
-//std::cout << temp_mat[0][1]  << " " << temp_mat[0][2] << std::endl;
-//std::cout << temp_mat[1][1]  << " " << temp_mat[1][2] << std::endl;
-//std::cout << temp_mat[2][1]  << " " << temp_mat[2][2] << std::endl;
+
       //Ensures that temp_mat[1][1] (this is m_23 in the cubic book) satisfies
       // 0 <= m_23 < e/g )
       while ( (temp_mat[1][2] >= temp_mat[1][1]) || (temp_mat[1][2] < 0) ){
@@ -334,15 +327,6 @@ if ( !(IsZero(coeff_matrix[1][0]) && IsZero(coeff_matrix[2][0]) && IsZero(coeff_
       //ensures that m_12 is in the appropriate range
       while ( (temp_mat[0][1] >= this->coeff_matrix[0][0]) || (temp_mat[0][1] < 0) ){
 
-          /*
-          cout << "inf loop" << endl;
-          cout << temp_mat[0][0] << temp_mat[0][1] << endl;
-          cout << temp_mat[1][0] << temp_mat[1][1] << endl;
-
-          cout << this->coeff_matrix[0][0] << " "<< this->coeff_matrix[0][1] << " "<< this->coeff_matrix[0][2] <<endl;
-          cout << this->coeff_matrix[1][0] << " "<< this->coeff_matrix[1][1] << " "<< this->coeff_matrix[1][2] <<endl;
-          cout << this->coeff_matrix[2][0] << " "<< this->coeff_matrix[2][1] << " "<< this->coeff_matrix[2][2] <<endl;
-          */
           if (temp_mat[0][1] < 0){
               temp_mat[0][1] += this->coeff_matrix[0][0];
           }
@@ -351,7 +335,7 @@ if ( !(IsZero(coeff_matrix[1][0]) && IsZero(coeff_matrix[2][0]) && IsZero(coeff_
           }
       }
 
-      //ensures m_13 is in the appropriate range
+      // ensures m_13 is in the appropriate range
       while ( (temp_mat[0][2] >= this->coeff_matrix[0][0]) || (temp_mat[0][2] < 0) ){
           if (temp_mat[0][2] < 0){
               temp_mat[0][2] += this->coeff_matrix[0][0];
@@ -368,7 +352,7 @@ if ( !(IsZero(coeff_matrix[1][0]) && IsZero(coeff_matrix[2][0]) && IsZero(coeff_
       }
       this->normalize();
     }
-} // close defn of make_canonical
+}
 
 
 template<typename Type,typename PType>
@@ -410,7 +394,7 @@ void CubicIdeal<Type, PType> :: adjacent_ideal(CubicIdeal<Type, PType> &B, Cubic
 template<typename Type, typename PType>
 void CubicIdeal<Type, PType> :: divide_adjacent(CubicIdeal<Type, PType> &B, CubicElement<Type, PType> &adj_min){
     adj_min.set_order( this->my_order );
-    // this is a big problem, should I be using coeff(0,0) here, or should I be using this->denom ?
+    // this is a bit confusing, the denominator is set to coeff(0,0) here, not this->denom ?
     adj_min.assign(this->get_coeff(0,1),this->get_coeff(1,1),this->get_coeff(2,1), this->get_coeff(0,0));
     // spare_ideal_element is set to be 1/theta_g
     this->spare_ideal_element.set_order(this->my_order);
@@ -580,7 +564,7 @@ void CubicIdeal<Type, PType> :: make_voronoi_basis(char axis){
     this->get_order()->get_voronoi()->make_voronoi_basis(*this);
     this->get_order()->roots_swap_position(0,1);
   }else{
-    std::cout<< "No valid axis input" << std::endl;
+    throw "No valid axis input";
   }
 
 }
@@ -617,29 +601,27 @@ bool is_equal(CubicIdeal<T,PT> & A, CubicIdeal <T,PT> & B){
     mul(A.ci_temp3, A.coeff_matrix[1][2], A.coeff_matrix[2][1]);
     sub(A.ci_temp,  A.ci_temp, A.ci_temp3);
     abs(A.ci_temp,  A.ci_temp);
-    // A.ci_temp = abs(A.coeff_matrix[1][1] * A.coeff_matrix[2][2] - A.coeff_matrix[1][2] * A.coeff_matrix[2][1]);
+
     mul(A.ci_temp2, B.coeff_matrix[1][1], B.coeff_matrix[2][2]);
     mul(A.ci_temp3, B.coeff_matrix[1][2], B.coeff_matrix[2][1]);
     sub(A.ci_temp2, A.ci_temp2, A.ci_temp3);
     abs(A.ci_temp2, A.ci_temp2);
-    //A.ci_temp2 = abs(B.coeff_matrix[1][1] * B.coeff_matrix[2][2] - B.coeff_matrix[1][2] * B.coeff_matrix[2][1]);
 
 
-    if (   ( A.coeff_matrix[0][0] != B.coeff_matrix[0][0]   )             // matching sigma values
+    if (   ( A.coeff_matrix[0][0] != B.coeff_matrix[0][0]   )     // matching sigma values
         || ( A.ci_temp != A.ci_temp2 )                            // e values match
-        || (A.coeff_matrix[2][2] != B.coeff_matrix[2][2]) ){              //g values match
+        || (A.coeff_matrix[2][2] != B.coeff_matrix[2][2]) ){      //g values match
 
         #ifdef DEBUG
         std::cout << "first lattice-equality check fails" << std::endl;
         #endif
         return false;
-    }//close if clause
+    }
 
     else if (
          (  ( (A.coeff_matrix[1][2] - B.coeff_matrix[1][2]) % A.coeff_matrix[1][1] ) != 0  )
-//      || ( (A.coeff_matrix[0][1]%A.coeff_matrix[0][0]) != (B.coeff_matrix[0][1] % A.coeff_matrix[0][0]) )
-      || (  ( (A.coeff_matrix[0][1] - B.coeff_matrix[0][1]) %A.coeff_matrix[0][0]) != 0 )
-      || (   ( (A.coeff_matrix[0][2] - B.coeff_matrix[0][2])%A.coeff_matrix[0][0])
+      || (  ( (A.coeff_matrix[0][1] - B.coeff_matrix[0][1]) % A.coeff_matrix[0][0]) != 0 )
+      || (  ( (A.coeff_matrix[0][2] - B.coeff_matrix[0][2]) % A.coeff_matrix[0][0])
           != ( ( (A.coeff_matrix[1][2] - B.coeff_matrix[1][2])*A.coeff_matrix[0][1] / A.coeff_matrix[1][1] ) % A.coeff_matrix[0][0])   )
       ) //close else if clause
     {
@@ -650,7 +632,7 @@ bool is_equal(CubicIdeal<T,PT> & A, CubicIdeal <T,PT> & B){
         return false;
     }
     else if (A.get_denom() != B.get_denom()){
-      return false;       // added condition after adapting since now we might have fractional ideals
+      return false;
     }
     else {
       return true;

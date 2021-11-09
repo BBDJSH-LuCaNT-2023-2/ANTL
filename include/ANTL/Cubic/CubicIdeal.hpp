@@ -39,8 +39,8 @@ public:
 // Given a pointer to a cubic order, initialize the ideal as the identity matrix.
 CubicIdeal(CubicOrder<Type,PType> * cnfo){
   this->my_order = cnfo;
-  for (int i = 0; i < 3; ++i){
-    for (int j = 0; j<3; ++j){
+  for (auto i = 0; i < 3; ++i){
+    for (auto j = 0; j < 3; ++j){
       if (i != j){ NTL::clear(this->coeff_matrix[i][j]);}
       else{NTL::set(this->coeff_matrix[i][j]);}
     }
@@ -62,7 +62,7 @@ void set_order(CubicOrder<Type, PType> * ord) {this->my_order = ord;}
 /* @brief Given an integer i from 1..2, assign the input element to be
 * the ith element of the Z-basis of the ideal
 */
-void get_basis_element( CubicElement<Type, PType> & elt1, int pos) const;
+void copy_basis_element( CubicElement<Type, PType> & elt, int pos) const;
 //
 inline const CubicElement<Type, PType> * get_gen1()  {
   gen.set_order(my_order);
@@ -145,8 +145,8 @@ bool is_one(){
         if ((j == i) && (coeff_matrix[i][j] != to<Type>(1)) ){
             return false;
           }
-      }// end j's for
-    } // end i's for
+      }
+    }
   return true;
 }
 
@@ -352,13 +352,6 @@ private:
 
 
 }; // close class definition
-
-/**
-* @brief Method for multiplying two ideals together
-* @param[out] A = B*C
-* @param[in] CubicIdeals A, B, C.
-* @pre A,B,C should all belong to the same CubicOrder
-*/
 
 
 //define statics

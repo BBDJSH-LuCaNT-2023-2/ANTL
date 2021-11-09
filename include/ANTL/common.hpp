@@ -429,14 +429,14 @@ long ressol (GF2EX & x, const GF2EX & h, const GF2EX & f, const GF2EX & p);
 * @pre vec1 and vec2 need to be the same size.
 */
 template<typename PType>
-bool is_close(const std::vector<PType> & vec1, const std::vector<PType> & vec2, const PType & maxdist);
+bool is_close(const std::vector<PType> & vec1, const std::vector<PType> & vec2, const PType & max_dist);
 
 
 /*
 * @brief used in the computation of compact representations. Not yet implemented
 */
 template<typename Type, typename PType>
-void compute_initial_s(const std::vector<PType> & alpha, const int kbound);
+void compute_initial_s(const std::vector<PType> & alpha, const int k_bound);
 
 /*
 * @brief Takes a length r log vector and returns the corresponding length r+1 exponentiated vector. equivalent to create_target from the pari stuff.
@@ -445,7 +445,7 @@ void compute_initial_s(const std::vector<PType> & alpha, const int kbound);
 * Here deg(i) is 1 if the ith coordinate is a real embedding, 2 otherwise.
 */
 template<typename PType>
-void log_to_valuation(std::vector<PType> &valuationvec, const std::vector<PType> & log_vec, const int r1);
+void log_to_valuation(std::vector<PType> &valuation_vec, const std::vector<PType> & log_vec, const int r1);
 
 
 // Unspecialized template definitions.

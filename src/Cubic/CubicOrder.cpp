@@ -195,24 +195,27 @@ void CubicOrder<Type, PType> :: set_unit_rank( ){
       this->unit_rank = 1;
       r1 = 1;
       r2 = 1;
-    }else{
+    }else if (this->discriminant > 0){
       this->unit_rank = 2;
       r1 = 3;
       r2 = 0;
+    }else{
+      throw "Discriminant is 0";
     }
 }
 
 template <typename Type, typename PType>
 void CubicOrder<Type, PType> :: set_max_minima_dist( ){
-    PType tempval, tempval2;
+    PType sqrt_disc, mul_factor;
 
-    NTL::abs(tempval, to<PType>(this->discriminant));
-    SqrRoot(tempval, tempval);
+    NTL::abs(sqrt_disc, to<PType>(this->discriminant));
+    SqrRoot(sqrt_disc, sqrt_disc);
 
-    ComputePi(tempval2);
-    div(tempval2, PType(2), tempval2);
-    pow(tempval2, tempval2, PType(this->r1));
-    mul(this->max_minima_dist, tempval, tempval2);
+    ComputePi(mul_factor);
+    div(mul_factor, PType(2), mul_factor);
+    pow(mul_factor, mul_factor, PType(this->r1));
+    
+    mul(this->max_minima_dist, sqrt_disc, mul_factor);
 }
 
 

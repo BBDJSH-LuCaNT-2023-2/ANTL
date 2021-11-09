@@ -188,8 +188,8 @@ bool is_maximal(){if (index ==1) return true; else return false;}
 bool is_equal(const CubicOrder<Type, PType> &CO2) const;
 
 /**
-* Given a generating polynomial f, obtain its standard form, x^3 + Ex + G, where E,G are integers.
-* See pg 22 CFG for formulas
+* Given a generating polynomial f, obtain its standard form, x^3 + Ex + G,
+* where E,G are integers. See pg 22 CFG for formulas
 */
 void standard_form(Type & E, Type& G);
 
@@ -211,7 +211,7 @@ virtual CubicElement<Type, PType> * get_fundamental_unit(int i = 0) = 0;
 
 /**
 * @brief given an ideal1, and a log vector vec1 (length r), return a reduced ideal J and a minima
-* whose logarithm vector is close to vec1, and such that J = 1/minimum * ideal1 
+* whose logarithm vector is close to vec1, and such that J = 1/minimum * ideal1
 */
 virtual void close_minimum(CubicIdeal<Type, PType> & reduced_ideal1, \
   CubicElement<Type, PType> & minimum, CubicIdeal<Type, PType> & ideal1, std::vector<PType> & vec1) = 0;
@@ -295,12 +295,11 @@ void set_max_minima_dist();
 
 virtual void set_regulator() = 0;
 
-
 //void compute_fundamental_unit();
 
 private:
 
-CubicOrder(); // private default constructor means you can't call this
+CubicOrder();   // private default constructor means you can't call this
 
 
 
@@ -309,7 +308,6 @@ CubicOrder(); // private default constructor means you can't call this
 
 
 template<typename T, typename PT> PT CubicOrder<T,PT>::order_temp;
-//template<typename T, typename PT> CubicElement<T, PT> CubicOrder<T,PT>::temp_element(T(1), T(0), T(0), T(1));
 #include "../../../src/Cubic/CubicOrder.cpp"
 
 #endif // guard
