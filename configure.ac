@@ -22,6 +22,8 @@ AC_CHECK_LIB([mpfr], [main])
 AC_CHECK_LIB([mpfi], [main])
 AC_CHECK_LIB([ntl], [main])
 
+AX_BOOST_BASE([1.73],, [AC_MSG_ERROR([Boost library 1.73 or higher required])])
+
 # see https://www.gnu.org/software/autoconf/manual/autoconf-2.60/html_node/External-Software.html
 # run ./configure --help in the top level directory to list all options for configure
 AC_ARG_WITH([mpfr],
