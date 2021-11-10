@@ -10,15 +10,14 @@
 #include "../../../include/ANTL/Arithmetic/QQ.hpp"
 // For floating point arithmetic error tolerance
 
-#include "../../../include/ANTL/Cubic/generalFunctions.hpp"
-#include "../../../include/ANTL/Cubic/GeneralTemplateFunctions.hpp"
-#include "../../../include/ANTL/Cubic/CubicNumberField.hpp"
-#include "../../../include/ANTL/Cubic/RealCubicNumberField.hpp"
-#include "../../../include/ANTL/Cubic/ComplexCubicNumberField.hpp"
-#include "../../../include/ANTL/Cubic/CubicIdeal.hpp"
+//#include "../../../include/ANTL/Cubic/GeneralTemplateFunctions.hpp"
+//#include "../../../include/ANTL/Cubic/CubicNumberField.hpp"
+//#include "../../../include/ANTL/Cubic/RealCubicNumberField.hpp"
+//#include "../../../include/ANTL/Cubic/ComplexCubicNumberField.hpp"
+//#include "../../../include/ANTL/Cubic/CubicIdeal.hpp"
 
-#include "../../../include/ANTL/Cubic/Multiplication/IdealMultiplicationStrategy.hpp"
-#include "../../../include/ANTL/Cubic/Multiplication/MultiplyStrategyWilliams.hpp"
+//#include "../../../include/ANTL/Cubic/Multiplication/IdealMultiplicationStrategy.hpp"
+//#include "../../../include/ANTL/Cubic/Multiplication/MultiplyStrategyWilliams.hpp"
 const double DOUBLE_TOLERANCE = 0.0000001;
 
 using NTL::ZZ;
@@ -329,7 +328,7 @@ TEST_CASE("Subtraction"){
     REQUIRE(Erika.get_denom() == 6);
 
   }
-  SECTION("Sub two cubic elements"){
+  SECTION("Subtract two cubic elements"){
     sub(Erika,Ellie, Est);
 
     REQUIRE(Erika.get_u() == -11);
@@ -348,7 +347,7 @@ TEST_CASE("Multiplication"){
   CubicElement<long, double> Erika (Rufio, 0,0, 0, 5);
   QQ<long> tempQ(0, 2);
 
-  SECTION("Mul by a constant"){
+  SECTION("Multiply by a constant"){
     mul(Erika,Ellie, 0L);
     REQUIRE(Erika.is_zero());
 
@@ -411,7 +410,7 @@ TEST_CASE("Multiplication"){
   }
 }
 
-TEST_CASE("Division"){
+TEST_CASE("Division tests"){
   newpoly[3] = 1;
   newpoly[2] = 1;
   newpoly[1] = -2;
@@ -427,11 +426,11 @@ TEST_CASE("Division"){
 
   SECTION("Inverse test"){
     mul(Erika, Ellie, Erika);
-    std::cout << Erika.toString() << std::endl;
+    //std::cout << Erika.toString() << std::endl;
     REQUIRE(Erika.is_equal(Est));
 
     Ellie.inverse(Erika);
-    std::cout << Ellie.toString() << std::endl;
+    //std::cout << Ellie.toString() << std::endl;
     mul(Erika, Ellie, Erika);
     REQUIRE(Erika.is_equal(Est));
 

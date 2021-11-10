@@ -5,25 +5,22 @@ IFLAGS= -I/c/include -I/home/cs-gb2khv2/ANTL/include
 SRC_FILES := $(wildcard ../../src/Cubic/*.cpp)
 OBJ_FILES := $(notdir $(SRC_FILES:.cpp=.o))
 #For GCC/G++, you can pass compiler flags -std=c++11, -std=c++14, -std=c++17, or -std=c++2a to enable C++11/14/17/2a support respectively.
-main: cubicTestMain.o generalFunctions.o GlobalCubicField.o CubicNumberField.o\
+main: cubicTestMain.o GlobalCubicField.o CubicNumberField.o\
 					RealCubicNumberField.o ComplexCubicNumberField.o CubicOrder.o CubicOrderReal.o\
 					CubicElement.o CubicIdeal.o IdealMultiplicationStrategy.o MultiplyStrategyWilliams.o \
 					VoronoiMethods.o VoronoiReal.o VoronoiComplex.o BasicVoronoi.o BSGSVoronoi.o
 					#QQ.o common.o debug.o xgcd.o
 
-	$(CC) $(CFLAGS) -o bin/testFile $(IFLAGS) generalFunctions.o cubicTestMain.o GlobalCubicField.o CubicNumberField.o RealCubicNumberField.o ComplexCubicNumberField.o CubicOrder.o CubicOrderReal.o CubicElement.o CubicIdeal.o IdealMultiplicationStrategy.o MultiplyStrategyWilliams.o VoronoiMethods.o VoronoiReal.o VoronoiComplex.o BasicVoronoi.o BSGSVoronoi.o -L/c/lib $(LFLAGS)
+	$(CC) $(CFLAGS) -o bin/testFile $(IFLAGS) cubicTestMain.o GlobalCubicField.o CubicNumberField.o RealCubicNumberField.o ComplexCubicNumberField.o CubicOrder.o CubicOrderReal.o CubicElement.o CubicIdeal.o IdealMultiplicationStrategy.o MultiplyStrategyWilliams.o VoronoiMethods.o VoronoiReal.o VoronoiComplex.o BasicVoronoi.o BSGSVoronoi.o -L/c/lib $(LFLAGS)
 
 main2: belabas-extract.o
-	$(CC) $(CFLAGS) -o bin/belabasrun $(IFLAGS) generalFunctions.o belabas-extract.o GlobalCubicField.o CubicNumberField.o RealCubicNumberField.o ComplexCubicNumberField.o CubicOrder.o CubicOrderReal.o CubicElement.o CubicIdeal.o IdealMultiplicationStrategy.o MultiplyStrategyWilliams.o VoronoiMethods.o VoronoiReal.o VoronoiComplex.o BasicVoronoi.o BSGSVoronoi.o -L/c/lib $(LFLAGS)
+	$(CC) $(CFLAGS) -o bin/belabasrun $(IFLAGS) belabas-extract.o GlobalCubicField.o CubicNumberField.o RealCubicNumberField.o ComplexCubicNumberField.o CubicOrder.o CubicOrderReal.o CubicElement.o CubicIdeal.o IdealMultiplicationStrategy.o MultiplyStrategyWilliams.o VoronoiMethods.o VoronoiReal.o VoronoiComplex.o BasicVoronoi.o BSGSVoronoi.o -L/c/lib $(LFLAGS)
 
 belabas-extract.o:
 	 $(CC) $(CFLAGS) -c $(IFLAGS) belabas-extract.cpp -L/c/lib $(LFLAGS)
 
 cubicTestMain.o: cubicTestMain.cpp ../../include/ANTL/Cubic/CubicNumberField.hpp ../../include/ANTL/Cubic/ComplexCubicNumberField.hpp ../../include/ANTL/Cubic/RealCubicNumberField.hpp
 	$(CC) $(CFLAGS) -c $(IFLAGS) cubicTestMain.cpp -L/c/lib $(LFLAGS)
-
-generalFunctions.o: ../../src/Cubic/generalFunctions.cpp ../../include/ANTL/Cubic/generalFunctions.hpp
-	$(CC) $(CFLAGS) -c $(IFLAGS) ../../src/Cubic/generalFunctions.cpp -L/c/lib $(LFLAGS)
 
 GlobalCubicField.o: ../../src/Cubic/GlobalCubicField.cpp ../../include/ANTL/Cubic/GlobalCubicField.hpp
 	$(CC) $(CFLAGS) -c $(IFLAGS) ../../src/Cubic/GlobalCubicField.cpp -L/c/lib $(LFLAGS)
@@ -81,7 +78,7 @@ xgcd.o: ../../src/XGCD/xgcd.cpp ../../include/ANTL/XGCD/xgcd.hpp
 
 
 
-objects = cubicTestMain.o generalFunctions.o GlobalCubicField.o CubicNumberField.o\
+objects = cubicTestMain.o GlobalCubicField.o CubicNumberField.o\
 					RealCubicNumberField.o ComplexCubicNumberField.o CubicOrder.o \
 					CubicElement.o  CubicIdeal.o  IdealMultiplicationStrategy.o \
 					MultiplyStrategyWilliams.o VoronoiMethods.o VoronoiReal.o VoronoiComplex.o\

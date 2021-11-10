@@ -18,7 +18,6 @@ using boost::multiprecision::mpf_float;
 using boost::multiprecision::mpfi_float;
 */
 
-#include <ANTL/Cubic/generalFunctions.hpp>
 #include <ANTL/Cubic/GeneralTemplateFunctions.hpp>
 #include <ANTL/Cubic/CubicNumberField.hpp>
 #include <ANTL/Cubic/RealCubicNumberField.hpp>

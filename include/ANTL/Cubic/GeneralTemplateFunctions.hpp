@@ -19,6 +19,7 @@ const double PI = 3.141592653589793;
 const	double TwoPi = 6.28318530717958648;
 const RR DOUBLE_TOL(1e-25);
 
+//#define DEBUG_CARDANO = 0
 
 //const quad_float eps=1e-23;
 //const quad_float PI =    3.14159265358979323846264;
@@ -121,7 +122,9 @@ int cardano(polynomial<T> const &poly, PT * roots){
     }
     // at this point we will be working with the depressed monic cubic
     // x^3 + px + q, whose coefficients are rational numbers
+    #ifdef DEBUG_CARDANO
     std::cout << "Depressed form: p,q " << p << "  " << q << endl;
+    #endif
     div(q, q, T(2));                         // obtain q/2
     div(p, p, T(3));                         // obtain p/3
 
@@ -206,8 +209,6 @@ int cardano(polynomial<T> const &poly, PT * roots){
       SqrRoot(disc_root, disc);
       div(realtemp1, to<PT>(q.getN()), to<PT>(q.getD()));
 
-      std::cout << "p " << p.getNumerator()<< "/"<< p.getDenominator() << std::endl;
-      std::cout << "q " << q.getNumerator()<< "/"<< q.getDenominator() << std::endl;
       realtemp1 = -realtemp1;      // -q/2
 
 
@@ -215,7 +216,7 @@ int cardano(polynomial<T> const &poly, PT * roots){
       // see the description from brilliant.org for reference
       if( IsZero(p.getN()) ){
         mul(realtemp1, realtemp1, PT(2));
-        std::cout << "realtemp1 " << realtemp1 << std::endl;
+
         if (realtemp1 < DOUBLE_TOL){
           realtemp1 = -realtemp1;
           pow(realtemp1,realtemp1, athird);
@@ -263,11 +264,12 @@ int cardano(polynomial<T> const &poly, PT * roots){
       sub(roots[0], roots[0] , realtemp1);
       sub(roots[1], roots[1] , realtemp1);
 
-      std::cout << "Cardano roots: " << std::endl;
-      std::cout << roots[0] <<std::endl;
-      std::cout << roots[1] <<std::endl;
-      std::cout << roots[2] <<std::endl;
-
+      #ifdef DEBUG_CARDANO
+        std::cout << "Cardano roots: " << std::endl;
+        std::cout << roots[0] <<"\n";
+        std::cout << roots[1] <<"\n";
+        std::cout << roots[2] <<"\n";
+      #endif
       return 2;
     }
   }

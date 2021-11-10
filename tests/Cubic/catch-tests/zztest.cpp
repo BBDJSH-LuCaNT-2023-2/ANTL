@@ -9,7 +9,6 @@
 #include <boost/qvm/mat_access.hpp>
 #include <boost/qvm/mat_operations.hpp>
 
-#include "../../../include/ANTL/Cubic/generalFunctions.hpp"
 #include "../../../include/ANTL/Cubic/GeneralTemplateFunctions.hpp"
 #include "../../../include/ANTL/Cubic/CubicNumberField.hpp"
 #include "../../../include/ANTL/Cubic/RealCubicNumberField.hpp"
