@@ -11,10 +11,13 @@
 // Task: reduces the ideal
 template <> void ReducePlainReal<ZZ>::reduce(QuadraticIdealBase<ZZ> & A) {
   static ZZ a, b, c;
-
+  std::cout << "begin reduce!" << std::endl;
+  std::cout << "(a, b, c) = (" << A.get_a() << ", " << A.get_b() << ", " << A.get_c() << ")" << std::endl;
   // normalize ideal
   if (!A.is_normal()) {
     A.normalize();
+    std::cout << "(a, b, c) = (" << A.get_a() << ", " << A.get_b() << ", " << A.get_c() << ")" << std::endl;
+  // normalize ideal
   }
 
   // reduce
@@ -25,6 +28,8 @@ template <> void ReducePlainReal<ZZ>::reduce(QuadraticIdealBase<ZZ> & A) {
 
     A.assign(c, -1*b, a);
     A.normalize();
+    std::cout << "(a, b, c) = (" << A.get_a() << ", " << A.get_b() << ", " << A.get_c() << ")" << std::endl;
+  // normalize ideal
   }
 
   //account for special case
