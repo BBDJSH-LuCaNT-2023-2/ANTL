@@ -8,33 +8,34 @@
 #include <NTL/ZZ.h>
 #include <vector>
 
+//template<class T>
+//class QuadraticNumber
+template <class T, class R> // type of unit, type of regulator
 class IOrder {
-  // interface for objects that behave like orders in algebraic number fields
-  // and have invariants like class number and regulator
-
-  IOrder &operator = (IOrder const &order);
-};
-
-class IClassGroup:public IOrder {
 public:
-  virtual std::vector<NTL::ZZ> class_group() = 0;
-};
+  // interface for objects that have getters for number field invariants like class number and regulator
 
-class IClassNumber:public IOrder {
-public:
-  virtual NTL::ZZ class_number() = 0;
-};
+  // subclasses may implement class_group, class_number, unit_group, regulator
+  virtual std::vector<NTL::ZZ> class_group() {
+	std::vector<NTL::ZZ> classGroup = {NTL::ZZ(0)};
+	return classGroup;
+  }
 
-template <class T> // type of a unit
-class IUnitGroup:public IOrder {
-public:
-  virtual std::vector<T> unit_group() = 0;
-};
+  virtual NTL::ZZ class_number() {
+	NTL::ZZ classNumber = NTL::ZZ(0);
+	return classNumber;
+  }
 
-template <class R> // type of the regulator
-class IRegulator:public IOrder {
-public:
-  virtual R regulator() = 0;
+  virtual std::vector<T> unit_group() {
+	T object1, object2;
+	std::vector<T> unitGroup = {object1, object2};
+	return unitGroup;
+  }
+
+  virtual R regulator() {
+	R regulator;
+	return regulator;
+  }
 };
 
 #endif //ORDERINVARIANTS_H

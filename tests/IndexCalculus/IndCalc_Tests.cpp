@@ -7,46 +7,41 @@
 #include <NTL/ZZ.h>
 #include "../catch.hpp"
 #include "ANTL/IndexCalculus/IndCalc/QuadIndCalc.hpp"
-#include "ANTL/Interface/OrderInvariants.hpp"
+#include <ANTL/Interface/OrderInvariants.hpp>
 #include "ANTL/Constants.hpp"
+#include "ANTL/Quadratic/QuadraticOrder.hpp"
 
 using namespace Constants;
 using namespace NTL;
 using namespace ANTL;
 
-namespace UT {
-  typedef int ord_t; // fake type for the QuadraticOrder
-  typedef int unit_t; // fake type for number field units
-  typedef int reg_t; // fake type for the regulator
-
-// use a mock QuadraticOrder so we dont need to introduce the dependencies from ANTL/Quadratic/QuadraticOrder
-  template<class T>
-  class QuadraticOrder : public IOrder {
-  public:
-    QuadraticOrder(IOrder const &order) {}
-  };
-}
-
-std::map<std::string, std::string> get_params(std::string max_num_tests_str) {
-  std::map<std::string, std::string> params {{num_relations, "2"}, {size_fb, "3"}, {bound_fb, "5"},
+std::map<std::string, std::string> get_params(std::string size_fb_str,
+                                              std::string bound_fb_str,
+                                              std::string max_num_tests_str) {
+  std::map<std::string, std::string> params {{num_relations, "0"}, {size_fb, size_fb_str}, {bound_fb, bound_fb_str},
                                              {max_num_tests, max_num_tests_str}};
   return params;
 }
 
-/*** removing this test temporarily so I can investigate a segfault in it ***/
-/*** TESTS ***/
-//TEST_CASE("Parameters are read from the params map", "[capturing]") {
-//  IOrder order = IOrder();
-//  long expected_num_relations = 2;
-//  long expected_size_fb = 3;
-//  long expected_bound_fb = 5;
-//  long expected_max_num_tests = 7;
-//  QuadIndCalc<UT::unit_t , UT::reg_t> ind_calc1 =
-//    QuadIndCalc<UT::unit_t, UT::reg_t>::create(order, get_params("7"));
-//  REQUIRE(ind_calc1.get_relation_generator()->get_size_fb() == expected_size_fb);
-//  REQUIRE(ind_calc1.get_relation_generator()->get_max_num_tests() == expected_max_num_tests);
-//  REQUIRE(ind_calc1.get_factor_base()->get_size_fb() == expected_size_fb);
-//  REQUIRE(ind_calc1.get_factor_base()->get_bound() == expected_bound_fb);
-//}
+TEST_CASE("IndCalc: Create initializes IndCalc with correct parameters", "[IndCalc]") {
+  QuadraticOrder<ZZ> order = QuadraticOrder<ZZ>(ZZ(13));
+  auto expected_size_fb1 = 0;
+  auto expected_bound_fb1 = 0;
+  auto expected_max_num_tests1 = 0;
+  auto ind_calc1 = QuadIndCalc<ZZ, RR>::create(order, get_params("0", "0", "0"));
+  REQUIRE(ind_calc1->get_relation_generator()->get_size_fb() == expected_size_fb1);
+  REQUIRE(ind_calc1->get_factor_base()->get_size_fb() == expected_size_fb1);
+  REQUIRE(ind_calc1->get_factor_base()->get_bound() == expected_bound_fb1);
+  REQUIRE(ind_calc1->get_relation_generator()->get_max_num_tests() == expected_max_num_tests1);
+
+  auto expected_size_fb2 = 1;
+  auto expected_bound_fb2 = 2;
+  auto expected_max_num_tests2 = 3;
+  auto ind_calc2 = QuadIndCalc<ZZ, RR>::create(order, get_params("1", "2", "3"));
+  REQUIRE(ind_calc2->get_relation_generator()->get_size_fb() == expected_size_fb2);
+  REQUIRE(ind_calc2->get_factor_base()->get_size_fb() == expected_size_fb2);
+  REQUIRE(ind_calc2->get_factor_base()->get_bound() == expected_bound_fb2);
+  REQUIRE(ind_calc2->get_relation_generator()->get_max_num_tests() == expected_max_num_tests2);
+}
 
 #endif

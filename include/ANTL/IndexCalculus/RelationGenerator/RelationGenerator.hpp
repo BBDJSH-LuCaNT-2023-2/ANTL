@@ -3,8 +3,10 @@
 
 #include <string>
 #include <map>
+#include <NTL/ZZ.h>
+#include <NTL/RR.h>
 #include "ANTL/IndexCalculus/Relation/Relation.hpp"
-#include "ANTL/Interface/OrderInvariants.hpp"
+#include <ANTL/Interface/OrderInvariants.hpp>
 #include "ANTL/Constants.hpp"
 #include <ANTL/common.hpp>
 
@@ -14,8 +16,8 @@ namespace ANTL {
   class RelationGenerator {
   public:
     // constructors
-    RelationGenerator(IOrder const &order, std::map<std::string, std::string> const &params, FactorBase const &fb) :
-    order(order), FB(fb) {
+    RelationGenerator(IOrder<NTL::ZZ, NTL::RR> const &order, std::map<std::string, std::string> const &params) :
+    order(order) {
       long total_tests = 0;
       long total_rels_found = 0;
 
@@ -38,9 +40,6 @@ namespace ANTL {
         seed = std::stoi(params.find(Constants::seed)->second);
       }
     }
-
-    RelationGenerator(IOrder const &order, std::map<std::string, std::string> const &params) :
-      RelationGenerator(order, params, FactorBase(order, params)) {}
 
     /*
      * get_relation takes an empty relation as input
@@ -69,10 +68,10 @@ namespace ANTL {
     long total_rels_found = 0;
 
     // Order that relations are generated for
-    IOrder const &order;
+    IOrder<NTL::ZZ, NTL::RR> const &order;
 
     // factor base associated with this relation generator
-    FactorBase const &FB;
+    FactorBase const *FB;
 
     /*** Required Constructor Parameters ***/
     // size of the factor base.

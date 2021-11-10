@@ -5,11 +5,11 @@
 // Calling these functions in the right order is handled by the parent class
 // Computations are passed off to the classes FactorBase and RelationGenerator
 
-#include "ANTL/Interface/OrderInvariants.hpp"
-#include "ANTL/IndexCalculus/RelationGenerator/QuadRelationGenerator.hpp"
+#include <ANTL/Interface/OrderInvariants.hpp>
+#include <ANTL/IndexCalculus/RelationGenerator/QuadRelationGenerator.hpp>
 #include "ANTL/IndexCalculus/Relation/Relation.hpp"
-#include "ANTL/IndexCalculus/Relation/QuadRelation.hpp"
-#include "ANTL/IndexCalculus/FactorBase/QuadFactorBase.hpp"
+#include <ANTL/IndexCalculus/Relation/QuadRelation.hpp>
+#include <ANTL/IndexCalculus/FactorBase/QuadFactorBase.hpp>
 #include "ANTL/Constants.hpp"
 #include <typeinfo>
 
