@@ -10,6 +10,8 @@
 #include <boost/math/tools/polynomial.hpp>
 #include <boost/math/bindings/rr.hpp>
 
+
+#include <ANTL/Cubic/generalFunctions.hpp>
 #include <ANTL/Cubic/GeneralTemplateFunctions.hpp>
 #include <ANTL/Cubic/CubicNumberField.hpp>
 #include <ANTL/Cubic/RealCubicNumberField.hpp>

@@ -4,7 +4,7 @@ LFLAGS= -lntl -lgmp -lmpfi -lm -lpthread
 IFLAGS= -I/c/include -I/home/cs-gb2khv2/ANTL/include
 SRC_FILES := $(wildcard ../../src/Cubic/*.cpp)
 OBJ_FILES := $(notdir $(SRC_FILES:.cpp=.o))
-CORE_OBJ_FILES := ../CubicOrder.o ../CubicElement.o ../CubicIdeal.o
+CORE_OBJ_FILES := ../generalFunctions.o ../CubicOrder.o ../CubicElement.o ../CubicIdeal.o
 MUL_OBJ_FILES := ../MultiplyStrategyWilliams.o ../IdealMultiplicationStrategy.o
 
 main: testingMain.o test-cnf test-element test-order test-eta test-complex-voronoi
@@ -12,10 +12,10 @@ main: testingMain.o test-cnf test-element test-order test-eta test-complex-voron
 test-cnf: test-cnf.cpp testingMain.o ../catch.hpp ../../../include/ANTL/Cubic/GeneralTemplateFunctions.hpp
 	$(CC) $(CFLAGS) -o bin/010-TestCase $(IFLAGS) testingMain.o test-cnf.cpp -L/c/lib $(LFLAGS)
 
-test-element: ../catch.hpp CubicElement_Test.cpp
-	$(CC) $(CFLAGS) -o bin/020-TestCase CubicElement_Test.cpp $(IFLAGS) testingMain.o ../CubicOrder.o ../CubicElement.o -L/c/lib $(LFLAGS)
+test-element: ../catch.hpp test-element.cpp
+	$(CC) $(CFLAGS) -o bin/020-TestCase test-element.cpp $(IFLAGS) testingMain.o ../generalFunctions.o ../CubicOrder.o ../CubicElement.o -L/c/lib $(LFLAGS)
 
-test-order: ../catch.hpp test-order.cpp testingMain.o  ../CubicOrder.o
+test-order: ../catch.hpp test-order.cpp testingMain.o ../generalFunctions.o ../CubicOrder.o
 	$(CC) $(CFLAGS) -o bin/030-TestCase $(IFLAGS) testingMain.o ../CubicOrder.o test-order.cpp -L/c/lib $(LFLAGS)
 
 test-eta: ../catch.hpp test-etafunction.cpp testingMain.o ../../../include/ANTL/Cubic/GeneralTemplateFunctions.hpp
