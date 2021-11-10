@@ -27,6 +27,7 @@ test_SOURCES = tests/UnitTests.cpp                                    \
                tests/Quadratic/QuadraticOrder_long_Tests.cpp          \
                tests/Quadratic/Cube/CubePlain_ZZ_Tests.cpp            \
                tests/Quadratic/Cube/CubePlain_long_Tests.cpp          \
+               tests/Quadratic/Multiply/MultiplyNucomp_ZZ_Tests.cpp   \
                tests/Quadratic/Multiply/MultiplyPlain_long_Tests.cpp  \
                tests/Quadratic/Multiply/MultiplyPlain_ZZ_Tests.cpp    \
                tests/Quadratic/Reduce/ReducePlainReal_long_Tests.cpp  \
