@@ -29,11 +29,11 @@
 const double DOUBLE_TOLERANCE = 0.000001;
 
 
-TEST_CASE("Eta Function for doubles"){
+TEST_CASE("ZZ, RR Complex Voronoi tests"){
   std::string myfile = "ANTL/tests/Cubic/catch-tests/TestInput/test-input-complex-regulator.txt";
   ZZ a,b,c,d, disc;
   RR test_regulator, temp;
-  SECTION("equal tests"){
+  SECTION("Regulator Comparisons"){
     std::string line;
     double real_in, imag_in, real_out, imag_out;
 
