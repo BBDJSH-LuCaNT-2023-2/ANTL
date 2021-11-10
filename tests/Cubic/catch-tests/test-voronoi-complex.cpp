@@ -30,7 +30,7 @@ const double DOUBLE_TOLERANCE = 0.000001;
 
 
 TEST_CASE("ZZ, RR Complex Voronoi tests"){
-  std::string myfile = "ANTL/tests/Cubic/catch-tests/TestInput/test-input-complex-regulator.txt";
+  std::string myfile = "TestInput/test-input-complex-regulator.txt";
   ZZ a,b,c,d, disc;
   RR test_regulator, temp;
   SECTION("Regulator Comparisons"){
