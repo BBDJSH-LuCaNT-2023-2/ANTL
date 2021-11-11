@@ -22,7 +22,7 @@ TEST_CASE("MultiplyPlain<long>: Multiplying two ideals", "[MultiplyPlain]") {
     quad_ideal_base2.assign(17, -9, 1);
 
 
-    quad_order1.get_mul_plain()->multiply(quad_ideal_base_product, quad_ideal_base1, quad_ideal_base2);
+    mul(quad_ideal_base_product, quad_ideal_base1, quad_ideal_base2);
 
     REQUIRE(quad_ideal_base_product.get_a() == long(289));
     REQUIRE(quad_ideal_base_product.get_b() == long(59) );

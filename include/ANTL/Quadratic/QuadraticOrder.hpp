@@ -140,8 +140,14 @@ template < class T > class QuadraticOrder : public IOrder<T,NTL::RR> {
     T Delta;
     long g;  // genus (if an order in a function field)
 
-    // Pointers to objects for ideal arithmetic
+    // These ints determine the preferred or optimal strategies
+    // Currently, they are set during initialization
+    int preferred_red;
+    int preferred_mul;
+    int preferred_sqr;
+    int preferred_cube;
 
+    // Pointers to objects for ideal arithmetic
     ReduceStrategy<T>   *red_best;
     ReducePlainImag<T>  *red_plain_imag;
     ReducePlainReal<T>  *red_plain_real;

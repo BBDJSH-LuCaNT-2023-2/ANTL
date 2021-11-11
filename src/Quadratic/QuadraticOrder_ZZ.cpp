@@ -7,34 +7,59 @@
 
 using namespace ANTL;
 
-  template <>
-  QuadraticOrder<ZZ>::QuadraticOrder(const ZZ & D)
-  {
-    // test whether D is a valid discriminant
-    long m4 = rem(D,4);
-    if (m4 < 0)
-      m4 += 4;
+template <>
+QuadraticOrder<ZZ>::QuadraticOrder(const ZZ & D)
+{
+  // test whether D is a valid discriminant
+  long m4 = rem(D,4);
+  if (m4 < 0) {
+    m4 += 4;
+  }
 
-    if (m4 == 0 || m4 == 1) {
-      ZZ rD = SqrRoot (abs (D));
-        if (rD * rD != abs (D)) {
-          // assign new values
-          Delta = D;
-          g = 0;
-          hx = 0;
+  if (m4 == 0 || m4 == 1) {
+    ZZ rD = SqrRoot (abs (D));
+    if (rD * rD != abs (D)) {
+      // assign new values
+      Delta = D;
+      g = 0;
+      hx = 0;
 
-	  /*
-          // initialize invariant values
-          clear (R);
-          clear (h);
-          rank = 0;
-          clear (L);
+      //Setting preferred strategies. More nuanced logic should eventually go here.
+      preferred_red = 0;
+      preferred_mul = 0;
+      preferred_sqr = 0;
+      preferred_cube = 0;
 
-          Lfunc.init(Delta,QUADRATIC_MODE);
-	  */
-	}
+      //Explicitly setting arithmetic object pointer to nullptr
+      red_best = nullptr;
+      red_plain_imag = nullptr;
+      red_plain_real = nullptr;
+      red_fast  = nullptr;
+
+      mul_best = nullptr;
+      mul_plain = nullptr;
+      mul_nucomp = nullptr;
+
+      sqr_best = nullptr;
+      sqr_plain = nullptr;
+      sqr_nudupl = nullptr;
+
+      cube_best = nullptr;
+      cube_plain = nullptr;
+      cube_nucube = nullptr;
+      cube_mulsqr = nullptr;
+      /*
+        // initialize invariant values
+        clear (R);
+        clear (h);
+        rank = 0;
+        clear (L);
+
+        Lfunc.init(Delta,QUADRATIC_MODE);
+      */
     }
   }
+}
 
 
 

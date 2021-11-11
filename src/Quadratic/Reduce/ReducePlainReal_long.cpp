@@ -17,14 +17,23 @@ template <> void ReducePlainReal<long>::reduce(QuadraticIdealBase<long> & A) {
     A.normalize();
   }
 
+  a = A.get_a();
+  b = A.get_b();
+  c = A.get_c();
+
   // reduce
   while (!A.is_reduced()) {
+    A.assign(c, -b, a);
+    A.normalize();
+
     a = A.get_a();
     b = A.get_b();
     c = A.get_c();
+  }
 
-    A.assign(c, -1*b, a);
-    A.normalize();
+  if (a < 0) {
+    A.set_a(-a);
+    A.set_c(-c);
   }
 
   //account for special case

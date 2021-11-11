@@ -13,6 +13,7 @@ template <> void MultiplyNucomp<ZZ>::init(const ZZ & delta_in, const ZZ & h_in, 
 }
 
 template <> void MultiplyNucomp<ZZ>::multiply(QuadraticIdealBase<ZZ> & C, const QuadraticIdealBase<ZZ> & A, const QuadraticIdealBase<ZZ> & B) {
+  Delta = C.get_QO()->getDiscriminant();
   NC_BOUND = FloorToZZ(sqrt(sqrt(abs(to_RR(Delta)))));
 
   static ZZ a1, a2, b1, b2, c2, Ca, Cb, Cc, ss, m;
@@ -140,5 +141,5 @@ template <> void MultiplyNucomp<ZZ>::multiply(QuadraticIdealBase<ZZ> & C, const 
 
   // normalize and reduce
   C.assign(Ca,Cb,Cc);
-  C.get_QO()->get_red_plain_real()->reduce(C);
+  C.reduce();
 }

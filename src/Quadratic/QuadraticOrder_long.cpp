@@ -7,20 +7,44 @@
 
 using namespace ANTL;
 
-  template <>
-  QuadraticOrder<long>::QuadraticOrder(const long & D)
-  {
-    // test whether D is a valid discriminant
-    long m4 = D & 3;
-    if (m4 == 0 || m4 == 1) {
-      long rD = SqrRoot (labs (D));
-        if (rD * rD != labs (D)) {
-          // assign new values
-          Delta = D;
-          g = 0;
-          hx = 0;
+template <>
+QuadraticOrder<long>::QuadraticOrder(const long & D)
+{
+  // test whether D is a valid discriminant
+  long m4 = D & 3;
+  if (m4 == 0 || m4 == 1) {
+    long rD = SqrRoot (labs (D));
+      if (rD * rD != labs (D)) {
+        // assign new values
+        Delta = D;
+        g = 0;
+        hx = 0;
 
-	  /*
+        //Setting preferred strategies. More nuanced logic should eventually go here.
+        preferred_red = 0;
+        preferred_mul = 0;
+        preferred_sqr = 0;
+        preferred_cube = 0;
+
+        //Explicitly setting arithmetic object pointer to nullptr
+        red_best = nullptr;
+        red_plain_imag = nullptr;
+        red_plain_real = nullptr;
+        red_fast  = nullptr;
+
+        mul_best = nullptr;
+        mul_plain = nullptr;
+        mul_nucomp = nullptr;
+
+        sqr_best = nullptr;
+        sqr_plain = nullptr;
+        sqr_nudupl = nullptr;
+
+        cube_best = nullptr;
+        cube_plain = nullptr;
+        cube_nucube = nullptr;
+        cube_mulsqr = nullptr;
+      /*
           // initialize invariant values
           clear (R);
           clear (h);
@@ -28,11 +52,11 @@ using namespace ANTL;
           gens.clear();
           clear (L);
 
-	  Lfunc.init(Delta,QUADRATIC_MODE);
-	  */
-	}
+      Lfunc.init(Delta,QUADRATIC_MODE);
+      */
     }
   }
+}
 
 
 
