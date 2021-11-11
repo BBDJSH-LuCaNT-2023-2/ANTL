@@ -4,6 +4,9 @@
  * @remarks Class representing primitive ideal.
  */
 
+using namespace ANTL;
+
+namespace ANTL {
 // constructor
 template <class T> QuadraticIdealBase<T>::QuadraticIdealBase (QuadraticOrder<T> & inQO) {
   NTL::clear(a);
@@ -121,36 +124,45 @@ template <class T> void conjugate (QuadraticIdealBase<T> &C, const QuadraticIdea
   C.c = A.c;
 }
 
-template <class T> void ANTL::mul(QuadraticIdealBase<T> &C, const QuadraticIdealBase<T> &A, const QuadraticIdealBase<T> &B) {
+//Arithmetic Objects
+template <class T>
+void mul(QuadraticIdealBase<T> &C, const QuadraticIdealBase<T> &A, const QuadraticIdealBase<T> &B) {
   C.QO->get_mul_best()->multiply(C, A, B);
 }
 
-template <class T> void mul(QuadraticIdealBase<T> &C, ANTL::QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A, const QuadraticIdealBase<T> &B) {
+template <class T>
+void mul(QuadraticIdealBase<T> &C, QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A, const QuadraticIdealBase<T> &B) {
   C.QO->get_mul_best()->multiply(C,gamma,A,B);
 }
 
-template <class T> void sqr(QuadraticIdealBase<T> &C, const QuadraticIdealBase<T> &A) {
+template <class T>
+void sqr(QuadraticIdealBase<T> &C, const QuadraticIdealBase<T> &A) {
   C.QO->get_sqr_best()->sqr(C,A);
 }
 
 
-template <class T> void sqr(QuadraticIdealBase<T> &C, ANTL::QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A) {
+template <class T>
+void sqr(QuadraticIdealBase<T> &C, QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A) {
   C.QO->get_sqr_best()->sqr(C,gamma,A);
 }
 
-template <class T> void cube(QuadraticIdealBase<T> &C, const QuadraticIdealBase<T> &A) {
+template <class T>
+void cube(QuadraticIdealBase<T> &C, const QuadraticIdealBase<T> &A) {
   C.QO->get_cube_best()->cube(C,A);
 }
 
-template <class T>void cube(QuadraticIdealBase<T> &C, ANTL::QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A) {
+template <class T>
+void cube(QuadraticIdealBase<T> &C, QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A) {
   C.QO->get_cube_best()->cube(C,gamma,A);
 }
 
-template <class T> void QuadraticIdealBase<T>::reduce() {
+template <class T>
+void QuadraticIdealBase<T>::reduce() {
   QO->get_red_best()->reduce(*this);
 }
 
-template <class T> void QuadraticIdealBase<T>::reduce(ANTL::QuadraticNumber<T> & gamma) {
+template <class T>
+void QuadraticIdealBase<T>::reduce(QuadraticNumber<T> & gamma) {
   QO->get_red_best()->reduce(*this,gamma);
 }
 
@@ -219,4 +231,5 @@ template <class T> std::istream & operator >> (std::istream & in, QuadraticIdeal
 template <class T> std::ostream & operator << (std::ostream & out, const QuadraticIdealBase<T> &A) {
   out << "(" << A.a << ", " << A.b << ", " << A.c << ")";
   return out;
+}
 }

@@ -13,6 +13,9 @@ template <> void MultiplyNucomp<long>::init(const long & delta_in, const long & 
 }
 
 template <> void MultiplyNucomp<long>::multiply(QuadraticIdealBase<long> & C, const QuadraticIdealBase<long> & A, const QuadraticIdealBase<long> & B) {
+  Delta = C.get_QO()->getDiscriminant();
+  NC_BOUND = FloorToZZ(sqrt(sqrt(abs(to_RR(Delta)))));
+
   static long a1, a2, b1, b2, c2, Ca, Cb, Cc, ss, m;
   static long SP, S, v1, u2, v2, K, T, temp;
   static long R1, R2, C1, C2, M1, M2;
@@ -75,7 +78,7 @@ template <> void MultiplyNucomp<long>::multiply(QuadraticIdealBase<long> & C, co
   Cb = (T << 1) + b2;
 
   // C.c = (S c2 + K (b2 + T)) / L;
-  Cc = ((b2+T)*K + c2) / a1;
+  Cc = ((b2+T)*K + S*c2) / a1;
   }
   else {
     // use NUCOMP formulas
@@ -111,4 +114,5 @@ template <> void MultiplyNucomp<long>::multiply(QuadraticIdealBase<long> & C, co
 
   // normalize
   C.assign(Ca,Cb,Cc);
+  C.reduce();
 }

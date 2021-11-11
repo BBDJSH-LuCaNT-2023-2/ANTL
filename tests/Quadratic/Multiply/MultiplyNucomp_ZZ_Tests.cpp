@@ -26,7 +26,7 @@ TEST_CASE("MultiplyNucomp<ZZ>: Multiplying two ideals", "[MultiplyNucomp]") {
     quad_ideal_base1.assign(ZZ(17), ZZ(-9), ZZ(1));
     quad_ideal_base2.assign(ZZ(17), ZZ(-9), ZZ(1));
 
-    quad_order1.get_mul_nucomp()->multiply(quad_ideal_base_product, quad_ideal_base1, quad_ideal_base2);
+    mul(quad_ideal_base_product, quad_ideal_base1, quad_ideal_base2);
 
     REQUIRE(quad_ideal_base_product.get_a() == ZZ(1));
     REQUIRE(quad_ideal_base_product.get_b() == ZZ(3));

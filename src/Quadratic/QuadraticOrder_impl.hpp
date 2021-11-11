@@ -83,25 +83,119 @@ namespace ANTL
   }
   */
 
-  //Definition of Setters and Getters for Arithmetic Objects
-  template <class T> void QuadraticOrder<T>::set_red_best(ReduceStrategy<T> &A)        {red_best = &A;}
-  template <class T> void QuadraticOrder<T>::set_red_plain_imag(ReducePlainImag<T> &A) {red_plain_imag = &A;}
-  template <class T> void QuadraticOrder<T>::set_red_plain_real(ReducePlainReal<T> &A) {red_plain_real = &A;}
-  template <class T> void QuadraticOrder<T>::set_red_fast(ReduceFast<T> &A)            {red_fast = &A;}
+// Multiply Strategy Setters
+  template <class T>
+  void QuadraticOrder<T>::set_red_best(ReduceStrategy<T> &A) {
+    red_best = &A;
+  }
 
-  template <class T> void QuadraticOrder<T>::set_mul_best(MultiplyStrategy<T> &A)      {mul_best = &A;}
-  template <class T> void QuadraticOrder<T>::set_mul_plain(MultiplyPlain<T> &A)        {mul_plain = &A;}
-  template <class T> void QuadraticOrder<T>::set_mul_nucomp(MultiplyNucomp<T> &A)      {mul_nucomp = &A;}
+  template <class T>
+  void QuadraticOrder<T>::set_red_plain_imag(ReducePlainImag<T> &A) {
+    red_plain_imag = &A;
 
-  template <class T> void QuadraticOrder<T>::set_sqr_best(SquareStrategy<T> &A)        {sqr_best = &A;}
-  template <class T> void QuadraticOrder<T>::set_sqr_plain(SquarePlain<T> &A)          {sqr_plain = &A;}
-  template <class T> void QuadraticOrder<T>::set_sqr_nudupl(SquareNudupl<T> &A)        {sqr_nudupl = &A;}
+    //If red_best is not set, or if Plain is the preferred strategy, set red_best to A as well
+    if(red_best == nullptr || (preferred_red == 0 && this->IsImaginary())) {
+      red_best = &A;
+    }
+  }
 
-  template <class T> void QuadraticOrder<T>::set_cube_best(CubeStrategy<T> &A)         {cube_best = &A;}
-  template <class T> void QuadraticOrder<T>::set_cube_plain(CubePlain<T> &A)           {cube_plain = &A;}
-  template <class T> void QuadraticOrder<T>::set_cube_nucube(CubeNucube<T> &A)         {cube_nucube = &A;}
-  template <class T> void QuadraticOrder<T>::set_cube_mulsqr(CubeMulSqr<T> &A)         {cube_mulsqr = &A;}
+  template <class T>
+  void QuadraticOrder<T>::set_red_plain_real(ReducePlainReal<T> &A) {
+    red_plain_real = &A;
 
+    //If red_best is not set, or if Plain is the preferred strategy, set red_best to A as well
+    if(red_best == nullptr || (preferred_red == 0 && this->IsReal())) {
+      red_best = &A;
+    }
+  }
+
+  template <class T>
+  void QuadraticOrder<T>::set_red_fast(ReduceFast<T> &A) {
+    red_fast = &A;
+
+    //If red_best is not set, or if Fast is the preferred strategy, set red_best to A as well
+    if(red_best == nullptr || preferred_red == 1) {
+      red_best = &A;
+    }
+  }
+
+// Multiply Strategy Setters
+  template <class T> void QuadraticOrder<T>::set_mul_best(MultiplyStrategy<T> &A) {
+    mul_best = &A;
+  }
+
+  template <class T> void QuadraticOrder<T>::set_mul_plain(MultiplyPlain<T> &A) {
+    mul_plain = &A;
+
+    //If mul_best is not set, or if Plain is the preferred strategy, set mul_best to A as well
+    if(mul_best == nullptr || preferred_mul == 0) {
+      mul_best = &A;
+    }
+  }
+
+  template <class T> void QuadraticOrder<T>::set_mul_nucomp(MultiplyNucomp<T> &A) {
+    mul_nucomp = &A;
+
+    //If mul_best is not set, or if Nucomp is the preferred strategy, set mul_best to A as well
+    if(mul_best == nullptr || preferred_mul == 1) {
+      mul_best = &A;
+    }
+  }
+
+// Square Strategy Setters
+  template <class T> void QuadraticOrder<T>::set_sqr_best(SquareStrategy<T> &A) {
+    sqr_best = &A;
+  }
+
+  template <class T> void QuadraticOrder<T>::set_sqr_plain(SquarePlain<T> &A) {
+    sqr_plain = &A;
+
+    //If sqr_best is not set, or if Plain is the preferred strategy, set sqr_best to A as well
+    if(sqr_best == nullptr || preferred_sqr == 0) {
+      sqr_best = &A;
+    }
+  }
+
+  template <class T> void QuadraticOrder<T>::set_sqr_nudupl(SquareNudupl<T> &A) {
+    sqr_nudupl = &A;
+
+    //If sqr_best is not set, or if Nudupl is the preferred strategy, set sqr_best to A as well
+    if(sqr_best == nullptr || preferred_sqr == 0) {
+      sqr_best = &A;
+    }
+  }
+
+// Cube Strategy Setters
+  template <class T> void QuadraticOrder<T>::set_cube_best(CubeStrategy<T> &A) {
+    cube_best = &A;
+  }
+
+  template <class T> void QuadraticOrder<T>::set_cube_plain(CubePlain<T> &A) {
+    cube_plain = &A;
+
+    //If cube_best is not set, or if Plain is the preferred strategy, set cube_best to A as well
+    if(cube_best == nullptr || preferred_cube == 0) {
+      cube_best = &A;
+    }
+  }
+
+  template <class T> void QuadraticOrder<T>::set_cube_nucube(CubeNucube<T> &A) {
+    cube_nucube = &A;
+
+    //If cube_best is not set, or if Nucube is the preferred strategy, set cube_best to A as well
+    if(cube_best == nullptr || preferred_cube == 1) {
+      cube_best = &A;
+    }
+  }
+
+  template <class T> void QuadraticOrder<T>::set_cube_mulsqr(CubeMulSqr<T> &A) {
+    cube_mulsqr = &A;
+
+    //If cube_best is not set, or if Mulsqr is the preferred strategy, set cube_best to A as well
+    if(cube_best == nullptr || preferred_cube == 2) {
+      cube_best = &A;
+    }
+  }
 
   template <class T> ReduceStrategy<T> *   QuadraticOrder<T>::get_red_best()       {return red_best;}
   template <class T> ReducePlainImag<T> *  QuadraticOrder<T>::get_red_plain_imag() {return red_plain_imag;}
