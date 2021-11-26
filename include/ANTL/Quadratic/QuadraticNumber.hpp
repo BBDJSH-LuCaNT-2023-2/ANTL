@@ -594,7 +594,7 @@ namespace ANTL {
       bool
       isEqual (const QuadraticNumber<T> & x)
       {
-        return ((QO == x.QO) && (a == x.a) && (b = x.b) && (d = x.d));
+        return ((QO == x.QO) && (a == x.a) && (b == x.b) && (d == x.d));
       }
 
       /**
@@ -628,7 +628,7 @@ namespace ANTL {
       friend bool
       IsEqual (const QuadraticNumber<T> & x, const QuadraticNumber<T> & y)
       {
-        return (x.QO == y.QO && x.a == y.a && x.b = y.b && x.d = y.d);
+        return (x.QO == y.QO && x.a == y.a && x.b == y.b && x.d == y.d);
       }
 
       /**

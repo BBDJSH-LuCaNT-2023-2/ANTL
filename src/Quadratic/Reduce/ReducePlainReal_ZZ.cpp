@@ -8,8 +8,11 @@
 
 // reduce
 //
-// Task: reduces the ideal
-template <> void ReducePlainReal<ZZ>::reduce(QuadraticIdealBase<ZZ> & A) {
+// Task:
+//      reduces the ideal
+
+template <>
+void ReducePlainReal<ZZ>::reduce(QuadraticIdealBase<ZZ> & A) {
   static ZZ a, b, c;
 
   // normalize ideal
@@ -17,28 +20,47 @@ template <> void ReducePlainReal<ZZ>::reduce(QuadraticIdealBase<ZZ> & A) {
     A.normalize();
   }
 
+  bool debug = false;
+  // A variable Xn refers to X_{i+n} E.g. R2 refers to R_{i+2}
+  ZZ R, Q, P, B;
+  ZZ q, r;
+
+  RR RelativeGenerator;
+
   a = A.get_a();
   b = A.get_b();
   c = A.get_c();
 
-  // reduce
-  while (!A.is_reduced()) {
-    A.assign(c, -b, a);
-    A.normalize();
+  while() {
+    DivRem(q, r, b + FloorRootDelta, 2*a);
 
-    a = A.get_a();
-    b = A.get_b();
-    c = A.get_c();
+    if(debug) {
+      std::cout << "a is " << a << std::endl;
+      std::cout << "b is " << b << std::endl;
+      std::cout << "c is " << c << std::endl;
+      std::cout << "q is " << q << std::endl;
+      std::cout << "r is " << r << std::endl;
+    }
+
+    R = -a;
+    P = FloorRootDelta - r;
+    Q = q*((b - P)/2) - c;
+
+    if(debug) {
+    std::cout << "Q is " << Q << std::endl;
+    std::cout << "P is " << P << std::endl;
+    std::cout << "R is " << R << std::endl;
   }
 
-  if (a < 0) {
-    A.set_a(-a);
-    A.set_c(-c);
+  }
+  RelativeGenerator = inv(abs((to_RR(P) - sqrt(to_RR(Delta))) / to_RR(2*Q)));
+
+  if(debug) {
+    std::cout << "RG is " << RelativeGenerator << std::endl;
+    std::cout << "distance is " << log(RelativeGenerator) << std::endl;
   }
 
-  //account for special case
-  if ((a == c) && (b < 0)) {
-    b = -b;
-    A.set_b(b);
-  }
+
+  A.assign(Q, P, R);
+  distance = log(RelativeGenerator);
 }
