@@ -137,13 +137,13 @@ void mul(QuadraticIdealBase<T> &C, QuadraticNumber<T> & gamma, const QuadraticId
 
 template <class T>
 void sqr(QuadraticIdealBase<T> &C, const QuadraticIdealBase<T> &A) {
-  C.QO->get_sqr_best()->sqr(C,A);
+  C.QO->get_sqr_best()->square(C,A);
 }
 
 
 template <class T>
 void sqr(QuadraticIdealBase<T> &C, QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A) {
-  C.QO->get_sqr_best()->sqr(C,gamma,A);
+  C.QO->get_sqr_best()->square(C,gamma,A);
 }
 
 template <class T>

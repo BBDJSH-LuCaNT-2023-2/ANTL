@@ -15,6 +15,9 @@ template <> void SquareNudupl<ZZ>::init(const ZZ & delta_in, const ZZ & h_in, lo
 
 
 template <> void SquareNudupl<ZZ>::square(QuadraticIdealBase<ZZ> & C, const QuadraticIdealBase<ZZ> & A) {
+  Delta = C.get_QO()->getDiscriminant();
+  NC_BOUND = FloorToZZ(sqrt(sqrt(abs(to_RR(Delta)))));
+
   static ZZ a1, b1, c1, Ca, Cb, Cc;
   static ZZ S, v1, K, T, temp;
   static ZZ R1, R2, C1, C2, M2;
@@ -107,5 +110,5 @@ template <> void SquareNudupl<ZZ>::square(QuadraticIdealBase<ZZ> & C, const Quad
 
   // normalize and reduce
   C.assign(Ca,Cb,Cc);
-  //C.reduce();
+  C.reduce();
 }

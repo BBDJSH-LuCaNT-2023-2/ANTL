@@ -7,7 +7,7 @@
 using namespace NTL;
 using namespace ANTL;
 
-TEST_CASE("QuadraticNumber<ZZ>: Numbers are equal iff discriminants are equal", "[QuadraticNumber]") {
+TEST_CASE("QuadraticNumber<ZZ>: Numbers are equal iff delta, a, b, d are equal", "[QuadraticNumber]") {
 
     QuadraticOrder<ZZ> quad_order1 = QuadraticOrder<ZZ>(ZZ(13));
 
@@ -19,4 +19,3 @@ TEST_CASE("QuadraticNumber<ZZ>: Numbers are equal iff discriminants are equal", 
 }
 
 #endif
-

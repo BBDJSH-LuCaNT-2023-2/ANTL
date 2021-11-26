@@ -15,7 +15,7 @@ TEST_CASE("MultiplyNucomp<ZZ>: Multiplying two ideals", "[MultiplyNucomp]") {
     quad_order1.set_mul_nucomp(mul_nucomp_object);
 
     ReducePlainReal<ZZ> red_plain_real_object = ReducePlainReal<ZZ>();
-    quad_order1.set_red_plain_real(red_plain_real_object);
+    quad_order1.set_red_best(red_plain_real_object);
 
     QuadraticIdealBase<ZZ> quad_ideal_base1 = QuadraticIdealBase<ZZ>(quad_order1);
     QuadraticIdealBase<ZZ> quad_ideal_base2 = QuadraticIdealBase<ZZ>(quad_order1);

@@ -15,6 +15,9 @@ template <> void CubeNucube<long>::init(const long & delta_in, const long & h_in
 
 
 template <> void CubeNucube<long>::cube(QuadraticIdealBase<long> &C, const QuadraticIdealBase<long> &A) {
+  Delta = C.get_QO()->getDiscriminant();
+  sqrt_delta = FloorToZZ(sqrt(abs(to_RR(Delta))));
+
   static long a, b, c, Ca, Cb, Cc;
   static long SP, S, v1, u2, v2, N, K, L, T, temp, temp2;
   static long B, R1, R2, C1, C2, BB, M1, M2;
@@ -128,4 +131,5 @@ template <> void CubeNucube<long>::cube(QuadraticIdealBase<long> &C, const Quadr
   }
 
   C.assign(Ca,Cb,Cc);
+  C.reduce();
 }
