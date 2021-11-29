@@ -75,52 +75,7 @@ PP root3 ( PP x ){
   if ( x < 0 ) return-_root3<PP>(-x ); else
   return 0.;
 };
-/*
-//////////////////////////////////////////////////////////////
-// x - array of size 3
-// In case 3 real roots: => x[0], x[1], x[2], return 3
-//         2 real roots: x[0], x[1],          return 2
-//         1 real root : x[0], x[1] � i*x[2], return 1
-template<typename PP>
-int SolveP3(NTL::RR* x,PP a,PP b,PP c){
 
-    // Step 1: Convert to the canonical form  x^3 + q*x + r = 0
-  	PP a2 = a*a;
-    //std::cout << a2 << std::endl;
-    PP q  = (a2 - 3*b)/9;
-    //std::cout << q << std::endl;
-  	PP r  = (a*(2*a2-9*b) + 27*c)/54;
-  	// equation x^3 + q*x + r = 0
-
-
-    PP r2 = r*r;
-  	PP q3 = q*q*q;
-  	PP A;
-    PP B;
-  	if (r2 <= (q3 + eps)) {//<<-- FIXED!
-  		PP t=r/sqrt(q3);
-  		if( t<-1) t=-1;
-  		if( t> 1) t= 1;
-          t=acos(t);
-          a/=3; q=-2*sqrt(q);
-          x[0]=q*cos(t/3)-a;
-          x[1]=q*cos((t+TwoPi)/3)-a;
-          x[2]=q*cos((t-TwoPi)/3)-a;
-          return(3);
-      } else {
-          //A =-pow(fabs(r)+sqrt(r2-q3),1./3);
-          A =-root3<PP>(fabs(r)+sqrt(r2-q3));
-  		if( r<0 ) A=-A;
-  		B = (A==0? 0 : q/A);
-
-  		a/=3;
-  		x[0] =conv<RR>((A+B)-a);
-          x[1] =conv<RR>(-0.5*(A+B)-a);
-          x[2] = conv<RR>(0.5*sqrt(3.0)*(A-B) );
-  		if(fabs(x[2])<eps) { x[2]=x[1]; return(2); }
-          return(1);
-      }
-};*/
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 template<typename T, typename PT>
@@ -152,13 +107,13 @@ int cardano(polynomial<T> const &poly, PT * roots){
     mul(temp, poly[3], poly[3]);
     mul(temp, temp, T(27));
     div(intermediate, intermediate, temp);
-    add(q, q, intermediate);                     // q = d + (2b^3/27a^2)
+    add(q, q, intermediate);                    // q = d + (2b^3/27a^2)
 
-    mul(temp, poly[2], poly[1]);              // bc
+    mul(temp, poly[2], poly[1]);                // bc
     intermediate.assign(temp);
-    mul(temp, T(3), poly[3]);                // 3a
-    div(intermediate, intermediate, temp);     // bc/3a
-    sub(q, q, intermediate);                  // q = d + (2b^3/27a^2) - bc/3a
+    mul(temp, T(3), poly[3]);                   // 3a
+    div(intermediate, intermediate, temp);      // bc/3a
+    sub(q, q, intermediate);                    // q = d + (2b^3/27a^2) - bc/3a
 
     if (! (IsOne(poly[3]) )){
       div(q, q, poly[3]);
@@ -246,7 +201,7 @@ int cardano(polynomial<T> const &poly, PT * roots){
       SqrRoot(omega_im, omega_im);
 
       div(omega_im, omega_im, PT(2));         /// omega_re - omega_im = w, (3rd root of unity)
-                                              // oemga_re + omega_im = w^2
+                                              // omega_re + omega_im = w^2
 
       SqrRoot(disc_root, disc);
       div(realtemp1, to<PT>(q.getN()), to<PT>(q.getD()));
@@ -273,7 +228,7 @@ int cardano(polynomial<T> const &poly, PT * roots){
 
         mul(roots[2], realtemp1, omega_im);                   // im(S, omega)
       }else{
-        add(realtemp1, realtemp1, disc_root); // -q/2 + sqrt(disc)
+        add(realtemp1, realtemp1, disc_root);               // -q/2 + sqrt(disc)
         if (realtemp1 < DOUBLE_TOL){
           realtemp1 = -realtemp1;
           pow(realtemp1,realtemp1, athird);
@@ -289,11 +244,11 @@ int cardano(polynomial<T> const &poly, PT * roots){
 
         add(roots[0], realtemp2, realtemp1);                // this should be x1
 
-        mul(roots[1], realtemp1, omega_re);                   //re(v1, omega)
+        mul(roots[1], realtemp1, omega_re);                 //re(v1, omega)
 
-        mul(roots[2], realtemp1, omega_im);                   // im(v1, omega)
+        mul(roots[2], realtemp1, omega_im);                 // im(v1, omega)
 
-        mul(realtemp1, realtemp2, omega_re);                  // re(w1, omega^2)
+        mul(realtemp1, realtemp2, omega_re);                // re(w1, omega^2)
 
         add(roots[1], realtemp1, roots[1]);
 
@@ -568,7 +523,6 @@ inline std::string zToString(const long &z) {
     buffer << z;
     return buffer.str();
 }
-
 
 
 

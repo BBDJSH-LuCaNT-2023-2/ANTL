@@ -68,6 +68,11 @@ CubicElement<Type, PType> * get_fundamental_unit(int i){
 
 void set_regulator();
 
+void close_minimum(CubicIdeal<Type, PType> & reduced_ideal, CubicElement<Type, PType> & minimum, CubicIdeal<Type, PType> & ideal1, const std::vector<PType> & vec1){
+  cout << "Real version not implemented"  << endl;
+  return;
+};
+
 protected:
 // This is meant to store the Matrix
 // [ rho1', rho2' ]

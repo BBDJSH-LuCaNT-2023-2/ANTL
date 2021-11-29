@@ -340,8 +340,8 @@ void CubicElement<Type, PType> :: normalize(){
 template <typename Type, typename PType>
 std::string CubicElement<Type, PType> :: toString() const
 {
-  string s = (zToString(this->get_u()) + " + " + zToString(this->x) + "*rho1 + " + zToString(this->y) + "*rho2  /" + zToString(this->denom) );
-  return s;
+  string str = (zToString(this->get_u()) + " + " + zToString(this->x) + "*rho1 + " + zToString(this->y) + "*rho2  /" + zToString(this->denom) );
+  return str;
 };
 
 

@@ -35,10 +35,12 @@ class CubicIdeal{
 
 public:
 
+
+// Given a pointer to a cubic order, initialize the ideal as the identity matrix.
 CubicIdeal(CubicOrder<Type,PType> * cnfo){
   this->my_order = cnfo;
-  for (int i = 0; i < 3; ++i){
-    for (int j = 0; j<3; ++j){
+  for (auto i = 0; i < 3; ++i){
+    for (auto j = 0; j < 3; ++j){
       if (i != j){ NTL::clear(this->coeff_matrix[i][j]);}
       else{NTL::set(this->coeff_matrix[i][j]);}
     }
@@ -50,11 +52,17 @@ CubicIdeal(CubicOrder<Type,PType> * cnfo, const CubicElement<Type,PType> & A,
 
 
 /************** Accessors **********************/
-inline CubicOrder<Type, PType> * get_order() const {return my_order;}
+CubicOrder<Type, PType> * get_order() const {return my_order;}
+const Type get_denom () const {return denom;}
+const Type get_coeff(int i, int j) const {
+  return coeff_matrix[i][j];
+}
+void set_order(CubicOrder<Type, PType> * ord) {this->my_order = ord;}
 
-
-
-
+/* @brief Given an integer i from 1..2, assign the input element to be
+* the ith element of the Z-basis of the ideal
+*/
+void copy_basis_element( CubicElement<Type, PType> & elt, int pos) const;
 //
 inline const CubicElement<Type, PType> * get_gen1()  {
   gen.set_order(my_order);
@@ -69,11 +77,7 @@ inline const CubicElement<Type, PType> * get_gen3()  {
   gen.set_order(my_order);
   gen.assign(coeff_matrix[0][2], coeff_matrix[1][2],coeff_matrix[2][2], this->denom);
   return &gen;}
-inline const Type get_denom () const {return denom;}
-inline const Type get_coeff(int i, int j) const {
-  return coeff_matrix[i][j];
-}
-inline void set_order(CubicOrder<Type, PType> * ord) {this->my_order = ord;}
+
 
 void assign(const CubicElement<Type, PType> g3, const CubicElement<Type, PType> g2, const CubicElement<Type, PType> g1);
 void assign(const CubicIdeal<Type, PType> & A);
@@ -85,7 +89,7 @@ const Type U3, const Type X3, const Type Y3, const Type D3);
 /* @brief Changes this ideal into the the identity, which corresponds to O_k itself
 *
 */
-inline void make_identity(){
+void make_identity(){
   for (int i =0; i <3; ++i){
     for (int j = 0; j < 3; ++j){
         if (j!= i){
@@ -124,7 +128,7 @@ void make_triangular();
 * @brief Returns a bool indicating whether this is an interal ideal or not
 * Since the ideal should be in lowest terms, it just sees if denom = 1
 */
-inline bool is_integral(){
+bool is_integral(){
   return IsOne(this->denom);
 };
 
@@ -141,10 +145,10 @@ bool is_one(){
         if ((j == i) && (coeff_matrix[i][j] != to<Type>(1)) ){
             return false;
           }
-      }// end j's for
-    } // end i's for
+      }
+    }
   return true;
-  }
+}
 
 
 
@@ -183,7 +187,7 @@ bool is_prime();
 bool is_canonical();
 
 /**
-* @brief function to obtain an equivalent reduced ideal. Not yet implemented
+* @brief function to obtain an equivalent reduced ideal.
 */
 void reduce(CubicIdeal<Type, PType> & rIdeal, CubicElement<Type, PType> & relatingElement);
 
@@ -220,21 +224,19 @@ void adjacent_ideal(CubicIdeal<Type, PType> &B, CubicElement<Type, PType> &adj_m
 
 
 /**
-* @brief function to obtain a prepared basis. Not yet implemented
+* @brief function to obtain a prepared basis. Relies on the corresponding function
+* in the Voronoi.cpp files
 */
 void make_prepared(){
 
   this->puncture_lattice(this->p_lat);
-
-  //std::cout << this->p_lat[0][0] << "  " << this->p_lat[0][1] << std::endl;
-  //std::cout << this->p_lat[1][0] << "  " << this->p_lat[1][1] << std::endl;
   this->get_order()->get_voronoi()->make_prepared(*this, this->p_lat);
 }
 
 /**
 * @brief function to convert the basis to a Voronoi basis
 */
-void make_voronoi_basis(char axis = 1);
+void make_voronoi_basis(char axis = 'X');
 
 
 /*
@@ -295,19 +297,19 @@ static QQ<Type> rational_temp;
 CubicElement<Type, PType> gen;
 
 Type coeff_matrix[3][3];
-Type denom = Type(1);
+Type denom{1};
 PType p_lat[2][2];
 
-char reduced = 2;
+char reduced{2};
 
 /**
 * @ brief, returns an indicator whether the ideal is reduced (= 1), not reduced ( = 0),
 * or if unknown (= 2)
 */
-inline char is_reduced() const{
+char is_reduced() const{
   return reduced;
 }
-inline void set_reduction_state(char r){
+void set_reduction_state(char r){
   if (0 <= r && r <= 2){
     reduced = r;
   }
@@ -329,7 +331,7 @@ void check_rank();
 * or violates any representation assumptions.
 * Use with discretion.
 */
-inline void flip_basis_element(int i){
+void flip_basis_element(int i){
   coeff_matrix[0][i] = - coeff_matrix[0][i];
   coeff_matrix[1][i] = - coeff_matrix[1][i];
   coeff_matrix[2][i] = - coeff_matrix[2][i];
@@ -350,13 +352,6 @@ private:
 
 
 }; // close class definition
-
-/**
-* @brief Method for multiplying two ideals together
-* @param[out] A = B*C
-* @param[in] CubicIdeals A, B, C.
-* @pre A,B,C should all belong to the same CubicOrder
-*/
 
 
 //define statics
