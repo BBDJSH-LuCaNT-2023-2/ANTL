@@ -65,13 +65,13 @@ TEST_CASE("Root-finding function SolveP3, monic, double") {
 
 
 boost::math::tools::polynomial<long> poly1{{-1,-3,1,1}};
-boost::math::tools::polynomial<boost::multiprecision::mpz_int> poly2{{-1,-3,1,1}};
+//boost::math::tools::polynomial<boost::multiprecision::mpz_int> poly2{{-1,-3,1,1}};
 TEST_CASE("Discriminant function"){
 
 
   SECTION("Binary Cubic Form, discriminant long and mpz_int"){
     REQUIRE(discriminant_bcf(poly1) == 148);
-    REQUIRE(discriminant_bcf(poly2) == 148);
+    //REQUIRE(discriminant_bcf(poly2) == 148);
   }
 }
 

@@ -4,65 +4,36 @@
  * @remark Primitive quadratic ideal function specializations (ZZ base type).
  */
 
-#include <QuadraticIdealBase.hpp>
+#include <ANTL/Quadratic/QuadraticIdealBase.hpp>
 
+using namespace ANTL;
 
-template <>
-void
-QuadraticIdealBase<ZZ>::test_ideal(string msg)
-{
-  ZZ tval = b*b - 4*a*c;
-  if (tval != QO->getDiscriminant()) {
-    cout << "ERROR " << msg << "!  wrong discriminant!" << endl;
-    cout << "a = " << a << ", b = " << b << ", c = " << c << endl;
-    cout << "Delta = " << QO->getDiscriminant() << endl;
-    cout << "b^2 - 4ac = " << tval << endl;
-    exit(1);
-  }
-}
-
-
-
-//
 // QuadraticIdealBase<T>::assign_one()
 //
-// Task:
-//      set to the unit ideal of the current quadratic_order
-//
+// Task: set to the unit ideal of the current quadratic_order
 
-template <>
-void
-QuadraticIdealBase<ZZ>::assign_one()
-{
+template <> void QuadraticIdealBase<ZZ>::assign_one() {
   set(a);
+
   if (rem(QO->getDiscriminant(),4) == 1) {
     set(b);
     sub(c,1,QO->getDiscriminant());
   }
+
   else {
     clear(b);
-    negate(c,QO->getDiscriminant());
+    NTL::negate(c,QO->getDiscriminant());
   }
+
   div(c,c,a);
   RightShift(c,c,2);
 }
 
-
-
-
-//
 // assign_prime()
 //
-// Task:
-//      computes a reduced representative of the equivalence class containing
-//      the ideal lying over the prime p.  If such an ideal doesnot exist,
-//      false is returned.
-//
+// Task: Computes an ideal lying over the prime p. If such an ideal does not exist, false is returned.
 
-template <>
-bool
-QuadraticIdealBase<ZZ>::assign_prime (const ZZ & p)
-{
+template <> bool QuadraticIdealBase<ZZ>::assign_prime (const ZZ & p) {
   ZZ temp, Dp;
   long jac;
 
@@ -76,14 +47,14 @@ QuadraticIdealBase<ZZ>::assign_prime (const ZZ & p)
   if (p == 2) {
     if (IsZero(Dp)) {
       rem(QO->getDiscriminant(),4);
-      if (Dp < 0)
-	add(Dp,Dp,4);
+        if (Dp < 0)
+          add(Dp,Dp,4);
 
       if (IsZero(Dp)) {
-	RightShift(temp,QO->getDiscriminant(),2);
-	Dp = rem(temp,4);
+        RightShift(temp,QO->getDiscriminant(),2);
+        Dp = rem(temp,4);
         if (Dp < 0)
-	  add(Dp,Dp,4);
+          add(Dp,Dp,4);
         if (Dp != 3)
           return false;
       }
@@ -93,17 +64,18 @@ QuadraticIdealBase<ZZ>::assign_prime (const ZZ & p)
       RightShift(c,c,3);
       return true;
     }
-    else
-      {
-	long D8 = rem(QO->getDiscriminant(),8);
 
-	if (D8 < 0)
-	  add(D8,D8,8);
+    else {
+      ZZ D8;
+      rem(D8, QO->getDiscriminant(),ZZ(8));
 
-	if (D8 == 1)
-	  jac = 1;
-        else
-          jac = -1;
+      if (D8 < 0)
+        add(D8,D8,ZZ(8));
+
+      if (D8 == 1)
+        jac = 1;
+      else
+        jac = -1;
       }
   }
   else {
@@ -120,7 +92,7 @@ QuadraticIdealBase<ZZ>::assign_prime (const ZZ & p)
 
       rem(temp,QO->getDiscriminant(),p*p);
       if (IsZero (temp))
-	return false;
+        return false;
       else
         return true;
     }
@@ -146,4 +118,125 @@ QuadraticIdealBase<ZZ>::assign_prime (const ZZ & p)
   RightShift(c,c,2);
 
   return true;
+}
+
+// QuadraticIdealBase<T>::is_normal()
+// Note: Not defined for positive definite forms.
+// Task: tests if the ideal is normal.
+template <> bool QuadraticIdealBase<ZZ>::is_normal() {
+  ZZ delta, temp, rootD;
+
+  // delta = b^2 - 4ac
+  mul(temp, a, c);
+  mul(temp, temp, 4);
+  sqr(delta, b);
+  sub(delta, delta, temp);
+
+  if(delta > 0) {
+    // rootD = floor(sqrt(delta)) - [Recall NTL::SqrRoot(ZZ a) = ZZ floor(sqrt(a))]
+    rootD = SqrRoot(abs(delta));
+
+    if(abs(a) > rootD)
+      return (-1*(abs(a)) < b && b <= abs(a));
+
+    else
+      return (rootD - 2*abs(a) < b && b <= rootD);
+  }
+}
+
+// QuadraticIdealBase<T>::is_reduced()
+//
+// Task: tests if the ideal is reduced.
+template <> bool QuadraticIdealBase<ZZ>::is_reduced() {
+  ZZ delta, temp;
+
+  // delta = b^2 - 4ac
+  mul(temp, a, c);
+  mul(temp, temp, 4);
+  sqr(delta, b);
+  sub(delta, delta, temp);
+
+  if(delta > 0) {
+    ZZ ubound, lbound, rootD;
+
+    // rootD = floor(sqrt(delta)) - [Recall NTL::SqrRoot(ZZ a) = ZZ floor(sqrt(a))]
+    rootD = SqrRoot(abs(delta));
+
+    // lbound = abs(rootD - 2*abs(a))
+    mul(temp, abs(a), 2);
+    sub(lbound, rootD, temp);
+    abs(lbound, lbound);
+
+    // We assume the form is irrational, so there ought to be no case where delta is square
+    ubound = rootD;
+
+    if (lbound < 0) lbound++; // (rootD = floor(sqrt(Delta)))
+
+    return lbound < b && b <= ubound;
+  }
+
+  // TODO: The case when delta < 0 remains untested!
+  else if (delta < 0) {
+    bool cond1 = ((abs(b) <= a) && (a <= c));
+    bool cond2 = true;
+    if( ((abs(b) == a) || (c == a)) && (b < 0))
+      cond2 = false;
+
+    return cond1 && cond2;
+  };
+
+}
+
+template <> void QuadraticIdealBase<ZZ>::normalize() {
+  static ZZ a2, delta, rootDelta, temp, s;
+
+  // delta = b^2 - 4ac
+  mul(temp, a, c);
+  mul(temp, temp, 4);
+  sqr(delta, b);
+  sub(delta, delta, temp);
+
+  rootDelta = SqrRoot(delta);
+
+  if(a <= rootDelta) {
+    mul(a2, 2, abs(a));
+
+    // Computing s, the normalizing integer,  per [BV07, pg. 108]
+    sub(temp, rootDelta, b);
+    div(s, temp, a2);
+    mul(s, s, sign(a));
+
+    //c = a*s^2 + b*s + c
+    mul(temp, s, s);
+    mul(temp, temp, a);
+    add(c, c, temp);
+    mul(temp, b, s);
+    add(c, c, temp);
+
+    //b = b + 2sa
+    mul(temp, a, 2);
+    mul(temp, temp, s);
+    add(b, b, temp);
+  }
+
+  else {
+    mul(a2, 2, abs(a));
+
+    // Computing s, the normalizing integer,  per [BV07, pg. 108]
+    sub(temp, abs(a), b);
+    div(s, temp, a2);
+    mul(s, s, sign(a));
+
+    //c = a*s^2 + b*s + c
+    mul(temp, s, s);
+    mul(temp, temp, a);
+    add(c, c, temp);
+    mul(temp, b, s);
+    add(c, c, temp);
+
+    //b = b + 2sa
+    mul(temp, a, 2);
+    mul(temp, temp, s);
+    add(b, b, temp);
+  }
 }

@@ -62,19 +62,21 @@ namespace NTL {
   //
   // NTL-like methods, for completeness. There exists a "set" and "clear" for most (all?) NTL types.
   // The below definitions extend this functionality for other types.
-  inline void clear (long &X)	        { X = 0; }
+
+  inline void clear (long &X)        { X = 0; }
   inline void set (long &X)          { X = 1; }
   inline void clear (float &i)       { i = 0.0f; }
   inline void set (float &i)         { i = 1.0f; }
   inline void clear (double &i)      { i = double(0); }
-  inline void set (double &i)	        { i = double(1); }
+  inline void set (double &i)        { i = double(1); }
   inline void clear (quad_float & i) { i = double(0); }
-  inline void set (quad_float & i)	{ i = double(1); }
+  inline void set (quad_float & i)   { i = double(1); }
 
 
   inline long IsOne (const long &X)         { return (X == 1); }
   inline long IsZero (const long &X)        { return (X == 0); }
   inline long IsOdd (const long &X)         { return (X & 1); }
+  inline long sign (const long &X)          { return (X > 0) ? 1 : ((X < 0) ? -1 : 0); }
 
   inline long IsOne (const float &X)         { return (X == 1.0f); }
   inline long IsZero (const float &X)        { return (X == 0.0f); }
@@ -147,7 +149,6 @@ namespace ANTL {
   void DivRem (long &q, long &r, long a, long b);
   inline long SqrRoot (const long &a) { return (long) ::floor(::sqrt((double) a)); }
 
-
   //
   // cmath-like methods, for completeness.
   // Most of these exist because of problems where gcc doesn't find the
@@ -166,6 +167,38 @@ namespace ANTL {
   inline float pow(float x, float e) { return (float)std::pow((double)x, (double)e ); }
   inline double pow(double x, float e) { return std::pow(x,e); }
 
+  //
+  // quadratic residuosity functions
+  //
+
+  /* Jacobi functions - assumes a is reduced mod n */
+  long Jacobi_base (const long & a, const long & n);
+  long Jacobi_base (const long long & a, const long long & n);
+  long Jacobi_base (const ZZ & a, const ZZ & n);
+
+  /* Jacobi functions - no preconditions on a and n */
+  long Jacobi(const long & a, const long & n);
+  long Jacobi(const long long & a, const long long & n);
+  long Jacobi(const long long & a, const long & n);
+  long Jacobi(const ZZ & a, const ZZ & n);
+  long Jacobi(const ZZ & a, const long & n);
+  long Jacobi(const ZZ_pX & a, const ZZ_pX & n);
+  long Jacobi(const zz_pX & a, const zz_pX & n);
+  long Jacobi(const ZZ_pEX & a, const ZZ_pEX & n);
+  long Jacobi(const zz_pEX & a, const zz_pEX & n);
+//   long Jacobi(const GF2EX & h, const GF2EX & a, const GF2EX & n);
+
+  /* Kronecker functions - no preconditions on a and n */
+  long Kronecker(const long & a, const long & n);
+  long Kronecker(const long long & a, const long long & n);
+  long Kronecker(const long long & a, const long & n);
+  long Kronecker(const ZZ & a, const ZZ & n);
+  long Kronecker(const ZZ & a, const long & n);
+  long Kronecker(const ZZ_pX & a, const ZZ_pX & n);
+  long Kronecker(const zz_pX & a, const zz_pX & n);
+  long Kronecker(const ZZ_pEX & a, const ZZ_pEX & n);
+  long Kronecker(const zz_pEX & a, const zz_pEX & n);
+  long Kronecker(const GF2EX & h, const GF2EX & f, const GF2EX & n);
 
   // finite field cardinality macros
   template <class> ZZ CARDINALITY(void);
@@ -357,8 +390,8 @@ long Jacobi_base (const ZZ & a, const ZZ & n);
 long Jacobi_base (const long & a, const long & n);
 
 /* Jacobi functions - no preconditions on a and n */
-long Jacobi(const ZZ & a, const ZZ & n);
-long Jacobi(const long & a, const long & n);
+//long Jacobi(const ZZ & a, const ZZ & n);
+//long Jacobi(const long & a, const long & n) { return long(Jacobi( to_ZZ(a), to_ZZ(n))); }
 long Jacobi(const ZZ_pX & a, const ZZ_pX & n);
 long Jacobi(const zz_pX & a, const zz_pX & n);
 long Jacobi(const ZZ_pEX & a, const ZZ_pEX & n);
@@ -418,6 +451,34 @@ long ressol (T & x, const T & a, const T & p);
  */
 long ressol (GF2EX & x, const GF2EX & h, const GF2EX & f, const GF2EX & p);
 
+
+/**
+* @brief Checks whether all coordinates of vec1 and vec2 are within maxdist of each other
+* Currently for RR and doubles
+* @param[out] true if abs(v1[i] -v2[i]) < maxdist for all i
+* @param[in] B vec1 is a vector of real type entries.
+* @param[in] vec2 is a vector with real type entries
+* @param[in] maxdist is a real type value that indicates the max acceptable distance of entries to be considered close
+* @pre vec1 and vec2 need to be the same size.
+*/
+template<typename PType>
+bool is_close(const std::vector<PType> & vec1, const std::vector<PType> & vec2, const PType & max_dist);
+
+
+/*
+* @brief used in the computation of compact representations. Not yet implemented
+*/
+template<typename Type, typename PType>
+void compute_initial_s(const std::vector<PType> & alpha, const int k_bound);
+
+/*
+* @brief Takes a length r log vector and returns the corresponding length r+1 exponentiated vector. equivalent to create_target from the pari stuff.
+* @param[in] log_vec is a vector with real entries having length equal to the unit rank r of the field
+* @param[out] valuationvec is a length r+1 vector, consisting of  exp(log_vec[i]), -sum(deg(i)*log_vec[i])/deg(r+1) )
+* Here deg(i) is 1 if the ith coordinate is a real embedding, 2 otherwise.
+*/
+template<typename PType>
+void log_to_valuation(std::vector<PType> &valuation_vec, const std::vector<PType> & log_vec, const int r1);
 
 
 // Unspecialized template definitions.

@@ -11,6 +11,7 @@ CubicOrder<Type, PType> :: CubicOrder(polynomial<Type> const &poly, std::string 
 
     this->discriminant = discriminant_bcf(poly);
 
+    // s specifies the multiplication method. Only one exists right now.
     if (s.compare("Williams") == 0){
         if (!(this->williams)){
           this->williams.reset();
@@ -24,8 +25,8 @@ CubicOrder<Type, PType> :: CubicOrder(polynomial<Type> const &poly, std::string 
     }
     defining_IBCF = poly;
 
-    // this initiate the fund unit strategy, we only have one for now, but the if statement will
-    // allow us to switch strategies possibly or just use the setter method
+    // this initiate the fund unit strategy, The if statement could be changed to allow
+    // different initializations. Perhaps we just want to use setter method.
     if (true){
         if (!(this->voronoi_basic)){
           this->voronoi_basic.reset();
@@ -48,8 +49,10 @@ CubicOrder<Type, PType> :: CubicOrder(polynomial<Type> const &poly, std::string 
       this->vmethods = std::static_pointer_cast <VoronoiMethods<Type, PType> > (this->vreal);
     }
 
+    set_max_minima_dist();
     set_roots();
     set_integral_basis();
+    set_unit_rank();
     set_mul_table();
 
 
@@ -185,81 +188,35 @@ void CubicOrder<Type, PType> :: set_class_group( ){
     std::cout << "set class group"<< std::endl;
 }
 
-/*
 template <typename Type, typename PType>
-void CubicOrder<Type, PType> :: compute_fundamental_unit(){
+void CubicOrder<Type, PType> :: set_unit_rank( ){
 
-  // initialize matrix L0 as the identity
-
-  CubicIdeal<Type, PType> L_identity = CubicIdeal<Type, PType>(this);
-  CubicIdeal<Type, PType> L1 = CubicIdeal<Type, PType>(this);
-  CubicIdeal<Type, PType> L2 = CubicIdeal<Type, PType>(this);
-
-  CubicElement<Type, PType> epsilon = CubicElement<Type, PType>(this);
-  CubicElement<Type, PType> adj_minimum = CubicElement<Type, PType>(this);
-  int rounds=0;
-  bool complete_cycle=false;
-
-  do {
-
-    //////////////////////////////////////
-    // For testing purposes only: creates test-lattice Ltest
-    // copy L to Ltest
-    //for (int i = 0; i < 3; ++i){
-    //  for (int j = 0; j < 2; ++j){
-    //    Ltest.coefficientMatrix[i][j] = L.coefficientMatrix[i][j];
-    //  }
-    //}
-    //Ltest.mainDenominator = L.mainDenominator;
-    /////////////////////////////////////
-
-    std::cout << " *************************************** " << std::endl;
-    std::cout << " *************************************** " << std::endl;
-
-        std::cout << "Fund.Unit Iteration Number --- " << rounds << std::endl;
-        ++rounds; //prints and increases counter.
-
-
-        // compute the VoronoiBasis (1, theta_g, theta_h),
-        //  where theta_g is the minima adjacent to 1 in L
-        //L.make_voronoi_basis();
-
-//std::cout << "FundamentalUnit2: After voronoiBasis: " << std::endl;
-//std::cout << L.coefficientMatrix[0][0] << "   " << L.coefficientMatrix[0][1] << " " << std::endl;
-//std::cout << L.coefficientMatrix[1][0] << "   " << L.coefficientMatrix[1][1] << " " << std::endl;
-//std::cout << L.coefficientMatrix[2][0] << "   " << L.coefficientMatrix[2][1] << " " << std::endl;
-//std::cout << L.mainDenominator << std::endl;
-//std::cout << " ****************************** " << std::endl;
-//std::cout << "FundamentalUnit2: Is VB the same? "<< std::endl;
-//        if (compareLattice3(Ltest,L)!= 1){
-//          std::cout << "ERROR: VoronoiBasis has returned a different lattice. ABORT";
-//          break;
-//        }
-//        else{
-//          std::cout << "VoronoiBasis has returned the same lattice, continuing:";
-//        }
-//std::cout << " ****************************** " << std::endl;
-
-
-        // If proper, after this call, L2 is the adjacent lattice, and L1. spare_ideal_element
-        // will contain the relative minima adjacent to 1.
-
-        L1.adjacent_ideal(L2, adj_minimum );
-
-        // mulitiply epsilon by the min adjacent to 1.
-        ::mul(epsilon, epsilon, adj_minimum );
-
-        std::swap(L1, L2);
-
-        complete_cycle = ::is_equal(L1, L_identity);
-
-    } while( !complete_cycle );
-
-    std::cout << "Fundamental Unit computed: "<< std::endl;
-  this->fundamentalUnits.push_back(epsilon);
+    if(this->discriminant < 0){
+      this->unit_rank = 1;
+      r1 = 1;
+      r2 = 1;
+    }else if (this->discriminant > 0){
+      this->unit_rank = 2;
+      r1 = 3;
+      r2 = 0;
+    }else{
+      throw "Discriminant is 0";
+    }
 }
-*/
 
+template <typename Type, typename PType>
+void CubicOrder<Type, PType> :: set_max_minima_dist( ){
+    PType sqrt_disc, mul_factor;
+
+    NTL::abs(sqrt_disc, to<PType>(this->discriminant));
+    SqrRoot(sqrt_disc, sqrt_disc);
+
+    ComputePi(mul_factor);
+    div(mul_factor, PType(2), mul_factor);
+    pow(mul_factor, mul_factor, PType(this->r1));
+    
+    mul(this->max_minima_dist, sqrt_disc, mul_factor);
+}
 
 
 template <typename Type, typename PType>
@@ -267,16 +224,16 @@ void CubicOrder<Type, PType> :: standard_form(Type & E, Type& G){
 
 
   Type temp_var1, temp_var2;
-  mul(E, this->get_coeff(2),this->get_coeff(2));    // b^2
+  mul(E, this->get_coeff(2),this->get_coeff(2));          // b^2
   mul(temp_var1, Type(3), this->get_coeff(3));
-  mul(temp_var1, temp_var1, this->get_coeff(1));    // 3ac
-  sub (E, E, temp_var1);                            // b^2 - 3ac   // A
+  mul(temp_var1, temp_var1, this->get_coeff(1));          // 3ac
+  sub (E, E, temp_var1);                                  // b^2 - 3ac   // A
 
-  mul(G, E, this->get_coeff(2));                    // Ab
+  mul(G, E, this->get_coeff(2));                          // Ab
 
-  mul(E, E, Type(-3));                              // E = -3A
+  mul(E, E, Type(-3));                                    // E = -3A
 
-  mul(G, G, Type(2));                               // G = 2Ab
+  mul(G, G, Type(2));                                     // G = 2Ab
 
   mul(temp_var1, this->get_coeff(1), this->get_coeff(2)); // bc
   mul(temp_var2, this->get_coeff(0), this->get_coeff(3)); // ad
@@ -288,7 +245,7 @@ void CubicOrder<Type, PType> :: standard_form(Type & E, Type& G){
 
 }
 
-// We have to denote the
+
 template <typename Type, typename PType>
 int CubicOrder<Type, PType> :: splitting_type(Type p){
 

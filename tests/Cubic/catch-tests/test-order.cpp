@@ -63,6 +63,42 @@ TEST_CASE("Double: Cubic Order accessor functions"){
   }
 }
 
+TEST_CASE("CubicOrderComplex functions"){
+
+  SECTION("Test close_minimum"){
+    boost::math::tools::polynomial<long> poly1{{11,5,5,1}};
+    CubicOrder<ZZ, RR> * co_pointer = CubicOrder<ZZ, RR>::make_order(poly1);
+
+    CubicIdeal<ZZ, RR> reduced_ideal1 = CubicIdeal<ZZ, RR>(NULL);
+    CubicElement<ZZ, RR> minima       = CubicElement<ZZ, RR>(NULL);
+    std::vector<RR> v1 = {RR(3.0)};
+    CubicIdeal<ZZ,RR> ideal1 = CubicIdeal(co_pointer);
+    std::cout << "just before" << ideal1.toString() << endl;
+    co_pointer->close_minimum(reduced_ideal1,minima, ideal1, v1);
+
+    // note that these results were verified using the COLLECT algorithm written in pari/gp
+    REQUIRE(minima.get_u() == ZZ(3));
+    REQUIRE(minima.get_x() == ZZ(-4));
+    REQUIRE(minima.get_y() == ZZ(1));
+    REQUIRE(minima.get_denom() == ZZ(1));
+    REQUIRE(minima.get_order() == co_pointer);
+
+    REQUIRE(reduced_ideal1.get_coeff(0,0) == ZZ(11));
+    REQUIRE(reduced_ideal1.get_coeff(1,0) == ZZ(0));
+    REQUIRE(reduced_ideal1.get_coeff(2,0) == ZZ(0));
+    REQUIRE(reduced_ideal1.get_coeff(0,1) == ZZ(0));
+    REQUIRE(reduced_ideal1.get_coeff(1,1) == ZZ(-6));
+    REQUIRE(reduced_ideal1.get_coeff(2,1) == ZZ(1));
+    REQUIRE(reduced_ideal1.get_coeff(0,2) == ZZ(11));
+    REQUIRE(reduced_ideal1.get_coeff(1,2) == ZZ(-1));
+    REQUIRE(reduced_ideal1.get_coeff(2,2) == ZZ(2));
+    REQUIRE(reduced_ideal1.get_coeff(0,0) == ZZ(11));
+    REQUIRE(reduced_ideal1.get_coeff(1,0) == ZZ(0));
+    REQUIRE(reduced_ideal1.get_denom() == ZZ(1));
+  }
+
+}
+
 
 
 #endif

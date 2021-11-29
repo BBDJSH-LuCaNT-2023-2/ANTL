@@ -83,6 +83,43 @@ namespace ANTL
   }
   */
 
+  //Definition of Setters and Getters for Arithmetic Objects
+  template <class T> void QuadraticOrder<T>::set_red_best(ReduceStrategy<T> &A)        {red_best = &A;}
+  template <class T> void QuadraticOrder<T>::set_red_plain_imag(ReducePlainImag<T> &A) {red_plain_imag = &A;}
+  template <class T> void QuadraticOrder<T>::set_red_plain_real(ReducePlainReal<T> &A) {red_plain_real = &A;}
+  template <class T> void QuadraticOrder<T>::set_red_fast(ReduceFast<T> &A)            {red_fast = &A;}
+
+  template <class T> void QuadraticOrder<T>::set_mul_best(MultiplyStrategy<T> &A)      {mul_best = &A;}
+  template <class T> void QuadraticOrder<T>::set_mul_plain(MultiplyPlain<T> &A)        {mul_plain = &A;}
+  template <class T> void QuadraticOrder<T>::set_mul_nucomp(MultiplyNucomp<T> &A)      {mul_nucomp = &A;}
+
+  template <class T> void QuadraticOrder<T>::set_sqr_best(SquareStrategy<T> &A)        {sqr_best = &A;}
+  template <class T> void QuadraticOrder<T>::set_sqr_plain(SquarePlain<T> &A)          {sqr_plain = &A;}
+  template <class T> void QuadraticOrder<T>::set_sqr_nudupl(SquareNudupl<T> &A)        {sqr_nudupl = &A;}
+
+  template <class T> void QuadraticOrder<T>::set_cube_best(CubeStrategy<T> &A)         {cube_best = &A;}
+  template <class T> void QuadraticOrder<T>::set_cube_plain(CubePlain<T> &A)           {cube_plain = &A;}
+  template <class T> void QuadraticOrder<T>::set_cube_nucube(CubeNucube<T> &A)         {cube_nucube = &A;}
+  template <class T> void QuadraticOrder<T>::set_cube_mulsqr(CubeMulSqr<T> &A)         {cube_mulsqr = &A;}
+
+
+  template <class T> ReduceStrategy<T> *   QuadraticOrder<T>::get_red_best()       {return red_best;}
+  template <class T> ReducePlainImag<T> *  QuadraticOrder<T>::get_red_plain_imag() {return red_plain_imag;}
+  template <class T> ReducePlainReal<T> *  QuadraticOrder<T>::get_red_plain_real() {return red_plain_real;}
+  template <class T> ReduceFast<T> *       QuadraticOrder<T>::get_red_fast()       {return red_fast;}
+
+  template <class T> MultiplyStrategy<T> * QuadraticOrder<T>::get_mul_best()      {return mul_best;}
+  template <class T> MultiplyPlain<T> *    QuadraticOrder<T>::get_mul_plain()     {return mul_plain;}
+  template <class T> MultiplyNucomp<T> *   QuadraticOrder<T>::get_mul_nucomp()    {return mul_nucomp;}
+
+  template <class T> SquareStrategy<T> *   QuadraticOrder<T>::get_sqr_best()      {return sqr_best;}
+  template <class T> SquarePlain<T> *      QuadraticOrder<T>::get_sqr_plain()     {return sqr_plain;}
+  template <class T> SquareNudupl<T> *     QuadraticOrder<T>::get_sqr_nudupl()    {return sqr_nudupl;}
+
+  template <class T> CubeStrategy<T> *     QuadraticOrder<T>::get_cube_best()     {return cube_best;}
+  template <class T> CubePlain<T> *        QuadraticOrder<T>::get_cube_plain()    {return cube_plain;}
+  template <class T> CubeNucube<T> *       QuadraticOrder<T>::get_cube_nucube()   {return cube_nucube;}
+  template <class T> CubeMulSqr<T> *       QuadraticOrder<T>::get_cube_mulsqr()   {return cube_mulsqr;}
 
 
   //
