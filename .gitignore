@@ -91,6 +91,7 @@ special/
 .idea/*
 cmake-build-debug/*
 
+*.kdev4
 #
 # Emancs backup files
 #

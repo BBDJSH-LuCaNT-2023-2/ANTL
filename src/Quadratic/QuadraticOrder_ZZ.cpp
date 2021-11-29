@@ -5,8 +5,8 @@
 
 #include <ANTL/Quadratic/QuadraticOrder.hpp>
 
-namespace ANTL
-{
+using namespace ANTL;
+
   template <>
   QuadraticOrder<ZZ>::QuadraticOrder(const ZZ & D)
   {
@@ -575,6 +575,4 @@ namespace ANTL
       p = PS.next ();
   }
   */
-
-} // ANTL
 

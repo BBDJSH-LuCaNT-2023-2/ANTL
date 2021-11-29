@@ -88,8 +88,6 @@ template < class T, class U >
   return jac;
 }
 
-
-
 //
 // modular square root functions
 //

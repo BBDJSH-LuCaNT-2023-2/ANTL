@@ -32,7 +32,7 @@ void XGCD_LEFT(T & G, T & X, const T & A, const T & B)
 {
 #ifdef TRACE_XGCD
   cout << "XGCD_LEFT:" << endl;
-#endif  
+#endif
   if (deg(B) < Thresholds<T>::get_half_xgcd_left_crossover())
     XGCD_LEFT_ITER(G,X,A,B);
   else {
