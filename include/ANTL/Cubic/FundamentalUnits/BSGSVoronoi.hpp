@@ -15,6 +15,7 @@ template<typename Type, typename PType>
 class FundUnitStrategy;
 template<typename Type, typename PType>
 class BasicVoronoi;
+
 template<typename Type, typename PType>
 class BSGSVoronoi : public FundUnitStrategy<Type, PType> {
 

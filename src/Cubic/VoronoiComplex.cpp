@@ -16,11 +16,6 @@ void VoronoiComplex<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> &
       //these are used in step 5 as precomputed values
       Type Irho1, Irho2;
 
-
-      //Needed so that a column of omegaMatrix (which is an element of K)
-      //can be interpreted as such. Needed for realEmbedding and cubicTrace
-      // ZZVector3 elementHolder;  replaced by this->placeholder
-
       //this bool array will be to decide the correct omega
       for (int i = 0; i < 5; ++i ){
         this->omegaDecision[i] = true;
@@ -36,28 +31,23 @@ void VoronoiComplex<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> &
       gammaMatrix[0][1] =  ideal1.get_order()->get_rho1();                                             // rho1
 
       mul(gammaMatrix[1][1], to<PType>(ideal1.get_order()->get_coeff(3)), ideal1.get_order()->get_root3() );  // a*Im(delta')
-      //gammaMatrix[1][1] = ( to<PType>(ideal1.get_order()->get_coeff(3))*ideal1.get_order()->get_root3() );    // a*Im(delta')
 
       NTL::clear(gammaMatrix[2][1]);
       sub(gammaMatrix[2][1],gammaMatrix[2][1], ideal1.get_order()->get_rho1());
       sub(gammaMatrix[2][1],gammaMatrix[2][1], to<PType>(ideal1.get_order()->get_coeff(2)));
-
       div(gammaMatrix[2][1], gammaMatrix[2][1], to<PType>(2));
-      //gammaMatrix[2][1] = -(ideal1.get_order()->get_rho1() + to<PType>(ideal1.get_order()->get_coeff(2)))/2; // -(rho1 + b)/2
       gammaMatrix[0][2] =  ideal1.get_order()->get_rho2();                                             // rho2
 
       NTL::clear(gammaMatrix[1][2]);                                                                  // 0
       sub(gammaMatrix[1][2], gammaMatrix[1][2], to<PType>(ideal1.get_order()->get_coeff(3)));             // -a
       mul(gammaMatrix[1][2], gammaMatrix[1][2], ideal1.get_order()->get_root1());                     // -a*delta
       mul(gammaMatrix[1][2], gammaMatrix[1][2], ideal1.get_order()->get_root3());                     // -a*delta* im(delta')
-      //gammaMatrix[1][2] = -(to<PType>(ideal1.get_order()->get_coeff(3))*(ideal1.get_order()->get_root1())*(ideal1.get_order()->get_root3()) );
 
       NTL::clear(gammaMatrix[2][2]);
       sub(gammaMatrix[2][2], gammaMatrix[2][2], to<PType>(ideal1.get_order()->get_coeff(1)));             // -c
       mul(gammaMatrix[2][2],gammaMatrix[2][2],2);                                                     //-2c
       sub(gammaMatrix[2][2],gammaMatrix[2][2], ideal1.get_order()->get_rho2());                       // -rho2 -2c
       div(gammaMatrix[2][2],gammaMatrix[2][2],2);                                                     // -(rho2 + 2c)/2
-      //gammaMatrix[2][2] = -(ideal1.get_order()->get_rho2() + 2*to<PType>(ideal1.get_order()->get_coeff(1)))/2;  // -(rho2 + 2c)/2
 
       //std::cout << "gammaMatrix: " << std::endl;
       //std::cout <<  gammaMatrix[0][0] << "  " << gammaMatrix[0][1] << "  " << gammaMatrix[0][2]<< std::endl;
@@ -65,46 +55,45 @@ void VoronoiComplex<Type, PType> :: make_voronoi_basis(CubicIdeal<Type, PType> &
       //std::cout <<  gammaMatrix[2][0] << "  " << gammaMatrix[2][1] << "  " <<gammaMatrix[2][2]<< std::endl;
 
       // Step 1: make sure basis is in canonical form
+      #ifdef DEBUG_VORONOI
       std::cout << "VoronoiBasis: Initial input matrix: " << std::endl;
       std::cout <<  ideal1.coeff_matrix[0][1] << "  " << ideal1.coeff_matrix[0][2] <<  std::endl;
       std::cout <<  ideal1.coeff_matrix[1][1] << "  " << ideal1.coeff_matrix[1][2] <<  std::endl;
       std::cout <<  ideal1.coeff_matrix[2][1] << "  " << ideal1.coeff_matrix[2][2] <<  std::endl;
-
+      #endif
       ideal1.make_canonical();
+      #ifdef DEBUG_VORONOI
       std::cout << "VoronoiBasis: The canonical form: " <<  std::endl;
       std::cout <<  ideal1.coeff_matrix[0][1] << "  " << ideal1.coeff_matrix[0][2] <<  std::endl;
       std::cout <<  ideal1.coeff_matrix[1][1] << "  " << ideal1.coeff_matrix[1][2] <<  std::endl;
       std::cout <<  ideal1.coeff_matrix[2][1] << "  " << ideal1.coeff_matrix[2][2] <<  std::endl;
-      //std::cout << "VoronoiBasis: Check if canonical basis is the same lattice  "  << compareLattice3(B, Ltest)<<std::endl;
+      #endif
 
+      // STEP 2: Obtain the puncture lattice of B
+      // Step 3: convert B, PuncB to a prepared basis, {1, phi, psi}
 
-      // Step 2: Obtain the puncture lattice of B
-
-      // Note that the CubicIdeal.make_prepared() function computes and stores
-      // the corresponding puncture lattice into CubicIdeal.p_lat
+      // Note that CubicIdeal::make_prepared() performs Step 2,3 at once.
+      // the corresponding puncture lattice is stored in CubicIdeal.p_lat
       ideal1.make_prepared();
 
-      // ideal1.puncture_lattice(temp_pb);
-      // becomePrepared(ideal1, temp_pb);
-
-      // Step 3: convert B, PuncB to a prepared basis, {1, phi, psi}
-      // this step is performed above
-
+      #ifdef DEBUG_VORONOI
       std::cout << "VoronoiBasis: Now Prepared: " <<  std::endl;
       std::cout <<  ideal1.coeff_matrix[0][1] << "  " << ideal1.coeff_matrix[0][2] <<  std::endl;
       std::cout <<  ideal1.coeff_matrix[1][1] << "  " << ideal1.coeff_matrix[1][2] <<  std::endl;
       std::cout <<  ideal1.coeff_matrix[2][1] << "  " << ideal1.coeff_matrix[2][2] <<  std::endl;
 
+      #endif
       //std::cout << "VoronoiBasis: Check if prepared basis is the same lattice: "  << compareLattice3(B, Ltest)<<std::endl;
       //std::cout << "VoronoiBasis: Redundancy check (ensure sameness after comparison)" << std::endl;
       //std::cout <<  ideal1.coeff_matrix[0][1] << "  " << ideal1.coeff_matrix[0][2] <<  std::endl;
       //std::cout <<  ideal1.coeff_matrix[1][1] << "  " << ideal1.coeff_matrix[1][2] <<  std::endl;
       //std::cout <<  ideal1.coeff_matrix[2][1] << "  " << ideal1.coeff_matrix[2][2] <<  std::endl;
       //std::cout <<  ideal1.coeff_matrix[0][0] << std::endl;
-
+      #ifdef DEBUG_VORONOI
       std::cout << "VoronoiBasis: PB's puncture Lattice:" << std::endl;
       std::cout <<  ideal1.p_lat[0][0] << "  " << ideal1.p_lat[0][1] <<  std::endl;
       std::cout <<  ideal1.p_lat[1][0] << "  " << ideal1.p_lat[1][1] <<  std::endl;
+      #endif
       #ifdef DEBUG
       std::cout << ( to<PType>(ideal1.coeff_matrix[0][1])
                     + to<PType>(ideal1.coeff_matrix[1][1]) *ideal1.get_order()->get_rho1()

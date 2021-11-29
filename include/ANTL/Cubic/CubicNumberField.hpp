@@ -38,7 +38,7 @@ protected:
     - Type(4)*this->definingPolynomial[2]*this->definingPolynomial[2]*this->definingPolynomial[2]*this->definingPolynomial[0]
     - Type(27)*this->definingPolynomial[3]*this->definingPolynomial[3]*this->definingPolynomial[0]*this->definingPolynomial[0] ;
 
-  };  // override
+  };  
 
 
   // Will use different data types and method for finding the roots

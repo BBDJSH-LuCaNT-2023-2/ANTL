@@ -1,12 +1,13 @@
 CC=g++
 CFLAGS=-g -O2
-LFLAGS= -lntl -lgmp -lmpfi -lmpfr -lm -lpthread
+LFLAGS= -lntl -lgmp -lmpfi -lm -lpthread
 IFLAGS= -I/c/include -I/home/cs-gb2khv2/ANTL/include
 SRC_FILES := $(wildcard ../../src/Cubic/*.cpp)
 OBJ_FILES := $(notdir $(SRC_FILES:.cpp=.o))
 CORE_OBJ_FILES := ../generalFunctions.o ../CubicOrder.o ../CubicElement.o ../CubicIdeal.o
 MUL_OBJ_FILES := ../MultiplyStrategyWilliams.o ../IdealMultiplicationStrategy.o
-main: testingMain.o test-cnf test-element test-order test-eta
+
+main: testingMain.o test-cnf test-element test-order test-eta test-complex-voronoi
 
 test-cnf: test-cnf.cpp testingMain.o ../catch.hpp ../../../include/ANTL/Cubic/GeneralTemplateFunctions.hpp
 	$(CC) $(CFLAGS) -o bin/010-TestCase $(IFLAGS) testingMain.o test-cnf.cpp -L/c/lib $(LFLAGS)

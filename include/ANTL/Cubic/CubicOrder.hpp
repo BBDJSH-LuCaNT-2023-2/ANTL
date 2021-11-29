@@ -110,10 +110,10 @@ PType get_root1() const {return root_list[0];}
 
 // This is bad form, because in real these are the conjugates
 // but in complex, this is the real and complex part respectively
-inline PType get_root2() const {return root_list[1];}
-inline PType get_root3() const {return root_list[2];}
+PType get_root2() const {return root_list[1];}
+PType get_root3() const {return root_list[2];}
 
-inline long get_index() const {return index;}
+long get_index() const {return index;}
 
 ZZ get_class_number();
 PType get_regulator();
@@ -126,15 +126,11 @@ std::vector<Type> get_class_group();
 /**
 * @brief Method returns a bool indicating if the order is real (positive discriminant)
 */
-inline bool is_real() const {
-  return (discriminant > 0);
-}
+bool is_real() const {return (discriminant > 0);}
 /**
 * @brief Method returns a bool indicating if the order is complex (negative discriminant)
 */
-inline bool is_complex() const {
-  return (discriminant < 0);
-}
+bool is_complex() const {return (discriminant < 0);}
 /**
 * @brief Method for switching the order of the roots of the defining polynomial
 * Note that in the real case, this function is specialized to re-compute the conjugates of all basis elements
@@ -152,10 +148,10 @@ int splitting_type(Type p);
 * @brief Method for setting the IdealMultiplicationStrategy
 * @param A pointer to a concrete strategy (subclass of IdealMultiplicationStrategy)
 */
-inline void set_mul_strategy(std::shared_ptr<IdealMultiplicationStrategy<Type,PType>> mstrat){
+void set_mul_strategy(std::shared_ptr<IdealMultiplicationStrategy<Type,PType>> mstrat){
   this->m_method = std::static_pointer_cast< IdealMultiplicationStrategy<Type, PType>>(mstrat);
 };
-inline void set_unit_strategy(std::shared_ptr<FundUnitStrategy<Type,PType>> ustrat){
+void set_unit_strategy(std::shared_ptr<FundUnitStrategy<Type,PType>> ustrat){
   this->unit_strat = std::static_pointer_cast< FundUnitStrategy<Type, PType>>(ustrat);
 };
 
@@ -163,7 +159,7 @@ inline void set_unit_strategy(std::shared_ptr<FundUnitStrategy<Type,PType>> ustr
 * @brief Method for setting the FundUnitStrategy
 * @param A pointer to a concrete strategy (subclass of FundUnitStrategy)
 */
-inline void set_unit_strategy(std::string s){
+void set_unit_strategy(std::string s){
   if (s.compare("Voronoi") == 0){
       if (!(this->voronoi_basic)){
           this->voronoi_basic.reset();
@@ -192,8 +188,8 @@ bool is_maximal(){if (index ==1) return true; else return false;}
 bool is_equal(const CubicOrder<Type, PType> &CO2) const;
 
 /**
-* Given a generating polynomial f, obtain its standard form, x^3 + Ex + G, where E,G are integers.
-* See pg 22 CFG for formulas
+* Given a generating polynomial f, obtain its standard form, x^3 + Ex + G,
+* where E,G are integers. See pg 22 CFG for formulas
 */
 void standard_form(Type & E, Type& G);
 
@@ -213,7 +209,12 @@ virtual void get_real_value(PType & newVal, const Type &U, const Type &X, const 
 */
 virtual CubicElement<Type, PType> * get_fundamental_unit(int i = 0) = 0;
 
-
+/**
+* @brief given an ideal1, and a log vector vec1 (length r), return a reduced ideal J and a minima
+* whose logarithm vector is close to vec1, and such that J = 1/minimum * ideal1
+*/
+virtual void close_minimum(CubicIdeal<Type, PType> & reduced_ideal, \
+  CubicElement<Type, PType> & minimum, CubicIdeal<Type, PType> & ideal1, const std::vector<PType> & vec1) = 0;
 // **************************************************************************  /
 // ******************* Friend classes and functions *************************  /
 
@@ -250,31 +251,32 @@ std::shared_ptr<BSGSVoronoi<Type, PType>>  voronoi_bsgs;
 
 std::shared_ptr<VoronoiMethods<Type, PType>>  vmethods;
 
+static const int DEGREE = 3;
+
 PType root_list[3];
+PType rho1, rho2, max_minima_dist; // 2nd and 3rd elements of the integral basis
 
 Type discriminant;
 Type E =Type(0); Type G = Type(0);
-// 2nd and 3rd elements of the integral basis
-PType rho1, rho2;
 
 long index; // The number f such that disc(O) = f^2 * Delta, Delta = field discriminant
-
+int unit_rank, r1,r2;
 
 // See the issue link below regarding the four members below
 // https://gitlab.cpsc.ucalgary.ca/jacobs/ANTL/-/issues/11
 Type class_number = Type(0);
 std::vector<Type> cg_structure;
+
 PType regulator = PType(0);
 std::vector<CubicElement<Type, PType>> fundamentalUnits;
 
-
-
+//std::vector<std::vector<PType>(DEGREE, PType(0)) > embedding_matrix;
 
 Type mul_table[3][3];
 
 static PType order_temp;
-
 CubicElement<Type, PType> temp_element = CubicElement<Type, PType>(this, Type(1), Type(0), Type(0), Type(1));
+
 
 void set_roots();
 
@@ -287,13 +289,17 @@ void set_class_number();
 
 void set_class_group();
 
+void set_unit_rank();
+
+void set_max_minima_dist();
+
 virtual void set_regulator() = 0;
 
 //void compute_fundamental_unit();
 
 private:
 
-CubicOrder(); // private default constructor means you can't call this
+CubicOrder();   // private default constructor means you can't call this
 
 
 
@@ -302,7 +308,6 @@ CubicOrder(); // private default constructor means you can't call this
 
 
 template<typename T, typename PT> PT CubicOrder<T,PT>::order_temp;
-//template<typename T, typename PT> CubicElement<T, PT> CubicOrder<T,PT>::temp_element(T(1), T(0), T(0), T(1));
 #include "../../../src/Cubic/CubicOrder.cpp"
 
 #endif // guard

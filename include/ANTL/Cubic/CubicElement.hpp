@@ -78,20 +78,17 @@ CubicElement(const CubicOrder<Type,PType> * cnfo, const Type &U, const Type &X, 
 /*********** Accessor functions **************/
 inline const CubicOrder<Type, PType> * get_order() const {return my_order;}
 
-inline Type get_denom () const {return denom;}
-inline Type get_u () const {return u;}
-inline Type get_x () const {return x;}
-inline Type get_y () const {return y;}
+Type get_denom () const {return denom;}
+Type get_u () const {return u;}
+Type get_x () const {return x;}
+Type get_y () const {return y;}
 
-inline void set_order(const CubicOrder<Type, PType> * ord){
+void set_order(const CubicOrder<Type, PType> * ord){
   my_order = ord;
 }
+
 /******calculator functions****/
 //these should calculate and set into the provided variable the specified value
-
-//virtual void norm(ANTL::QQ<Type> & newVal) = 0;
-//virtual void trace(ANTL::QQ<Type> & newVal) = 0;
-
 
 /**
 * @brief Sets this CubicElementNF equal to C.
@@ -99,7 +96,6 @@ inline void set_order(const CubicOrder<Type, PType> * ord){
 * @pre this CubicElementNF and C must be in the same CubicOrder
 */
 void assign(const CubicElement<Type,PType> & C);
-
 
 void assign(const Type _coeff[3], const Type & D);
 
@@ -135,6 +131,7 @@ void negate( CubicElement <Type, PType> & B){
   B.y = -this->y;
   B.denom = this->temp;
 }
+
 /**
 * @brief Checks if this CubicElement is equal to B
 * @ param[in] B a CubicElementNF
@@ -143,7 +140,7 @@ bool is_equal(const CubicElement <Type, PType> & B);
 
 /** @brief Checks if the element is the zero element and returns appropriate bool
 */
-inline bool is_zero() const {
+bool is_zero() const {
   return (this->u ==Type(0)) && (this->x ==Type(0)) && (this->y == Type(0));
 }
 
@@ -182,17 +179,6 @@ std::string toString() const ;
 //these procedural operations should take B and C and place the result into A
 
 
-
-// The functions below turned into friend functions, no need for member operations?
-//void subtract (CubicElement <Type,PType> & A, const CubicElement <Type,PType> & B, const CubicElement <Type,PType>& C);
-//void divide (CubicElement <Type,PType> & A, const CubicElement <Type,PType> & B, const CubicElement <Type,PType> & C);
-//void power (CubicElement <Type,PType> & A, const CubicElement <Type,PType> & B, const NTL::ZZ & p);
-
-
-
-
-
-
 /**
 * @brief Sets A to equal B
 * @param[out] A is the result of assignment
@@ -210,10 +196,11 @@ protected:
 
 /***************** member variables ******************/
 
+// A reference to the order which the element belongs to.
+const CubicOrder<Type, PType> * my_order;
 
-const CubicOrder<Type, PType> * my_order;   // A reference to the order which the element belongs to.
-
-Type u,x,y;           // Coefficients in terms of an integral basis of my_order. It is understood that alpha = (u + x*rho1 + y*rho2)/denom */
+Type u,x,y;           // Coefficients in terms of an integral basis of my_order.
+                      // understood that alpha = (u + x*rho1 + y*rho2)/denom
 Type denom;           // Common denominator of coefficients
 
 /** Temporary variable(s) for arithmetic operations */

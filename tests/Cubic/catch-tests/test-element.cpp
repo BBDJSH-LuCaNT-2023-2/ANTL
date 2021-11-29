@@ -66,10 +66,8 @@ TEST_CASE("Constructors and ZZ,RR type tests"){
   CubicElement<ZZ, RR> elt1 (Odie, elt_vector, ZZ(1));
   CubicElement<ZZ, RR> elt2 (Odie, elt_vector[0], elt_vector[1],elt_vector[2], ZZ(7));
 
-  SECTION("CubicElement getterns, RR,ZZ"){
+  SECTION("CubicElement getters, RR,ZZ"){
     REQUIRE(elt2.get_order() == Odie);
-
-
 
     REQUIRE(elt2.get_denom() == 7);
     REQUIRE(elt2.get_u() == 1);
@@ -147,6 +145,21 @@ TEST_CASE("Trace Function for ZZ and RR"){
     elt2.get_real_value(realholder);
 
     REQUIRE(realholder - (-7.77532584701453) < DOUBLE_TOL);
+  }
+
+  SECTION("real value of an arbitrary cubic number"){
+    eltZZ[0] = to<ZZ>(2);
+    eltZZ[1] = to<ZZ>(16);
+    eltZZ[2] = to<ZZ>(5);
+    bottom = ZZ(1);
+    CubicElement<ZZ, RR> elt1 (Odie);
+    CubicElement<ZZ, RR>elt2 (Odie, eltZZ, bottom);
+
+    elt2.negate(elt1);
+
+    REQUIRE(elt1.get_u() == to<ZZ>(-2));
+    REQUIRE(elt1.get_x() == to<ZZ>(-16));
+    REQUIRE(elt1.get_y() == to<ZZ>(-5));
   }
 }
 

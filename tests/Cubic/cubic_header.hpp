@@ -5,15 +5,11 @@
 #include <functional>
 #include <iterator>
 #include <unordered_map>
-// qvm matrix headers
-//#include <boost/qvm/mat.hpp>
-//#include <boost/qvm/mat_traits.hpp>
-//#include <boost/qvm/mat_access.hpp>
-//#include <boost/qvm/mat_operations.hpp>
 
-#include <boost/multiprecision/mpfi.hpp>
 
-#include "../../include/ANTL/Cubic/generalFunctions.hpp"
+//#include <boost/multiprecision/mpfi.hpp>
+
+#include <ANTL/Cubic/generalFunctions.hpp>
 #include "../../include/ANTL/Cubic/GeneralTemplateFunctions.hpp"
 #include "../../include/ANTL/Cubic/CubicNumberField.hpp"
 #include "../../include/ANTL/Cubic/RealCubicNumberField.hpp"
@@ -33,8 +29,8 @@ using NTL::ZZ;
 using NTL::RR;
 using namespace boost::multiprecision;
 using boost::math::tools::polynomial;
-using boost::multiprecision::mpf_float;
-using boost::multiprecision::mpfi_float;
+//using boost::multiprecision::mpf_float;
+//using boost::multiprecision::mpfi_float;
 using std::cout;
 using std::endl;
 NTL_CLIENT
