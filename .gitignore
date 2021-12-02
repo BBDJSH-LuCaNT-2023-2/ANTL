@@ -88,6 +88,8 @@ bin/
 unused/
 special/
 
+.vscode/*
+
 .idea/*
 cmake-build-debug/*
 
