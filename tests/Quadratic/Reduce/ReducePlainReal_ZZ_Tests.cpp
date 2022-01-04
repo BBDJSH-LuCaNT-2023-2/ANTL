@@ -9,7 +9,7 @@ using namespace ANTL;
 
 TEST_CASE("ReducePlainReal<ZZ>: Ideals should be reduced upon calling reduce", "[ReducePlainReal]") {
 
-    QuadraticOrder<ZZ> quad_order1 = QuadraticOrder<ZZ>(ZZ(13));
+    QuadraticOrder<ZZ> quad_order1 = QuadraticOrder<ZZ>(ZZ(29));
 
     ReducePlainReal<ZZ> reduce_plain_real_object = ReducePlainReal<ZZ>();
     quad_order1.set_red_plain_real(reduce_plain_real_object);

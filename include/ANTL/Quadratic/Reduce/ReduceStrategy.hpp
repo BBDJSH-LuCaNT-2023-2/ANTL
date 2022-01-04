@@ -31,7 +31,9 @@ namespace ANTL {
 
   template <class T> class ReduceStrategy {
     protected:
+      RR Distance;
       T Delta;
+      T FloorRootDelta;
       T hx;
       long genus;
       bool is_init;
@@ -48,6 +50,7 @@ namespace ANTL {
 //         }
 
         Delta = delta_in;
+        FloorRootDelta = SqrRoot(Delta);
         hx = h_in;
         genus = g_in;
         is_init = true;

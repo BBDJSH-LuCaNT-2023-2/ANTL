@@ -133,14 +133,19 @@ template <> bool QuadraticIdealBase<ZZ>::is_normal() {
   sub(delta, delta, temp);
 
   if(delta > 0) {
+
+    if (a <= 0) {
+      return false;
+    }
+
     // rootD = floor(sqrt(delta)) - [Recall NTL::SqrRoot(ZZ a) = ZZ floor(sqrt(a))]
     rootD = SqrRoot(abs(delta));
 
-    if(abs(a) > rootD)
-      return (-1*(abs(a)) < b && b <= abs(a));
+    if(a > rootD)
+      return ( -a < b ) && ( b <= a );
 
     else
-      return (rootD - 2*abs(a) < b && b <= rootD);
+      return ( rootD - 2*a < b ) && ( b <= rootD );
   }
 }
 
@@ -238,5 +243,10 @@ template <> void QuadraticIdealBase<ZZ>::normalize() {
     mul(temp, a, 2);
     mul(temp, temp, s);
     add(b, b, temp);
+  }
+
+  if(a < 0) {
+    a = -a;
+    c = -c;
   }
 }

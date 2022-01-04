@@ -26,8 +26,8 @@ test_SOURCES = tests/UnitTests.cpp                                    \
                tests/Quadratic/QuadraticNumber_ZZ_Tests.cpp           \
                tests/Quadratic/QuadraticOrder_ZZ_Tests.cpp            \
                tests/Quadratic/QuadraticOrder_long_Tests.cpp          \
-               tests/Quadratic/Cube/CubeNucube_ZZ_Tests.cpp           \
                tests/Quadratic/Cube/CubeNucube_long_Tests.cpp         \
+               tests/Quadratic/Cube/CubeNucube_ZZ_Tests.cpp           \
                tests/Quadratic/Cube/CubePlain_ZZ_Tests.cpp            \
                tests/Quadratic/Cube/CubePlain_long_Tests.cpp          \
                tests/Quadratic/Multiply/MultiplyNucomp_long_Tests.cpp \
@@ -45,22 +45,22 @@ test_SOURCES = tests/UnitTests.cpp                                    \
                src/Quadratic/QuadraticIdealBase_ZZ.cpp                \
                src/Quadratic/QuadraticInfElement_ZZ.cpp               \
                src/Quadratic/QuadraticNumber_ZZ.cpp                   \
-               src/Quadratic/QuadraticOrder_ZZ.cpp                    \
                src/Quadratic/QuadraticOrder_long.cpp                  \
-               src/Quadratic/Cube/CubePlain_ZZ.cpp                    \
+               src/Quadratic/QuadraticOrder_ZZ.cpp                    \
                src/Quadratic/Cube/CubePlain_long.cpp                  \
-               src/Quadratic/Cube/CubeNucube_ZZ.cpp                   \
+               src/Quadratic/Cube/CubePlain_ZZ.cpp                    \
                src/Quadratic/Cube/CubeNucube_long.cpp                 \
+               src/Quadratic/Cube/CubeNucube_ZZ.cpp                   \
                src/Quadratic/Multiply/MultiplyNucomp_long.cpp         \
                src/Quadratic/Multiply/MultiplyNucomp_ZZ.cpp           \
                src/Quadratic/Multiply/MultiplyPlain_long.cpp          \
                src/Quadratic/Multiply/MultiplyPlain_ZZ.cpp            \
                src/Quadratic/Reduce/ReducePlainReal_long.cpp          \
                src/Quadratic/Reduce/ReducePlainReal_ZZ.cpp            \
-               src/Quadratic/Square/SquareNudupl_ZZ.cpp               \
                src/Quadratic/Square/SquareNudupl_long.cpp             \
-               src/Quadratic/Square/SquarePlain_ZZ.cpp                \
+               src/Quadratic/Square/SquareNudupl_ZZ.cpp               \
                src/Quadratic/Square/SquarePlain_long.cpp              \
+               src/Quadratic/Square/SquarePlain_ZZ.cpp                \
                src/thresholds.cpp                                     \
                src/XGCD/hxgcd.cpp                                     \
                src/XGCD/xgcd.cpp                                      \
