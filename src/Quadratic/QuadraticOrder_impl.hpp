@@ -86,11 +86,13 @@ namespace ANTL
 // Multiply Strategy Setters
   template <class T>
   void QuadraticOrder<T>::set_red_best(ReduceStrategy<T> &A) {
+    A.init(Delta, hx, g);
     red_best = &A;
   }
 
   template <class T>
   void QuadraticOrder<T>::set_red_plain_imag(ReducePlainImag<T> &A) {
+    A.init(Delta, hx, g);
     red_plain_imag = &A;
 
     //If red_best is not set, or if Plain is the preferred strategy, set red_best to A as well
@@ -101,6 +103,7 @@ namespace ANTL
 
   template <class T>
   void QuadraticOrder<T>::set_red_plain_real(ReducePlainReal<T> &A) {
+    A.init(Delta, hx, g);
     red_plain_real = &A;
 
     //If red_best is not set, or if Plain is the preferred strategy, set red_best to A as well
@@ -111,6 +114,7 @@ namespace ANTL
 
   template <class T>
   void QuadraticOrder<T>::set_red_fast(ReduceFast<T> &A) {
+    A.init(Delta, hx, g);
     red_fast = &A;
 
     //If red_best is not set, or if Fast is the preferred strategy, set red_best to A as well
