@@ -26,7 +26,7 @@ using namespace ANTL;
 template < class T > class QuadraticInfElement {
   private:
   QuadraticIdealBase<T> qib;
-  RR distance;
+  RR Distance;
 
   T Delta;
   T FloorRootDelta;

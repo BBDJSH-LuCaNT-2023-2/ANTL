@@ -11,7 +11,6 @@ using namespace ANTL;
 TEST_CASE("QuadraticInfElement<ZZ>: baby_step correctly traverse through the principal cycle", "[QuadraticInfElement]") {
 
     QuadraticOrder<ZZ> quad_order1 = QuadraticOrder<ZZ>(ZZ(193));
-
     QuadraticInfElement<ZZ> quad_inf_element1 = QuadraticInfElement<ZZ>(quad_order1);
 
     quad_inf_element1.baby_step();

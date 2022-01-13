@@ -16,7 +16,9 @@ void ReducePlainReal<ZZ>::reduce(QuadraticIdealBase<ZZ> & A) {
   ZZ a0, b0, c0, a1, b1, c1, q, r;
   ZZ B0 = ZZ(1), B1 = ZZ(0), BTemp;
 
-  bool debug = true;
+  //mul(a0, a0, b1);
+  bool debug = false;
+  set(*RelativeGenerator);
 
   if(A.is_reduced()) {
     return;
@@ -40,11 +42,19 @@ void ReducePlainReal<ZZ>::reduce(QuadraticIdealBase<ZZ> & A) {
     A.normalize();
   }
 
-  RR RelativeGenerator;
-
   a0 = A.get_a();
   b0 = A.get_b();
   c0 = A.get_c();
+
+  if(debug) {
+  std::cout << "a is " << a0 << std::endl;
+  std::cout << "b is " << b0 << std::endl;
+  std::cout << "c is " << c0 << std::endl;
+  }
+
+  if(A.is_reduced()) {
+    return;
+  }
 
   DivRem(q, r, b0 + FloorRootDelta, 2*a0);
 
@@ -113,14 +123,19 @@ void ReducePlainReal<ZZ>::reduce(QuadraticIdealBase<ZZ> & A) {
     }
   }
 
-  RelativeGenerator = inv(abs((to_RR(b0) - sqrt(to_RR(Delta))) / to_RR(2*a0)));
+
+  RelativeGenerator->set_abd(2*B0*a0 + B1*b0, B1, 2*a0);
+  //RelativeGenerator->invert();
+
+  if(RelativeGenerator->conv_RR() < 0) {
+    mul(*RelativeGenerator, *RelativeGenerator, ZZ(-1));
+  }
 
   if(debug) {
-    std::cout << "RG is " << RelativeGenerator << std::endl;
-    std::cout << "distance is " << log(RelativeGenerator) << std::endl;
+    std::cout << "RG is " << RelativeGenerator->conv_RR() << std::endl;
+    std::cout << "distance is " << log(RelativeGenerator->conv_RR()) << std::endl;
   }
 
 
   A.assign(a0, b0, c0);
-  Distance = log(RelativeGenerator);
 }

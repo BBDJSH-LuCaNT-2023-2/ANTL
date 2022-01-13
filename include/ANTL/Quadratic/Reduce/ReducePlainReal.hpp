@@ -20,7 +20,7 @@ namespace ANTL {
   template <class T> class QuadraticIdealBase;
 
   template <class T> class ReducePlainReal : public ReduceStrategy<T> {
-    using ReduceStrategy<T>::Distance;
+    using ReduceStrategy<T>::RelativeGenerator;
     using ReduceStrategy<T>::Delta;
     using ReduceStrategy<T>::FloorRootDelta;
     using ReduceStrategy<T>::hx;
@@ -31,6 +31,9 @@ namespace ANTL {
       ~ReducePlainReal() {};
 
       void reduce(QuadraticIdealBase<T> & A);
+
+      using ReduceStrategy<T>::get_RelativeGenerator;
+      using ReduceStrategy<T>::set_RelativeGenerator;
   };
 
 

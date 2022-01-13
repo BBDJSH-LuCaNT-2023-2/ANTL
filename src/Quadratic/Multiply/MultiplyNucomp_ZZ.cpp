@@ -18,7 +18,7 @@ template <> void MultiplyNucomp<ZZ>::multiply(QuadraticIdealBase<ZZ> & C, const 
 
   static ZZ a1, a2, b1, b2, c2, Ca, Cb, Cc, ss, m;
   static ZZ SP, S, v1, u2, v2, K, T, temp;
-  static ZZ R1, R2, C1, C2, M1, M2;
+  static ZZ R1, R2, C1 = ZZ(-1), C2 = ZZ(-0), M1, M2, B1, B2, rgA, rgB, rgC;
 
   // want a1 to be the smaller of the two a coefficients, because initial
   // computations are done mod a1
@@ -93,6 +93,7 @@ template <> void MultiplyNucomp<ZZ>::multiply(QuadraticIdealBase<ZZ> & C, const 
     div(Cc,Cc,a1);
   }
   else {
+    std::cout << "USING NUCOMP" << std::endl;
     // use NUCOMP formulas
 
     // Execute partial reduction
@@ -139,7 +140,34 @@ template <> void MultiplyNucomp<ZZ>::multiply(QuadraticIdealBase<ZZ> & C, const 
     }
   }
 
+  B1 = ZZ(sign(Ca))*abs(C1);
+  B2 = abs(C2);
+
+  rgA = S*(2*Ca*B1 + B2*Cb);
+  rgB = -S*B2;
+  rgC = 2*Ca;
+
+  std::cout << "rgA is " << rgA << std::endl;
+  std::cout << "rgB is " << rgB << std::endl;
+  std::cout << "rgC is " << rgC << std::endl;
+
+  RelativeGenerator->set_abd(rgA, rgB, rgC);
+  RelativeGenerator->invert();
+  if(RelativeGenerator->conv_RR() < 0) {
+    mul(*RelativeGenerator, *RelativeGenerator, ZZ(-1));
+  }
   // normalize and reduce
+  std::cout << "Ca is " << Ca << std::endl;
+  std::cout << "Cb is " << Cb << std::endl;
+  std::cout << "Cc is " << Cc << std::endl;
   C.assign(Ca,Cb,Cc);
   C.reduce();
+
+  std::cout << "NUCOMP: RG1 is " << RelativeGenerator->conv_RR() << std::endl;
+  std::cout << "NUCOMP: RG2 is " << C.get_QO()->get_red_best()->get_RelativeGenerator()->conv_RR() << std::endl;
+
+  ANTL::mul(*RelativeGenerator, *RelativeGenerator, *C.get_QO()->get_red_best()->get_RelativeGenerator());
+
+  std::cout << "NUCOMP: RGf is " << RelativeGenerator->conv_RR() << std::endl;
+  std::cout << "NUCOMP: distance is " << log(RelativeGenerator->conv_RR()) << std::endl;
 }

@@ -28,10 +28,12 @@ using namespace ANTL;
 namespace ANTL {
 
   template <class T> class QuadraticIdealBase;
+  template <class T> class QuadraticNumber;
+  template <class T> class QuadraticOrder;
 
   template <class T> class ReduceStrategy {
     protected:
-      RR Distance;
+      QuadraticNumber<T> * RelativeGenerator;
       T Delta;
       T FloorRootDelta;
       T hx;
@@ -58,6 +60,15 @@ namespace ANTL {
 
       // Generic ideal reduction definition
       virtual void reduce(QuadraticIdealBase<T> & A) = 0;
+
+      QuadraticNumber<T> * get_RelativeGenerator() {
+        return RelativeGenerator;
+      }
+
+      void set_RelativeGenerator(QuadraticNumber<T> & QN) {
+        RelativeGenerator = &QN;
+        set(*RelativeGenerator);
+      }
   };
 
 }// ANTL
