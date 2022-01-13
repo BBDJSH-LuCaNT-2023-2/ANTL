@@ -468,7 +468,7 @@ void
       mul (QuadraticNumber<T> & z, const QuadraticNumber<T> & x, const QuadraticNumber<T> & y)
       {
         T newA, newB, newD, temp;
-        if (z.QO != x.QO || z.QO != y.QO) {
+        if (*z.get_QO() != *x.get_QO() || *z.get_QO() != *y.get_QO()) {
           // TODO:  THROW AN EXCEPTION
         }
 
@@ -476,21 +476,20 @@ void
         //     ---------------------------------------------------------------------
         //                              x.d y.d
 
-        ::mul(newA,x.a,y.a);
-        ::mul(temp,x.b,y.b);
-        ::mul(temp,temp,z.QO->getDiscriminant());
-        ::add(newA,newA,temp);
+        mul(newA,x.get_a(),y.get_a());
+        mul(temp,x.get_b(),y.get_b());
+        mul(temp,temp,z.get_QO()->getDiscriminant());
+        add(newA,newA,temp);
 
-        ::mul(newB,x.a,y.b);
-        ::mul(temp,x.b,y.a);
-        ::add(newB,newB,temp);
+        mul(newB,x.get_a(),y.get_b());
+        mul(temp,x.get_b(),y.get_a());
+        add(newB,newB,temp);
 
-        ::mul(newD,x.d,y.d);
+        mul(newD,x.get_d(),y.get_d());
 
-        z.a = newA;
-        z.b = newB;
-        z.d = newD;
-        z.normalize ();
+        z.set_a(newA);
+        z.set_b(newB);
+        z.set_d(newD);
       }
 
 /**

@@ -10,11 +10,13 @@ using namespace ANTL;
 TEST_CASE("SquareNudupl<ZZ>: Squaring an ideal", "[SquareNudupl]") {
 
     QuadraticOrder<ZZ> quad_order1 = QuadraticOrder<ZZ>(ZZ(13));
+    QuadraticNumber<ZZ> quad_number1 = QuadraticNumber<ZZ>(quad_order1);
 
     SquareNudupl<ZZ> sqr_nudupl_object = SquareNudupl<ZZ>();
     quad_order1.set_sqr_nudupl(sqr_nudupl_object);
 
     ReducePlainReal<ZZ> red_plain_real_object = ReducePlainReal<ZZ>();
+    red_plain_real_object.set_RelativeGenerator(quad_number1);
     quad_order1.set_red_best(red_plain_real_object);
 
     QuadraticIdealBase<ZZ> quad_ideal_base1 = QuadraticIdealBase<ZZ>(quad_order1);

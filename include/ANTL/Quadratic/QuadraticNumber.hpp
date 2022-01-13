@@ -269,9 +269,9 @@ namespace ANTL {
         // remove common factors
         T g = GCD(GCD(a,b),d);
         if (!::IsOne(g)) {
-            ::div(a,a,g);
-            ::div(b,b,g);
-            ::div(d,d,g);
+            div(a,a,g);
+            div(b,b,g);
+            div(d,d,g);
         }
 
         // normalize leading coefficients
@@ -336,8 +336,6 @@ namespace ANTL {
       {
       }
 
-
-
       /**
        * Accessor methods
        */
@@ -345,7 +343,7 @@ namespace ANTL {
       const T &
       get_a () const
       {
-	return a;
+      return a;
       }
 
       const T &
@@ -361,7 +359,7 @@ namespace ANTL {
       }
 
       QuadraticOrder<T> *
-      getQO () const
+      get_QO () const
       {
 	return QO;
       }
@@ -421,6 +419,15 @@ namespace ANTL {
       void
       set_d (const T & inD)
       {
+        d = inD;
+        normalize ();
+      }
+
+      void
+      set_abd (const T & inA, const T & inB, const T & inD)
+      {
+        a = inA;
+        b = inB;
         d = inD;
         normalize ();
       }
@@ -507,6 +514,21 @@ namespace ANTL {
         z.a = x.a;
         z.b = x.b;
         z.d = x.d;
+      }
+
+      /**
+       * @brief Conversion to RR
+       * @param[out] x, the value of this quadratic number as an RR
+       */
+      RR conv_RR() {
+        RR x, y, z, RootD;
+
+        x = to_RR(a);
+        y = to_RR(b);
+        z = to_RR(d);
+        RootD = sqrt(to_RR(QO->getDiscriminant()));
+
+        return (x + y*RootD)/z;
       }
 
       /**
@@ -824,14 +846,14 @@ namespace ANTL {
       {
         T newA,newB,newD,temp;
         // ((a + b rho) / d)^-1 = (ad - bd rho) / (a^2 - b^2 Delta)
-        ::mul(newA,a,d);
+        mul(newA,a,d);
 
-        ::mul(newB,b,d);
+        mul(newB,b,d);
 
-        ::sqr(newD,a);
-        ::sqr(temp,b);
-        ::mul(temp,temp,QO->getDiscriminant());
-        ::sub(newD,newD,temp);
+        sqr(newD,a);
+        sqr(temp,b);
+        mul(temp,temp,QO->getDiscriminant());
+        sub(newD,newD,temp);
 
         a = newA;
         b = -newB;
@@ -839,8 +861,6 @@ namespace ANTL {
 
         normalize ();
       }
-
-
 
       /**
        * @brief Sets the QuadraticNumber z equal to the conjugate of x
@@ -1151,16 +1171,16 @@ namespace ANTL {
         //     ---------------------------------------------------------------------
         //                              x.d y.d
 
-        ::mul(newA,x.a,y.a);
-        ::mul(temp,x.b,y.b);
-        ::mul(temp,temp,z.QO->getDiscriminant());
-        ::add(newA,newA,temp);
+        ANTL::mul(newA,x.a,y.a);
+        ANTL::mul(temp,x.b,y.b);
+        ANTL::mul(temp,temp,z.QO->getDiscriminant());
+        add(newA,newA,temp);
 
-        ::mul(newB,x.a,y.b);
-        ::mul(temp,x.b,y.a);
-        ::add(newB,newB,temp);
+        ANTL::mul(newB,x.a,y.b);
+        ANTL::mul(temp,x.b,y.a);
+        add(newB,newB,temp);
 
-        ::mul(newD,x.d,y.d);
+        ANTL::mul(newD,x.d,y.d);
 
         z.a = newA;
         z.b = newB;
@@ -1183,8 +1203,8 @@ namespace ANTL {
             // TODO:  THROW AN EXCEPTION!!!
           }
 
-        ::mul(z.a,x.a,n);
-        ::mul(z.b,x.b,n);
+        mul(z.a,x.a,n);
+        mul(z.b,x.b,n);
         z.d = x.d;
         z.normalize();
       }

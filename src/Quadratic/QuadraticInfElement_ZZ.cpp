@@ -42,5 +42,5 @@ void QuadraticInfElement<ZZ>::baby_step() {
 
 
   qib.assign(Q, P, R);
-  distance = log(RelativeGenerator);
+  Distance = log(RelativeGenerator);
 }

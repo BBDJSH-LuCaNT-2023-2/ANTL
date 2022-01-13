@@ -19,7 +19,7 @@ namespace ANTL {
 
   template <class T> class MultiplyStrategy;
   template <class T> class QuadraticIdealBase;
-
+  template <class T> class QuadraticNumber;
 
   template < class T > class MultiplyNucomp : public MultiplyStrategy<T> {
 
@@ -29,6 +29,7 @@ namespace ANTL {
     using MultiplyStrategy<T>::is_init;
 
     protected:
+      QuadraticNumber<T> * RelativeGenerator;
       ZZ NC_BOUND;    // termination bound for NUCOMP = floor(|D|^1/4)
 
     public:
@@ -37,6 +38,14 @@ namespace ANTL {
     void init(const T & delta_in, const T & h_in, long g_in=0) {
       MultiplyStrategy<T>::init(delta_in,h_in,g_in);
     };
+
+    QuadraticNumber<T> * get_RelativeGenerator() {
+      return RelativeGenerator;
+    }
+
+    void set_RelativeGenerator(QuadraticNumber<T> & QN) {
+        RelativeGenerator = &QN;
+    }
 
 //     nucomp();
 //     Task:

@@ -5,7 +5,7 @@ QuadraticInfElement<T>::QuadraticInfElement(QuadraticOrder<T> & quad_o) : qib(qu
   qib.assign_one();
   Delta = quad_o.getDiscriminant();
   FloorRootDelta = FloorToZZ(sqrt(to_RR(Delta)));
-  distance = 1;
+  Distance = 1;
 }
 
 // destructor
@@ -19,7 +19,7 @@ QuadraticIdealBase<T> QuadraticInfElement<T>::get_qib(){
 
 template <class T>
 RR QuadraticInfElement<T>::get_distance(){
-  return distance;
+  return Distance;
 }
 
 
