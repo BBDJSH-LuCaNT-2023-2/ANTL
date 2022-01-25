@@ -20,7 +20,7 @@ template <> void CubeNucube<ZZ>::cube(QuadraticIdealBase<ZZ> &C, const Quadratic
 
   static ZZ a, b, c, Ca, Cb, Cc;
   static ZZ SP, S, v1, u2, v2, N, K, L, T, temp, temp2;
-  static ZZ B, R1, R2, C1, C2, BB, M1, M2;
+  static ZZ B, R1, R2, C1 = ZZ(-1), C2 = ZZ(0), BB, M1, M2, B1, B2, rgA, rgB, rgC;
 
   a = A.get_a();
   b = A.get_b();
@@ -29,11 +29,13 @@ template <> void CubeNucube<ZZ>::cube(QuadraticIdealBase<ZZ> &C, const Quadratic
   // solve SP = v1 b + u1 a (only need v1)
   XGCD_LEFT (SP, v1, b, a);
 
-  if (IsOne(SP)) {
-    // N = a
-    N = a;
+  std::cout << "NUCUBE: v1 is " << v1 << std::endl;
 
-    // L = a^2
+  if (IsOne(SP)) {
+    // N = a, S = 1, L = a^2
+    N = a;
+    S = 1;
+
     sqr(L,a);
 
     // K = c v1 (v1(b - a c v1) - 2) mod L
@@ -78,11 +80,14 @@ template <> void CubeNucube<ZZ>::cube(QuadraticIdealBase<ZZ> &C, const Quadratic
   }
 
   // Compute NUCOMP termination bound
-  mul(B, sqrt_delta, a);
-  RightShift(B,B,1);
-  SqrRoot(B, B);
- 
-  if (L < B) {
+  //   mul(B, sqrt_delta, a);
+  //   RightShift(B,B,1);
+  //   SqrRoot(B, B);
+
+    ZZ NC_BOUND = FloorToZZ(sqrt(to_RR(a)) * (sqrt(sqrt(abs(to_RR(Delta)/4)))));
+
+  if (L < NC_BOUND) {
+    std::cout << "NUCUBE: PLAIN" << std::endl;
     // compute with regular cubing formula (result will be reduced)
 
     // T = NK
@@ -102,11 +107,12 @@ template <> void CubeNucube<ZZ>::cube(QuadraticIdealBase<ZZ> &C, const Quadratic
     div(Cc,Cc,L);
   }
   else {
+    std::cout << "NUCUBE: NUCOMP" << std::endl;
     // use NUCOMP formulas
 
     // Execute partial reduction
     R2=L; R1=K;
-    XGCD_PARTIAL(R2, R1, C2, C1, B);
+    XGCD_PARTIAL(R2, R1, C2, C1, NC_BOUND);
 
     // T = N K
     MulMod(T,N,K,L);
@@ -124,9 +130,14 @@ template <> void CubeNucube<ZZ>::cube(QuadraticIdealBase<ZZ> &C, const Quadratic
     sub(M2,M2,temp2);
     div(M2,M2,L);
 
+    std::cout << "NUCUBE: R1 is " << R1 << std::endl;
+    std::cout << "NUCUBE: M1 is " << M1 << std::endl;
+
     // C.a = (-1)^(i-1) (R1 M1 - C1 M2)
     mul(Ca,R1,M1);
     mul(temp2,C1,M2);
+    std::cout << "NUCUBE: R1M1 is " << Ca << std::endl;
+    std::cout << "NUCUBE: C1M2 is " << temp2 << std::endl;
     if (sign(C1) < 0)
       sub(Ca,Ca,temp2);
     else
@@ -152,6 +163,53 @@ template <> void CubeNucube<ZZ>::cube(QuadraticIdealBase<ZZ> &C, const Quadratic
     }
   }
 
+  B1 = ZZ(sign(Ca))*abs(C1);
+  B2 = abs(C2);
+
+  std::cout << "Ca is " << Ca << std::endl;
+  std::cout << "Cb is " << Cb << std::endl;
+  std::cout << "Cc is " << Cc << std::endl;
+
+  std::cout << "C1 is " << C1 << std::endl;
+  std::cout << "C2 is " << C2 << std::endl;
+
+  std::cout << "B1 is " << B1 << std::endl;
+  std::cout << "B2 is " << B2 << std::endl;
+
+  std::cout << "S is " << S << std::endl;
+
+  rgA = S*(2*Ca*B1 + B2*Cb);
+  rgB = -S*B2;
+  rgC = 2*Ca;
+
+  std::cout << "rgA is " << rgA << std::endl;
+  std::cout << "rgB is " << rgB << std::endl;
+  std::cout << "rgC is " << rgC << std::endl;
+
+  RelativeGenerator->set_abd(rgA, rgB, rgC);
+  RelativeGenerator->invert();
+  if(RelativeGenerator->conv_RR() < 0) {
+    mul(*RelativeGenerator, *RelativeGenerator, ZZ(-1));
+  }
+
+  std::cout << "Ca is " << Ca << std::endl;
+  std::cout << "Cb is " << Cb << std::endl;
+  std::cout << "Cc is " << Cc << std::endl;
+
   C.assign(Ca,Cb,Cc);
   C.reduce();
+
+  ANTL::mul(*RelativeGenerator, *RelativeGenerator, *C.get_QO()->get_red_best()->get_RelativeGenerator());
 }
+//Debug Tools
+// std::cout << "USING NUCOMP" << std::endl;
+// std::cout << "rgA is " << rgA << std::endl;
+// std::cout << "rgB is " << rgB << std::endl;
+// std::cout << "rgC is " << rgC << std::endl;
+// std::cout << "Ca is " << Ca << std::endl;
+// std::cout << "Cb is " << Cb << std::endl;
+// std::cout << "Cc is " << Cc << std::endl;
+// std::cout << "NUCOMP: RG1 is " << RelativeGenerator->conv_RR() << std::endl;
+// std::cout << "NUCOMP: RG2 is " << C.get_QO()->get_red_best()->get_RelativeGenerator()->conv_RR() << std::endl;
+// std::cout << "NUCOMP: RGf is " << RelativeGenerator->conv_RR() << std::endl;
+// std::cout << "NUCOMP: distance is " << log(RelativeGenerator->conv_RR()) << std::endl;

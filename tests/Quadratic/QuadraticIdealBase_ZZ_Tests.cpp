@@ -34,7 +34,7 @@ TEST_CASE("QuadraticIdealBase<ZZ>: Testing assign_prime()", "[QuadraticIdealBase
 
 TEST_CASE("QuadraticIdealBase<ZZ>: Testing is_reduced()", "[QuadraticIdealBase]") {
 
-    QuadraticOrder<ZZ> quad_order1 = QuadraticOrder<ZZ>(ZZ(13));
+    QuadraticOrder<ZZ> quad_order1 = QuadraticOrder<ZZ>(ZZ(29));
 
     QuadraticIdealBase<ZZ> quad_ideal_base1 = QuadraticIdealBase<ZZ>(quad_order1);
     QuadraticIdealBase<ZZ> quad_ideal_base2 = QuadraticIdealBase<ZZ>(quad_order1);
@@ -48,10 +48,11 @@ TEST_CASE("QuadraticIdealBase<ZZ>: Testing is_reduced()", "[QuadraticIdealBase]"
 
 TEST_CASE("QuadraticIdealBase<ZZ>: Testing is_normal()", "[QuadraticIdealBase]") {
 
-    QuadraticOrder<ZZ> quad_order1 = QuadraticOrder<ZZ>(ZZ(13));
+    QuadraticOrder<ZZ> quad_order1 = QuadraticOrder<ZZ>(ZZ(5));
+    QuadraticOrder<ZZ> quad_order2 = QuadraticOrder<ZZ>(ZZ(73));
 
     QuadraticIdealBase<ZZ> quad_ideal_base1 = QuadraticIdealBase<ZZ>(quad_order1);
-    QuadraticIdealBase<ZZ> quad_ideal_base2 = QuadraticIdealBase<ZZ>(quad_order1);
+    QuadraticIdealBase<ZZ> quad_ideal_base2 = QuadraticIdealBase<ZZ>(quad_order2);
 
     quad_ideal_base1.assign(ZZ(5), ZZ(5), ZZ(1));  // A normal form from [BV07, pg. 107]
     quad_ideal_base2.assign(ZZ(3), ZZ(5), ZZ(-4)); // A normal form from [BV07, pg. 107] with a and c negated

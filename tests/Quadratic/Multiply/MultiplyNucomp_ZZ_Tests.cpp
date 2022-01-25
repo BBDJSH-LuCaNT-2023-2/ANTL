@@ -10,6 +10,7 @@ using namespace ANTL;
 TEST_CASE("MultiplyNucomp<ZZ>: Multiplying two ideals", "[MultiplyNucomp]") {
 
     QuadraticOrder<ZZ> quad_order1 = QuadraticOrder<ZZ>(ZZ(193));
+
     QuadraticNumber<ZZ> quad_number1 = QuadraticNumber<ZZ>(quad_order1);
     QuadraticNumber<ZZ> quad_number2 = QuadraticNumber<ZZ>(quad_order1);
 
@@ -28,14 +29,19 @@ TEST_CASE("MultiplyNucomp<ZZ>: Multiplying two ideals", "[MultiplyNucomp]") {
     QuadraticIdealBase<ZZ> quad_ideal_base_product = QuadraticIdealBase<ZZ>(quad_order1);
 
     quad_ideal_base1.assign(ZZ(2), ZZ(13), ZZ(-3));
-    quad_ideal_base2.assign(ZZ(4), ZZ(9), ZZ(-7));
+    quad_ideal_base2.assign(ZZ(2), ZZ(13), ZZ(-3));
 
     mul(quad_ideal_base_product, quad_ideal_base1, quad_ideal_base2);
 
-    //REQUIRE(quad_ideal_base_product.get_a() == ZZ(6));
-    REQUIRE(quad_ideal_base_product.get_b() == ZZ(5));
+    REQUIRE(quad_ideal_base_product.get_a() == ZZ( 4));
+    REQUIRE(quad_ideal_base_product.get_b() == ZZ( 9));
     REQUIRE(quad_ideal_base_product.get_c() == ZZ(-7));
+
+    mul(quad_ideal_base_product, quad_ideal_base_product, quad_ideal_base2);
+
+    REQUIRE(quad_ideal_base_product.get_a() ==  6);
+    REQUIRE(quad_ideal_base_product.get_b() == 11);
+    REQUIRE(quad_ideal_base_product.get_c() == -3);
 
 }
 #endif
-

@@ -35,17 +35,17 @@ namespace ANTL {
     public:
       ~MultiplyNucomp() { };
 
-    void init(const T & delta_in, const T & h_in, long g_in=0) {
-      MultiplyStrategy<T>::init(delta_in,h_in,g_in);
-    };
+      void init(const T & delta_in, const T & h_in, long g_in=0) {
+        MultiplyStrategy<T>::init(delta_in,h_in,g_in);
+      };
 
-    QuadraticNumber<T> * get_RelativeGenerator() {
-      return RelativeGenerator;
-    }
+      QuadraticNumber<T> * get_RelativeGenerator() {
+        return RelativeGenerator;
+      }
 
-    void set_RelativeGenerator(QuadraticNumber<T> & QN) {
-        RelativeGenerator = &QN;
-    }
+      void set_RelativeGenerator(QuadraticNumber<T> & QN) {
+          RelativeGenerator = &QN;
+      }
 
 //     nucomp();
 //     Task:

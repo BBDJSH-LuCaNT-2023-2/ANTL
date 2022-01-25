@@ -5,7 +5,7 @@ QuadraticInfElement<T>::QuadraticInfElement(QuadraticOrder<T> & quad_o) : qib(qu
   qib.assign_one();
   Delta = quad_o.getDiscriminant();
   FloorRootDelta = FloorToZZ(sqrt(to_RR(Delta)));
-  Distance = 1;
+  Distance = 0;
 }
 
 // destructor

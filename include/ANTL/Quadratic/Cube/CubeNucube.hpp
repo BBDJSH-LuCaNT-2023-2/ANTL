@@ -18,7 +18,9 @@ using namespace ANTL;
 
 namespace ANTL {
 
+  template <class T> class CubeStrategy;
   template <class T> class QuadraticIdealBase;
+  template <class T> class QuadraticNumber;
 
   template <class T> class CubeNucube : public CubeStrategy<T> {
     using CubeStrategy<T>::Delta;
@@ -27,6 +29,7 @@ namespace ANTL {
     using CubeStrategy<T>::is_init;
 
     protected:
+      QuadraticNumber<T> * RelativeGenerator;
       ZZ sqrt_delta;   // = floor(SquareRoot(abs(Delta)))
 
     public:
@@ -35,6 +38,14 @@ namespace ANTL {
       void init(const T & delta_in, const T & h_in, long g_in=0) {
         CubeStrategy<T>::init(delta_in,h_in,g_in);
       };
+
+      QuadraticNumber<T> * get_RelativeGenerator() {
+        return RelativeGenerator;
+      }
+
+      void set_RelativeGenerator(QuadraticNumber<T> & QN) {
+        RelativeGenerator = &QN;
+      }
 
       // nucube
       void cube(QuadraticIdealBase<T> & C, const QuadraticIdealBase<T> & A);

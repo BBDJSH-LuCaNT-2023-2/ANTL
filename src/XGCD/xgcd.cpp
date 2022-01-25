@@ -66,7 +66,8 @@ void XGCD_PARTIAL(ZZ & R2, ZZ & R1, ZZ & C2, ZZ & C1, const ZZ & bound) {
 */
 
 
-  while (!IsZero(R1) && R1 > bound ) {
+  while (!IsZero(R1) && R1 > bound) {
+    std::cout << "Hello1" << std::endl;
     T = NumBits (R2) - 31;
     T1 = NumBits (R1) - 31;
     if (T < T1) T=T1;

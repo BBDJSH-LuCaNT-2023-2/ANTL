@@ -102,9 +102,13 @@ template <class T> void QuadraticIdealBase<T>::assign (const T & na, const T & n
 //
 // Task: set to a copy of B.
 template <class T> void QuadraticIdealBase<T>::assign (const QuadraticIdealBase<T> &B) {
-  a = B.a;
-  b = B.b;
-  c = B.c;
+  if(B->get_QO()->getDiscriminant() == b^2 - 4*a*c) {
+    a = B.a;
+    b = B.b;
+    c = B.c;
+    return;
+  }
+  std::cout << "Coeffecients not valid!" << std::endl;
 }
 
 // operator =

@@ -124,28 +124,21 @@ template <> bool QuadraticIdealBase<ZZ>::assign_prime (const ZZ & p) {
 // Note: Not defined for positive definite forms.
 // Task: tests if the ideal is normal.
 template <> bool QuadraticIdealBase<ZZ>::is_normal() {
-  ZZ delta, temp, rootD;
+  ZZ Delta, FloorRootDelta;
 
-  // delta = b^2 - 4ac
-  mul(temp, a, c);
-  mul(temp, temp, 4);
-  sqr(delta, b);
-  sub(delta, delta, temp);
+  if (a < 0) {
+    return false;
+  }
 
-  if(delta > 0) {
+  Delta = this->get_QO()->getDiscriminant();
+  FloorRootDelta = SqrRoot(Delta);
 
-    if (a <= 0) {
-      return false;
-    }
+  if(FloorRootDelta < a) {
+    return (-a < b) && (b <= a);
+  }
 
-    // rootD = floor(sqrt(delta)) - [Recall NTL::SqrRoot(ZZ a) = ZZ floor(sqrt(a))]
-    rootD = SqrRoot(abs(delta));
-
-    if(a > rootD)
-      return ( -a < b ) && ( b <= a );
-
-    else
-      return ( rootD - 2*a < b ) && ( b <= rootD );
+  else {
+    return (FloorRootDelta - 2*a < b) && (b < FloorRootDelta + 1);
   }
 }
 
@@ -153,39 +146,24 @@ template <> bool QuadraticIdealBase<ZZ>::is_normal() {
 //
 // Task: tests if the ideal is reduced.
 template <> bool QuadraticIdealBase<ZZ>::is_reduced() {
-  ZZ delta, temp;
+  ZZ Delta, FloorRootDelta;
 
-  // delta = b^2 - 4ac
-  mul(temp, a, c);
-  mul(temp, temp, 4);
-  sqr(delta, b);
-  sub(delta, delta, temp);
+  Delta = this->get_QO()->getDiscriminant();
 
-  if(delta > 0) {
-    ZZ ubound, lbound, rootD;
+  if(Delta > 0) {
+    FloorRootDelta = SqrRoot(Delta);
 
-    // rootD = floor(sqrt(delta)) - [Recall NTL::SqrRoot(ZZ a) = ZZ floor(sqrt(a))]
-    rootD = SqrRoot(abs(delta));
-
-    // lbound = abs(rootD - 2*abs(a))
-    mul(temp, abs(a), 2);
-    sub(lbound, rootD, temp);
-    abs(lbound, lbound);
-
-    // We assume the form is irrational, so there ought to be no case where delta is square
-    ubound = rootD;
-
-    if (lbound < 0) lbound++; // (rootD = floor(sqrt(Delta)))
-
-    return lbound < b && b <= ubound;
+    return (abs(FloorRootDelta - 2*a) < b) && (b < FloorRootDelta + 1);
   }
 
   // TODO: The case when delta < 0 remains untested!
-  else if (delta < 0) {
+  else if (Delta < 0) {
     bool cond1 = ((abs(b) <= a) && (a <= c));
     bool cond2 = true;
-    if( ((abs(b) == a) || (c == a)) && (b < 0))
+
+    if( ((abs(b) == a) || (c == a)) && (b < 0)) {
       cond2 = false;
+    }
 
     return cond1 && cond2;
   };
@@ -193,60 +171,21 @@ template <> bool QuadraticIdealBase<ZZ>::is_reduced() {
 }
 
 template <> void QuadraticIdealBase<ZZ>::normalize() {
-  static ZZ a2, delta, rootDelta, temp, s;
+  ZZ Delta, FloorRootDelta, q, r;
 
-  // delta = b^2 - 4ac
-  mul(temp, a, c);
-  mul(temp, temp, 4);
-  sqr(delta, b);
-  sub(delta, delta, temp);
+  Delta = this->get_QO()->getDiscriminant();
+  FloorRootDelta = SqrRoot(Delta);
 
-  rootDelta = SqrRoot(delta);
+  abs(a, a);
 
-  if(a <= rootDelta) {
-    mul(a2, 2, abs(a));
-
-    // Computing s, the normalizing integer,  per [BV07, pg. 108]
-    sub(temp, rootDelta, b);
-    div(s, temp, a2);
-    mul(s, s, sign(a));
-
-    //c = a*s^2 + b*s + c
-    mul(temp, s, s);
-    mul(temp, temp, a);
-    add(c, c, temp);
-    mul(temp, b, s);
-    add(c, c, temp);
-
-    //b = b + 2sa
-    mul(temp, a, 2);
-    mul(temp, temp, s);
-    add(b, b, temp);
+  if(FloorRootDelta < a) {
+    b += ((a-b) / (2*a)) * (2*a);
   }
 
   else {
-    mul(a2, 2, abs(a));
-
-    // Computing s, the normalizing integer,  per [BV07, pg. 108]
-    sub(temp, abs(a), b);
-    div(s, temp, a2);
-    mul(s, s, sign(a));
-
-    //c = a*s^2 + b*s + c
-    mul(temp, s, s);
-    mul(temp, temp, a);
-    add(c, c, temp);
-    mul(temp, b, s);
-    add(c, c, temp);
-
-    //b = b + 2sa
-    mul(temp, a, 2);
-    mul(temp, temp, s);
-    add(b, b, temp);
+    b += ((FloorRootDelta-b) / (2*a)) * (2*a);
   }
 
-  if(a < 0) {
-    a = -a;
-    c = -c;
-  }
+  c = (Delta - (b*b))/(-4*a);
+
 }
