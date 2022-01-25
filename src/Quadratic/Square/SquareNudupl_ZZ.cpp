@@ -20,7 +20,7 @@ template <> void SquareNudupl<ZZ>::square(QuadraticIdealBase<ZZ> & C, const Quad
 
   static ZZ a1, b1, c1, Ca, Cb, Cc;
   static ZZ S, v1, K, T, temp;
-  static ZZ R1, R2, C1, C2, M2;
+  static ZZ R1, R2, C1 = ZZ(-1), C2 = ZZ(0), M2, B1, B2, rgA, rgB, rgC;
 
   a1 = A.get_a();
   b1 = A.get_b();
@@ -108,7 +108,37 @@ template <> void SquareNudupl<ZZ>::square(QuadraticIdealBase<ZZ> & C, const Quad
     }
   }
 
+  B1 = ZZ(sign(Ca))*abs(C1);
+  B2 = abs(C2);
+
+  rgA = S*(2*Ca*B1 + B2*Cb);
+  rgB = -S*B2;
+  rgC = 2*Ca;
+
+  RelativeGenerator->set_abd(rgA, rgB, rgC);
+  RelativeGenerator->invert();
+  if(RelativeGenerator->conv_RR() < 0) {
+    mul(*RelativeGenerator, *RelativeGenerator, ZZ(-1));
+  }
+
   // normalize and reduce
   C.assign(Ca,Cb,Cc);
   C.reduce();
+
+  std::cout << "NUCOMP: RG1 is " << RelativeGenerator->conv_RR() << std::endl;
+  std::cout << "NUCOMP: RG2 is " << C.get_QO()->get_red_best()->get_RelativeGenerator()->conv_RR() << std::endl;
+
+  ANTL::mul(*RelativeGenerator, *RelativeGenerator, *C.get_QO()->get_red_best()->get_RelativeGenerator());
 }
+//Debug Tools
+// std::cout << "USING NUCOMP" << std::endl;
+// std::cout << "rgA is " << rgA << std::endl;
+// std::cout << "rgB is " << rgB << std::endl;
+// std::cout << "rgC is " << rgC << std::endl;
+// std::cout << "Ca is " << Ca << std::endl;
+// std::cout << "Cb is " << Cb << std::endl;
+// std::cout << "Cc is " << Cc << std::endl;
+// std::cout << "NUCOMP: RG1 is " << RelativeGenerator->conv_RR() << std::endl;
+// std::cout << "NUCOMP: RG2 is " << C.get_QO()->get_red_best()->get_RelativeGenerator()->conv_RR() << std::endl;
+// std::cout << "NUCOMP: RGf is " << RelativeGenerator->conv_RR() << std::endl;
+// std::cout << "NUCOMP: distance is " << log(RelativeGenerator->conv_RR()) << std::endl;

@@ -42,6 +42,7 @@ template < class T > class QuadraticInfElement {
   RR get_distance();
 
   void baby_step();
+  void giant_step(QuadraticInfElement<T> & quad_ib);
   void giant_step(const QuadraticIdealBase<T> & quad_ib);
 };
 

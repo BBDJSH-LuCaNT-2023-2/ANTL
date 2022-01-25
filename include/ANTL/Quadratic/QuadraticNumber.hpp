@@ -528,7 +528,7 @@ namespace ANTL {
         z = to_RR(d);
         RootD = sqrt(to_RR(QO->getDiscriminant()));
 
-        return (x + y*RootD)/z;
+        return (x + (y*RootD))/z;
       }
 
       /**

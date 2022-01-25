@@ -48,10 +48,11 @@ TEST_CASE("QuadraticIdealBase<long>: Testing is_reduced()", "[QuadraticIdealBase
 
 TEST_CASE("QuadraticIdealBase<long>: Testing is_normal()", "[QuadraticIdealBase]") {
 
-    QuadraticOrder<long> quad_order1 = QuadraticOrder<long>(13);
+    QuadraticOrder<long> quad_order1 = QuadraticOrder<long>(5);
+    QuadraticOrder<long> quad_order2 = QuadraticOrder<long>(73);
 
     QuadraticIdealBase<long> quad_ideal_base1 = QuadraticIdealBase<long>(quad_order1);
-    QuadraticIdealBase<long> quad_ideal_base2 = QuadraticIdealBase<long>(quad_order1);
+    QuadraticIdealBase<long> quad_ideal_base2 = QuadraticIdealBase<long>(quad_order2);
 
     quad_ideal_base1.assign(5, 5, 1);  //A form which is normal [BV07, pg. 109]
     quad_ideal_base2.assign(-3, 5, 4); //A form which is normal [BV07, pg. 109]
