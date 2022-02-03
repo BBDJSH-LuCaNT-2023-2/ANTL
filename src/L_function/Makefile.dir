@@ -1,0 +1,17 @@
+#
+# File:  src/L_function/Makefile.dir
+# Author: John Lees-Miller (2005-06-06).
+# Version: $Header$
+#
+# This is only a partial makefile, included by the root makefile.
+# It contains build rules only for files in this directory.
+# All paths must be relative to the location of the root makefile.
+#
+
+# Register sources with the root makefile.
+ANTL_SRC += src/L_function/Character.cpp
+ANTL_SRC += src/L_function/L_function_util.cpp
+ANTL_SRC += src/L_function/L_function_GF2EX.cpp
+ANTL_SRC += src/L_function/L_function_long.cpp
+ANTL_SRC += src/L_function/L_function_longlong.cpp
+ANTL_SRC += src/L_function/L_function_ZZ.cpp
