@@ -20,6 +20,7 @@ main_SOURCES = tests/HeaderTest.cpp src/Quadratic/QuadraticOrder_ZZ.cpp src/Quad
 test_SOURCES = tests/UnitTests.cpp                                    \
                tests/IndexCalculus/IndCalc_Tests.cpp                  \
                tests/common_Tests.cpp                                 \
+               tests/LFunction/LFunction_ZZ_Tests.cpp                 \
                tests/Quadratic/QuadraticIdealBase_long_Tests.cpp      \
                tests/Quadratic/QuadraticIdealBase_ZZ_Tests.cpp        \
                tests/Quadratic/QuadraticInfElement_ZZ_Tests.cpp       \
@@ -28,7 +29,6 @@ test_SOURCES = tests/UnitTests.cpp                                    \
                tests/Quadratic/QuadraticOrder_long_Tests.cpp          \
                tests/Quadratic/Cube/CubeNucube_long_Tests.cpp         \
                tests/Quadratic/Cube/CubeNucube_ZZ_Tests.cpp           \
-               tests/Quadratic/Cube/CubePlain_ZZ_Tests.cpp            \
                tests/Quadratic/Cube/CubePlain_long_Tests.cpp          \
                tests/Quadratic/Multiply/MultiplyNucomp_long_Tests.cpp \
                tests/Quadratic/Multiply/MultiplyNucomp_ZZ_Tests.cpp   \
@@ -41,6 +41,9 @@ test_SOURCES = tests/UnitTests.cpp                                    \
                tests/Quadratic/Square/SquarePlain_ZZ_Tests.cpp        \
                tests/Quadratic/Square/SquarePlain_long_Tests.cpp      \
                src/common.cpp                                         \
+               src/L_function/Character.cpp                           \
+               src/L_function/L_function_util.cpp                     \
+               src/L_function/L_function_ZZ.cpp                       \
                src/Quadratic/QuadraticIdealBase_long.cpp              \
                src/Quadratic/QuadraticIdealBase_ZZ.cpp                \
                src/Quadratic/QuadraticInfElement_ZZ.cpp               \
