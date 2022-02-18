@@ -9,6 +9,7 @@
  * @brief order in a cubic number field or function field.
  */
 
+#include <memory>
 #include <sstream>
 #include <string>
 #include <NTL/RR.h>

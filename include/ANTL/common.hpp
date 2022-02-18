@@ -25,6 +25,7 @@
 #include <NTL/GF2XFactoring.h>
 #include <NTL/GF2EXFactoring.h>
 
+#include <boost/math/tools/tuple.hpp>
 #include <boost/math/bindings/rr.hpp>
 using boost::math::ntl::atan;
 
