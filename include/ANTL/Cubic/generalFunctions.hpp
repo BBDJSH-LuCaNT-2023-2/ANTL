@@ -2,6 +2,7 @@
 #define GENERAL_FUNCTIONS_H
 
 #include <complex>
+#include <boost/math/tools/tuple.hpp>
 #include <boost/math/bindings/rr.hpp>
 #include <boost/multiprecision/gmp.hpp>
 using namespace boost::multiprecision;
