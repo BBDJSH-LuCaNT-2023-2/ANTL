@@ -482,7 +482,7 @@ namespace ANTL
     long Q, Q2, P, kron;
     TYPE C, E, wt, term, dP;
     ZZ d;
-    register long i;
+    long i;
     CC<float> X;
 
     Q = terms;
@@ -597,22 +597,26 @@ namespace ANTL
   {
     long Q, Q2, P, kron;
     TYPE C, E, wt;
-    register long i;
+    long i;
 
     Q = terms;
 
     // compute weight
-    Q2 = Q << 1;			// Q2 = Q*2;
+    // Q2 = Q*2;
+    Q2 = Q << 1;
+
     clear(C);
-    for (i = Q; i <= Q2 - 1; ++i)
+    for (i = Q; i <= Q2 - 1; ++i) {
       C += to<TYPE>(i) * log(to<TYPE>(i));
+    }
 
     // compute partial product  p < Q
     clear(E);
     lfunc.primes.reset(2);
-    P = lfunc.primes.next();		// primes start at 2
-    while (P < Q)
-      {
+
+    // primes start at 2
+    P = lfunc.primes.next();
+    while (P < Q) {
         kron = lfunc.Chi.quadratic_long(P);
         E += log (to<TYPE>(P) / to<TYPE>(P - kron));
         P = lfunc.primes.next();
@@ -623,8 +627,7 @@ namespace ANTL
     for (i = Q; i <= P; ++i)
       wt -= to<TYPE>(i) * log (to<TYPE>(i)) / C;
 
-    while (P < Q2)
-      {
+    while (P < Q2) {
         kron = lfunc.Chi.quadratic_long(P);
         E += wt * log (to<TYPE>(P) / to<TYPE>(P - kron));
         P = lfunc.primes.next();
@@ -636,11 +639,6 @@ namespace ANTL
     return (exp(to_RR(E)));
   }
 
-
-
-
-
-
   /*
    * Function: L_function<ZZ>::approximateL1
    * Description: This function calculates the L(1,X) function over the finite
@@ -651,11 +649,9 @@ namespace ANTL
    * Inputs: long n - the number of term in the truncated Euler product
    * Output: RR - the result of the product.
    */
-  template <> RR L_function < ZZ >::approximateL1 (long n)
-  {
+  template <> RR L_function < ZZ >::approximateL1 (long n) {
     /* if we have precalculated the L1 function to this many terms return that value */
-    if (n <= nterms_used[L1_REF])
-      {
+    if (n <= nterms_used[L1_REF]){
         return L1_result;
       }
 
@@ -667,41 +663,34 @@ namespace ANTL
 
     if (mode == QUADRATIC_MODE) {
       long prec = calculate_precision (Delta);
-      if (prec <= 53)
-	{
-	  L1_result = approximateL1_impl<double>(*this, Q);
-	}
-      else if (prec <= 104)
-	{
-	  L1_result = approximateL1_impl<quad_float>(*this, Q);
-	}
-      else
-	{
-	  RR::SetPrecision (prec);
-	  L1_result = approximateL1_impl<RR>(*this, Q);
-	}
-    }
-    else if (mode == QUARTIC_MODE)
-      {
-        long prec = calculate_precision (Delta);
-        RR::SetPrecision(NumBits(Delta) << 1);
-        RR::SetOutputPrecision(NumBits(Delta) << 1);
-        ComputePi(PI);
-
-        if (prec <= 53)
-	  {
-            L1_result = approximateL1Bach_Quartic_impl<double>(*this, n);
-	  }
-        else if (prec <= 104)
-	  {
-            L1_result = approximateL1Bach_Quartic_impl<quad_float>(*this, n);
-	  }
-        else
-	  {
-            RR::SetPrecision (prec);
-            L1_result = approximateL1Bach_Quartic_impl<RR>(*this, n);
-	  }
+      if (prec <= 53) {
+        L1_result = approximateL1_impl<double>(*this, Q);
       }
+      else if (prec <= 104) {
+        L1_result = approximateL1_impl<quad_float>(*this, Q);
+      }
+      else {
+        RR::SetPrecision (prec);
+        L1_result = approximateL1_impl<RR>(*this, Q);
+      }
+    }
+    else if (mode == QUARTIC_MODE) {
+      long prec = calculate_precision (Delta);
+      RR::SetPrecision(NumBits(Delta) << 1);
+      RR::SetOutputPrecision(NumBits(Delta) << 1);
+      ComputePi(PI);
+
+      if (prec <= 53) {
+        L1_result = approximateL1Bach_Quartic_impl<double>(*this, n);
+      }
+      else if (prec <= 104){
+        L1_result = approximateL1Bach_Quartic_impl<quad_float>(*this, n);
+      }
+      else{
+        RR::SetPrecision (prec);
+        L1_result = approximateL1Bach_Quartic_impl<RR>(*this, n);
+      }
+    }
 
     return L1_result;
   }
@@ -716,80 +705,65 @@ namespace ANTL
    * Inputs: double acc - The required accuracy of the calculation
    * Outputs: RR - The result of the calculation
    */
-  template <> RR L_function < ZZ >::approximateL1 (double acc)
-  {
-    long Q;
-    long prec;
+template <> RR L_function < ZZ >::approximateL1 (double acc) {
+  long Q;
+  long prec;
 
-    if (mode == QUADRATIC_MODE)
-      {
-        if (global_flag)
-	  {
-            Q = global_num_terms;
-            prec = global_prec;
+  if (mode == QUADRATIC_MODE) {
+    if (global_flag) {
+      Q = global_num_terms;
+      prec = global_prec;
 
-            if (prec <= 53)
-	      {
-                L1_result = approximateL1_impl<double>(*this, Q);
-	      }
-            else if (prec <= 104)
-	      {
-                L1_result = approximateL1_impl<quad_float>(*this, Q);
-	      }
-            else
-	      {
-                /* there is no need to set the RR precision because it was set when the global
-                   precision was setup */
-                L1_result = approximateL1_impl<RR>(*this, Q);
-	      }
-	  }
-        else
-	  {
-            Q = calculate_optimal_terms_new (Delta, acc);
-            if (Q <= nterms_used[L1_REF])
-	      {			/* if the L0 function has been calculated before, return that value */
-                return L1_result;
-	      }
-
-            prec = calculate_precision (Delta);
-            if (prec <= 53)
-	      {
-                L1_result = approximateL1_impl<double>(*this, Q);
-	      }
-            else if (prec <= 104)
-	      {
-                L1_result = approximateL1_impl<quad_float>(*this, Q);
-	      }
-            else
-	      {
-                RR::SetPrecision (prec);
-                L1_result = approximateL1_impl<RR>(*this, Q);
-	      }
-	  }
+      if (prec <= 53) {
+        L1_result = approximateL1_impl<double>(*this, Q);
       }
-    else if (mode == QUARTIC_MODE)
-      {
-        prec = calculate_precision_Quartic (Delta);
-        RR::SetPrecision((3*NumBits(Delta)) >> 1);
-        RR::SetOutputPrecision((3*NumBits(Delta)) >> 1);
-
-        if (prec <= 53)
-	  {
-            L1_result = approximateL1_Quartic_impl<double>(*this, acc);
-	  }
-        else if (prec <= 104)
-	  {
-            L1_result = approximateL1_Quartic_impl<quad_float>(*this, acc);
-	  }
-        else
-	  {
-            RR::SetPrecision (prec);
-            L1_result = approximateL1_Quartic_impl<RR>(*this, acc);
-	  }
+      else if (prec <= 104) {
+        L1_result = approximateL1_impl<quad_float>(*this, Q);
+      }
+      else {
+        /* there is no need to set the RR precision because it was set when the global precision was setup */
+        L1_result = approximateL1_impl<RR>(*this, Q);
+      }
+    }
+    else {
+      Q = calculate_optimal_terms_new (Delta, acc);
+      if (Q <= nterms_used[L1_REF]) {
+        /* if the L0 function has been calculated before, return that value */
+        return L1_result;
       }
 
-    return L1_result;
+      prec = calculate_precision (Delta);
+      if (prec <= 53) {
+        L1_result = approximateL1_impl<double>(*this, Q);
+      }
+      else if (prec <= 104) {
+        L1_result = approximateL1_impl<quad_float>(*this, Q);
+      }
+      else {
+        RR::SetPrecision (prec);
+        L1_result = approximateL1_impl<RR>(*this, Q);
+      }
+    }
   }
+  else if (mode == QUARTIC_MODE) {
+    prec = calculate_precision_Quartic (Delta);
+    RR::SetPrecision((3*NumBits(Delta)) >> 1);
+    RR::SetOutputPrecision((3*NumBits(Delta)) >> 1);
+
+    if (prec <= 53) {
+      L1_result = approximateL1_Quartic_impl<double>(*this, acc);
+    }
+    else if (prec <= 104) {
+      L1_result = approximateL1_Quartic_impl<quad_float>(*this, acc);
+    }
+    else {
+      RR::SetPrecision (prec);
+      L1_result = approximateL1_Quartic_impl<RR>(*this, acc);
+    }
+  }
+
+  return L1_result;
+}
 
   /********************************************************************************************
 
@@ -847,7 +821,7 @@ namespace ANTL
    */
   template <> RR L_function < ZZ >::approximateL (long s, long terms)
   {
-    register long i;
+    long i;
     long kron, P;
     double E, Ps;
 
@@ -907,24 +881,22 @@ namespace ANTL
    */
   template <> RR L_function < ZZ >::approximate (long s, double acc)
   {
-    switch (s)
-      {
+    switch (s) {
       case 0:
-	if (mode == QUARTIC_MODE) {
-	  cout <<
-	    "Please call the approximateL0 function explicitly as it returns Complex Values"
-	       << endl;
-	  return to_RR (0.0);
-	}
-	else
-	  approximateL0 (acc).real();
+        if (mode == QUARTIC_MODE) {
+          std::cout << "Please call the approximateL0 function explicitly as it returns Complex Values" << std::endl;
+          return to_RR (0.0);
+        }
+        else {
+          approximateL0 (acc).real();
+        }
 
       case 1:
-	return approximateL1 (acc);
+        return approximateL1 (acc);
 
       default:
-	return approximateL (s, (long) 10000);	// the value passed to the function should really be calculated
-	// instead of just defaulting to 10000
+        //the value passed to the function should really be calculated instead of just defaulting to 10000
+        return approximateL (s, (long) 10000);
       }
   }
 
@@ -987,7 +959,7 @@ namespace ANTL
 
   template <class TYPE> RR approximateL0_RealNumberField_table_impl(L_function<ZZ>& lfunc, long n)
   {
-    register long int i,Di;     // loop var
+    long int i, Di;     // loop var
     TYPE temp1;	              // used in the calulation of the two multipliers
     TYPE f, h, en, en_1;        // used to determine en inductively
     TYPE S1, S2, S3, S4;        // the three sums in the calculation
@@ -1207,7 +1179,7 @@ namespace ANTL
   template <> RR L_function < ZZ >::approximateL1_table ()
   {
     double C, E, wt;
-    register long i,Q,Q2,P;
+    long i, Q, Q2, P;
     long *pl;
 
     if (info > 2)

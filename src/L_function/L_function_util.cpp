@@ -253,7 +253,7 @@ namespace ANTL
   int
   compute_r2(const ZZ_pX & D)
   {
-    register long j;
+    long j;
     vec_pair_ZZ_pX_long facts;
 
     CanZass(facts,D);
@@ -266,7 +266,7 @@ namespace ANTL
   int
   compute_r2(const zz_pX & D)
   {
-    register long j;
+    long j;
     vec_pair_zz_pX_long facts;
 
     CanZass(facts,D);
@@ -279,7 +279,7 @@ namespace ANTL
   int
   compute_r2(const ZZ_pEX & D)
   {
-    register long j;
+    long j;
     vec_pair_ZZ_pEX_long facts;
 
     CanZass(facts,D);
@@ -292,7 +292,7 @@ namespace ANTL
   int
   compute_r2(const zz_pEX & D)
   {
-    register long j;
+    long j;
     vec_pair_zz_pEX_long facts;
 
     CanZass(facts,D);
@@ -305,7 +305,7 @@ namespace ANTL
   int
   compute_r2(const GF2EX & D)
   {
-    register long j;
+    long j;
     vec_pair_GF2EX_long facts;
     //MDV In case D's not monic..
     GF2EX D2 = D;
