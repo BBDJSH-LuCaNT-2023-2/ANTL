@@ -34,6 +34,8 @@
 #include <ANTL/Quadratic/Cube/CubeNucube.hpp>
 #include <ANTL/Quadratic/Cube/CubeMulSqr.hpp>
 
+#include <ANTL/L_function/L_function.hpp>
+
 /*
 // Class group classes
 #include <ANTL/Quadratic/Invariants/qo_class_group.hpp>
@@ -97,6 +99,23 @@ using namespace ANTL;
   template < class T >
   std::ostream & operator << (std::ostream & out, const QuadraticOrder < T > &QO);
 
+  const long OQvals[] = {
+    947, 2269, 3929, 6011, 8447, 11093, 14149, 17393, 20921, 24733, 28807,
+    33151, 37619, 42533, 47507, 52859, 58321, 64231, 70099, 76463
+  };
+
+  const long OQvals_cnum[] = {
+    2269, 5741, 10427, 16183, 22901, 30631,
+    39209, 48731, 59063, 70237, 82223, 95009, 108571, 122921, 137983, 153817,
+    170341, 187631, 205589, 224261
+  };
+
+  const long OQvals_cfunc[] = {
+    630000, 825000, 995000, 1145000,
+    1290000, 1425000, 1555000, 1675000, 1795000, 1910000, 2020000, 2125000,
+    2230000, 2335000, 2435000, 2530000, 2625000, 2720000, 2810000, 2900000
+  };
+
 
   /**
    * @brief Order in a quadratic number or function field
@@ -140,6 +159,11 @@ template < class T > class QuadraticOrder : public IOrder<T,NTL::RR> {
     T Delta;
     long g;  // genus (if an order in a function field)
 
+    // true if only unconditional methods are to be used for computations
+    bool unconditional;
+    // true if only table-driven
+    bool use_tables;
+
     // These ints determine the preferred or optimal strategies
     // Currently, they are set during initialization
     int preferred_red;
@@ -170,34 +194,35 @@ template < class T > class QuadraticOrder : public IOrder<T,NTL::RR> {
     // invariants and associated objects objects
     //
 
-    /*
-    // Lfunction approximations
-    qo_lfunction<T> Lfunc;
 
+//     Lfunction approximations
+//     L-function approximation
+    L_function <T> Lfunc;
+//
+//
+//     regulator
+//     DTYPE R;            // regulator
+//     bool Rconditional;	// true if correctness of R relies on ERH
+//
+//     qo_regulator<T,DTYPE> *R_best;
+//     qo_regulator_cfrac<T,DTYPE> R_cfrac;
+//     qo_regulator_bsgs<T,DTYPE> R_bsgs;
+//     qo_regulator_lenstra<T,DTYPE> R_lenstra;
+//     qo_regulator_D16<T,DTYPE> R_D16;
+//     qo_regulator_subexp<T,DTYPE> R_subexp;
+//
+//
+//     class group
+//     S h;                          // class number
+//     vector<S> CL;                 // class group invariants
+//     vector < qi_class<T> > gens;  // system of generators
+//     bool hconditional;            // true if correctness of h relies on ERH
+//
+//     qo_class_group<T,S,DTYPE> *CL_best;
+//     qo_class_group<T,S,DTYPE> CL_bjt;
+//     qo_class_group<T,S,DTYPE> CL_bs;
+//     qo_class_group<T,S,DTYPE> CL_subexp;
 
-    // regulator
-    DTYPE R;            // regulator
-    bool Rconditional;	// true if correctness of R relies on ERH
-
-    qo_regulator<T,DTYPE> *R_best;
-    qo_regulator_cfrac<T,DTYPE> R_cfrac;
-    qo_regulator_bsgs<T,DTYPE> R_bsgs;
-    qo_regulator_lenstra<T,DTYPE> R_lenstra;
-    qo_regulator_D16<T,DTYPE> R_D16;
-    qo_regulator_subexp<T,DTYPE> R_subexp;
-
-
-    // class group
-    S h;                          // class number
-    vector<S> CL;                 // class group invariants
-    vector < qi_class<T> > gens;  // system of generators
-    bool hconditional;            // true if correctness of h relies on ERH
-
-    qo_class_group<T,S,DTYPE> *CL_best;
-    qo_class_group<T,S,DTYPE> CL_bjt;
-    qo_class_group<T,S,DTYPE> CL_bs;
-    qo_class_group<T,S,DTYPE> CL_subexp;
-    */
 
 
 
@@ -235,18 +260,15 @@ template < class T > class QuadraticOrder : public IOrder<T,NTL::RR> {
     // access functions
     //
 
-    T getH () const
-    {
+    T getH () const {
       return hx;
     }
 
-    T getDiscriminant () const
-    {
+    T getDiscriminant () const {
       return Delta;
     }
 
-    long getGenus () const
-    {
+    long getGenus () const {
       return g;
     }
 
@@ -354,12 +376,24 @@ template < class T > class QuadraticOrder : public IOrder<T,NTL::RR> {
     //qo_square<T> & square_method (long method = 0);
     //qo_cube<T> & cube_method (long method = 0);
 
+    long bsgs_getl (const ZZ & K, ZZ & N, ZZ & entry_size, RR & mu, bool nodist);
 
+    long generate_optimal_Q();
+    long get_optimal_Q();
+    long get_optimal_Q_cnum();
+    long generate_optimal_Q_cfunc();
+    long get_optimal_Q_cfunc();
+    RR estimate_C (long nQ);
+
+    ZZ approximate_hR ();
+    ZZ lower_bound_hR ();
+    ZZ estimate_hR_error ();
 
     /*
     //
     // L functions.  Output is templated, should be one of double, RR, or mpfi_t
     //
+
 
     void set_unconditional()
     {
@@ -569,6 +603,17 @@ class QuadraticOrder<long> : public QuadraticOrder<long, long, double, double> {
 };
 */
 
+  template <> long QuadraticOrder <ZZ>::generate_optimal_Q();
+  template <> long QuadraticOrder <ZZ>::get_optimal_Q();
+  template <> long QuadraticOrder <ZZ>::get_optimal_Q_cnum();
+  template <> long QuadraticOrder <ZZ>::generate_optimal_Q_cfunc();
+  template <> long QuadraticOrder <ZZ>::get_optimal_Q_cfunc();
+  template <> RR QuadraticOrder < ZZ >::estimate_C (long nQ);
+
+  template <> ZZ QuadraticOrder < ZZ >::approximate_hR();
+  template <> ZZ QuadraticOrder < ZZ >::lower_bound_hR ();
+  template <> ZZ QuadraticOrder < ZZ >::estimate_hR_error();
+
   template <>      QuadraticOrder<ZZ>::QuadraticOrder (const ZZ & D);
   template <>      QuadraticOrder<long>::QuadraticOrder (const long & D);
 
@@ -595,5 +640,6 @@ class QuadraticOrder<long> : public QuadraticOrder<long, long, double, double> {
 
 // Unspecialized template definitions.
 #include "../../../src/Quadratic/QuadraticOrder_impl.hpp"
+#include "../../../src/Quadratic/QuadraticOrderRegulator_impl.hpp"
 
 #endif // guard

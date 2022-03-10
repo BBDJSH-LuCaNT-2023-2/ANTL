@@ -4,6 +4,7 @@
  */
 
 #include <ANTL/Quadratic/QuadraticOrder.hpp>
+#include <ANTL/L_function/L_function.hpp>
 
 using namespace ANTL;
 
@@ -54,14 +55,337 @@ QuadraticOrder<ZZ>::QuadraticOrder(const ZZ & D)
         clear (h);
         rank = 0;
         clear (L);
-
-        Lfunc.init(Delta,QUADRATIC_MODE);
       */
+        Lfunc.init(Delta, QUADRATIC_MODE);
+
     }
   }
 }
 
+  //=============================
+  // Beginning of qo_lfunction.cpp port
+  //=============================
 
+  //
+  // QuadraticOrder<ZZ>::generate_optimal_Q()
+  //
+  // Task:
+  //      computes the optimal value of Q for computing h* such that
+  //      h* < h < 2h*
+  //
+
+  template <> long QuadraticOrder <ZZ>::generate_optimal_Q() {
+    long OQ;
+    RR A, l2;
+    PrimeSeq primes;
+
+    l2 = log (sqrt (to_RR (2)));
+
+    // set OQ = 3
+    OQ = primes.next ();
+
+    do {
+      OQ = primes.next ();
+      A = Lfunc.calculate_L1_error (Delta, OQ);
+    }
+    while (A >= l2);
+
+    return OQ;
+  }
+
+  //
+  // QuadraticOrder<ZZ>::get_optimal_Q()
+  //
+  // Task:
+  //      returns a value of Q from a pre-computed table which will compute h*
+  //      such that h* < h < 2h*.
+  //
+
+  template <> long QuadraticOrder < ZZ >::get_optimal_Q() {
+    long Dlog;
+    ZZ temp;
+
+    temp = FloorToZZ (log10 (to_RR (abs (Delta))));
+    conv (Dlog, temp);
+
+    if ((Dlog / 5) > 19) {
+      return generate_optimal_Q ();
+    }
+
+    return OQvals[Dlog / 5];
+  }
+
+  //
+  // QuadraticOrder<ZZ>::get_optimal_Q_cnum()
+  //
+  // Task:
+  //      returns a value of Q from a pre-computed table which is sufficient
+  //      to determine whether the approximation of h gleaned from the analytic
+  //      class number formula is actually the class number, provided that h <=3.
+  //
+
+  template <> long QuadraticOrder < ZZ >::get_optimal_Q_cnum() {
+    long Dlog;
+    ZZ temp;
+
+    temp = FloorToZZ (log10 (to_RR (abs (Delta))));
+    conv (Dlog, temp);
+
+    return OQvals_cnum[Dlog / 5];
+  }
+
+  //
+  // QuadraticOrder<ZZ>::generate_optimal_Q_cfunc()
+  //
+  // Task:
+  //      computes the optimal value of Q required to compute C(Delta) to 8
+  //      significant digits.
+  //
+
+  template <> long QuadraticOrder < ZZ >::generate_optimal_Q_cfunc() {
+    long QQ;
+    RR OQ, B, sb, val, lDelta, lQ, temp1, temp2;
+
+    val = log (1 + (SqrRoot (to_RR (1.0000002)) / 2));
+
+    lDelta = log (to_RR (abs (Delta)));
+
+    OQ = 100;
+
+    lQ = log (OQ);
+    B =
+      lDelta * (inv (ComputePi_RR () * lQ) + to_RR (5.3) / (lQ * lQ)) +
+      to_RR (4) / lQ;
+    B += to_RR (1) / ComputePi_RR ();
+
+    sb = 2 / (OQ * OQ) + B * (13 * lQ + 8) / (9 * OQ * SqrRoot (OQ));
+
+    while (sb >= val) {
+      if (OQ == 100) {
+        OQ = 1000;
+      }
+      else if (OQ < 5000) {
+        OQ += 1000;
+      }
+      else {
+        OQ += 5000;
+      }
+
+      lQ = log (OQ);
+      B = lDelta * (inv (ComputePi_RR () * lQ) + to_RR (5.3) / (lQ * lQ)) + to_RR (4) / lQ;
+      B += to_RR (1) / ComputePi_RR ();
+
+      sb = 2 / (OQ * OQ) + B * (13 * lQ + 8) / (9 * OQ * SqrRoot (OQ));
+    }
+
+    conv (QQ, OQ);
+    return QQ;
+  }
+
+  //
+  // QuadraticOrder<ZZ>::get_optimal_Q_cfunc()
+  //
+  // Task:
+  //      returns a value of Q from a pre-computed list which is sufficient to
+  //      compute an approximation of C(Delta) accurate to 8 significant digits.
+  //
+
+  template <> long QuadraticOrder < ZZ >::get_optimal_Q_cfunc() {
+    long Dlog;
+    ZZ temp;
+
+    temp = FloorToZZ (log10 (to_RR (abs (Delta))));
+    conv (Dlog, temp);
+
+    if ((Dlog / 5) > 19) {
+      return get_optimal_Q_cfunc ();
+    }
+
+    return OQvals_cfunc[Dlog / 5];
+  }
+
+  //
+  // QuadraticOrder<ZZ>::estimate_C
+  //
+  // Task:
+  //      computes a truncated product approximation of C(D) using primes
+  //      less than Q.
+  //
+
+  template <> RR QuadraticOrder < ZZ >::estimate_C (long nQ) {
+    PrimeSeq primes;
+    long jac, P;
+    double E;
+
+    E = (double) 1.0;
+
+    P = primes.next ();
+
+    // compute partial product for LQ <= p < QQ
+    while (P < nQ) {
+      P = primes.next ();
+      jac = Jacobi (Delta, P);
+      E *= (double) 1.0 - ((double) jac / (P - 1.0));
+    }
+
+    return to_RR (E);
+  }
+
+  //
+  // QuadraticOrder<ZZ>::approximate_hR()
+  //
+  // Task:
+  //      returns an approximation of hR
+  //
+
+  template <> ZZ QuadraticOrder < ZZ >::approximate_hR() {
+    ZZ hR;
+    RR temp,FI;
+
+    std::cout <<"DEBUG: approximate_hR() hello1!" << std::endl;
+
+    long n = get_optimal_Q_cnum ();
+
+    FI = Lfunc.approximateL1 (n);
+
+    if (IsImaginary()) {
+      // h = sqrt(Delta) L / Pi
+      temp = FI * SqrRoot (to_RR (-Delta)) / ComputePi_RR ();
+      if (Delta == -4) {
+        temp *= 2;
+      }
+      if (Delta == -3) {
+        temp *= 3;
+      }
+    }
+    else {
+      // hR = sqrt(Delta) L / 2
+      temp = FI * SqrRoot (to_RR (Delta)) / 2;
+    }
+
+    hR = CeilToZZ (temp);
+    return hR;
+  }
+
+  //
+  // QuadraticOrder<ZZ>::lower_bound_hR()
+  //
+  // Task:
+  //      returns a lower bound of hR such that L < hR < 2L
+  //
+
+  template <> ZZ QuadraticOrder < ZZ >::lower_bound_hR (){
+    ZZ hR;
+    RR temp,FI;
+
+    std::cout <<"DEBUG: lower_bound_hR hello1!" << std::endl;
+
+    if (unconditional) {
+      // compute hR apporximation
+
+      if (IsImaginary()) {
+        if (use_tables) {
+          FI = Lfunc.approximateL0_ImaginaryNumberField_table(log (sqrt (double (2))));
+        }
+        else {
+          FI = Lfunc.approximateL0_ImaginaryNumberField(log (sqrt (double (2))));
+        }
+
+        temp = FI;
+        if (Delta == -4)
+          temp *= 2;
+        if (Delta == -3)
+          temp *= 3;
+      }
+      else {
+        if (use_tables) {
+          FI = Lfunc.approximateL0_RealNumberField_table(log (sqrt (double (2))));
+        }
+        else {
+          FI = Lfunc.approximateL0_RealNumberField(log (sqrt (double (2))));
+        }
+        temp = FI;
+      }
+    }
+    else {
+      if (use_tables) {
+        FI = Lfunc.approximateL1_table();
+      }
+      else {
+        long n = get_optimal_Q();
+        FI = Lfunc.approximateL1 (n);
+      }
+
+
+
+      if (IsImaginary())  {
+        // h = sqrt(Delta) L / Pi
+        temp = FI * SqrRoot (to_RR (-Delta)) / ComputePi_RR ();
+        if (Delta == -4) {
+          temp *= 2;
+        }
+        if (Delta == -3) {
+          temp *= 3;
+        }
+      }
+      else {
+        // hR = sqrt(Delta) L / 2
+        temp = FI * SqrRoot (to_RR (Delta)) / 2;
+      }
+    }
+
+    hR = CeilToZZ (temp / SqrRoot (to_RR (2)));
+    return hR;
+  }
+
+
+
+  //
+  // QuadraticOrder<ZZ>::estimate_hR_error(long n)
+  //
+  // Task:
+  //      returns L such that |hR - hR'| < exp(L)^2
+  //
+
+  template <> ZZ QuadraticOrder < ZZ >::estimate_hR_error() {
+    ZZ err;
+    RR Aval, Fval, temp;
+
+    std::cout <<"DEBUG: estimate_hR_error hello1!" << std::endl;
+
+    if (Lfunc.terms_used(1) == 0)  return ZZ::zero();
+
+    long n = get_optimal_Q_cnum ();
+    RR FI = Lfunc.approximateL1(n);
+
+    Aval = Lfunc.calculate_L1_error (Delta, Lfunc.terms_used(1));
+    Fval = exp (Aval) - 1;
+    temp = 1 - exp (-Aval);
+    if (temp > Fval)
+      Fval = temp;
+
+    if (IsImaginary()) {
+      // h = sqrt(Delta) L / Pi
+      Fval *= FI * SqrRoot (to_RR (-Delta)) / ComputePi_RR ();
+      if (Delta == -4) {
+        temp *= 2;
+      }
+      if (Delta == -3) {
+        temp *= 3;
+      }
+    }
+    else {
+      // hR = sqrt(Delta) L / 2
+      Fval *= FI * SqrRoot (to_RR (Delta)) / 2;
+    }
+
+    err = CeilToZZ (Fval * log (to_RR (2))) >> 1;
+    return err;
+  }
+
+  //=============================
+  // End of qo_lfunction.cpp port
+  //=============================
 
   //
   // QuadraticOrder<ZZ>::IsImaginary()
@@ -102,424 +426,6 @@ QuadraticOrder<ZZ>::QuadraticOrder(const ZZ & D)
   {
     return (Delta > 0);
   }
-
-
-  /*
-  //
-  // randomImaginaryOrder
-  //
-  // Task:
-  //      generates a random imaginary order
-  //
-
-  template <>
-  QuadraticOrder<ZZ> & randomImaginaryOrder (long size, bool prime)
-  {
-    // select a random discriminant with given genus
-
-    long m4 = RandomWord () % 2;
-    ZZ disc, rD, p;
-
-    do
-      {
-	if (prime)
-	  {
-	    if (m4) {
-	      do {
-		p = RandomPrime_ZZ (size);
-	      } while (((p % 4) != 1) && (NumBits(p) != size));
-	      disc = p;
-	    }
-	    else {
-	      do {
-		p = RandomPrime_ZZ (size - 2);
-	      } while (((p % 4) != 3) && (NumBits (4*p) != size));
-	      disc = 4*p;
-	    }
-	  }
-	else
-	  disc = RandomLen_ZZ (size);
-	disc = -abs (disc);
-  
-        rD = SqrRoot (abs (disc));
-      }
-    while (rD * rD == abs (disc));
-
-    return new QuadraticOrder<ZZ>(disc);
-  }
-
-
-
-  //
-  // randomUnusualOrder
-  //
-  // Task:
-  //      generates a random real order
-  //
-
-  template <>
-  QuadraticOrder<ZZ> & randomUnusualOrder (long size, bool prime)
-  {
-  }
-
-
-
-  //
-  // randomRealOrder
-  //
-  // Task:
-  //      generates a random real order
-  //
-
-  template <>
-  QuadraticOrder<ZZ> & randomRealOrder (long size, bool prime)
-  {
-    // select a random discriminant with given genus
-
-    long m4 = RandomWord () % 2;
-    ZZ disc,rd,p;
-
-    do
-      {
-	if (prime)
-	  {
-	    if (m4) {
-	      do {
-		p = RandomPrime_ZZ (size);
-	      } while (((p % 4) != 1) && (NumBits(p) != size));
-	      disc = p;
-	    }
-	    else {
-	      do {
-		p = RandomPrime_ZZ (size - 2);
-	      } while (((p % 4) != 3) && (NumBits (4*p) != size));
-	      disc = 4*p;
-	    }
-	  }
-	else
-	  disc = RandomLen_ZZ (size);
-	disc = abs (disc);
-
-        rD = SqrRoot (disc);
-      } 
-    while (rD * rD == disc);
-
-    return new QuadraticOrder<ZZ>(disc);
-  }
-*/
-
-
-
-  /*
-  //
-  // QuadraticOrder<ZZ>::use_Lfunction_tables(H)
-  //
-  // Task:
-  //      initializes table-driven L-function approximations, assuming that
-  //      discriminants will be less than H
-  //
-
-  template <> void QuadraticOrder < ZZ >::use_Lfunction_tables (const ZZ & H)
-  {
-    use_tables = true;
-    if (unconditional)
-      Lfunc.create_L0_tables(H, log (sqrt (double (2))));
-    else
-      Lfunc.create_L1_tables(H, log (sqrt (double (2))));
-  }
-
-
-  //
-  // QuadraticOrder<ZZ>::set_Lfunction_global(H)
-  //
-  // Task:
-  //      sets the global terms and precision constants for L_function
-  //      computations
-  //
-                                                                              
-  template <> 
-  void QuadraticOrder < ZZ >::set_Lfunction_global (const ZZ & H)
-  {
-    double acc = std::log (std::sqrt (double (2)));
-                                                                        
-    if (unconditional) {
-      // set global precision
-      Lfunc.set_global_prec(H,QUADRATIC_L0_MODE);
-
-      // compute number of terms to use, assuming D is an upper bound
-      Lfunc.set_global_terms(H,acc,QUADRATIC_L0_MODE);
-    }
-    else {
-      // set global precision
-      Lfunc.set_global_prec(H,QUADRATIC_L1_MODE);
-
-      // compute number of terms to use, assuming D is an upper bound
-      Lfunc.set_global_terms(H,acc,QUADRATIC_L1_MODE);
-    }
-  }
-                                                                              
-      
-
-  //
-  // QuadraticOrder<ZZ>::Lfunction
-  //
-  // Task:
-  //      returns an approximation of L_K(1/q) computed via the analytic class
-  //      number formula.
-  //
-
-  template <> RR QuadraticOrder < ZZ >::Lfunction ()
-  {
-    if (!is_L_computed ())
-      {
-	// L has not been computed - compute it
-
-	if (is_imaginary ())
-	  {
-	    // L = pi*h / sqrt(Delta)
-	    L =
-	      ComputePi_RR () * to_RR (class_number ()) /
-	      SqrRoot (to_RR (-Delta));
-	    if (Delta == -4)
-	      L /= 2;
-	    if (Delta == -3)
-	      L /= 3;
-	  }
-	else
-	  {
-	    // L = 2hR / sqrt(Delta)
-	    L =
-	      to_RR (class_number () << 1) * regulator ().get_log () /
-	      SqrRoot (to_RR (Delta));
-	  }
-      }
-
-    return L;
-  }
-
-
-  //
-  // QuadraticOrder<ZZ>::LDfunction
-  //
-  // Task:
-  //      returns an approximation of the LD(1) function defined by Shanks
-  //      (L(1,X) without the 2-factor) computed via the analytic class
-  //      number formula.
-  //
-
-  template <> RR QuadraticOrder < ZZ >::LDfunction ()
-  {
-    RR LD;
-    long m8;
-
-    m8 = Delta % 8;
-    if (m8 < 0)
-      m8 += 8;
-    LD = Lfunction ();
-    if (m8 == 1)
-      LD /= 2;
-    else if (m8 == 5)
-      LD *= to_RR (1.5);
-
-    return LD;
-  }
-
-
-
-  //
-  // QuadraticOrder<ZZ>::LLI
-  //
-  // Task:
-  //      returns an approximation of the Lower Littlewood Index (defined by
-  //      Shanks).
-  //
-
-  template <> RR QuadraticOrder < ZZ >::LLI ()
-  {
-    RR LLI, c;
-
-    if (::IsZero (Delta))
-      clear (LLI);
-    else
-      {
-	//    c = exp(Euler()) / (ComputePi_RR() * ComputePi_RR());
-
-	if (IsOdd (Delta))
-	  c *= to_RR (12);
-	else
-	  c *= to_RR (8);
-
-	LLI = Lfunction () * c * log (log (to_RR (abs (Delta))));
-      }
-
-    return LLI;
-  }
-
-
-
-  //
-  // QuadraticOrder<ZZ>::LLI_D
-  //
-  // Task:
-  //      returns an approximation of the LLI_D value (defined by Shanks).
-  //
-
-  template <> RR QuadraticOrder < ZZ >::LLI_D ()
-  {
-    RR LLI, c;
-
-    if (::IsZero (Delta))
-      clear (LLI);
-    else
-      {
-	//    c = to_RR(8) * exp(Euler()) / (ComputePi_RR() * ComputePi_RR());
-	LLI = LDfunction () * c * log (log (to_RR (abs (Delta << 2))));
-      }
-
-    return LLI;
-  }
-
-
-
-  //
-  // QuadraticOrder<ZZ>::ULI
-  //
-  // Task:
-  //      returns an approximation of the Upper Littlewood Index (defined by
-  //      Shanks).
-  //
-
-  template <> RR QuadraticOrder < ZZ >::ULI ()
-  {
-    RR ULI, c;
-
-    if (::IsZero (Delta))
-      clear (ULI);
-    else
-      {
-	//    c = exp(Euler());
-
-	if (IsOdd (Delta))
-	  c *= 2;
-
-	ULI = Lfunction () / (c * log (log (to_RR (abs (Delta)))));
-      }
-
-    return ULI;
-  }
-
-
-
-  //
-  // QuadraticOrder<ZZ>::ULI_D
-  //
-  // Task:
-  //      returns an approximation of the ULI_D value (defined by Shanks).
-  //
-
-  template <> RR QuadraticOrder < ZZ >::ULI_D ()
-  {
-    RR ULI, c;
-
-    if (::IsZero (Delta))
-      clear (ULI);
-    else
-      {
-	//    c = exp(Euler());
-	ULI = LDfunction () / (c * log (log (to_RR (abs (Delta << 2)))));
-      }
-
-    return ULI;
-  }
-
-
-
-  //
-  // QuadraticOrder<ZZ>::set_regulator(newR)
-  //
-  // Sets the regulator of the order - no error checking!
-  //
-
-  template <> void QuadraticOrder < ZZ >::set_regulator (const ZZ & newR)
-  {
-    qi_pair < ZZ > A, U;
-    U.assign_one ();
-    nuclose (A, newR);
-    A.adjust (U);
-    A.get_distance (R);
-    Rbsgs = false;
-    Rconditional = true;
-  }
-
-
-  //
-  // QuadraticOrder<ZZ>::set_regulator(newR)
-  //
-  // Sets the regulator of the order - no error checking!
-  //
-
-  template <>
-  void QuadraticOrder < ZZ >::set_regulator (const qo_distance < ZZ > &newR)
-  {
-    R = newR;
-    Rbsgs = false;
-    Rconditional = true;
-  }
-
-
-
-  // distance computation in BS-GS methods
-
-  template <>
-  void
-  QuadraticOrder < ZZ >::
-  combine_BSGS (qo_distance < ZZ > &dist, const qi_pair < ZZ > &DD,
-		const qo_hash_entry_real < ZZ > *F)
-  {
-    qi_pair < ZZ > C (*F);
-    C.adjust (DD);
-    divide (dist, DD.get_distance (), C.get_distance ());
-  }
-
-
-  template <>
-  void
-  QuadraticOrder < ZZ >::
-  combine_conj_BSGS (qo_distance < ZZ > &dist, const qi_pair < ZZ > &DD,
-		     const qo_hash_entry_real < ZZ > *F)
-  {
-    qi_pair < ZZ > C (*F);
-    C.adjust (-DD);
-    multiply (dist, DD.get_distance (), C.get_distance ());
-    dist.divide (DD.get_a ());
-  }
-
-  template <>
-  void
-  QuadraticOrder < ZZ >::
-  combine_BSGS_easy (qo_distance < ZZ > &dist, const qi_pair < ZZ > &DD,
-		     const qo_hash_entry_real < ZZ > *F)
-  {
-    qi_pair < ZZ > C (*F);
-    C.adjust (DD);
-    divide(dist,C.get_distance(),DD.get_distance());
-  }
-
-
-  template <>
-  void
-  QuadraticOrder < ZZ >::
-  combine_conj_BSGS_easy (qo_distance < ZZ > &dist, const qi_pair < ZZ > &DD,
-			  const qo_hash_entry_real < ZZ > *F)
-  {
-    qi_pair < ZZ > C (*F);
-    C.adjust (-DD);
-    divide(dist,R,C.get_distance());
-    divide(dist,dist,DD.get_distance());
-    dist.multiply(DD.get_a());
-  }
-  */
-
 
   //
   // operator <<

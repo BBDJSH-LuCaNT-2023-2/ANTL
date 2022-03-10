@@ -38,9 +38,8 @@ namespace ANTL
       CL.clear();
       gens.clear();
       clear (L);
-  
-      Lfunc.init(Delta,QUADRATIC_MODE);
       */
+      Lfunc.init(Delta,QUADRATIC_MODE);
     }
   }
 
@@ -219,6 +218,160 @@ namespace ANTL
   template <class T> CubeNucube<T> *       QuadraticOrder<T>::get_cube_nucube()   {return cube_nucube;}
   template <class T> CubeMulSqr<T> *       QuadraticOrder<T>::get_cube_mulsqr()   {return cube_mulsqr;}
 
+
+  template < class T > long QuadraticOrder<T>::bsgs_getl(const ZZ & K, ZZ & N, ZZ & entry_size, RR & mu, bool nodist) {
+    ZZ maxN, rootK;
+    RR n, temp;
+    long
+    l;
+
+    // get mu (# baby steps per giant step)
+    mu = get_mu (Delta);
+
+    // n = number of slave processes
+//     if (parallel)
+//       n = parallel;
+//     else
+      set (n);
+
+    // compute max number of baby steps to store
+    bsgs_getentrysize (entry_size, nodist);
+    maxN = 1 + (MAXMEMORY / (to_ZZ (n) * entry_size));
+
+    // compute number of baby steps assuming l=1, N=sqrt(KG/2n)
+    temp = floor (SqrRoot (to_RR (K) * mu / (to_RR (1) * n)));
+    conv (N, temp);
+    l = 1;
+
+    if (N > maxN) {
+      // compute l = sqrt(KG/2n) / N;
+      //    N = maxN;
+      entry_size *= 3;
+      entry_size >>= 1;
+      N = 1 + (MAXMEMORY / (to_ZZ (n) * entry_size));
+      temp = floor ((SqrRoot (to_RR (K) * mu / (to_RR (2) * n)) / to_RR (N)));
+      conv (l, temp);
+      if (l < 1) {
+        l = 1;
+      }
+    }
+
+    return l;
+  }
+// QuadraticOrder<T>::approximate_hR()
+// Task: returns an approximation of hR
+
+  template < class T > ZZ QuadraticOrder< T >::approximate_hR() {
+    ZZ hR, temp, q = CARDINALITY<T>();
+    long n;
+
+    if (g == 1) {
+      hR = q;
+      ++hR;
+      return hR;
+    }
+
+    if (g == 2) {
+      hR = q * q + 6 * q + 1;
+      return hR;
+    }
+
+    n = 2*g - 1;
+
+    if ((g % 5) == 2) {
+      n /= 5;
+    }
+    else {
+      double tn = (double) n;
+      n = (long) ::round(tn/5.0);
+    }
+
+    if (q < 5) {
+      if (n < 8) {
+        n = 8;
+      }
+    }
+    else if (q < 7) {
+      if (n < 4) {
+        n = 4;
+      }
+    }
+    else if (q < 11) {
+      if (n < 3) {
+        n = 3;
+      }
+    }
+    else if (q < 13) {
+      if (n < 2) {
+        n = 2;
+      }
+    }
+
+    RR FI = Lfunc.approximateL1 (n);
+
+    hR = CeilToZZ(FI);
+
+    return hR;
+  }
+
+// QuadraticOrder<T>::lower_bound_hR()
+// Task: returns a lower bound of hR such that L < hR < 2L
+
+  template < class T > ZZ QuadraticOrder< T >::lower_bound_hR() {
+    ZZ hR, q = CARDINALITY<T>();
+    RR temp, temp2, rootq = SqrRoot (to_RR (q));
+
+    // compute temp = (sqrt(q) + 1)^2g - (sqrt(q) - 1)^2g
+    temp2 = rootq;
+    temp = temp2;
+    ++temp;
+    --temp2;
+    power(temp,temp,g << 1);
+    power(temp2,temp2,g << 1);
+    temp -= temp2;
+
+    // if width of Hasse interval is <= 2, use lower Hasse bound
+    if (temp <= to_RR(2)) {
+      hR = CeilToZZ (temp2);
+
+      return hR;
+    }
+
+    // approximate L1 to accuracy log(sqrt(2))
+    double acc = log(sqrt((double) 2));
+    RR FI = Lfunc.approximateL1 (acc);
+
+    // lower bound is FI/sqrt(2)
+    hR = CeilToZZ (FI / SqrRoot (to_RR (2)));
+
+    return hR;
+  }
+
+// QuadraticOrder<T>::estimate_hR_error(long n)
+// Task: returns L such that |hR - hR'| < exp(L)^2
+
+  template < class T > ZZ QuadraticOrder< T >::estimate_hR_error() {
+    ZZ err, qn, q = CARDINALITY<T>();
+    long n = Lfunc.terms_used(1);
+
+    if ((g == 1) && (n == 0)) {
+      SqrRoot (err, q);
+      ++err;
+      err <<= 1;
+      return err;
+    }
+
+    if ((g == 2) && (n == 0)) {
+      SqrRoot (err, q);
+      ++err;
+      err *= ((q + 1) << 2);
+      return err;
+    }
+
+    err = CeilToZZ(Lfunc.calculate_L1_error_ff(Delta,n));
+
+    return err;
+  }
 
   //
   // QuadraticOrder<T>::IsEqual()

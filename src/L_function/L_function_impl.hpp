@@ -79,7 +79,7 @@ namespace ANTL
   template < class T > 
   void L_function < T >::delete_tables ()
   {
-    register long i;
+    long i;
 
     if (log_table)
       {
@@ -729,17 +729,15 @@ MISC FUNCTIONS
 
     primes.reset(2);
     Q = primes.next ();
-    do
-      {
-	i = 0;
-	while (i < 16)
-	  {
-	    Q = primes.next ();
-	    i++;
-	  }
-
-	conv(A,calculate_L1_error(D,Q));
+    do {
+      i = 0;
+      while (i < 16) {
+        Q = primes.next ();
+        i++;
       }
+
+    conv(A,calculate_L1_error(D,Q));
+    }
     while (acc <= A);
 
     return Q;
@@ -749,7 +747,7 @@ MISC FUNCTIONS
 
   template < class T > long L_function < T >::calculate_precision (const T & D)
   {
-    return 53;			// double precision is sufficient for almost but the largest discriminants, ie 10^1000, etc
+    return 53; // double precision is sufficient for almost but the largest discriminants, ie 10^1000, etc
   }
 
   /*
@@ -797,8 +795,7 @@ MISC FUNCTIONS
    */
   template < class T >
   long
-  L_function < T >::calculate_optimal_n_RealNumberField (const T & D,
-							 double acc)
+  L_function < T >::calculate_optimal_n_RealNumberField (const T & D, double acc)
   {
     RR M;
     RR N;
@@ -891,7 +888,7 @@ MISC FUNCTIONS
   template < class T >
   void L_function < T >::create_L1_tables (const T & D, double acc)
   {
-    register long P,Q2,a,a2;
+    long P,Q2,a,a2;
     double val;
 
     if (info > 2) 
@@ -983,7 +980,7 @@ MISC FUNCTIONS
   template < class T >
   void L_function < T >::create_L0_tables(const T & D, double acc)
   {
-    register long i,a;
+    long i,a;
 
     if (info > 2) 
       cout << "\nStarting create_L0_tables" << endl;

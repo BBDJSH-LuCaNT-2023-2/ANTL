@@ -58,6 +58,9 @@ L FUNCTIONS OVER zz_pEX, zz_pE, ZZ_pEX, ZZ_pE
     ZZ q = CARDINALITY < T > ();
     ZZ g = to_ZZ (deg (Delta) >> 1);
 
+    std::cout << "calculate_L1_error_ff: q is " << q <<std::endl;
+    std::cout << "calculate_L1_error_ff: g is " << g <<std::endl;
+
     /* temporary variables to aid in the calculation */
     ZZ temp1num,temp1den,temp2num,temp2den;
     RR temp1RR,temp2RR;
@@ -140,7 +143,7 @@ L FUNCTIONS OVER zz_pEX, zz_pE, ZZ_pEX, ZZ_pE
    */
   template < class T > RR L_function < T >::approximateL1 (long n)
   {
-    register long i;
+    long i;
     ZZ q2g;			// q to the power of g + r2
     long g = deg(Delta);
 
@@ -221,7 +224,7 @@ L FUNCTIONS OVER zz_pEX, zz_pE, ZZ_pEX, ZZ_pE
    */
   template < class T > RR L_function < T >::approximateL (long s, long terms)
   {
-    register long i;
+    long i;
     ZZ q2g;			// q to the power of g/2
     RR result;
 

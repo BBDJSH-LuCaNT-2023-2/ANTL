@@ -73,7 +73,7 @@ namespace ANTL
    */
   template <class TYPE> CC<RR> approximateL0_Quartic_impl(L_function<long>& lfunc, long terms)
   {
-    register long i;		// loop var
+    long i;		// loop var
     CC<TYPE>T1, temp3;	// used in the calulation of the two multipliers
     TYPE T2, temp1, temp2;
     TYPE f, h, en;		// used to determine en inductively
@@ -504,7 +504,7 @@ namespace ANTL
   {
     long Q, Q2, P, kron;
     TYPE C, E, wt, term, dP;
-    register long i;
+    long i;
     CC<float> X;
 
     Q = terms;
@@ -608,7 +608,7 @@ namespace ANTL
   {
     long Q, Q2, P, kron;
     TYPE C, E, wt;
-    register long i;
+    long i;
 
     Q = terms;
 
@@ -857,7 +857,7 @@ namespace ANTL
    */
   template <> RR L_function < long >::approximateL (long s, long terms)
   {
-    register long i;
+    long i;
     long kron, P;
     double E, Ps;
 
@@ -996,7 +996,7 @@ namespace ANTL
 
   template <class TYPE> RR approximateL0_RealNumberField_table_impl(L_function<long>& lfunc, long n)
   {
-    register long int i,Di;     // loop var
+    long int i,Di;     // loop var
     //  TYPE T1, T2;	      // used in the calulation of the two multipliers
     TYPE temp1;	      // used in the calulation of the two multipliers
     TYPE f, h, en, en_1;        // used to determine en inductively
@@ -1219,7 +1219,7 @@ namespace ANTL
   template <> RR L_function < long >::approximateL1_table ()
   {
     double C, E, wt;
-    register long i,Q,Q2,P,Dp;
+    long i,Q,Q2,P,Dp;
     long *pl;
 
     if (info > 2)

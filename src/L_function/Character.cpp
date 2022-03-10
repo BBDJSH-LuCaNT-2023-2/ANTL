@@ -535,7 +535,7 @@ namespace ANTL
   CC < float >
   Character<ZZ>::quartic (const ZZ & n)
   {
-    register long i;
+    long i;
     ZZ n4;
     ZZ temp;
 
@@ -558,7 +558,7 @@ namespace ANTL
   CC < float >
   Character<long>::quartic (const long & n)
   {
-    register long i;
+    long i;
     long n4;
     long temp;
 
@@ -581,7 +581,7 @@ namespace ANTL
 //   CC < float >
 //   Character<long long>::quartic (const long long & n)
 //   {
-//     register long i;
+//     long i;
 //     long long n4;
 //     long long temp;
 //
@@ -605,7 +605,7 @@ namespace ANTL
   CC < float >
   Character<ZZ>::quartic_long (const long & n)
   {
-    register long i;
+    long i;
     ZZ n4;
     ZZ temp;
 
@@ -628,7 +628,7 @@ namespace ANTL
   CC < float >
   Character<long>::quartic_long (const long & n)
   {
-    register long i;
+    long i;
     long long n4;
     long long temp;
 

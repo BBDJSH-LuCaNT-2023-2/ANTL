@@ -13,10 +13,12 @@ TEST_CASE("LFunction<ZZ>: Computing L(1, Chi(Delta))", "[LFunction]") {
 
     L_function1.init(ZZ(12157), 2);
 
-    RR LFunctionApprox1 = L_function1.approximate(1,long(10000000));
+    RR LFunctionApprox1 = L_function1.approximate(1, double(10000));
+    LFunctionApprox1 = L_function1.approximate(1, long(10000));
+
+    std::cout << "Estimate of L(1, 12157) is " << LFunctionApprox1 << std::endl;
 
     REQUIRE(abs(LFunctionApprox1 - 0.792928842) < 0.00001);
 }
 
 #endif
-
