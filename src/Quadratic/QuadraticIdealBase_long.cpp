@@ -10,10 +10,10 @@ using namespace ANTL;
 
 template <> void QuadraticIdealBase<long>::ensure_valid(std::string msg) {
     long tval = b*b - 4*a*c;
-    if (tval != QO->getDiscriminant()) {
+    if (tval != QO->get_discriminant()) {
       cout << "ERROR " << msg << "!  wrong discriminant!" << endl;
       cout << "a = " << a << ", b = " << b << ", c = " << c << endl;
-      cout << "Delta = " << QO->getDiscriminant() << endl;
+      cout << "Delta = " << QO->get_discriminant() << endl;
       cout << "b^2 - 4ac = " << tval << endl;
       exit(1);
     }
@@ -28,13 +28,13 @@ template <> void QuadraticIdealBase<long>::ensure_valid(std::string msg) {
 
 template <> void QuadraticIdealBase<long>::assign_one() {
   a = 1;
-  if ((QO->getDiscriminant() & 3) == 1) {
+  if ((QO->get_discriminant() & 3) == 1) {
     b = 1;
-    c = 1 - QO->getDiscriminant();
+    c = 1 - QO->get_discriminant();
   }
   else {
     b = 0;
-    c = -QO->getDiscriminant();
+    c = -QO->get_discriminant();
   }
   c = c / (a << 2);
 }
@@ -56,16 +56,16 @@ template <> bool QuadraticIdealBase<long>::assign_prime (const long & p) {
   if (!ProbPrime (p))
     return false;
 
-  Dp = QO->getDiscriminant() % p;
+  Dp = QO->get_discriminant() % p;
   if (Dp < 0)
     Dp += p;
 
   if (p == 2) {
     if (Dp == 0) {
-      Dp = QO->getDiscriminant() % 4;
+      Dp = QO->get_discriminant() % 4;
       if (Dp < 0)  Dp += 4;
       if (Dp == 0) {
-        Dp = (QO->getDiscriminant() >> 2) % 4;
+        Dp = (QO->get_discriminant() >> 2) % 4;
         if (Dp < 0)
           Dp += 4;
         if (Dp != 3)
@@ -73,11 +73,11 @@ template <> bool QuadraticIdealBase<long>::assign_prime (const long & p) {
       }
       a = 2;
       b = 2;
-      c = (4-QO->getDiscriminant()) >> 3;
+      c = (4-QO->get_discriminant()) >> 3;
       return true;
     }
     else {
-    long D8 = QO->getDiscriminant() % 8;
+    long D8 = QO->get_discriminant() % 8;
 
     if (D8 < 0)
       D8 += 8;
@@ -90,14 +90,14 @@ template <> bool QuadraticIdealBase<long>::assign_prime (const long & p) {
   else {
     if (Dp == 0) {
       a = p;
-      if (IsOdd (QO->getDiscriminant()))
+      if (IsOdd (QO->get_discriminant()))
         b = p;
       else
         b = 0;
-      c = (b*b - QO->getDiscriminant()) / a;
+      c = (b*b - QO->get_discriminant()) / a;
       c >>= 2;
 
-      temp = QO->getDiscriminant() % (p * p);
+      temp = QO->get_discriminant() % (p * p);
       if (IsZero(to_ZZ(temp))) //An IsZero call was here, but there doesn't seem to be an implementation for that method yet...
     return false;
       else
@@ -113,12 +113,12 @@ template <> bool QuadraticIdealBase<long>::assign_prime (const long & p) {
   temp = to_long(SqrRootMod (to_ZZ(Dp), to_ZZ(p))); //SqrRootMod is not defined for input of type long.
   if (temp < 0)
     temp += p;
-  if (IsOdd (QO->getDiscriminant()) != IsOdd (temp))
+  if (IsOdd (QO->get_discriminant()) != IsOdd (temp))
     temp = p - temp;
 
   a = p;
   b = temp;
-  c = (b * b - QO->getDiscriminant()) / a;
+  c = (b * b - QO->get_discriminant()) / a;
   c >>= 2;
 
   return true;

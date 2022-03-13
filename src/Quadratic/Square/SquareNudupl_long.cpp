@@ -15,7 +15,7 @@ template <> void SquareNudupl<long>::init(const long & delta_in, const long & h_
 
 
 template <> void SquareNudupl<long>::square(QuadraticIdealBase<long> & C, const QuadraticIdealBase<long> & A) {
-  Delta = C.get_QO()->getDiscriminant();
+  Delta = C.get_QO()->get_discriminant();
   NC_BOUND = FloorToZZ(sqrt(sqrt(abs(to_RR(Delta)))));
 
   static long a1, b1, c1, Ca, Cb, Cc;

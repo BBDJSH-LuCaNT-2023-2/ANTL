@@ -18,22 +18,22 @@ TEST_CASE("QuadraticOrder<long>: Orders are equal iff discriminants are equal", 
     REQUIRE(quad_order1 != quad_order3);
 }
 
-TEST_CASE("QuadraticOrder<long>: getDiscriminant returns the discriminant", "[QuadraticOrder]") {
+TEST_CASE("QuadraticOrder<long>: get_discriminant returns the discriminant", "[QuadraticOrder]") {
 
     QuadraticOrder<long> quad_order1 = QuadraticOrder<long>(long(13));
 
     long expected_discriminant = long(13);
 
-    REQUIRE(quad_order1.getDiscriminant() == expected_discriminant);
+    REQUIRE(quad_order1.get_discriminant() == expected_discriminant);
 }
 
 TEST_CASE("QuadraticOrder<long>: Orders are real iff their discriminant is positive", "[QuadraticOrder]") {
 
     QuadraticOrder<long> quad_order1 = QuadraticOrder<long>(long(13));
 
-    REQUIRE(quad_order1.IsReal());
+    REQUIRE(quad_order1.is_real());
 
-    REQUIRE_FALSE(quad_order1.IsImaginary());
+    REQUIRE_FALSE(quad_order1.is_imaginary());
 }
 
 #endif

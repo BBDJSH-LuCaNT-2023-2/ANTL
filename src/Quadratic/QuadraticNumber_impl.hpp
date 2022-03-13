@@ -95,7 +95,7 @@ template < class T >
 bool
       operator == (const QuadraticNumber<T> & x, const QuadraticNumber<T> & y)
       {
-        return (x.QO->getDiscriminant() == y.QO->getDiscriminant() && x.a == y.a && x.b = y.b && x.d = y.d);
+        return (x.QO->get_discriminant() == y.QO->get_discriminant() && x.a == y.a && x.b = y.b && x.d = y.d);
       }
 
 template < class T >
@@ -198,7 +198,7 @@ void
 
         ::sqr(z.d,x.a);
         ::sqr(temp,x.b);
-        ::mul(temp,temp,x.QO->getDiscriminant());
+        ::mul(temp,temp,x.QO->get_discriminant());
         ::sub(z.d,z.d,temp);
 
         z.normalize ();
@@ -478,7 +478,7 @@ void
 
         mul(newA,x.get_a(),y.get_a());
         mul(temp,x.get_b(),y.get_b());
-        mul(temp,temp,z.get_QO()->getDiscriminant());
+        mul(temp,temp,z.get_QO()->get_discriminant());
         add(newA,newA,temp);
 
         mul(newB,x.get_a(),y.get_b());
@@ -558,7 +558,7 @@ void
 
         ::mul(newA,x.a,y.a);
         ::mul(temp,x.b,y.b);
-        ::mul(temp,temp,z.QO->getDiscriminant());
+        ::mul(temp,temp,z.QO->get_discriminant());
         ::sub(newA,newA,temp);
         ::mul(newA,newA,y.d);
 
@@ -569,7 +569,7 @@ void
 
         ::sqr(newD,y.a);
         ::sqr(temp,y.b);
-        ::mul(temp,temp,z.QO->getDiscriminant());
+        ::mul(temp,temp,z.QO->get_discriminant());
         ::mul(newD,temp,x.d);
 
         z.a = newA;
@@ -645,7 +645,7 @@ void
 
         ::sqr(newA,x.a);
         ::sqr(temp,x.b);
-        ::mul(temp,temp,z.QO->getDiscriminant());
+        ::mul(temp,temp,z.QO->get_discriminant());
         ::add(newA,newA,temp);
 
         ::mul(newB,x.a,x.b);
@@ -966,7 +966,7 @@ QuadraticNumber<T>
 // std::ostream &
 //       operator<<<T> (std::ostream & out, const QuadraticNumber<T> & x)
 //       {
-//         out << "(" << x.a << "," << x.b << "," << x.d << ", " << x.QO->getDiscriminant() << ")";
+//         out << "(" << x.a << "," << x.b << "," << x.d << ", " << x.QO->get_discriminant() << ")";
 //         return out;
 //       }
 

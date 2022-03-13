@@ -15,14 +15,14 @@ using namespace ANTL;
 template <> void QuadraticIdealBase<ZZ>::assign_one() {
   set(a);
 
-  if (rem(QO->getDiscriminant(),4) == 1) {
+  if (rem(QO->get_discriminant(),4) == 1) {
     set(b);
-    sub(c,1,QO->getDiscriminant());
+    sub(c,1,QO->get_discriminant());
   }
 
   else {
     clear(b);
-    NTL::negate(c,QO->getDiscriminant());
+    NTL::negate(c,QO->get_discriminant());
   }
 
   div(c,c,a);
@@ -40,18 +40,18 @@ template <> bool QuadraticIdealBase<ZZ>::assign_prime (const ZZ & p) {
   if (!ProbPrime (p))
     return false;
 
-  rem(Dp,QO->getDiscriminant(),p);
+  rem(Dp,QO->get_discriminant(),p);
   if (Dp < 0)
     add(Dp,Dp,p);
 
   if (p == 2) {
     if (IsZero(Dp)) {
-      rem(QO->getDiscriminant(),4);
+      rem(QO->get_discriminant(),4);
         if (Dp < 0)
           add(Dp,Dp,4);
 
       if (IsZero(Dp)) {
-        RightShift(temp,QO->getDiscriminant(),2);
+        RightShift(temp,QO->get_discriminant(),2);
         Dp = rem(temp,4);
         if (Dp < 0)
           add(Dp,Dp,4);
@@ -60,14 +60,14 @@ template <> bool QuadraticIdealBase<ZZ>::assign_prime (const ZZ & p) {
       }
       a = 2;
       b = 2;
-      sub(c,4,QO->getDiscriminant());
+      sub(c,4,QO->get_discriminant());
       RightShift(c,c,3);
       return true;
     }
 
     else {
       ZZ D8;
-      rem(D8, QO->getDiscriminant(),ZZ(8));
+      rem(D8, QO->get_discriminant(),ZZ(8));
 
       if (D8 < 0)
         add(D8,D8,ZZ(8));
@@ -81,16 +81,16 @@ template <> bool QuadraticIdealBase<ZZ>::assign_prime (const ZZ & p) {
   else {
     if (Dp == 0) {
       a = p;
-      if (IsOdd (QO->getDiscriminant()))
+      if (IsOdd (QO->get_discriminant()))
         b = p;
       else
         b = 0;
       sqr(c,b);
-      sub(c,c,QO->getDiscriminant());
+      sub(c,c,QO->get_discriminant());
       div(c,c,a);
       RightShift(c,c,2);
 
-      rem(temp,QO->getDiscriminant(),p*p);
+      rem(temp,QO->get_discriminant(),p*p);
       if (IsZero (temp))
         return false;
       else
@@ -107,13 +107,13 @@ template <> bool QuadraticIdealBase<ZZ>::assign_prime (const ZZ & p) {
   if (temp < 0)
     add(temp,temp,p);
 
-  if (IsOdd (QO->getDiscriminant()) != IsOdd (temp))
+  if (IsOdd (QO->get_discriminant()) != IsOdd (temp))
     sub(temp,p,temp);
 
   a = p;
   b = temp;
   sqr(c,b);
-  sub(c,c,QO->getDiscriminant());
+  sub(c,c,QO->get_discriminant());
   div(c,c,a);
   RightShift(c,c,2);
 
@@ -130,7 +130,7 @@ template <> bool QuadraticIdealBase<ZZ>::is_normal() {
     return false;
   }
 
-  Delta = this->get_QO()->getDiscriminant();
+  Delta = this->get_QO()->get_discriminant();
   FloorRootDelta = SqrRoot(Delta);
 
   if(FloorRootDelta < a) {
@@ -148,7 +148,7 @@ template <> bool QuadraticIdealBase<ZZ>::is_normal() {
 template <> bool QuadraticIdealBase<ZZ>::is_reduced() {
   ZZ Delta, FloorRootDelta;
 
-  Delta = this->get_QO()->getDiscriminant();
+  Delta = this->get_QO()->get_discriminant();
 
   if(Delta > 0) {
     FloorRootDelta = SqrRoot(Delta);
@@ -173,7 +173,7 @@ template <> bool QuadraticIdealBase<ZZ>::is_reduced() {
 template <> void QuadraticIdealBase<ZZ>::normalize() {
   ZZ Delta, FloorRootDelta, q, r;
 
-  Delta = this->get_QO()->getDiscriminant();
+  Delta = this->get_QO()->get_discriminant();
   FloorRootDelta = SqrRoot(Delta);
 
   abs(a, a);

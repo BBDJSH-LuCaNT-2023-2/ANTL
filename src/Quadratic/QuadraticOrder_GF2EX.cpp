@@ -30,7 +30,7 @@ namespace ANTL
       hx = newh;
 
       // compute genus
-      if (IsReal()){
+      if (is_real()){
         g = deg(hx) - 1;
       }
       else {
@@ -78,7 +78,7 @@ namespace ANTL
 
 
   //
-  // QuadraticOrder<GF2EX>::IsImaginary()
+  // QuadraticOrder<GF2EX>::is_imaginary()
   //
   // Task:
   //      returns true if the function field is imaginary
@@ -86,7 +86,7 @@ namespace ANTL
                                                                                 
   template <> 
   bool 
-  QuadraticOrder < GF2EX >::IsImaginary () const
+  QuadraticOrder < GF2EX >::is_imaginary () const
   {
     return ((deg (Delta) & 1) && (deg(hx) <= ((deg(Delta)-1) >> 1)));
   }
@@ -110,7 +110,7 @@ namespace ANTL
 
 
   //
-  // QuadraticOrder<T>::IsReal()
+  // QuadraticOrder<T>::is_real()
   //
   // Task:
   //      returns true if the function field is real
@@ -118,7 +118,7 @@ namespace ANTL
 
   template <>
   bool 
-  QuadraticOrder < GF2EX >::IsReal () const
+  QuadraticOrder < GF2EX >::is_real () const
   {
     bool real1 = (!(deg(Delta) & 1) && (deg(hx) == (deg(Delta) >> 1)) && test_Dcoeff(Delta,hx));
     bool real2 = (deg(Delta) < 2*deg(hx));

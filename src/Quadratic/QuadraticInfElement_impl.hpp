@@ -3,7 +3,7 @@ namespace ANTL {
 template <class T>
 QuadraticInfElement<T>::QuadraticInfElement(QuadraticOrder<T> & quad_o) : qib(quad_o) {
   qib.assign_one();
-  Delta = quad_o.getDiscriminant();
+  Delta = quad_o.get_discriminant();
   FloorRootDelta = FloorToZZ(sqrt(to_RR(Delta)));
   Distance = 0;
 }
