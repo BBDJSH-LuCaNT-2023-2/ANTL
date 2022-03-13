@@ -19,6 +19,9 @@
 #include "ANTL/Quadratic/QuadraticNumber.hpp"
 //#include "ANTL/Quadratic/QuadraticField.hpp"
 
+#include "ANTL/Quadratic/Regulator/RegulatorLenstraData.hpp"
+//#include "ANTL/Quadratic/Regulator/RegulatorLenstraCompute.hpp"
+
 int main() {
   return 0;
 }

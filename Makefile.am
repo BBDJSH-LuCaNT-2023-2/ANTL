@@ -6,9 +6,9 @@ AM_CC = @PTHREAD_CC@
 AM_CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/include
 
 if EXTRADEPS
-bin_PROGRAMS = test main
+bin_PROGRAMS = main
 else
-bin_PROGRAMS = test main
+bin_PROGRAMS = main
 endif
 
 main_SOURCES = tests/HeaderTest.cpp
@@ -17,7 +17,7 @@ main_SOURCES = tests/HeaderTest.cpp
 
 #testorder_SOURCES=tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp
 
-test_SOURCES = tests/UnitTests.cpp                                    \
+#test_SOURCES = tests/UnitTests.cpp                                    \
                tests/IndexCalculus/IndCalc_Tests.cpp                  \
                tests/common_Tests.cpp                                 \
                tests/LFunction/LFunction_ZZ_Tests.cpp                 \
