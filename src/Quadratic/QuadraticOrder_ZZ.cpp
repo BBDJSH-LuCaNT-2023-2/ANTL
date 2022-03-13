@@ -248,7 +248,7 @@ QuadraticOrder<ZZ>::QuadraticOrder(const ZZ & D)
 
     FI = Lfunc.approximateL1 (n);
 
-    if (IsImaginary()) {
+    if (is_imaginary()) {
       // h = sqrt(Delta) L / Pi
       temp = FI * SqrRoot (to_RR (-Delta)) / ComputePi_RR ();
       if (Delta == -4) {
@@ -283,7 +283,7 @@ QuadraticOrder<ZZ>::QuadraticOrder(const ZZ & D)
     if (unconditional) {
       // compute hR apporximation
 
-      if (IsImaginary()) {
+      if (is_imaginary()) {
         if (use_tables) {
           FI = Lfunc.approximateL0_ImaginaryNumberField_table(log (sqrt (double (2))));
         }
@@ -318,7 +318,7 @@ QuadraticOrder<ZZ>::QuadraticOrder(const ZZ & D)
 
 
 
-      if (IsImaginary())  {
+      if (is_imaginary())  {
         // h = sqrt(Delta) L / Pi
         temp = FI * SqrRoot (to_RR (-Delta)) / ComputePi_RR ();
         if (Delta == -4) {
@@ -364,7 +364,7 @@ QuadraticOrder<ZZ>::QuadraticOrder(const ZZ & D)
     if (temp > Fval)
       Fval = temp;
 
-    if (IsImaginary()) {
+    if (is_imaginary()) {
       // h = sqrt(Delta) L / Pi
       Fval *= FI * SqrRoot (to_RR (-Delta)) / ComputePi_RR ();
       if (Delta == -4) {
@@ -388,13 +388,13 @@ QuadraticOrder<ZZ>::QuadraticOrder(const ZZ & D)
   //=============================
 
   //
-  // QuadraticOrder<ZZ>::IsImaginary()
+  // QuadraticOrder<ZZ>::is_imaginary()
   //
   // Task:
   //      returns true if the quadratic order is imaginary
   //
 
-  template <> bool QuadraticOrder<ZZ>::IsImaginary () const
+  template <> bool QuadraticOrder<ZZ>::is_imaginary () const
   {
     return (Delta < 0);
   }
@@ -416,13 +416,13 @@ QuadraticOrder<ZZ>::QuadraticOrder(const ZZ & D)
 
 
   //
-  // QuadraticOrder<ZZ>::IsReal()
+  // QuadraticOrder<ZZ>::is_real()
   //
   // Task:
   //      returns true if the quadratic order is real
   //
 
-  template <> bool QuadraticOrder < ZZ >::IsReal () const
+  template <> bool QuadraticOrder < ZZ >::is_real () const
   {
     return (Delta > 0);
   }

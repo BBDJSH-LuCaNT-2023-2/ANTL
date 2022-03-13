@@ -13,7 +13,7 @@ template <> void MultiplyNucomp<long>::init(const long & delta_in, const long & 
 }
 
 template <> void MultiplyNucomp<long>::multiply(QuadraticIdealBase<long> & C, const QuadraticIdealBase<long> & A, const QuadraticIdealBase<long> & B) {
-  Delta = C.get_QO()->getDiscriminant();
+  Delta = C.get_QO()->get_discriminant();
   NC_BOUND = FloorToZZ(sqrt(sqrt(abs(to_RR(Delta)))));
 
   static long a1, a2, b1, b2, c2, Ca, Cb, Cc, ss, m;

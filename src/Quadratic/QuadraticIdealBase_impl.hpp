@@ -32,13 +32,13 @@ template <class T> void QuadraticIdealBase<T>::set_QO (QuadraticOrder<T> *x) {QO
 
 // template <class T> void QuadraticIdealBase<T>::ensure_valid (std::string msg) {
 //   T temp = b * b - 4 * a * c;
-//   if (temp != QO->getDiscriminant())
+//   if (temp != QO->get_discriminant())
 //     {
-//       cout << "ERROR " << msg << "!  wrong getDiscriminant!" << endl;
+//       cout << "ERROR " << msg << "!  wrong get_discriminant!" << endl;
 //       cout << "a = " << a << ", b = " << b << ", c = " << c << endl;
-//       cout << "Delta = " << QO->getDiscriminant() << endl;
+//       cout << "Delta = " << QO->get_discriminant() << endl;
 //       cout << "b^2 - ac = " << temp << endl;
-//       cout << "(b^2 - Delta) % a = " << (b*b - QO->getDiscriminant()) % a << endl;
+//       cout << "(b^2 - Delta) % a = " << (b*b - QO->get_discriminant()) % a << endl;
 //       exit (1);
 //     }
 // }
@@ -49,7 +49,7 @@ template <class T> void QuadraticIdealBase<T>::set_QO (QuadraticOrder<T> *x) {QO
 template <class T> void QuadraticIdealBase<T>::assign_one () {
   set (a);
   clear (b);
-  c = -QO->getDiscriminant();
+  c = -QO->get_discriminant();
 }
 
 // assign_prime
@@ -64,14 +64,14 @@ template <class T> bool QuadraticIdealBase<T>::assign_prime (const T & p) {
   if (!DetIrredTest (p))
     return false;
 
-  jac = ressol (temp, QO->getDiscriminant() % p, p);
+  jac = ressol (temp, QO->get_discriminant() % p, p);
 
   if (jac < 0)
     return false;
 
   if (jac == 0)
     {
-      temp = QO->getDiscriminant() % (p * p);
+      temp = QO->get_discriminant() % (p * p);
       if (IsZero (temp))
     return false;
       else
@@ -83,7 +83,7 @@ template <class T> bool QuadraticIdealBase<T>::assign_prime (const T & p) {
 
   // c = (b^2 - Delta) / a
   sqr(c,b);
-  sub(c,c,QO->getDiscriminant());
+  sub(c,c,QO->get_discriminant());
   div(c,c,a);
 
   return true;
@@ -102,7 +102,7 @@ template <class T> void QuadraticIdealBase<T>::assign (const T & na, const T & n
 //
 // Task: set to a copy of B.
 template <class T> void QuadraticIdealBase<T>::assign (const QuadraticIdealBase<T> &B) {
-  if(B->get_QO()->getDiscriminant() == b^2 - 4*a*c) {
+  if(B->get_QO()->get_discriminant() == b^2 - 4*a*c) {
     a = B.a;
     b = B.b;
     c = B.c;

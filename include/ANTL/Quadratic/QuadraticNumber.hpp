@@ -375,7 +375,7 @@ namespace ANTL {
 
         NTL::sqr(newA,a);
         NTL::sqr(temp,b);
-        NTL::mul(temp,temp,QO->getDiscriminant());
+        NTL::mul(temp,temp,QO->get_discriminant());
         NTL::sub(newA,newA,temp);
         NTL::sqr(newD,d);
         q.assign(newA,newD);
@@ -526,7 +526,7 @@ namespace ANTL {
         x = to_RR(a);
         y = to_RR(b);
         z = to_RR(d);
-        RootD = sqrt(to_RR(QO->getDiscriminant()));
+        RootD = sqrt(to_RR(QO->get_discriminant()));
 
         return (x + (y*RootD))/z;
       }
@@ -710,7 +710,7 @@ namespace ANTL {
       friend bool
       operator == (const QuadraticNumber<T> & x, const QuadraticNumber<T> & y)
       {
-        return (x.QO->getDiscriminant() == y.QO->getDiscriminant() && x.a == y.a && x.b == y.b && x.d == y.d);
+        return (x.QO->get_discriminant() == y.QO->get_discriminant() && x.a == y.a && x.b == y.b && x.d == y.d);
       }
 
       /**
@@ -852,7 +852,7 @@ namespace ANTL {
 
         sqr(newD,a);
         sqr(temp,b);
-        mul(temp,temp,QO->getDiscriminant());
+        mul(temp,temp,QO->get_discriminant());
         sub(newD,newD,temp);
 
         a = newA;
@@ -901,7 +901,7 @@ namespace ANTL {
 
         ::sqr(z.d,x.a);
         ::sqr(temp,x.b);
-        ::mul(temp,temp,x.QO->getDiscriminant());
+        ::mul(temp,temp,x.QO->get_discriminant());
         ::sub(z.d,z.d,temp);
 
         z.normalize ();
@@ -1173,7 +1173,7 @@ namespace ANTL {
 
         ANTL::mul(newA,x.a,y.a);
         ANTL::mul(temp,x.b,y.b);
-        ANTL::mul(temp,temp,z.QO->getDiscriminant());
+        ANTL::mul(temp,temp,z.QO->get_discriminant());
         add(newA,newA,temp);
 
         ANTL::mul(newB,x.a,y.b);
@@ -1251,7 +1251,7 @@ namespace ANTL {
 
         ::mul(newA,x.a,y.a);
         ::mul(temp,x.b,y.b);
-        ::mul(temp,temp,z.QO->getDiscriminant());
+        ::mul(temp,temp,z.QO->get_discriminant());
         ::sub(newA,newA,temp);
         ::mul(newA,newA,y.d);
 
@@ -1262,7 +1262,7 @@ namespace ANTL {
 
         ::sqr(newD,y.a);
         ::sqr(temp,y.b);
-        ::mul(temp,temp,z.QO->getDiscriminant());
+        ::mul(temp,temp,z.QO->get_discriminant());
         ::mul(newD,temp,x.d);
 
         z.a = newA;
@@ -1335,7 +1335,7 @@ namespace ANTL {
 
         ::sqr(newA,x.a);
         ::sqr(temp,x.b);
-        ::mul(temp,temp,z.QO->getDiscriminant());
+        ::mul(temp,temp,z.QO->get_discriminant());
         ::add(newA,newA,temp);
 
         ::mul(newB,x.a,x.b);
@@ -1628,7 +1628,7 @@ namespace ANTL {
       friend std::ostream &
       operator<< (std::ostream & out, const QuadraticNumber<T> & x)
       {
-	    out << "(" << x.a << "," << x.b << "," << x.d << ", " << x.QO->getDiscriminant() << ")";
+	    out << "(" << x.a << "," << x.b << "," << x.d << ", " << x.QO->get_discriminant() << ")";
 	    return out;
       }
     };

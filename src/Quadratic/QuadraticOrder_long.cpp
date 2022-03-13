@@ -62,13 +62,13 @@ QuadraticOrder<long>::QuadraticOrder(const long & D)
 
 
   //
-  // QuadraticOrder<long>::IsImaginary()
+  // QuadraticOrder<long>::is_imaginary()
   //
   // Task:
   //      returns true if the function field is imaginary
   //
 
-  template <> bool QuadraticOrder < long >::IsImaginary () const
+  template <> bool QuadraticOrder < long >::is_imaginary () const
   {
     return (Delta < 0);
   }
@@ -90,13 +90,13 @@ QuadraticOrder<long>::QuadraticOrder(const long & D)
 
 
   //
-  // QuadraticOrder<long>::IsReal()
+  // QuadraticOrder<long>::is_real()
   //
   // Task:
   //      returns true if the function field is real
   //
 
-  template <> bool QuadraticOrder < long >::IsReal () const
+  template <> bool QuadraticOrder < long >::is_real () const
   {
     return (Delta > 0);
   }
