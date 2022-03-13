@@ -147,7 +147,7 @@ public:
 
   long long get_a() const { return a; }
   long long get_b() const { return b; }
-  ZZ hval() const { return to<ZZ>(a); }
+  ZZ hval() const { return ZZ(a); }
 
   friend bool operator==
       <long long>(const HashEntry<long long> &A, const HashEntry<long long> &B);

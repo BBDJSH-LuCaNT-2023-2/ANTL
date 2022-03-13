@@ -1,10 +1,15 @@
 #ifndef REGULATOR_LENSTRA_COMPUTE_H
 #define REGULATOR_LENSTRA_COMPUTE_H
 
+#include <ANTL/common.hpp>
+
+#include <ANTL/HashTable/HashEntryReal.hpp>
+#include <ANTL/HashTable/IndexedHashTable.hpp>
+#include <ANTL/L_function/L_function.hpp>
 #include <ANTL/Quadratic/QuadraticInfElement.hpp>
 #include <ANTL/Quadratic/QuadraticOrder.hpp>
+
 #include <ANTL/Quadratic/Regulator/RegulatorLenstraData.hpp>
-#include <ANTL/common.hpp>
 
 NTL_CLIENT
 using namespace ANTL;
@@ -27,6 +32,11 @@ private:
 
   void bsgs_getentrysize(RegulatorLenstraData<T> &rl_data, ZZ &entry_size,
                          bool nodist);
+
+  void init_prinlist(RegulatorLenstraData<T> &rl_data, const ZZ &N, long l,
+                     ZZ &s, long &M, QuadraticInfElement<T> &G);
+
+  void regulator_bsgs(RegulatorLenstraData<T> &rl_data, const ZZ &bound);
 };
 
 // START: Forward Declaring template specializations
@@ -58,13 +68,13 @@ RR RegulatorLenstraCompute<T>::regulator_lenstra(
   // initialize hash table
   //
 
-  RR regulator;
   ZZ K, N, B, entry_size, u, s, s2;
   long l = 1, M = 1;
   RR mu;
   QuadraticInfElement<T> AA, G;
 
-  qo_distance<T> S;
+  RR S;
+  // qo_distance<T> S;
   clear(S);
 
   K = estimate_hR_error(rl_data.get_quadratic_order()) >> 1;
@@ -93,23 +103,23 @@ RR RegulatorLenstraCompute<T>::regulator_lenstra(
   //
 
   QuadraticInfElement<T> A, C, CC, D, DD, GG;
-  qo_hash_entry_real<T> *F;
+  HashEntryReal<T> *F;
 
   if (IsZero(S)) {
 
     A.assign_one();
     if (l == 1)
-      regulator = G.get_baby_steps(prin_list, B, A);
+      rl_data.get_regulator() = G.get_baby_steps(rl_data.get_rl_data.get_prin_list()(), B, A);
     else
-      regulator = G.get_baby_steps(prin_list, B, A, l, M);
+      regulator = G.get_baby_steps(rl_data.get_rl_data.get_prin_list()(), B, A, l, M);
 
-    if (!IsZero(R)) {
-      nuclose(C, R.eval());
+    if (!IsZero(regulator)) {
+      nuclose(C, regulator);
       regulator = C.get_distance();
       Rbsgs = true;
     }
 
-    prinlist_M = M;
+    rl_data.get_prinlist_M() = M;
 
     if (IsZero(regulator)) {
       G.adjust(s);
@@ -144,25 +154,25 @@ RR RegulatorLenstraCompute<T>::regulator_lenstra(
     CC = C;
     DD = D;
     for (i = 0; i < M && IsZero(S); ++i) {
-      F = prin_list.search(CC.hash_real());
+      F = rl_data.get_rl_data.get_prin_list()().search(CC.hash_real());
       if (F) {
         // found CC in the hash table!
 
         combine_BSGS(S, CC, F);
       } else {
-        F = prin_list.search((-CC).hash_real());
+        F = rl_data.get_rl_data.get_prin_list()().search((-CC).hash_real());
         if (F) {
           // found CC^-1 in the hash table!
 
           combine_conj_BSGS(S, CC, F);
         } else {
-          F = prin_list.search(DD.hash_real());
+          F = rl_data.get_rl_data.get_prin_list()().search(DD.hash_real());
           if (F) {
             // found DD in the hash table!
 
             combine_BSGS(S, DD, F);
           } else {
-            F = prin_list.search((-DD).hash_real());
+            F = rl_data.get_rl_data.get_prin_list()().search((-DD).hash_real());
             if (F) {
               // found DD^-1 in the hash table!
 
@@ -197,28 +207,28 @@ RR RegulatorLenstraCompute<T>::regulator_lenstra(
     ZZ B, N, entry_size;
     RR mu;
     long l;
-    RR temp = log(to_RR(S.eval())) * to_RR(2) / to_RR(3);
+    RR temp = log(to_RR(S)) * to_RR(2) / to_RR(3);
 
     conv(B, ceil(exp(temp)));
 
     l = bsgs_getl(B, N, entry_size, mu, true);
-    optimize_K(B, S.eval(), N, l);
+    optimize_K(B, S, N, l);
 
     regulator_bsgs(B);
 
     ZZ hstar, Pmax;
 
     if (info > 1 && !IsZero(regulator)) {
-      hstar = S.eval() / R.eval();
+      hstar = S / regulator;
 
       cout << "Found R = " << regulator << endl;
       cout << "h* = " << hstar << endl;
     } else {
-      Pmax = 1 + S.eval() / B;
-      find_hstar(hstar, S.eval(), Pmax, t1);
+      Pmax = 1 + S / RR(B);
+      find_hstar(hstar, S, Pmax, t1);
     }
 
-    nuclose(C, R.eval());
+    nuclose(C, regulator);
     regulator = C.get_distance();
   }
 }
@@ -233,20 +243,20 @@ ZZ RegulatorLenstraCompute<ZZ>::estimate_hR_error(
   ZZ err, delta = rl_data.get_delta();
   RR Aval, Fval, temp;
 
-  if (rl_data.get_l_function().terms_used(1) == 0)
+  if (rl_data.get_l_function()->terms_used(1) == 0)
     return ZZ::zero();
 
   long n = get_optimal_Q_cnum(rl_data);
-  RR FI = rl_data.get_l_function().approximateL1(n);
+  RR FI = rl_data.get_l_function()->approximateL1(n);
 
-  Aval = rl_data.get_l_function().calculate_L1_error(
-      delta, rl_data.get_l_function().terms_used(1));
+  Aval = rl_data.get_l_function()->calculate_L1_error(
+      delta, rl_data.get_l_function()->terms_used(1));
   Fval = exp(Aval) - 1;
   temp = 1 - exp(-Aval);
   if (temp > Fval)
     Fval = temp;
 
-  if (rl_data.get_quadratic_order().is_imaginary()) {
+  if (rl_data.get_quadratic_order()->is_imaginary()) {
     // h = sqrt(delta) L / Pi
     Fval *= FI * SqrRoot(to_RR(-delta)) / ComputePi_RR();
     if (delta == -4)
@@ -269,7 +279,7 @@ long RegulatorLenstraCompute<ZZ>::get_optimal_Q_cnum(
   ZZ temp;
 
   temp = FloorToZZ(
-      log10(to_RR(abs(rl_data.get_quadratic_order().get_discriminant()))));
+      log10(to_RR(abs(rl_data.get_quadratic_order()->get_discriminant()))));
   conv(dlog, temp);
 
   return rl_data.get_OQvals_cnum_entry((dlog / 5));
@@ -358,31 +368,128 @@ void RegulatorLenstraCompute<ZZ>::bsgs_getentrysize(
 // computations. Uses current contents if appropriate.
 
 template <class T>
-void RegulatorLenstraCompute<T>::init_prinlist(const ZZ &N, long l, ZZ &s, long &M,
-                                       qi_pair<T> &G) {
+void RegulatorLenstraCompute<T>::init_prinlist(RegulatorLenstraData<T> &rl_data,
+                                               const ZZ &N, long l, ZZ &s,
+                                               long &M,
+                                               QuadraticInfElement<T> &G) {
   long lsize, P;
 
   // compute B and s
-  P = 3 + qi_pair<T>::size_rd();
+  P = 3 + NumBits(SqrRoot(rl_data.get_delta()));
   s = N * l - P;
 
   // initialize hash table
-  if (prin_list.no_of_elements() > 0) {
-    G.assign(prin_list.last_entry());
-    l = prinlist_l;
-    M = prinlist_M;
-    if (prinlist_s > s)
-      s = prinlist_s;
+  if (rl_data.get_rl_data.get_prin_list().no_of_elements() > 0) {
+    G.assign(rl_data.get_rl_data.get_prin_list().last_entry());
+    l = rl_data.get_prinlist_l();
+    M = rl_data.get_prinlist_M();
+    if (rl_data.get_prinlist_s() > s)
+      s = rl_data.get_prinlist_s();
     else
-      prinlist_s = s;
+      rl_data.get_prinlist_s() = s;
   } else {
     conv(lsize, N + P);
     lsize += 100;
-    prin_list.initialize(lsize);
+    rl_data.get_rl_data.get_prin_list()().initialize(lsize);
     G.assign_one();
-    prinlist_l = l;
-    prinlist_s = s;
+    rl_data.get_prinlist_l() = l;
+    rl_data.get_prinlist_s() = s;
   }
+}
+
+//
+// quadratic_order<T>::regulator_bsgs
+// Task: Computes the regulator using an O(sqrt(R)) baby-step giant-step
+// algorithm.
+//
+
+template <class T>
+void RegulatorLenstraCompute<T>::regulator_bsgs(RegulatorLenstraData<T> &rl_data, const ZZ &bound) {
+
+  // initialize hash table
+  ZZ K, B, N, entry_size, u, s;
+  RR mu;
+  long l, M = 1;
+
+  QuadraticInfElement<T> G;
+
+  if (bound == 0)
+    get_bound(K);
+  else
+    K = bound;
+
+  l = bsgs_getl(K, N, entry_size, mu, false);
+  init_prinlist(N, l, s, M, G);
+  B = N * l;
+
+  // compute list of baby steps (distance < B)
+  QuadraticInfElement<T> A, C, AA;
+  HashEntryReal<T> *F;
+
+  A.assign_one();
+  if (l == 1)
+    R = G.get_baby_steps(rl_data.get_prin_list(), B, A);
+  else
+    R = G.get_baby_steps(rl_data.get_prin_list(), B, A, l, M);
+
+  prinlist_M = M;
+
+  if (!IsZero(R)) {
+    Rbsgs = true;
+  }
+
+  if (IsZero(R)) {
+    Rbsgs = false;
+
+    G.adjust(s);
+
+    u = (s << 1);
+    A = G;
+    nudupl(G, G);
+    G.adjust(u);
+    if (G.is_one())
+      G.rho();
+  }
+
+  //
+  // compute giant steps until R is found or the bound is exceeded
+  //
+
+  long i;
+
+  while (IsZero(R) && (bound == 0 || A.get_distance().eval() <= bound)) {
+    s += u;
+    nucomp(A, A, G);
+    A.adjust(s);
+
+    // search for A, rho_1(A), ..., rho_l(A) in the hash table
+    AA = A;
+    for (i = 0; i < M && IsZero(R); ++i) {
+      F = rl_data.get_prin_list().search(AA.hash_real());
+      if (F) {
+        // found AA in the hash table!
+
+        combine_BSGS(R, AA, F);
+
+        nuclose(C, R.eval());
+        R = C.get_distance();
+
+      } else {
+        F = rl_data.get_prin_list().search((-AA).hash_real());
+        if (F) {
+          // found A^-1 in the hash table!
+
+          combine_conj_BSGS(R, AA, F);
+          nuclose(C, R.eval());
+          R = C.get_distance();
+        } else if (i < M)
+          AA.rho();
+      }
+    }
+  }
+
+  if (!IsZero(R))
+    Rconditional = false;
 }
 
 } // namespace ANTL
