@@ -1,9 +1,10 @@
 #ifndef REGULATOR_LENSTRA_DATA_H
 #define REGULATOR_LENSTRA_DATA_H
 
+#include <ANTL/HashTable/IndexedHashTable.hpp>
 #include <ANTL/L_function/L_function.hpp>
-#include <ANTL/Quadratic/QuadraticOrder.hpp>
 #include <ANTL/Quadratic/QuadraticInfElement.hpp>
+#include <ANTL/Quadratic/QuadraticOrder.hpp>
 #include <ANTL/common.hpp>
 
 NTL_CLIENT
@@ -26,13 +27,13 @@ private:
 
   ZZ max_memory{4000000000};
 
-  indexed_hash_table < qo_hash_entry_real < T > >prin_list;
+  IndexedHashTable<qo_hash_entry_real<T>> prin_list;
 
-  long prinlist_l;	// distance between consecutive table entries
+  long prinlist_l; // distance between consecutive table entries
 
-  long prinlist_M;	// max # of baby-steps between table entries
+  long prinlist_M; // max # of baby-steps between table entries
 
-  ZZ prinlist_s;		// giant-step distance
+  ZZ prinlist_s; // giant-step distance
 
 public:
   QuadraticOrder<T> get_quadratic_order();
@@ -46,7 +47,6 @@ public:
   long get_OQvals_cnum_entry(long index);
 
   ZZ get_max_memory();
-
 };
 
 // Method definitions - Everything below will eventually go into a
