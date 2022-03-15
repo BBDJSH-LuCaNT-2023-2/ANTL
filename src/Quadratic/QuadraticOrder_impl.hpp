@@ -37,7 +37,7 @@ template <class T> QuadraticOrder<T>::QuadraticOrder(const T &D) {
     gens.clear();
     clear (L);
     */
-    Lfunc.init(Delta, QUADRATIC_MODE);
+    //Lfunc.init(Delta, QUADRATIC_MODE);
   }
 }
 
