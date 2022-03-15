@@ -6,18 +6,22 @@ AM_CC = @PTHREAD_CC@
 AM_CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/include
 
 if EXTRADEPS
-bin_PROGRAMS = main
+bin_PROGRAMS = main regulator
 else
-bin_PROGRAMS = main
+bin_PROGRAMS = main regulator
 endif
 
-main_SOURCES = tests/HeaderTest.cpp
+main_SOURCES = tests/HeaderTest.cpp                  \
+               src/Quadratic/QuadraticOrder_long.cpp \
+               src/Quadratic/QuadraticOrder_ZZ.cpp
+
+regulator_SOURCES = tests/Quadratic/Regulator/RegulatorLenstra_Test.cpp
 
 #cubic_SOURCES=tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/FundamentalUnits/BasicVoronoi.cpp src/Cubic/FundamentalUnits/BSGSVoronoi.cpp
 
 #testorder_SOURCES=tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp
 
-#test_SOURCES = tests/UnitTests.cpp                                    \
+#test_SOURCES = tests/UnitTests.cpp                                   \
                tests/IndexCalculus/IndCalc_Tests.cpp                  \
                tests/common_Tests.cpp                                 \
                tests/LFunction/LFunction_ZZ_Tests.cpp                 \

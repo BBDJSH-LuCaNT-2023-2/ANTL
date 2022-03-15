@@ -45,6 +45,9 @@ private:
   bool Rconditional; // true if correctness of R relies on ERH
 
 public:
+  RegulatorLenstraData(QuadraticOrder<ZZ> *quadratic_order_arg,
+                       L_function<ZZ> *l_function_arg);
+
   void regulator_lenstra();
 
 private:
@@ -62,9 +65,27 @@ private:
                      QuadraticInfElement<T> &G);
 
   void regulator_bsgs(const ZZ &bound);
+
+  ZZ approximate_hR();
+
+  void optimize_K(ZZ &bound, const ZZ &S, const ZZ &N, long l);
+
+  RR func(const RR &K, const RR &S, const RR &N, const RR &G, const RR &n,
+          long l);
+
+  RR dfunc(const RR &K, const RR &S, const RR &N, const RR &G, const RR &n,
+           long l);
+
+  void nuclose(QuadraticInfElement<ZZ> &C, const ZZ &n);
 };
 
 // START: Forward Declaring template specializations
+
+template <>
+RegulatorLenstraData<ZZ>::RegulatorLenstraData(
+    QuadraticOrder<ZZ> *quadratic_order_arg, L_function<ZZ> *l_function_arg);
+
+template <> ZZ RegulatorLenstraData<ZZ>::estimate_hR_error();
 
 template <> long RegulatorLenstraData<ZZ>::get_optimal_Q_cnum();
 
@@ -73,10 +94,29 @@ template <> RR RegulatorLenstraData<ZZ>::get_mu(const ZZ &delta);
 template <>
 void RegulatorLenstraData<ZZ>::bsgs_getentrysize(ZZ &entry_size, bool nodist);
 
+template <> ZZ RegulatorLenstraData<ZZ>::approximate_hR();
+
+template <>
+void RegulatorLenstraData<ZZ>::nuclose(QuadraticInfElement<ZZ> &C, const ZZ &n);
+
 // FINISH:Forward Declaring template specializations
 
 // Method definitions - Everything below will eventually go into a
 // RegulatorLenstraData_impl.hpp file.
+
+template <>
+RegulatorLenstraData<ZZ>::RegulatorLenstraData(
+    QuadraticOrder<ZZ> *quadratic_order_arg, L_function<ZZ> *l_function_arg) {
+
+  quadratic_order = quadratic_order_arg;
+  delta = quadratic_order->get_discriminant();
+
+  l_function = l_function_arg;
+
+  parallel = false;
+  Rbsgs = false;        // true if R was computed using BSGS
+  Rconditional = false; // true if correctness of R relies on ERH
+}
 
 // RegulatorLenstraData<T>::regulator_lenstra
 // Task: Computes the regulator using an O(D^1/5) baby-step giant-step algorithm
@@ -97,7 +137,7 @@ template <class T> void RegulatorLenstraData<T>::regulator_lenstra() {
   // qo_distance<T> S;
   clear(S);
 
-  K = estimate_hR_error(*quadratic_order) >> 1;
+  K = estimate_hR_error() >> 1;
   l = bsgs_getl(K, N, entry_size, mu, false);
   init_prinlist(N, l, s, M, G);
   B = N * l;
@@ -113,7 +153,7 @@ template <class T> void RegulatorLenstraData<T>::regulator_lenstra() {
 
     ZZ E = approximate_hR();
     nuclose(AA, E);
-
+    //
     if (AA.is_one())
       S = AA.get_distance();
   }
@@ -238,15 +278,15 @@ template <class T> void RegulatorLenstraData<T>::regulator_lenstra() {
 
     ZZ hstar, Pmax;
 
-    if (info > 1 && !IsZero(regulator)) {
-      hstar = S / regulator;
-
-      cout << "Found R = " << regulator << endl;
-      cout << "h* = " << hstar << endl;
-    } else {
-      Pmax = 1 + S / RR(B);
-      find_hstar(hstar, S, Pmax, t1);
-    }
+    //     if (info > 1 && !IsZero(regulator)) {
+    //       hstar = S / regulator;
+    //
+    //       cout << "Found R = " << regulator << endl;
+    //       cout << "h* = " << hstar << endl;
+    //     } else {
+    //       Pmax = 1 + S / RR(B);
+    //       find_hstar(hstar, S, Pmax, t1);
+    //     }
 
     nuclose(C, regulator);
     regulator = C.get_distance();
@@ -267,8 +307,7 @@ template <> ZZ RegulatorLenstraData<ZZ>::estimate_hR_error() {
   long n = get_optimal_Q_cnum();
   RR FI = l_function->approximateL1(n);
 
-  Aval = l_function->calculate_L1_error(
-      delta, rl_data.get_l_function()->terms_used(1));
+  Aval = l_function->calculate_L1_error(delta, l_function->terms_used(1));
   Fval = exp(Aval) - 1;
   temp = 1 - exp(-Aval);
   if (temp > Fval)
@@ -419,7 +458,9 @@ void RegulatorLenstraData<T>::regulator_bsgs(const ZZ &bound) {
   QuadraticInfElement<T> G;
 
   if (bound == 0)
-    get_bound(K);
+    // replacing get_bound for now...
+    bound = SqrRoot(delta);
+  // get_bound(K);
   else
     K = bound;
 
@@ -496,6 +537,136 @@ void RegulatorLenstraData<T>::regulator_bsgs(const ZZ &bound) {
 
   if (!IsZero(regulator))
     Rconditional = false;
+}
+
+//
+// quadratic_order<ZZ>::approximate_hR()
+//
+// Task:
+//      returns an approximation of hR
+//
+
+template <> ZZ RegulatorLenstraData<ZZ>::approximate_hR() {
+  ZZ hR;
+  RR temp, FI;
+
+  long n = get_optimal_Q_cnum();
+
+  FI = l_function->approximateL1(n);
+
+  if (quadratic_order->is_imaginary()) {
+    // h = sqrt(delta) L / Pi
+    temp = FI * SqrRoot(to_RR(-delta)) / ComputePi_RR();
+    if (delta == -4)
+      temp *= 2;
+    if (delta == -3)
+      temp *= 3;
+  } else {
+    // hR = sqrt(delta) L / 2
+    temp = FI * SqrRoot(to_RR(delta)) / 2;
+  }
+
+  hR = CeilToZZ(temp);
+
+  return hR;
+}
+
+template <class T>
+void RegulatorLenstraData<T>::optimize_K(ZZ &bound, const ZZ &S, const ZZ &N,
+                                         long l) {
+  RR K = to_RR(bound);
+  RR mu = get_mu(delta);
+  RR rS = to_RR(S);
+  RR rN = to_RR(N);
+  RR rn;
+
+  if (parallel)
+    rn = to_RR(parallel);
+  else
+    set(rn);
+
+  RR F, dF;
+
+  F = func(K, rS, rN, mu, rn, l);
+  dF = dfunc(K, rS, rN, mu, rn, l);
+  cout << "K = " << K << ", F(K) = " << F << ", F'(K) = " << dF << endl;
+
+  while (abs(F) > to_RR(0.00001)) {
+    K = K - F / dF;
+    F = func(K, rS, rN, mu, rn, l);
+    dF = dfunc(K, rS, rN, mu, rn, l);
+    //    cout << "K = " << K << ", F(K) = " << F << ", F'(K) = " << dF << endl;
+  }
+  cout << "K = " << K << ", F(K) = " << F << endl;
+
+  bound = FloorToZZ(K);
+}
+
+inline RR func(const RR &K, const RR &S, const RR &N, const RR &G, const RR &n,
+               long l) {
+  RR val;
+
+  //  cout << "\nF:  K = " << K << ", S = " << S << endl;
+
+  //  val = (1.5*(G+1)*S*log(K)) / (n*K*(log(S)-log(K)));
+  val = ((G + 1) * S * (log(K) - log(N * l))) / (n * K * (log(S) - log(K)));
+  val -= SqrRoot((2 * K * G) / n);
+  if (l > 1)
+    val -= K / (2 * n * N);
+
+  return val;
+}
+
+inline RR dfunc(const RR &K, const RR &S, const RR &N, const RR &G, const RR &n,
+                long l) {
+  RR val, temp;
+
+  temp = log(S) - log(K);
+
+  //  val = (1.5*(G+1)*S*(1-log(K))) / (K*K*n*temp);
+  //  val += (1.5*(G+1)*S*log(K)) / (K*K*n*temp*temp);
+  val = ((G + 1) * S * (1 - log(K) + log(N * l))) / (K * K * n * temp);
+  val += ((G + 1) * S * (log(K) - log(N * l))) / (K * K * n * temp * temp);
+  val -= sqrt(G / (2 * K * n));
+  if (l > 1)
+    val -= to_RR(1) / (2 * N * n);
+  return val;
+}
+
+template <>
+void RegulatorLenstraData<ZZ>::nuclose(QuadraticInfElement<ZZ> &C, const ZZ &n) {
+  long i, k = 0;
+  ZZ j, ex, s;
+
+  C.assign_one();
+  if (IsZero(n))
+    return;
+
+  // compute binary expansion of ex (hi order to low order)
+  ex = abs(n);
+  clear(j);
+  while (!IsOne(ex)) {
+    j <<= 1;
+    if (IsOdd(ex))
+      ++j;
+    ex >>= 1;
+    ++k;
+  }
+
+  s = 1;
+  C.adjust(s);
+
+  for (i = 1; i <= k; ++i) {
+    s <<= 1;
+    nudupl(C, C);
+
+    if (IsOdd(j))
+      ++s;
+
+    C.adjust(s);
+
+    j >>= 1;
+  }
 }
 
 } // namespace ANTL

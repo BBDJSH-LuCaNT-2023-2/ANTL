@@ -34,8 +34,6 @@
 #include <ANTL/Quadratic/Cube/CubePlain.hpp>
 #include <ANTL/Quadratic/Cube/CubeStrategy.hpp>
 
-#include <ANTL/L_function/L_function.hpp>
-
 /*
 // Class group classes
 #include <ANTL/Quadratic/Invariants/qo_class_group.hpp>
@@ -191,7 +189,7 @@ private:
 
   //     Lfunction approximations
   //     L-function approximation
-  L_function<T> Lfunc;
+  //     L_function<T> Lfunc;
   //
   //
   //     regulator
