@@ -15,7 +15,35 @@ main_SOURCES = tests/HeaderTest.cpp                  \
                src/Quadratic/QuadraticOrder_long.cpp \
                src/Quadratic/QuadraticOrder_ZZ.cpp
 
-regulator_SOURCES = tests/Quadratic/Regulator/RegulatorLenstra_Test.cpp
+regulator_SOURCES = tests/Quadratic/Regulator/RegulatorLenstra_Test.cpp \
+                    src/common.cpp                                         \
+                    src/L_function/Character.cpp                           \
+                    src/L_function/L_function_util.cpp                     \
+                    src/L_function/L_function_ZZ.cpp                       \
+                    src/Quadratic/QuadraticIdealBase_long.cpp              \
+                    src/Quadratic/QuadraticInfElement_ZZ.cpp               \
+                    src/Quadratic/QuadraticNumber_ZZ.cpp                   \
+                    src/Quadratic/QuadraticOrder_long.cpp                  \
+                    src/Quadratic/QuadraticOrder_ZZ.cpp                    \
+                    src/Quadratic/Cube/CubePlain_long.cpp                  \
+                    src/Quadratic/Cube/CubePlain_ZZ.cpp                    \
+                    src/Quadratic/Cube/CubeNucube_long.cpp                 \
+                    src/Quadratic/Cube/CubeNucube_ZZ.cpp                   \
+                    src/Quadratic/Multiply/MultiplyNucomp_long.cpp         \
+                    src/Quadratic/Multiply/MultiplyNucomp_ZZ.cpp           \
+                    src/Quadratic/Multiply/MultiplyPlain_long.cpp          \
+                    src/Quadratic/Multiply/MultiplyPlain_ZZ.cpp            \
+                    src/Quadratic/Reduce/ReducePlainReal_long.cpp          \
+                    src/Quadratic/Reduce/ReducePlainReal_ZZ.cpp            \
+                    src/Quadratic/Square/SquareNudupl_long.cpp             \
+                    src/Quadratic/Square/SquareNudupl_ZZ.cpp               \
+                    src/Quadratic/Square/SquarePlain_long.cpp              \
+                    src/Quadratic/Square/SquarePlain_ZZ.cpp                \
+                    src/thresholds.cpp                                     \
+                    src/XGCD/hxgcd.cpp                                     \
+                    src/XGCD/xgcd.cpp                                      \
+                    src/XGCD/xgcd_iter.cpp                                 \
+                    src/XGCD/xgcd_plain.cpp
 
 #cubic_SOURCES=tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/FundamentalUnits/BasicVoronoi.cpp src/Cubic/FundamentalUnits/BSGSVoronoi.cpp
 
