@@ -64,7 +64,7 @@ private:
   void init_prinlist(const ZZ &N, long l, ZZ &s, long &M,
                      QuadraticInfElement<T> &G);
 
-  void regulator_bsgs(const ZZ &bound);
+  void regulator_bsgs(ZZ &bound);
 
   ZZ approximate_hR();
 
@@ -153,7 +153,7 @@ template <class T> void RegulatorLenstraData<T>::regulator_lenstra() {
 
     ZZ E = approximate_hR();
     nuclose(AA, E);
-    //
+
     if (AA.is_one())
       S = AA.get_distance();
   }
@@ -448,7 +448,7 @@ void RegulatorLenstraData<T>::init_prinlist(const ZZ &N, long l, ZZ &s, long &M,
 //
 
 template <class T>
-void RegulatorLenstraData<T>::regulator_bsgs(const ZZ &bound) {
+void RegulatorLenstraData<T>::regulator_bsgs(ZZ &bound) {
 
   // initialize hash table
   ZZ K, B, N, entry_size, u, s;
@@ -504,7 +504,7 @@ void RegulatorLenstraData<T>::regulator_bsgs(const ZZ &bound) {
   long i;
 
   while (IsZero(regulator) &&
-         (bound == 0 || A.get_distance().eval() <= bound)) {
+         (bound == 0 || A.get_distance() <= to_RR(bound))) {
     s += u;
     nucomp(A, A, G);
     A.adjust(s);
@@ -658,7 +658,7 @@ void RegulatorLenstraData<ZZ>::nuclose(QuadraticInfElement<ZZ> &C, const ZZ &n) 
 
   for (i = 1; i <= k; ++i) {
     s <<= 1;
-    nudupl(C, C);
+    sqr(C.get_qib(), C.get_qib());
 
     if (IsOdd(j))
       ++s;
