@@ -32,6 +32,7 @@ test_SOURCES = tests/UnitTests.cpp                                    \
                tests/Quadratic/Reduce/ReducePlainReal_ZZ_Tests.cpp    \
                tests/Quadratic/Square/SquarePlain_ZZ_Tests.cpp        \
                tests/Quadratic/Square/SquarePlain_long_Tests.cpp      \
+			   tests/XGCD/xgcd_test.cpp								  \
                src/common.cpp                                         \
                src/Quadratic/QuadraticIdealBase_long.cpp              \
                src/Quadratic/QuadraticIdealBase_ZZ.cpp                \
