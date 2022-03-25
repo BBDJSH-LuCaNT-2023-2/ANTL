@@ -388,4 +388,14 @@ namespace ANTL {
 //   }
 
 
+//integer negation using mask m. m must be 0 or -1
+// m=0: x->x
+// m=-1: x->-x
+//ported from liboptarith, written by Maxwell Sayles
+int64_t negate_using_mask(const uint64_t m, const uint64_t x){
+  assert(m == 0 || m == (uint64_t)(-1));
+  return (x ^ m) - m;
+
+}
+
 } // ANTL

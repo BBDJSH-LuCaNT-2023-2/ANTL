@@ -138,3 +138,81 @@ XGCD_PARTIAL_REDUCE_PLAIN(GF2EX & R2, GF2EX & R1, GF2EX & B2, GF2EX & B1, long b
       B1 = r;
     }
 }
+
+
+//Plain XGCD from liboptarith 
+//Written by Maxwell Sayles 
+void 
+XGCD_PLAIN(int64_t & o_u, int64_t & o_v, int64_t & m, int64_t & n){
+
+  uint64_t sm = m >> 63;
+  uint64_t sn = n >> 63;
+  m = ANTL::negate_using_mask(sm, m);
+  n = ANTL::negate_using_mask(sn, n);
+    
+  int64_t a = 0;
+  int64_t b = 1;
+  int64_t u = 1;
+  int64_t v = 0;
+  
+  if (n == 0) {
+    o_u = 1;
+    o_v = 0;
+    return;
+  }
+  if (m == 0) {
+    o_u = 0;
+    o_v = 1;
+    return;
+  }
+
+#if defined(__x86_64)
+  asm("0:\n\t"
+      "movq %0, %%rax\n\t"
+      "xorq %%rdx, %%rdx\n\t"
+      "divq %1\n\t"
+      
+      "movq %1, %0\n\t"
+      "movq %%rdx, %1\n\t"
+      
+      "movq %%rax, %%rdx\n\t"
+      "imul %4, %%rax\n\t"
+      "imul %5, %%rdx\n\t"
+      
+      "subq %%rax, %2\n\t"
+      "subq %%rdx, %3\n\t"
+      
+      "testq %1, %1\n\t"  // for the branch at the bottom
+      
+      "xchgq %2, %4\n\t"
+      "xchgq %3, %5\n\t"
+      
+      "jnz 0b\n\t"
+      
+      : "=r"(m), "=r"(n), "=r"(u), "=r"(v), "=r"(a), "=r"(b)
+      : "0"(m), "1"(n), "2"(u), "3"(v), "4"(a), "5"(b)
+      : "cc", "rax", "rdx");
+#else
+  int64_t q, t;
+  while (n != 0) {
+    q = m / n;
+    
+    t = n;
+    n = m - q*n;
+    m = t;
+    
+    t = a;
+    a = u - q*a;
+    u = t;
+    
+    t = b;
+    b = v - q*b;
+    v = t;
+  }
+#endif
+
+  o_u = ANTL::negate_using_mask(sm, u);
+  o_v = ANTL::negate_using_mask(sn, v);
+  //return m;
+
+}
