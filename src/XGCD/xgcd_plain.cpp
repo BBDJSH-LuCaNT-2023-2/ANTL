@@ -143,26 +143,31 @@ XGCD_PARTIAL_REDUCE_PLAIN(GF2EX & R2, GF2EX & R1, GF2EX & B2, GF2EX & B1, long b
 //Plain XGCD from liboptarith 
 //Written by Maxwell Sayles 
 void 
-XGCD_PLAIN(int64_t & o_u, int64_t & o_v, int64_t & m, int64_t & n){
+XGCD_PLAIN(int64_t & g, int64_t & x, int64_t & y, const int64_t & a, const int64_t & b){
 
-  uint64_t sm = m >> 63;
-  uint64_t sn = n >> 63;
-  m = ANTL::negate_using_mask(sm, m);
-  n = ANTL::negate_using_mask(sn, n);
+  int64_t t_a = a;
+  int64_t t_b = b;
+
+  uint64_t sm = a >> 63;
+  uint64_t sn = b >> 63;
+  t_a = ANTL::negate_using_mask(sm, a);
+  t_b = ANTL::negate_using_mask(sn, b);
     
-  int64_t a = 0;
-  int64_t b = 1;
+  int64_t m = 0;
+  int64_t n = 1;
   int64_t u = 1;
   int64_t v = 0;
   
-  if (n == 0) {
-    o_u = 1;
-    o_v = 0;
+  if (t_a == 0) {
+    x = 1;
+    y = 0;
+    g = b;
     return;
   }
-  if (m == 0) {
-    o_u = 0;
-    o_v = 1;
+  if (t_b == 0) {
+    x = 0;
+    y = 1;
+    g = a;
     return;
   }
 
@@ -189,30 +194,30 @@ XGCD_PLAIN(int64_t & o_u, int64_t & o_v, int64_t & m, int64_t & n){
       
       "jnz 0b\n\t"
       
-      : "=r"(m), "=r"(n), "=r"(u), "=r"(v), "=r"(a), "=r"(b)
-      : "0"(m), "1"(n), "2"(u), "3"(v), "4"(a), "5"(b)
+      : "=r"(t_a), "=r"(t_b), "=r"(u), "=r"(v), "=r"(m), "=r"(n)
+      : "0"(t_a), "1"(t_b), "2"(u), "3"(v), "4"(m), "5"(n)
       : "cc", "rax", "rdx");
 #else
   int64_t q, t;
-  while (n != 0) {
-    q = m / n;
-    
-    t = n;
-    n = m - q*n;
-    m = t;
-    
-    t = a;
-    a = u - q*a;
-    u = t;
+  while (b != 0) {
+    q = t_a / t_b;
     
     t = b;
-    b = v - q*b;
+    t_b = t_a - q*t_b;
+    t_a = t;
+    
+    t = m;
+    m = u - q*m;
+    u = t;
+    
+    t = n;
+    n = v - q*n;
     v = t;
   }
 #endif
 
-  o_u = ANTL::negate_using_mask(sm, u);
-  o_v = ANTL::negate_using_mask(sn, v);
-  //return m;
+  x = ANTL::negate_using_mask(sm, u);
+  y = ANTL::negate_using_mask(sn, v);
+  g = t_a;
 
 }
