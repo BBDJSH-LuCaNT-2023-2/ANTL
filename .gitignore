@@ -38,7 +38,15 @@
 
 # build artifacts
 /build/*
+**/.deps
+**/.dirstamp
 !/build/README
+
+#binaries
+main
+test
+testorder
+cubic
 
 #
 # Autotools rules
@@ -67,7 +75,6 @@ Makefile.in
 /install-sh
 /missing
 /stamp-h1
-
 
 
 #
