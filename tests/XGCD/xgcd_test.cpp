@@ -145,8 +145,6 @@ class XGCDPlainTestInstance: public XGCDTestInstance<T> {
          * @return false g is not the expected gcd of a and b
          */
         bool testXGCD(T gcd){
-            cout << "Sanity check: "
-                << this->g << " " << this->u << " " << this->v << " " << this->a << " " << this->b << endl;
             evaluateXGCD();
             return gcd == this->g;
         }
