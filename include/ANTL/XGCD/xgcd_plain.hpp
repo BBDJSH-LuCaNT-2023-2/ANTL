@@ -46,7 +46,8 @@ NTL_CLIENT
 
 template < class T >
 void XGCD_PLAIN(T & G, T & X, T & Y, const T & A, const T & B);
-
+template<>
+void XGCD_PLAIN(int64_t&, int64_t&, int64_t&, const int64_t&, const int64_t&);
 
 
 //
@@ -83,7 +84,8 @@ void XGCD_PARTIAL_REDUCE_PLAIN(T & R2, T & R1, T & B2, T & B1, long bound, bool 
 // flag not requred for GF2EX version
 void XGCD_PARTIAL_REDUCE_PLAIN(GF2EX & R2, GF2EX & R1, GF2EX & B2, GF2EX & B1, long bound, bool even);
 
-void XGCD_PLAIN(int64_t&, int64_t&, int64_t&, const int64_t&, const int64_t&);
+
+
 
 // Unspecialized template definitions.
 #include "../../../src/XGCD/xgcd_plain_impl.hpp"
