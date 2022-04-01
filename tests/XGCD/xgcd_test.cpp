@@ -163,54 +163,98 @@ cout << r << " " << s << " " << a << " " << b << "\n";
 return 0;
 }*/
 
-TEST_CASE("[XGCD]: int64_t PLAIN"){
-    int64_t a,b;
+TEMPLATE_TEST_CASE("XGCD_PLAIN tests", "[XGCD][XGCD_PLAIN]", int64_t){
+    TestType a,b,g;
+    a = 0;
+    b = 0;
+    XGCDPlainTestInstance<TestType>* inst = new XGCDPlainTestInstance<TestType>(a,b);
+    
+    SECTION("Basic Test"){
+        //basic initial test: (3,5) = 1
+        a = 3;
+        b = 5;
+        g = 1;
 
-    //basic initial test: (3,5) = 1
-    a = 3;
-    b = 5;
+        inst->refreshInstance(a,b);
+        REQUIRE(inst->testXGCD(g));
+    }
+    SECTION("Reverse Basic Test"){
+        a = 5;
+        b = 3;
+        g = 1;
+        inst->refreshInstance(a,b);
+        REQUIRE(inst->testXGCD(g));
+    }
 
-    //XGCDTestInstance<int>* inst = new XGCDTestInstance<int>(3,4);
-    XGCDPlainTestInstance<int64_t>* inst = new XGCDPlainTestInstance<int64_t>(3,5);
-    REQUIRE(inst->testXGCD(1));
+    SECTION("Common Factor Test"){
+        //common factor test: (5,20) = 5
+        a = 5;
+        b = 20;
+        g = 5;
+        inst->refreshInstance(a,b);
+        REQUIRE(inst->testXGCD(g));
+    }
 
-    inst->refreshInstance(5,3);
-    REQUIRE(inst->testXGCD(1));
+    SECTION("Unit Input Test"){
+        //unit test: (1, 999) = 1
+        a = 1;
+        b = 999;
+        g = 1;
+        inst->refreshInstance(a,b);
+        REQUIRE(inst->testXGCD(g));
+    }
+    SECTION("Negative Input Test"){
+        //sign permutation tests: (+/- 3, +/- 6) = 3
+        a = -3;
+        b = 6;
+        g = 3;
+        inst->refreshInstance(a,b);
+        REQUIRE(inst->testXGCD(g));
+    
+        a = 3;
+        b = -6;
+        inst->refreshInstance(a,b);
+        REQUIRE(inst->testXGCD(g));
 
-    //common factor test: (5,20) = 5
-    inst->refreshInstance(5,20);
-    REQUIRE(inst->testXGCD(5));
+        a=-3;
+        b=-6;
+        inst->refreshInstance(a,b);
+        REQUIRE(inst->testXGCD(g));
+    }
+    SECTION("Large Random Positive Test"){
+        //arbitrary large (2^32 < a,b < 2^63) positive test: (3166167471260038366, 2078992898117306689) = 1
+        a = 3166167471260038366;
+        b = 2078992898117306689;
+        g = 1;
+        inst->refreshInstance(a, b);
+        REQUIRE(inst->testXGCD(g));
+    }
+    SECTION("Large Random Negative Test"){
+        //arbitrary large (-2^32 > a,b > 2^63) negative test: (-3867470587490682194, -6531477986582055176) = 2 
+        a = -3867470587490682194;
+        b =  -6531477986582055176;
+        g = 2;
+        inst->refreshInstance(a, b);
+        REQUIRE(inst->testXGCD(g));
+    }
+    SECTION("0 Input Tests"){
+        //0 value tests
+        a = 0;
+        b = 100;
+        g = 100;
+        inst->refreshInstance(a,b);
+        REQUIRE(inst->testXGCD(g));
 
-    //unit test: (1, 999) = 1
-    inst->refreshInstance(1,999);
-    REQUIRE(inst->testXGCD(1));
+        a = 50;
+        b = 0;
+        g = 50;
+        inst->refreshInstance(a, b);
+        REQUIRE(inst->testXGCD(g));
 
-    //sign permutation tests: (+/- 3, +/- 6) = 3
-    inst->refreshInstance(-3,6);
-    REQUIRE(inst->testXGCD(3));
-
-    inst->refreshInstance(3,-6);
-    REQUIRE(inst->testXGCD(3));
-
-    inst->refreshInstance(-3,-6);
-    REQUIRE(inst->testXGCD(3));
-
-    //arbitrary large (2^32 < a,b < 2^63) positive test: (3166167471260038366, 2078992898117306689) = 1
-    inst->refreshInstance(3166167471260038366, 2078992898117306689);
-    REQUIRE(inst->testXGCD(1));
-
-    //arbitrary large (-2^32 > a,b > 2^63) negative test: (-3867470587490682194, -6531477986582055176) = 2 
-    inst->refreshInstance(-3867470587490682194, -6531477986582055176);
-    REQUIRE(inst->testXGCD(2));
-
-    //0 value tests
-    inst->refreshInstance(0,100);
-    REQUIRE(inst->testXGCD(100));
-
-    inst->refreshInstance(50,0);
-    REQUIRE(inst->testXGCD(50));
-
-    inst->refreshInstance(0,0);
-    REQUIRE(inst->testXGCD(0));
-
+        a = 0;
+        b = 0;
+        g = 0;
+        inst->refreshInstance(a,b);
+        REQUIRE(inst->testXGCD(g));
+    }
 }
