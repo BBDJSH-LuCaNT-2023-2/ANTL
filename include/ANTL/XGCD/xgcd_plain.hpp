@@ -48,6 +48,9 @@ template < class T >
 void XGCD_PLAIN(T & G, T & X, T & Y, const T & A, const T & B);
 template<>
 void XGCD_PLAIN(int64_t&, int64_t&, int64_t&, const int64_t&, const int64_t&);
+template<>
+void XGCD_PLAIN(ZZ&, ZZ&, ZZ&, const ZZ&, const ZZ&);
+
 
 
 //
