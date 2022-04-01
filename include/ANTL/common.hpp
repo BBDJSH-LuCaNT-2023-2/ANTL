@@ -201,7 +201,8 @@ namespace ANTL {
   long Kronecker(const GF2EX & h, const GF2EX & f, const GF2EX & n);
 
   //mask negation functions: m must be 0 or -1
-  int64_t negate_using_mask(const uint64_t m, const uint64_t x);
+  template <class T>
+  T negate_using_mask(const uint64_t m, const T x);
 
   // finite field cardinality macros
   template <class> ZZ CARDINALITY(void);

@@ -392,10 +392,16 @@ namespace ANTL {
 // m=0: x->x
 // m=-1: x->-x
 //ported from liboptarith, written by Maxwell Sayles
-int64_t negate_using_mask(const uint64_t m, const uint64_t x){
+template <class T>
+T negate_using_mask(const uint64_t m, const T x){
   assert(m == 0 || m == (uint64_t)(-1));
   return (x ^ m) - m;
 
+}
+template<>
+int64_t negate_using_mask<int64_t>(const uint64_t m, const int64_t x){
+  assert(m == 0 || m == (uint64_t)(-1));
+  return (x ^ m) - m;
 }
 
 } // ANTL
