@@ -77,6 +77,12 @@ private:
            long l);
 
   void nuclose(QuadraticInfElement<ZZ> &C, const ZZ &n);
+
+  void combine_BSGS(RR &dist, const QuadraticInfElement<T> &DD,
+                    const HashEntryReal<T> *F);
+
+  void combine_conj_BSGS(RR &dist, const QuadraticInfElement<T> &DD,
+                         const HashEntryReal<T> *F);
 };
 
 // START: Forward Declaring template specializations
@@ -174,7 +180,7 @@ template <class T> void RegulatorLenstraData<T>::regulator_lenstra() {
       regulator = G.get_baby_steps(prin_list, B, A, l, M);
 
     if (!IsZero(regulator)) {
-      nuclose(C, regulator);
+      nuclose(C, FloorToZZ(log(regulator) / log(RR(2))));
       regulator = C.get_distance();
       Rbsgs = true;
     }
@@ -185,18 +191,18 @@ template <class T> void RegulatorLenstraData<T>::regulator_lenstra() {
       G.adjust(s);
 
       u = (s << 1);
-      nudupl(G, G);
+      sqr(G, G);
       G.adjust(u);
       if (G.is_one())
-        G.rho();
+        G.baby_step();
 
-      GG = conjugate(G);
-      while (abs(GG.get_distance().eval()) <= u)
+      GG = G.conjugate();
+      while (abs(GG.eval()) <= u)
         GG.inverse_rho();
-      while (abs(GG.get_distance().eval()) > u)
-        GG.rho();
+      while (abs(GG.eval()) > u)
+        GG.baby_step();
 
-      s2 = s = AA.get_distance().eval();
+      s2 = s = AA.eval();
       C = AA;
       D = AA;
     }
@@ -220,7 +226,7 @@ template <class T> void RegulatorLenstraData<T>::regulator_lenstra() {
 
         combine_BSGS(S, CC, F);
       } else {
-        F = prin_list.search((-CC).hash_real());
+        F = prin_list.search((CC.conjugate()).hash_real());
         if (F) {
           // found CC^-1 in the hash table!
 
@@ -232,14 +238,14 @@ template <class T> void RegulatorLenstraData<T>::regulator_lenstra() {
 
             combine_BSGS(S, DD, F);
           } else {
-            F = prin_list.search((-DD).hash_real());
+            F = prin_list.search((DD.conjugate()).hash_real());
             if (F) {
               // found DD^-1 in the hash table!
 
               combine_conj_BSGS(S, DD, F);
             } else if (i < M) {
-              CC.rho();
-              DD.rho();
+              CC.baby_step();
+              DD.baby_step();
             }
           }
         }
@@ -248,11 +254,11 @@ template <class T> void RegulatorLenstraData<T>::regulator_lenstra() {
 
     if (IsZero(S)) {
       s += u;
-      nucomp(C, C, G);
+      mul(C, C, G);
       C.adjust(s);
 
       s2 -= u;
-      nucomp(D, D, GG);
+      mul(D, D, GG);
       D.adjust(s2);
     }
   }
@@ -267,28 +273,29 @@ template <class T> void RegulatorLenstraData<T>::regulator_lenstra() {
     ZZ B, N, entry_size;
     RR mu;
     long l;
-    RR temp = log(to_RR(S)) * to_RR(2) / to_RR(3);
+    RR temp = log(to_RR(FloorToZZ(log(S) / log(RR(2))))) * to_RR(2) / to_RR(3);
 
     conv(B, ceil(exp(temp)));
 
     l = bsgs_getl(B, N, entry_size, mu, true);
-    optimize_K(B, S, N, l);
+    optimize_K(B, FloorToZZ(log(to_RR(FloorToZZ(log(S) / log(RR(2)))))), N, l);
 
     regulator_bsgs(B);
 
     ZZ hstar, Pmax;
 
     //     if (info > 1 && !IsZero(regulator)) {
-    //       hstar = S / regulator;
+    //       hstar = (FloorToZZ(log(S) / log(RR(2)))) /
+    //       (FloorToZZ(log(regulator) / log(RR(2))));
     //
     //       cout << "Found R = " << regulator << endl;
     //       cout << "h* = " << hstar << endl;
     //     } else {
-    //       Pmax = 1 + S / RR(B);
+    //       Pmax = 1 + FloorToZZ(log(S) / log(RR(2))) / RR(B);
     //       find_hstar(hstar, S, Pmax, t1);
     //     }
 
-    nuclose(C, regulator);
+    nuclose(C, FloorToZZ(log(regulator) / log(RR(2))));
     regulator = C.get_distance();
   }
 }
@@ -447,8 +454,7 @@ void RegulatorLenstraData<T>::init_prinlist(const ZZ &N, long l, ZZ &s, long &M,
 // algorithm.
 //
 
-template <class T>
-void RegulatorLenstraData<T>::regulator_bsgs(ZZ &bound) {
+template <class T> void RegulatorLenstraData<T>::regulator_bsgs(ZZ &bound) {
 
   // initialize hash table
   ZZ K, B, N, entry_size, u, s;
@@ -491,10 +497,10 @@ void RegulatorLenstraData<T>::regulator_bsgs(ZZ &bound) {
 
     u = (s << 1);
     A = G;
-    nudupl(G, G);
+    sqr(G, G);
     G.adjust(u);
     if (G.is_one())
-      G.rho();
+      G.baby_step();
   }
 
   //
@@ -503,10 +509,9 @@ void RegulatorLenstraData<T>::regulator_bsgs(ZZ &bound) {
 
   long i;
 
-  while (IsZero(regulator) &&
-         (bound == 0 || A.get_distance() <= to_RR(bound))) {
+  while (IsZero(regulator) && (bound == 0 || A.eval() <= bound)) {
     s += u;
-    nucomp(A, A, G);
+    mul(A, A, G);
     A.adjust(s);
 
     // search for A, rho_1(A), ..., rho_l(A) in the hash table
@@ -518,19 +523,20 @@ void RegulatorLenstraData<T>::regulator_bsgs(ZZ &bound) {
 
         combine_BSGS(regulator, AA, F);
 
-        nuclose(C, regulator);
+        nuclose(C, FloorToZZ(log(regulator) / log(RR(2))));
         regulator = C.get_distance();
 
       } else {
-        F = prin_list.search((-AA).hash_real());
+        F = prin_list.search((AA.conjugate()).hash_real());
         if (F) {
           // found A^-1 in the hash table!
 
           combine_conj_BSGS(regulator, AA, F);
-          nuclose(C, regulator);
+          nuclose(C, FloorToZZ(log(regulator) / log(RR(2))));
           regulator = C.get_distance();
         } else if (i < M)
-          AA.rho();
+          // AA.rho(); Swapping this out for AA.baby_step();
+          AA.baby_step();
       }
     }
   }
@@ -634,7 +640,8 @@ inline RR dfunc(const RR &K, const RR &S, const RR &N, const RR &G, const RR &n,
 }
 
 template <>
-void RegulatorLenstraData<ZZ>::nuclose(QuadraticInfElement<ZZ> &C, const ZZ &n) {
+void RegulatorLenstraData<ZZ>::nuclose(QuadraticInfElement<ZZ> &C,
+                                       const ZZ &n) {
   long i, k = 0;
   ZZ j, ex, s;
 
@@ -658,7 +665,7 @@ void RegulatorLenstraData<ZZ>::nuclose(QuadraticInfElement<ZZ> &C, const ZZ &n) 
 
   for (i = 1; i <= k; ++i) {
     s <<= 1;
-    sqr(C.get_qib(), C.get_qib());
+    sqr(C, C);
 
     if (IsOdd(j))
       ++s;
@@ -667,6 +674,19 @@ void RegulatorLenstraData<ZZ>::nuclose(QuadraticInfElement<ZZ> &C, const ZZ &n) 
 
     j >>= 1;
   }
+}
+
+template <class T>
+void RegulatorLenstraData<T>::combine_BSGS(RR &dist,
+                                           const QuadraticInfElement<T> &DD,
+                                           const HashEntryReal<T> *F) {
+  dist = DD.get_distance() - F->get_d();
+}
+
+template <class T>
+void RegulatorLenstraData<T>::combine_conj_BSGS(
+    RR &dist, const QuadraticInfElement<T> &DD, const HashEntryReal<T> *F) {
+  dist = DD.get_distance() + F->get_d() - deg(DD.get_qib().get_a());
 }
 
 } // namespace ANTL

@@ -532,6 +532,20 @@ namespace ANTL {
       }
 
       /**
+       * @brief Outputs the log of the QuadraticNumber
+       */
+      template <class S> S to_log() {
+        S x, y, z, RootD;
+
+        x = to<S>(a);
+        y = to<S>(b);
+        z = to<S>(d);
+        RootD = sqrt(to<S>(QO->get_discriminant()));
+
+        return log((x + (y*RootD))/z);
+      }
+
+      /**
        * @brief Assignment operator
        * @param[in] x value to give the QuadraticNumber
        */
