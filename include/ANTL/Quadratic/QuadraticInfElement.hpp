@@ -7,6 +7,9 @@
 #ifndef ANTL_QUADRATIC_INF_ELEMENT_H
 #define ANTL_QUADRATIC_INF_ELEMENT_H
 
+#include <ANTL/HashTable/HashEntryReal.hpp>
+#include <ANTL/HashTable/IndexedHashTable.hpp>
+#include <ANTL/Quadratic/QuadraticDistance.hpp>
 #include <ANTL/Quadratic/QuadraticIdealBase.hpp>
 #include <ANTL/Quadratic/QuadraticNumber.hpp>
 
@@ -16,6 +19,33 @@ using namespace ANTL;
 
 template <class T> class QuadraticNumber;
 template <class T> class QuadraticIdealBase;
+template <class T, class S> class QuadraticInfElement;
+
+// Forward declarations of friend functions
+
+template <class T, class S>
+void mul(QuadraticInfElement<T, S> qie_a, QuadraticInfElement<T, S> qie_b);
+template <class T, class S>
+void mul(QuadraticInfElement<T, S> qie_a, QuadraticInfElement<T, S> qie_b,
+         QuadraticInfElement<T, S> qie_c);
+
+template <class T, class S>
+void sqr(QuadraticInfElement<T, S> qie_a, QuadraticInfElement<T, S> qie_b);
+template <class T, class S>
+void sqr(QuadraticInfElement<T, S> qie_a, QuadraticInfElement<T, S> qie_b,
+         QuadraticInfElement<T, S> qie_c);
+
+template <class S>
+void update_distance_add(S const &d_new, S const &distance_1,
+                         S const &distance_2);
+
+template <class S>
+void update_distance_subtract(S const &d_new, S const &distance_1,
+                              S const &distance_2);
+
+template <class S>
+void update_distance_multiply(S const &d_new, S const &distance_1,
+                              S const &distance_2);
 
 /**
  * @brief Element of a Quadratic Infrastructure
@@ -23,10 +53,10 @@ template <class T> class QuadraticIdealBase;
  *          and its distance along the Infrastructure respectively.
  */
 
-template <class T> class QuadraticInfElement {
+template <class T, class S> class QuadraticInfElement {
 private:
   QuadraticIdealBase<T> qib;
-  RR Distance;
+  S Distance;
 
   T Delta;
   T FloorRootDelta;
@@ -37,24 +67,45 @@ public:
 
   ~QuadraticInfElement();
 
-  QuadraticIdealBase<T> get_qib();
-  RR get_distance();
+  QuadraticIdealBase<T> get_qib() const;
+  S get_distance() const;
 
+  // Friend functions for arithmetic
+  friend void mul<T, S>(QuadraticInfElement<T, S> qie_a,
+                        QuadraticInfElement<T, S> qie_b);
+  friend void mul<T, S>(QuadraticInfElement<T, S> qie_a,
+                        QuadraticInfElement<T, S> qie_b,
+                        QuadraticInfElement<T, S> qie_c);
+
+  friend void sqr<T, S>(QuadraticInfElement<T, S> qie_a,
+                        QuadraticInfElement<T, S> qie_b);
+  friend void sqr<T, S>(QuadraticInfElement<T, S> qie_a,
+                        QuadraticInfElement<T, S> qie_b,
+                        QuadraticInfElement<T, S> qie_c);
+
+  // Helper Function for Updating Distance
+  friend void update_distance_multiply<S>(S const &d_new, S const &distance_1,
+                                          S const &distance_2);
+
+  // Infrastructure methods
   void baby_step();
-  void giant_step(QuadraticInfElement<T> &quad_ib);
-  void giant_step(const QuadraticIdealBase<T> &quad_ib);
+  void giant_step(const QuadraticInfElement<T, S> &quad_ib);
 
-  // TEMPORARY SECTION FOR REGULATORLENSTRADATA METHODS
+  // START: TEMPORARY SECTION FOR REGULATORLENSTRADATA METHODS
   void adjust(const ZZ &a);
-  void assign();
+  void assign(const HashEntryReal<T>);
   void assign_one();
+  QuadraticInfElement<T, S> conjugate() const;
+  ZZ eval();
+  HashEntryReal<T> hash_real() const;
   bool is_one();
+  void inverse_rho();
 
-  RR get_baby_steps(IndexedHashTable<HashEntryReal<T>> &prin_list, const ZZ &B,
-                    const QuadraticInfElement<T> &A);
+  S get_baby_steps(IndexedHashTable<HashEntryReal<T>> &prin_list, const ZZ &B,
+                    const QuadraticInfElement<T, S> &A);
 
-  RR get_baby_steps(IndexedHashTable<HashEntryReal<T>> &prin_list, const ZZ &B,
-                    const QuadraticInfElement<T> &A, long l, long &M);
+  S get_baby_steps(IndexedHashTable<HashEntryReal<T>> &prin_list, const ZZ &B,
+                    const QuadraticInfElement<T, S> &A, long l, long &M);
 
   //   qo_distance<T>
   //   get_baby_steps(indexed_hash_table<qo_hash_entry_real<T>> &prin_list,
@@ -63,14 +114,18 @@ public:
   //   get_baby_steps(indexed_hash_table<qo_hash_entry_real<T>> &prin_list,
   //                  const ZZ &B, const qi_pair<T> &A, long l, long &M);
 
-  // TEMPORARY SECTION FOR REGULATORLENSTRADATA METHODS
+  // FINISH: TEMPORARY SECTION FOR REGULATORLENSTRADATA METHODS
 };
 
-} // namespace ANTL
-// Unspecialized template definitions.
+// Forward declarations of specialized template definitions.
+//
+// Special Distance Arithmetic Example
+// template <>
+// void update_distance_multiply<double>(double const &d_new,
+//                                       double const &distance_1,
+//                                       double const &distance_2);
 
-template <> void QuadraticInfElement<ZZ>::baby_step();
-template <> void QuadraticInfElement<long>::baby_step();
+} // namespace ANTL
 
 #include "../../../src/Quadratic/QuadraticInfElement_impl.hpp"
 
