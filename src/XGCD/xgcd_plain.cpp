@@ -238,6 +238,110 @@ void XGCD_LEFT_PLAIN(ZZ_pEX & G, ZZ_pEX & X, const ZZ_pEX & A, const ZZ_pEX & B)
   XGCD_LEFT_PLAIN_work<ZZ_pE,ZZ_pEX>(G,X,A,B);
 }
 
+template<>
+void XGCD_LEFT_PLAIN(int64_t & g, int64_t & u, const int64_t & a, const int64_t & b) {
+  int64_t ma = a;
+  int64_t mb = b;
+
+  int64_t ta;
+  int sa;
+#if !defined(__x86_64)
+  int64_t q, t;
+#endif
+
+  if (ma < 0) {
+    sa = -1;
+    ma = -ma;
+  } else {
+    sa = 1;
+  }
+  if (mb < 0) {
+    mb = -mb;
+  }
+
+  ta = 0;
+  u = 1;
+
+  if (mb == 0) {
+    g = ma;
+    return;
+  }
+  if (ma == 0) {
+    u = 0;
+    g = mb;
+    return;
+  }
+
+#if defined(__x86_64)
+  // 64bit gcd
+  asm("0:\n\t"
+      "xorq %%rdx, %%rdx\n\t"
+      "movq %1, %%rax\n\t"
+      "divq %2\n\t"           // rdx = a%b, rax = a/b
+      "movq %2, %1\n\t"       // a = b
+      "movq %%rdx, %2\n\t"    // b = rdx
+
+      "imulq %3, %%rax\n\t"   // rax = q*a
+      "subq %%rax, %0\n\t"    // u -= q*a
+      "movq %3, %%rax\n\t"
+      "movq %0, %3\n\t"
+      "movq %%rax, %0\n\t"
+
+      "testq %2, %2\n\t"
+      "jz 1f\n\t"
+      "cmpq %4, %1\n\t"       // 64bit constants not permitted in compare
+      "jg 0b\n\t"             // unsigned (ja) did not work
+      "cmpq %4, %0\n\t"
+      "jg 0b\n\t"
+
+      "1:\n\t"
+      : "=r"(u), "=r"(ma), "=r"(mb), "=r"(ta)
+      : "0"(u), "1"(ma), "2"(mb), "3"(ta), "r"((int64_t)0x7FFFFFFFLL)
+      : "cc", "rax", "rdx");
+  // either b == 0, or both a and b are 32bit
+
+  if (mb != 0) {
+    uint32_t a32 = ma;
+    uint32_t b32 = mb;
+    // 32bit gcd
+    asm("0:\n\t"
+	"xorl %%edx, %%edx\n\t"
+	"movl %1, %%eax\n\t"
+	"divl %2\n\t"           // rdx = a%b, rax = a/b
+	"movl %2, %1\n\t"       // a = b
+	"movl %%edx, %2\n\t"    // b = rdx
+
+	"imulq %3, %%rax\n\t"   // rax = q*a
+	"subq %%rax, %0\n\t"    // u -= q*a
+	"movq %3, %%rax\n\t"
+	"movq %0, %3\n\t"
+	"movq %%rax, %0\n\t"
+
+	"testl %2, %2\n\t"
+	"jnz 0b\n\t"
+	: "=r"(u), "=r"(a32), "=r"(b32), "=r"(ta)
+	: "0"(u), "1"(a32), "2"(b32), "3"(ta)
+	: "cc", "rax", "rdx");
+    ma = a32;
+    mb = b32;
+  }
+#else
+  while (b != 0) {
+    q = a / b;
+
+    t = b;
+    b = a - q*b;
+    a = t;
+
+    t = ta;
+    ta = (u) - q*ta;
+    u = t;
+  }
+#endif
+  u *= sa;
+  g = ma;
+}
+
 
 
 //
