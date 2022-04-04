@@ -44,17 +44,18 @@ class XGCDTestInstance {
     protected:
         T g;
         T u;
-        T v;
         T a;
         T b; 
     public:
         /**
-         * @brief Parent constructor, should be sufficient for all implementing classes
+         * @brief Parent constructor, can be called by all implementing classes
          * 
-         * @param a input parameter a
-         * @param b input parameter b
+         * @param a xgcd input a
+         * @param b xgcd input b
          */
         XGCDTestInstance(T a, T b){
+            this->g = 0;
+            this->u = 0;
             this->a = a;
             this->b = b;
         }
@@ -74,6 +75,7 @@ class XGCDTestInstance {
          * @return false the expected vector differed from the member vector
          */
         bool testXGCD(vector<T> expected){
+            evaluateXGCD();
             return expected == createMemberVector(); 
         }
         /**
@@ -86,7 +88,6 @@ class XGCDTestInstance {
             members.push_back(g);
             members.push_back(u);
             members.push_back(a);
-            members.push_back(v);
             members.push_back(b);
             return members;
         }
@@ -102,7 +103,6 @@ class XGCDTestInstance {
         void refreshInstance(T a, T b){
             g = 0;
             u = 0;
-            v = 0;
             this->a = a;
             this->b = b;
             
