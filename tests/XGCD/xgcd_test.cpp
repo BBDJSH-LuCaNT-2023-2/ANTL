@@ -119,6 +119,7 @@ class XGCDTestInstance {
  */
 template<typename T>
 class XGCDPlainTestInstance: public XGCDTestInstance<T> {
+    T v;
     public:
         /**
          * @brief Construct a new XGCDPlainTestInstance object
@@ -128,14 +129,43 @@ class XGCDPlainTestInstance: public XGCDTestInstance<T> {
          * 
          * Inherits parent constructor
          */
-        XGCDPlainTestInstance(T a, T b) : XGCDTestInstance<T>(a,b){}
+        XGCDPlainTestInstance(T a, T b) : XGCDTestInstance<T>(a,b){
+            v = 0;
+        }
         /**
          * @brief Evaluate this XGCDPlainTestInstance by calling XGCD_PLAIN
          * 
          */
         void evaluateXGCD(){
             //hooray for templating
-            XGCD_PLAIN(this->g,this->u,this->v,this->a,this->b);
+            XGCD_PLAIN(this->g,this->u,v,this->a,this->b);
+        }
+        /**
+         * @brief Create  a vector of member variables. Overrides parent impl
+         * 
+         * @return vector of member variables, in order: (g,u,a,v,b) 
+         */
+        vector<T> createMemberVector(){
+            vector<T> members;
+
+            members.push_back(this->g);
+            members.push_back(this->u);
+            members.push_back(this->a);
+            members.push_back(v);
+            members.push_back(this->b);
+            
+            return members;
+
+        }
+        /**
+         * @brief Refresh test instance. Overrides parent impl
+         * 
+         * @param a first xgcd parameter
+         * @param b second xgcd parameter
+         */
+        void refreshInstance(T a, T b){
+            XGCDTestInstance<T>::refreshInstance(a,b);
+            v = 0;
         }
         /**
          * @brief Simplified test method
