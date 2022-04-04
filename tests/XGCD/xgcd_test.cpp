@@ -181,6 +181,26 @@ class XGCDPlainTestInstance: public XGCDTestInstance<T> {
 
 };
 
+template <typename T>
+class XGCDLeftPlainTestInstance: public XGCDTestInstance<T> {
+    public:
+        /**
+         * @brief Construct a new XGCDLeftPlainTestInstance object
+         * 
+         * @param a first XGCD parameter
+         * @param b second XGCD parameter
+         */
+        XGCDLeftPlainTestInstance(T a, T b): XGCDTestInstance<T>(a,b){}
+
+        /**
+         * @brief XGCD Evaluation method. Uses the XGCD_LEFT_PLAIN method.
+         * 
+         */
+        void evaluateXGCD(){
+            XGCD_LEFT_PLAIN(this->g, this->u, this->a, this->b);
+        }
+};
+
 /*int main(){
 long a,b,r,s,g;
 a = 3;
