@@ -308,3 +308,39 @@ TEMPLATE_TEST_CASE("XGCD_PLAIN tests", "[XGCD][XGCD_PLAIN]", int64_t){
         REQUIRE(inst->testXGCD(g));
     }
 }
+
+TEMPLATE_TEST_CASE("XGCD_LEFT_PLAIN tests","[XGCD][XGCD_LEFT][XGCD_LEFT_PLAIN]", int64_t){
+    TestType a, b, u, g;
+    a = 0;
+    b = 0;
+    XGCDLeftPlainTestInstance inst(a,b);
+    vector<TestType> sol;
+
+    SECTION("Basic Test"){ // (3,5) = 1, specifically 2*3 -1*5 = 1
+        a = 3;
+        b = 5;
+        u = 2;
+        g = 1;
+        sol.push_back(g);
+        sol.push_back(u);
+        sol.push_back(a);
+        sol.push_back(b);
+        
+        inst.refreshInstance(a,b);
+        REQUIRE(inst.testXGCD(sol));
+    }
+    SECTION("Reverse basic test"){
+        a = 5;
+        b = 3;
+        u = -1;
+        g = 1;
+        sol.push_back(g);
+        sol.push_back(u);
+        sol.push_back(a);
+        sol.push_back(b);
+        
+        inst.refreshInstance(a,b);
+        REQUIRE(inst.testXGCD(sol));
+    }
+
+}
