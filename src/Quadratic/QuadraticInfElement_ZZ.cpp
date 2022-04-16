@@ -86,7 +86,7 @@ public:
     return;
   }
 
-  void assign(const HashEntryReal<ZZ>);
+  void assign(const HashEntryReal<ZZ, S>);
 
   void assign_one();
 
@@ -94,7 +94,7 @@ public:
 
   ZZ eval();
 
-  HashEntryReal<ZZ> hash_real() const;
+  HashEntryReal<ZZ, S> hash_real() const;
 
   bool is_one();
 
@@ -136,10 +136,10 @@ public:
     qib.assign(a, b, c);
   }
 
-  RR get_baby_steps(IndexedHashTable<HashEntryReal<ZZ>> &prin_list, const ZZ &B,
+  RR get_baby_steps(IndexedHashTable<HashEntryReal<ZZ, S>> &prin_list, const ZZ &B,
                     const QuadraticInfElement<ZZ, S> &A);
 
-  RR get_baby_steps(IndexedHashTable<HashEntryReal<ZZ>> &prin_list, const ZZ &B,
+  RR get_baby_steps(IndexedHashTable<HashEntryReal<ZZ, S>> &prin_list, const ZZ &B,
                     const QuadraticInfElement<ZZ, S> &A, long l, long &M);
 
 };

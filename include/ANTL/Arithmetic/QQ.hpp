@@ -10,24 +10,19 @@
 
 #include <ANTL/common.hpp>
 
-namespace ANTL
-{
-  // class prototype needed by friend function definitions
-  template<class T>
-    class QQ;
+using namespace ANTL;
 
-  // Forward Declarations of friend functions
-  template<class T>
-    void
-    clear (QQ<T> & x);
+namespace ANTL {
+  // class prototype needed by friend function definitions
+  template <class T> class QQ;
+}
+
+namespace NTL {
+  template<class T> void clear (QQ<T> & x);
 
   template<class T>
     void
     set (QQ<T> & x);
-
-  template<class T>
-    void
-    assign (QQ<T> & z, const QQ<T> & x);
 
   template<class T>
     bool
@@ -36,6 +31,18 @@ namespace ANTL
   template<class T>
     bool
     IsOne (const QQ<T>& x);
+}
+namespace ANTL
+{
+
+
+
+  // Forward Declarations of friend functions
+  template<class T>
+    void
+    assign (QQ<T> & z, const QQ<T> & x);
+
+
 
   template<class T>
     bool

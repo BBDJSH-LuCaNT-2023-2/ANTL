@@ -7,8 +7,8 @@
 
 namespace ANTL {
 
-template <class T>
-HashEntryReal<T>::HashEntryReal(const T &na, const T &nb, const RR &nd)
+template <class T, class S>
+HashEntryReal<T, S>::HashEntryReal(const T &na, const T &nb, const S &nd)
     : HashEntry<T>(na, nb) {
   d = nd;
 }
@@ -27,8 +27,8 @@ HashEntryReal<T>::HashEntryReal(const T &na, const T &nb, const RR &nd)
 //      inputs a qi_pair<T> from the istream in.
 //
 
-template <class T>
-std::istream &operator>>(std::istream &in, HashEntryReal<T> &A) {
+template <class T, class S>
+std::istream &operator>>(std::istream &in, HashEntryReal<T, S> &A) {
   long n = 0;
   char c;
   T ibuf[2];
@@ -69,8 +69,8 @@ std::istream &operator>>(std::istream &in, HashEntryReal<T> &A) {
 //      outputs a qi_pair<T> to the ostream out.
 //
 
-template <class T>
-std::ostream &operator<<(std::ostream &out, const HashEntryReal<T> &A) {
+template <class T, class S>
+std::ostream &operator<<(std::ostream &out, const HashEntryReal<T, S> &A) {
   out << "(" << A.a << ", " << A.b << ", " << A.d << ")" << flush;
   return out;
 }

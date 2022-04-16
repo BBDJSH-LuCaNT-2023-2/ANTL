@@ -5,10 +5,8 @@
  */
 
 #include <ANTL/Quadratic/QuadraticNumber.hpp>
-
-namespace ANTL {
-
-template < class T >
+namespace NTL {
+  template < class T >
 void
       clear (QuadraticNumber<T> & z)
       {
@@ -27,6 +25,25 @@ void
       }
 
 template < class T >
+bool
+      IsZero (const QuadraticNumber<T> & x)
+      {
+        return (::IsZero (x.a) && ::IsZero (x.b) && ::IsOne (x.d));
+      }
+
+template < class T >
+bool
+      IsOne (const QuadraticNumber<T> & x)
+      {
+        return (::IsOne (x.a) && ::IsZero (x.b) && ::IsOne (x.d));
+      }
+}
+
+namespace ANTL {
+
+
+
+template < class T >
 void
       assign (QuadraticNumber<T> & z, const QuadraticNumber<T> & x)
       {
@@ -41,19 +58,6 @@ void
       }
 
 
-template < class T >
-bool
-      IsZero (const QuadraticNumber<T> & x)
-      {
-        return (::IsZero (x.a) && ::IsZero (x.b) && ::IsOne (x.d));
-      }
-
-template < class T >
-bool
-      IsOne (const QuadraticNumber<T> & x)
-      {
-        return (::IsOne (x.a) && ::IsZero (x.b) && ::IsOne (x.d));
-      }
 
 
 template < class T >

@@ -6,16 +6,16 @@ AM_CC = @PTHREAD_CC@
 AM_CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/include
 
 if EXTRADEPS
-bin_PROGRAMS = quadinfelm
+bin_PROGRAMS = regulator
 else
-bin_PROGRAMS = quadinfelm
+bin_PROGRAMS = regulator
 endif
 
 #main_SOURCES = tests/HeaderTest.cpp                  \
                src/Quadratic/QuadraticOrder_long.cpp \
                src/Quadratic/QuadraticOrder_ZZ.cpp
 
-#regulator_SOURCES = tests/UnitTests.cpp                                 \
+regulator_SOURCES = tests/UnitTests.cpp                                 \
                     tests/Quadratic/Regulator/RegulatorLenstra_Test.cpp \
                     src/common.cpp                                      \
                     src/L_function/Character.cpp                        \
@@ -38,7 +38,7 @@ endif
                     src/XGCD/xgcd_iter.cpp                              \
                     src/XGCD/xgcd_plain.cpp
 
-quadinfelm_SOURCES = tests/UnitTests.cpp                                \
+#quadinfelm_SOURCES = tests/UnitTests.cpp                                \
                     tests/Quadratic/QuadraticInfElement_ZZ_Tests.cpp    \
                     src/common.cpp                                      \
                     src/L_function/Character.cpp                        \

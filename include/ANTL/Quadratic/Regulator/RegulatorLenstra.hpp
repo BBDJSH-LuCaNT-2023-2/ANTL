@@ -9,13 +9,19 @@
 #include <ANTL/Quadratic/QuadraticInfElement.hpp>
 #include <ANTL/Quadratic/QuadraticOrder.hpp>
 
-NTL_CLIENT
+NTL_CLIENT;
 using namespace ANTL;
 
 namespace ANTL {
-template <class T> class RegulatorLenstraData {
+RR func(const RR &K, const RR &S, const RR &N, const RR &G, const RR &n,
+        long l);
+
+RR dfunc(const RR &K, const RR &S, const RR &N, const RR &G, const RR &n,
+         long l);
+
+template <class T, class U> class RegulatorLenstraData {
 private:
-  RR regulator;
+  U regulator;
 
   QuadraticOrder<T> *quadratic_order;
 
@@ -32,8 +38,7 @@ private:
 
   ZZ max_memory{4000000000};
 
-  IndexedHashTable<HashEntryReal<T>> prin_list;
-
+  IndexedHashTable<HashEntryReal<T, U>> prin_list;
   long prinlist_l; // distance between consecutive table entries
 
   long prinlist_M; // max # of baby-steps between table entries
@@ -45,12 +50,15 @@ private:
   bool Rconditional; // true if correctness of R relies on ERH
 
 public:
-  RegulatorLenstraData(QuadraticOrder<ZZ> *quadratic_order_arg,
-                       L_function<ZZ> *l_function_arg);
+  RegulatorLenstraData(QuadraticOrder<T> *quadratic_order_arg,
+                       L_function<T> *l_function_arg);
 
   void regulator_lenstra();
 
+  U get_regulator();
+
 private:
+
   ZZ estimate_hR_error();
 
   long get_optimal_Q_cnum();
@@ -62,7 +70,7 @@ private:
   void bsgs_getentrysize(ZZ &entry_size, bool nodist);
 
   void init_prinlist(const ZZ &N, long l, ZZ &s, long &M,
-                     QuadraticInfElement<T> &G);
+                     QuadraticInfElement<T, U> &G);
 
   void regulator_bsgs(ZZ &bound);
 
@@ -70,49 +78,19 @@ private:
 
   void optimize_K(ZZ &bound, const ZZ &S, const ZZ &N, long l);
 
-  RR func(const RR &K, const RR &S, const RR &N, const RR &G, const RR &n,
-          long l);
+  void combine_BSGS(RR &dist, const QuadraticInfElement<T, U> &DD,
+                    const HashEntryReal<T, U> *F);
 
-  RR dfunc(const RR &K, const RR &S, const RR &N, const RR &G, const RR &n,
-           long l);
-
-  void nuclose(QuadraticInfElement<ZZ> &C, const ZZ &n);
-
-  void combine_BSGS(RR &dist, const QuadraticInfElement<T> &DD,
-                    const HashEntryReal<T> *F);
-
-  void combine_conj_BSGS(RR &dist, const QuadraticInfElement<T> &DD,
-                         const HashEntryReal<T> *F);
+  void combine_conj_BSGS(RR &dist, const QuadraticInfElement<T, U> &DD,
+                         const HashEntryReal<T, U> *F);
 };
-
-// START: Forward Declaring template specializations
-
-template <>
-RegulatorLenstraData<ZZ>::RegulatorLenstraData(
-    QuadraticOrder<ZZ> *quadratic_order_arg, L_function<ZZ> *l_function_arg);
-
-template <> ZZ RegulatorLenstraData<ZZ>::estimate_hR_error();
-
-template <> long RegulatorLenstraData<ZZ>::get_optimal_Q_cnum();
-
-template <> RR RegulatorLenstraData<ZZ>::get_mu(const ZZ &delta);
-
-template <>
-void RegulatorLenstraData<ZZ>::bsgs_getentrysize(ZZ &entry_size, bool nodist);
-
-template <> ZZ RegulatorLenstraData<ZZ>::approximate_hR();
-
-template <>
-void RegulatorLenstraData<ZZ>::nuclose(QuadraticInfElement<ZZ> &C, const ZZ &n);
-
-// FINISH:Forward Declaring template specializations
 
 // Method definitions - Everything below will eventually go into a
 // RegulatorLenstraData_impl.hpp file.
 
-template <>
-RegulatorLenstraData<ZZ>::RegulatorLenstraData(
-    QuadraticOrder<ZZ> *quadratic_order_arg, L_function<ZZ> *l_function_arg) {
+template <class T, class U>
+RegulatorLenstraData<T, U>::RegulatorLenstraData(
+    QuadraticOrder<T> *quadratic_order_arg, L_function<T> *l_function_arg) {
 
   quadratic_order = quadratic_order_arg;
   delta = quadratic_order->get_discriminant();
@@ -124,11 +102,12 @@ RegulatorLenstraData<ZZ>::RegulatorLenstraData(
   Rconditional = false; // true if correctness of R relies on ERH
 }
 
-// RegulatorLenstraData<T>::regulator_lenstra
+// RegulatorLenstraData<T, U>::regulator_lenstra
 // Task: Computes the regulator using an O(D^1/5) baby-step giant-step algorithm
 // of Shanks and improvements of Lenstra.
 
-template <class T> void RegulatorLenstraData<T>::regulator_lenstra() {
+template <class T, class U>
+void RegulatorLenstraData<T, U>::regulator_lenstra() {
 
   //
   // initialize hash table
@@ -137,9 +116,9 @@ template <class T> void RegulatorLenstraData<T>::regulator_lenstra() {
   ZZ K, N, B, entry_size, u, s, s2;
   long l = 1, M = 1;
   RR mu;
-  QuadraticInfElement<T> AA, G;
+  QuadraticInfElement<T, U> AA, G;
 
-  RR S;
+  U S;
   // qo_distance<T> S;
   clear(S);
 
@@ -168,8 +147,8 @@ template <class T> void RegulatorLenstraData<T>::regulator_lenstra() {
   // compute list of baby steps (distance < B)
   //
 
-  QuadraticInfElement<T> A, C, CC, D, DD, GG;
-  HashEntryReal<T> *F;
+  QuadraticInfElement<T, U> A, C, CC, D, DD, GG;
+  HashEntryReal<T, U> *F;
 
   if (IsZero(S)) {
 
@@ -180,7 +159,7 @@ template <class T> void RegulatorLenstraData<T>::regulator_lenstra() {
       regulator = G.get_baby_steps(prin_list, B, A, l, M);
 
     if (!IsZero(regulator)) {
-      nuclose(C, FloorToZZ(log(regulator) / log(RR(2))));
+      nuclose(C, FloorToZZ(regulator));
       regulator = C.get_distance();
       Rbsgs = true;
     }
@@ -273,12 +252,12 @@ template <class T> void RegulatorLenstraData<T>::regulator_lenstra() {
     ZZ B, N, entry_size;
     RR mu;
     long l;
-    RR temp = log(to_RR(FloorToZZ(log(S) / log(RR(2))))) * to_RR(2) / to_RR(3);
+    RR temp = log(to_RR(S)) * to_RR(2) / to_RR(3);
 
     conv(B, ceil(exp(temp)));
 
     l = bsgs_getl(B, N, entry_size, mu, true);
-    optimize_K(B, FloorToZZ(log(to_RR(FloorToZZ(log(S) / log(RR(2)))))), N, l);
+    optimize_K(B, FloorToZZ(S), N, l);
 
     regulator_bsgs(B);
 
@@ -295,16 +274,20 @@ template <class T> void RegulatorLenstraData<T>::regulator_lenstra() {
     //       find_hstar(hstar, S, Pmax, t1);
     //     }
 
-    nuclose(C, FloorToZZ(log(regulator) / log(RR(2))));
+    nuclose(C, FloorToZZ(regulator));
     regulator = C.get_distance();
   }
 }
 
-// RegulatorLenstraData<ZZ>::estimate_hR_error(RegulatorLenstraData<ZZ>
+template <class T, class U> U RegulatorLenstraData<T, U>::get_regulator() {
+  return regulator;
+}
+
+// RegulatorLenstraData<ZZ, U>::estimate_hR_error(RegulatorLenstraData<ZZ, U>
 // &rl_data)
 // Task: returns L such that |hR - hR'| < exp(L)^2
 
-template <> ZZ RegulatorLenstraData<ZZ>::estimate_hR_error() {
+template <class T, class U> ZZ RegulatorLenstraData<T, U>::estimate_hR_error() {
   ZZ err;
   RR Aval, Fval, temp;
 
@@ -336,19 +319,20 @@ template <> ZZ RegulatorLenstraData<ZZ>::estimate_hR_error() {
   return err;
 }
 
-template <> long RegulatorLenstraData<ZZ>::get_optimal_Q_cnum() {
+template <class T, class U>
+long RegulatorLenstraData<T, U>::get_optimal_Q_cnum() {
   long dlog;
   ZZ temp;
 
-  temp = FloorToZZ(log10(to_RR(abs(quadratic_order->get_discriminant()))));
+  temp = FloorToZZ(NTL::log10(to_RR(abs(delta))));
   conv(dlog, temp);
 
   return OQvals_cnum[(dlog / 5)];
 }
 
-template <class T>
-long RegulatorLenstraData<T>::bsgs_getl(const ZZ &K, ZZ &N, ZZ &entry_size,
-                                        RR &mu, bool nodist) {
+template <class T, class U>
+long RegulatorLenstraData<T, U>::bsgs_getl(const ZZ &K, ZZ &N, ZZ &entry_size,
+                                           RR &mu, bool nodist) {
   ZZ maxN, rootK;
   RR n, temp;
   long l;
@@ -391,14 +375,16 @@ long RegulatorLenstraData<T>::bsgs_getl(const ZZ &K, ZZ &N, ZZ &entry_size,
 // one giant step.  These values are read in from a table (file) which is
 // computed at compile-time.
 
-template <> RR RegulatorLenstraData<ZZ>::get_mu(const ZZ &delta) {
+template <class T, class U>
+RR RegulatorLenstraData<T, U>::get_mu(const T &delta) {
   //  return to_RR(2)*((to_RR(NumBits(delta) - 5) / to_RR(10)) + to_RR(6));
   //  return (to_RR(NumBits(delta) - 5) / to_RR(10)) + to_RR(6);
   return to_RR(6.85) + to_RR(10.62) * to_RR(NumBits(delta)) / to_RR(135);
 }
 
-template <>
-void RegulatorLenstraData<ZZ>::bsgs_getentrysize(ZZ &entry_size, bool nodist) {
+template <class T, class U>
+void RegulatorLenstraData<T, U>::bsgs_getentrysize(ZZ &entry_size,
+                                                   bool nodist) {
   ZZ temp;
 
   entry_size = 3 * NTL_BITS_PER_LONG; // space for pointers
@@ -420,9 +406,10 @@ void RegulatorLenstraData<ZZ>::bsgs_getentrysize(ZZ &entry_size, bool nodist) {
 // Task: initializes the list of reduced principal ideals for BS-GS
 // computations. Uses current contents if appropriate.
 
-template <class T>
-void RegulatorLenstraData<T>::init_prinlist(const ZZ &N, long l, ZZ &s, long &M,
-                                            QuadraticInfElement<T> &G) {
+template <class T, class U>
+void RegulatorLenstraData<T, U>::init_prinlist(const ZZ &N, long l, ZZ &s,
+                                               long &M,
+                                               QuadraticInfElement<T, U> &G) {
   long lsize, P;
 
   // compute B and s
@@ -454,14 +441,15 @@ void RegulatorLenstraData<T>::init_prinlist(const ZZ &N, long l, ZZ &s, long &M,
 // algorithm.
 //
 
-template <class T> void RegulatorLenstraData<T>::regulator_bsgs(ZZ &bound) {
+template <class T, class U>
+void RegulatorLenstraData<T, U>::regulator_bsgs(ZZ &bound) {
 
   // initialize hash table
   ZZ K, B, N, entry_size, u, s;
   RR mu;
   long l, M = 1;
 
-  QuadraticInfElement<T> G;
+  QuadraticInfElement<T, U> G;
 
   if (bound == 0)
     // replacing get_bound for now...
@@ -475,8 +463,8 @@ template <class T> void RegulatorLenstraData<T>::regulator_bsgs(ZZ &bound) {
   B = N * l;
 
   // compute list of baby steps (distance < B)
-  QuadraticInfElement<T> A, C, AA;
-  HashEntryReal<T> *F;
+  QuadraticInfElement<T, U> A, C, AA;
+  HashEntryReal<T, U> *F;
 
   A.assign_one();
   if (l == 1)
@@ -523,7 +511,7 @@ template <class T> void RegulatorLenstraData<T>::regulator_bsgs(ZZ &bound) {
 
         combine_BSGS(regulator, AA, F);
 
-        nuclose(C, FloorToZZ(log(regulator) / log(RR(2))));
+        nuclose(C, FloorToZZ(regulator));
         regulator = C.get_distance();
 
       } else {
@@ -532,7 +520,7 @@ template <class T> void RegulatorLenstraData<T>::regulator_bsgs(ZZ &bound) {
           // found A^-1 in the hash table!
 
           combine_conj_BSGS(regulator, AA, F);
-          nuclose(C, FloorToZZ(log(regulator) / log(RR(2))));
+          nuclose(C, FloorToZZ(regulator));
           regulator = C.get_distance();
         } else if (i < M)
           // AA.rho(); Swapping this out for AA.baby_step();
@@ -552,7 +540,7 @@ template <class T> void RegulatorLenstraData<T>::regulator_bsgs(ZZ &bound) {
 //      returns an approximation of hR
 //
 
-template <> ZZ RegulatorLenstraData<ZZ>::approximate_hR() {
+template <class T, class U> ZZ RegulatorLenstraData<T, U>::approximate_hR() {
   ZZ hR;
   RR temp, FI;
 
@@ -577,9 +565,9 @@ template <> ZZ RegulatorLenstraData<ZZ>::approximate_hR() {
   return hR;
 }
 
-template <class T>
-void RegulatorLenstraData<T>::optimize_K(ZZ &bound, const ZZ &S, const ZZ &N,
-                                         long l) {
+template <class T, class U>
+void RegulatorLenstraData<T, U>::optimize_K(ZZ &bound, const ZZ &S, const ZZ &N,
+                                            long l) {
   RR K = to_RR(bound);
   RR mu = get_mu(delta);
   RR rS = to_RR(S);
@@ -639,53 +627,17 @@ inline RR dfunc(const RR &K, const RR &S, const RR &N, const RR &G, const RR &n,
   return val;
 }
 
-template <>
-void RegulatorLenstraData<ZZ>::nuclose(QuadraticInfElement<ZZ> &C,
-                                       const ZZ &n) {
-  long i, k = 0;
-  ZZ j, ex, s;
-
-  C.assign_one();
-  if (IsZero(n))
-    return;
-
-  // compute binary expansion of ex (hi order to low order)
-  ex = abs(n);
-  clear(j);
-  while (!IsOne(ex)) {
-    j <<= 1;
-    if (IsOdd(ex))
-      ++j;
-    ex >>= 1;
-    ++k;
-  }
-
-  s = 1;
-  C.adjust(s);
-
-  for (i = 1; i <= k; ++i) {
-    s <<= 1;
-    sqr(C, C);
-
-    if (IsOdd(j))
-      ++s;
-
-    C.adjust(s);
-
-    j >>= 1;
-  }
-}
-
-template <class T>
-void RegulatorLenstraData<T>::combine_BSGS(RR &dist,
-                                           const QuadraticInfElement<T> &DD,
-                                           const HashEntryReal<T> *F) {
+template <class T, class U>
+void RegulatorLenstraData<T, U>::combine_BSGS(
+    RR &dist, const QuadraticInfElement<T, U> &DD,
+    const HashEntryReal<T, U> *F) {
   dist = DD.get_distance() - F->get_d();
 }
 
-template <class T>
-void RegulatorLenstraData<T>::combine_conj_BSGS(
-    RR &dist, const QuadraticInfElement<T> &DD, const HashEntryReal<T> *F) {
+template <class T, class U>
+void RegulatorLenstraData<T, U>::combine_conj_BSGS(
+    RR &dist, const QuadraticInfElement<T, U> &DD,
+    const HashEntryReal<T, U> *F) {
   dist = DD.get_distance() + F->get_d() - deg(DD.get_qib().get_a());
 }
 

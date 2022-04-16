@@ -83,11 +83,12 @@ inline long sign(const long &X) { return (X > 0) ? 1 : ((X < 0) ? -1 : 0); }
 inline long IsOne(const float &X) { return (X == 1.0f); }
 inline long IsZero(const float &X) { return (X == 0.0f); }
 
-inline long IsOne(const double &X) { return (X == double(1)); }
-inline long IsZero(const double &X) { return (X == double(0)); }
+inline long IsOne(double &X) { return (X == double(1)); }
+inline long IsZero(double &X) { return (X == double(0)); }
 
 inline long IsOne(const quad_float &X) { return (X == double(1)); }
 inline long IsZero(const quad_float &X) { return (X == double(0)); }
+
 
 // JLM: needed to compile quadratic_form. I have not tested them
 // for correctness.
@@ -138,6 +139,9 @@ inline void abs(double &z, const double a) { z = std::abs(a); }
 inline void floor(long &z, const long a) { z = std::floor(a); }
 inline void floor(double &z, const double a) { z = std::floor(a); }
 
+inline ZZ FloorToZZ(const long& a) { return ZZ(std::floor(a)); }
+inline ZZ FloorToZZ(const double& a) { return ZZ(std::floor(a)); }
+
 inline void log(double &z, const double a) { z = std::log(a); }
 
 inline void atan_val(RR &z, const RR &a) { z = atan(a).value(); }
@@ -163,6 +167,16 @@ template <class S>
 void update_distance_multiply(S &distance_new, S const &distance_1,
                               S const &distance_2) {
   distance_new = distance_1 * distance_2;
+}
+
+template <class S>
+void update_distance_invert(S &distance_new, S const &distance_1) {
+  distance_new = 1 / distance_1;
+}
+
+template <class S>
+void update_distance_negate(S &distance_new, S const &distance_1) {
+  distance_new =  -distance_1;
 }
 
 inline int SqrRoot(const int &a) { return (int)::floor(::sqrt((double)a)); }

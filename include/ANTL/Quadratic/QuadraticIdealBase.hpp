@@ -55,6 +55,7 @@ namespace ANTL {
 
     public:
       // Constructor(s) and destructor
+      QuadraticIdealBase ();
       QuadraticIdealBase (ANTL::QuadraticOrder<T> & inQO);
       ~QuadraticIdealBase ();
 
