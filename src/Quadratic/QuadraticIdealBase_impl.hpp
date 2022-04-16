@@ -8,6 +8,9 @@ using namespace ANTL;
 
 namespace ANTL {
 // constructor
+
+template <class T> QuadraticIdealBase<T>::QuadraticIdealBase () {};
+
 template <class T> QuadraticIdealBase<T>::QuadraticIdealBase (QuadraticOrder<T> & inQO) {
   NTL::clear(a);
   NTL::clear(b);
@@ -102,13 +105,17 @@ template <class T> void QuadraticIdealBase<T>::assign (const T & na, const T & n
 //
 // Task: set to a copy of B.
 template <class T> void QuadraticIdealBase<T>::assign (const QuadraticIdealBase<T> &B) {
-  if(B.get_QO()->get_discriminant() == (b^2 - 4*a*c)) {
+  T discriminant_1 = B.get_b()*B.get_b() - 4*B.get_a()*B.get_c();
+
+  if(get_QO()->get_discriminant() == discriminant_1) {
     a = B.a;
     b = B.b;
     c = B.c;
     return;
   }
+  else {
   std::cout << "Coeffecients not valid!" << std::endl;
+  }
 }
 
 // operator =
@@ -174,7 +181,7 @@ void QuadraticIdealBase<T>::reduce(QuadraticNumber<T> & gamma) {
 //
 // Task: tests if the ideal is the unit ideal
 template <class T> bool QuadraticIdealBase<T>::IsOne () const {
-  return (IsOne (a));
+  return (NTL::IsOne(a) && IsZero(b));
 }
 
 // QuadraticIdealBase<T>::IsEqual()

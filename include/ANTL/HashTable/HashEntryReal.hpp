@@ -9,17 +9,19 @@
 
 #include <ANTL/HashTable/HashEntry.hpp>
 
-// Currently using NTL::RR in place of qo_distance; all changes marked by
-// comment #include <ANTL/quadratic/qo_distance.hpp>
+// Currently using template <class S> in place of qo_distance; all changes marked by
+// comment
+
+//#include <ANTL/quadratic/qo_distance.hpp>
 
 namespace ANTL {
-template <class T> class HashEntryReal;
+template <class T, class S> class HashEntryReal;
 
-template <class T>
-std::istream &operator>>(std::istream &in, HashEntryReal<T> &A);
+template <class T, class S>
+std::istream &operator>>(std::istream &in, HashEntryReal<T, S> &A);
 
-template <class T>
-std::ostream &operator<<(std::ostream &out, const HashEntryReal<T> &A);
+template <class T, class S>
+std::ostream &operator<<(std::ostream &out, const HashEntryReal<T, S> &A);
 
 //
 // Class: HashEntryReal<T>
@@ -28,29 +30,29 @@ std::ostream &operator<<(std::ostream &out, const HashEntryReal<T> &A);
 //      an element in a linked list.
 //
 
-template <class T> class HashEntryReal : public HashEntry<T> {
+template <class T, class S> class HashEntryReal : public HashEntry<T> {
 protected:
-  RR d;
+  S d;
   // qo_distance < T > d;
 
 public:
   HashEntryReal(){};
 
-  HashEntryReal(const T &na, const T &nb, const RR &nd);
+  HashEntryReal(const T &na, const T &nb, const S &nd);
   // HashEntryReal(const T &na, const T &nb, const qo_distance<T> &nd);
 
   ~HashEntryReal(){};
 
-  RR get_d() const { return d; };
+  S get_d() const { return d; };
   // qo_distance<T> get_d() const { return d; };
 
   //
   // input/output
   //
 
-  friend std::istream &operator>><T>(std::istream &in, HashEntryReal<T> &A);
+  friend std::istream &operator>><T>(std::istream &in, HashEntryReal<T, S> &A);
   friend std::ostream &operator<<<T>(std::ostream &out,
-                                     const HashEntryReal<T> &A);
+                                     const HashEntryReal<T, S> &A);
 };
 
 } // namespace ANTL

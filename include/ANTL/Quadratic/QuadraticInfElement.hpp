@@ -35,17 +35,28 @@ template <class T, class S>
 void sqr(QuadraticInfElement<T, S> qie_a, QuadraticInfElement<T, S> qie_b,
          QuadraticInfElement<T, S> qie_c);
 
-template <class S>
-void update_distance_add(S const &d_new, S const &distance_1,
-                         S const &distance_2);
+template <class T, class S>
+void conjugate(QuadraticInfElement<T, S> &qie_a,
+               QuadraticInfElement<T, S> const &qie_b);
+
+template <class T, class S>
+void nuclose(QuadraticInfElement<T, S> &C, const ZZ &n);
 
 template <class S>
-void update_distance_subtract(S const &d_new, S const &distance_1,
+void update_distance_add(S &d_new, S const &distance_1, S const &distance_2);
+
+template <class S>
+void update_distance_subtract(S &d_new, S const &distance_1,
                               S const &distance_2);
 
 template <class S>
-void update_distance_multiply(S const &d_new, S const &distance_1,
+void update_distance_multiply(S &d_new, S const &distance_1,
                               S const &distance_2);
+
+template <class S> void update_distance_invert(S &d_new, S const &distance_1);
+
+template <class S>
+void update_distance_negate(S &distance_new, S const &distance_1);
 
 /**
  * @brief Element of a Quadratic Infrastructure
@@ -83,9 +94,21 @@ public:
                         QuadraticInfElement<T, S> qie_b,
                         QuadraticInfElement<T, S> qie_c);
 
-  // Helper Function for Updating Distance
-  friend void update_distance_multiply<S>(S const &d_new, S const &distance_1,
+  // Friend function for Updating Distance
+  friend void update_distance_add<S>(S &d_new, S const &distance_1,
+                                     S const &distance_2);
+
+  friend void update_distance_subtract<S>(S &d_new, S const &distance_1,
                                           S const &distance_2);
+
+  friend void update_distance_multiply<S>(S &d_new, S const &distance_1,
+                                          S const &distance_2);
+
+  friend void update_distance_invert<S>(S &d_new, S const &distance_1);
+
+  friend void update_distance_negate<S>(S &distance_new, S const &distance_1);
+
+  friend void nuclose<T, S>(QuadraticInfElement<T, S> &C, const ZZ &n);
 
   // Infrastructure methods
   void baby_step();
@@ -93,19 +116,25 @@ public:
 
   // START: TEMPORARY SECTION FOR REGULATORLENSTRADATA METHODS
   void adjust(const ZZ &a);
-  void assign(const HashEntryReal<T>);
+  void assign(const HashEntryReal<T, S> &her_a);
   void assign_one();
-  QuadraticInfElement<T, S> conjugate() const;
+
+  friend void conjugate<T, S>(QuadraticInfElement<T, S> &qie_a,
+                              QuadraticInfElement<T, S> const &qie_b);
+
+  QuadraticInfElement<T, S> conjugate();
+
   ZZ eval();
-  HashEntryReal<T> hash_real() const;
-  bool is_one();
+  HashEntryReal<T, S> hash_real() const;
+  bool is_one() const;
   void inverse_rho();
 
-  S get_baby_steps(IndexedHashTable<HashEntryReal<T>> &prin_list, const ZZ &B,
-                    const QuadraticInfElement<T, S> &A);
+  S get_baby_steps(IndexedHashTable<HashEntryReal<T, S>> &prin_list,
+                   const ZZ &B, const QuadraticInfElement<T, S> &A);
 
-  S get_baby_steps(IndexedHashTable<HashEntryReal<T>> &prin_list, const ZZ &B,
-                    const QuadraticInfElement<T, S> &A, long l, long &M);
+  S get_baby_steps(IndexedHashTable<HashEntryReal<T, S>> &prin_list,
+                   const ZZ &B, const QuadraticInfElement<T, S> &A, long l,
+                   long &M);
 
   //   qo_distance<T>
   //   get_baby_steps(indexed_hash_table<qo_hash_entry_real<T>> &prin_list,
@@ -116,7 +145,6 @@ public:
 
   // FINISH: TEMPORARY SECTION FOR REGULATORLENSTRADATA METHODS
 };
-
 // Forward declarations of specialized template definitions.
 //
 // Special Distance Arithmetic Example

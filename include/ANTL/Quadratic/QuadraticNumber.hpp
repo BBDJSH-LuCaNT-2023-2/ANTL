@@ -13,10 +13,7 @@
 
 using namespace ANTL;
 
-namespace ANTL {
-  // Forward Declarations
-  template <class T> class QuadraticNumber;
-  template <class T> class QuadraticOrder;
+namespace NTL {
 
   template<class T> void
     clear (QuadraticNumber<T> & x);
@@ -25,17 +22,23 @@ namespace ANTL {
     void
     set (QuadraticNumber<T> & x);
 
-  template<class T>
-    void
-    assign (QuadraticNumber<T> & z, const QuadraticNumber<T> & x);
-
-  template<class T>
+    template<class T>
     bool
     IsZero (const QuadraticNumber<T>& x);
 
   template<class T>
     bool
     IsOne (const QuadraticNumber<T>& x);
+}
+
+namespace ANTL {
+  // Forward Declarations
+  template <class T> class QuadraticNumber;
+  template <class T> class QuadraticOrder;
+
+  template<class T>
+    void
+    assign (QuadraticNumber<T> & z, const QuadraticNumber<T> & x);
 
   template<class T>
     bool
