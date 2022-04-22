@@ -116,6 +116,7 @@ public:
 
   // START: TEMPORARY SECTION FOR REGULATORLENSTRADATA METHODS
   void adjust(const ZZ &a);
+  void adjust(const S &a);
   void assign(const HashEntryReal<T, S> &her_a);
   void assign_one();
 

@@ -128,9 +128,9 @@ TEST_CASE("QuadraticInfElement<ZZ, double>: giant_step correctly traverses the "
   QuadraticNumber<ZZ> quad_number1{quad_order1};
   QuadraticNumber<ZZ> quad_number2{quad_order1};
 
-  MultiplyNucomp<ZZ> mul_nucomp_object{};
-  mul_nucomp_object.set_RelativeGenerator(quad_number1);
-  quad_order1.set_mul_nucomp(mul_nucomp_object);
+  MultiplyComp<ZZ> mul_comp_object{};
+  mul_comp_object.set_RelativeGenerator(quad_number1);
+  quad_order1.set_mul_comp(mul_comp_object);
 
   ReducePlainReal<ZZ> red_plain_real_object{};
   red_plain_real_object.set_RelativeGenerator(quad_number2);

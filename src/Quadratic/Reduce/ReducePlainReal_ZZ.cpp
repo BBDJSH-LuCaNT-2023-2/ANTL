@@ -6,94 +6,59 @@
 
 #include <ANTL/Quadratic/Reduce/ReducePlainReal.hpp>
 
-// reduce
-//
-// Task:
-//      reduces the ideal
+// ReducePlainReal<ZZ>::Reduce
+// Task: Reduces the ideal
 
-template <>
-void ReducePlainReal<ZZ>::reduce(QuadraticIdealBase<ZZ> & A) {
-  ZZ a0, b0, c0, a1, b1, c1, q, r;
-  ZZ Bm1 = ZZ(0), Bm2 = ZZ(1), BTemp;
+template <> void ReducePlainReal<ZZ>::reduce(QuadraticIdealBase<ZZ> &A) {
 
-  //mul(a0, a0, b1);
+  ZZ a_old = A.get_a(), b_old = A.get_b(), c_old = A.get_c();
+  ZZ a_new, b_new, c_new, q, r, B_m1 = ZZ(0), B_m2 = ZZ(1), B_temp;
+
   set(*RelativeGenerator);
 
-  if(A.is_reduced()) {
-    return;
-  }
-
-  a0 = A.get_a();
-  b0 = A.get_b();
-  c0 = A.get_c();
-
-  // normalize ideal
   if (!A.is_normal()) {
-    std::cout << "REDUCE: Normalizing" << std::endl;
     A.normalize();
   }
 
-  a0 = A.get_a();
-  b0 = A.get_b();
-  c0 = A.get_c();
-
-  if(A.is_reduced()) {
+  if (A.is_reduced()) {
     return;
   }
 
-  DivRem(q, r, b0 + FloorRootDelta, 2*a0);
+  do {
+    DivRem(q, r, b_old + FloorRootDelta, 2 * a_old);
 
-  c1 = -a0;
-  b1 = FloorRootDelta - r;
-  a1 = (q*(b0 - b1))/2 - c0;
+    c_new = -a_old;
+    b_new = FloorRootDelta - r;
+    a_new = q * ((b_old - b_new) / 2) - c_old;
 
-  BTemp = Bm1;
-  Bm1 = q*Bm1 + Bm2;
-  Bm2 = BTemp;
+    B_temp = B_m1;
+    B_m1 = q * B_m1 + B_m2;
+    B_m2 = B_temp;
 
-  a0 = a1;
-  b0 = b1;
-  c0 = c1;
+    a_old = a_new;
+    b_old = b_new;
+    c_old = c_new;
 
-  while(!(b0 <= FloorRootDelta)) {
-    DivRem(q, r, b0 + FloorRootDelta, 2*a0);
+    abs(a_new, a_new);
 
-    c1 = -a0;
-    b1 = FloorRootDelta - r;
-    a1 = (q*(b0 - b1))/2 - c0;
+    if(FloorRootDelta < a_new) {
+      b_new += ((a_new-b_new) / (2*a_new)) * (2*a_new);
+    }
 
-    BTemp = Bm1;
-    Bm1 = q*Bm1 + Bm2;
-    Bm2 = BTemp;
+    else {
+      b_new += ((FloorRootDelta-b_new) / (2*a_new)) * (2*a_new);
+    }
 
-    a0 = a1;
-    b0 = b1;
-    c0 = c1;
-  }
+    c_new = (Delta - (b_new*b_new))/(-4*a_new);
 
-  RelativeGenerator->set_abd(2*Bm2*a0 + Bm1*b0, -Bm1, 2*a0);
+  } while (!((abs(FloorRootDelta - 2 * a_new) < b_new) && (b_new < FloorRootDelta + 1)));
+
+  RelativeGenerator->set_abd(2 * B_m2 * a_old + B_m1 * b_old, -B_m1, 2 * a_old);
   RelativeGenerator->invert();
 
-  if(RelativeGenerator->conv_RR() < 0) {
+  if (RelativeGenerator->conv_RR() < 0) {
     mul(*RelativeGenerator, *RelativeGenerator, ZZ(-1));
   }
 
-  A.assign(a0, b0, c0);
-  A.normalize();
+  A.assign(a_new, b_new, c_new);
 }
-
-//Debug Tools
-//   if(debug) {
-//     std::cout << "a is " << a0 << std::endl;
-//     std::cout << "b is " << b0 << std::endl;
-//     std::cout << "c is " << c0 << std::endl;
-//     std::cout << "not normal! " << std::endl;
-//     std::cout << "q is " << q << std::endl;
-//     std::cout << "r is " << r << std::endl;
-//     std::cout << "a1 is " << a1 << std::endl;
-//     std::cout << "b1 is " << b1 << std::endl;
-//     std::cout << "c1 is " << c1 << std::endl;
-//     std::cout << "B0 is " << B0 << std::endl;
-//     std::cout << "B1 is " << B1 << std::endl;
-//
-//   }

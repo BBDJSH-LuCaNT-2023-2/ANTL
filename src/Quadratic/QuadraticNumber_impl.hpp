@@ -589,20 +589,17 @@ void
   * @param[in] n second term (a constant)
   * @pre z and x must belong to the same QuadraticOrder
   */
-template <class T>
-void
-      div (QuadraticNumber<T> & z, const QuadraticNumber<T> & x, const T & n)
-      {
-        if (z.QO != x.QO)
-          {
-            // TODO:  THROW AN EXCEPTION!!!
-          }
+template <class T> void div (QuadraticNumber<T> & z, const QuadraticNumber<T> & x, const T & n) {
+  if (z.QO != x.QO) {
+    // TODO:  THROW AN EXCEPTION!!!
+  }
 
-        z.a = x.a;
-        z.b = x.b;
-        ::mul(z.d,x.d,n);
-        z.normalize();
-      }
+  z.a = x.a;
+  z.b = x.b;
+  mul(z.d, x.d, n);
+
+  z.normalize();
+}
 
 /**
   * @brief Computes the quotient of x and q (a rational number or function)

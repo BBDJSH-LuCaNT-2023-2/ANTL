@@ -153,6 +153,8 @@ template <> bool QuadraticIdealBase<ZZ>::is_reduced() {
   if(Delta > 0) {
     FloorRootDelta = SqrRoot(Delta);
 
+    // Below is a check for |sqrt(delta) - 2|a|| < b < sqrt(delta)
+    // It is slightly modified, so it can use floor(sqrt(delta)) instead
     return (abs(FloorRootDelta - 2*a) < b) && (b < FloorRootDelta + 1);
   }
 

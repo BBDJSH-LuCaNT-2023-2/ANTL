@@ -9,7 +9,7 @@ using namespace ANTL;
 
 TEST_CASE("SquareNudupl<ZZ>: Squaring an ideal", "[SquareNudupl]") {
 
-    QuadraticOrder<ZZ> quad_order1 = QuadraticOrder<ZZ>(ZZ(193));
+    QuadraticOrder<ZZ> quad_order1 = QuadraticOrder<ZZ>(ZZ(12157));
     QuadraticNumber<ZZ> quad_number1 = QuadraticNumber<ZZ>(quad_order1);
     QuadraticNumber<ZZ> quad_number2 = QuadraticNumber<ZZ>(quad_order1);
 
@@ -25,7 +25,7 @@ TEST_CASE("SquareNudupl<ZZ>: Squaring an ideal", "[SquareNudupl]") {
 
     QuadraticIdealBase<ZZ> quad_ideal_base_square = QuadraticIdealBase<ZZ>(quad_order1);
 
-    quad_ideal_base1.assign(ZZ(2), ZZ(13), ZZ(-3));
+    quad_ideal_base1.assign(ZZ(57), ZZ(23), ZZ(-51));
 
     sqr(quad_ideal_base_square, quad_ideal_base1);
 
