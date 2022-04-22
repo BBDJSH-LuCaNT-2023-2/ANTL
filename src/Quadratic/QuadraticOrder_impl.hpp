@@ -121,6 +121,18 @@ void QuadraticOrder<T>::set_mul_best(MultiplyStrategy<T> &A) {
   mul_best = &A;
 }
 
+template <class T>
+void QuadraticOrder<T>::set_mul_comp(MultiplyComp<T> &A) {
+  mul_comp = &A;
+
+  // If mul_best is not set, or if Nucomp is the preferred strategy, set
+  // mul_best to A as well
+  if (mul_best == nullptr || preferred_mul == 2) {
+    mul_best = &A;
+  }
+}
+
+
 template <class T> void QuadraticOrder<T>::set_mul_plain(MultiplyPlain<T> &A) {
   mul_plain = &A;
 
@@ -217,6 +229,9 @@ template <class T> ReduceFast<T> *QuadraticOrder<T>::get_red_fast() {
 
 template <class T> MultiplyStrategy<T> *QuadraticOrder<T>::get_mul_best() {
   return mul_best;
+}
+template <class T> MultiplyComp<T> *QuadraticOrder<T>::get_mul_comp() {
+  return mul_comp;
 }
 template <class T> MultiplyPlain<T> *QuadraticOrder<T>::get_mul_plain() {
   return mul_plain;

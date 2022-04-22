@@ -21,6 +21,7 @@
 #include <ANTL/Quadratic/Reduce/ReducePlainReal.hpp>
 #include <ANTL/Quadratic/Reduce/ReduceStrategy.hpp>
 
+#include <ANTL/Quadratic/Multiply/MultiplyComp.hpp>
 #include <ANTL/Quadratic/Multiply/MultiplyNucomp.hpp>
 #include <ANTL/Quadratic/Multiply/MultiplyPlain.hpp>
 #include <ANTL/Quadratic/Multiply/MultiplyStrategy.hpp>
@@ -64,6 +65,7 @@ template <class T> class ReduceFast;
 template <class T> class MultiplyStrategy;
 template <class T> class MultiplyPlain;
 template <class T> class MultiplyNucomp;
+template <class T> class MultiplyComp;
 
 template <class T> class SquareStrategy;
 template <class T> class SquarePlain;
@@ -173,6 +175,7 @@ private:
   MultiplyStrategy<T> *mul_best;
   MultiplyPlain<T> *mul_plain;
   MultiplyNucomp<T> *mul_nucomp;
+  MultiplyComp<T> *mul_comp;
 
   SquareStrategy<T> *sqr_best;
   SquarePlain<T> *sqr_plain;
@@ -321,6 +324,7 @@ public:
   void set_red_fast(ReduceFast<T> &A);
 
   void set_mul_best(MultiplyStrategy<T> &A);
+  void set_mul_comp(MultiplyComp<T> &A);
   void set_mul_plain(MultiplyPlain<T> &A);
   void set_mul_nucomp(MultiplyNucomp<T> &A);
 
@@ -339,6 +343,7 @@ public:
   ReduceFast<T> *get_red_fast();
 
   MultiplyStrategy<T> *get_mul_best();
+  MultiplyComp<T> *get_mul_comp();
   MultiplyPlain<T> *get_mul_plain();
   MultiplyNucomp<T> *get_mul_nucomp();
 

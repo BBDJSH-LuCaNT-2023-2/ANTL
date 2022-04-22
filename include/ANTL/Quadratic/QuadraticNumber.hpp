@@ -544,7 +544,6 @@ namespace ANTL {
         y = to<S>(b);
         z = to<S>(d);
         RootD = sqrt(to<S>(QO->get_discriminant()));
-
         return log((x + (y*RootD))/z);
       }
 
@@ -1295,19 +1294,7 @@ namespace ANTL {
        * @param[in] n second term (a constant)
        * @pre z and x must belong to the same QuadraticOrder
        */
-      friend void
-      div (QuadraticNumber<T> & z, const QuadraticNumber<T> & x, const T & n)
-      {
-      if (z.QO != x.QO)
-        {
-          // TODO:  THROW AN EXCEPTION!!!
-        }
-
-      z.a = x.a;
-      z.b = x.b;
-      ::mul(z.d,x.d,n);
-      z.normalize();
-      }
+      friend void div<T> (QuadraticNumber<T> & z, const QuadraticNumber<T> & x, const T & n);
 
       /**
        * @brief Computes the quotient of x and q (a rational number or function)

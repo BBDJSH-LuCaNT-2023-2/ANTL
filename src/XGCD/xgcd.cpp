@@ -53,8 +53,8 @@ void XGCD_PARTIAL(ZZ & R2, ZZ & R1, ZZ & C2, ZZ & C1, const ZZ & bound) {
   static long A2, A1, TA, B2, B1, TB, rr2, rr1, Tr, qq, bb, T, T1;
   static int i;
 
-  clear(C2);
-  C1 = to_ZZ(-1);
+  clear(C1);
+  C2 = to_ZZ(-1);
 
 /*
   ZZ ORIG_R2 = R2;
@@ -67,7 +67,6 @@ void XGCD_PARTIAL(ZZ & R2, ZZ & R1, ZZ & C2, ZZ & C1, const ZZ & bound) {
 
 
   while (!IsZero(R1) && R1 > bound) {
-    std::cout << "Hello1" << std::endl;
     T = NumBits (R2) - 31;
     T1 = NumBits (R1) - 31;
     if (T < T1) T=T1;

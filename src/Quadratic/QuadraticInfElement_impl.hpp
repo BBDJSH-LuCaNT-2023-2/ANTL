@@ -57,10 +57,12 @@ void QuadraticInfElement<T, S>::giant_step(
   mul(qib, qib, qif_1.get_qib());
 
   relative_distance_1 = qif_1.get_distance();
+
   relative_distance_2 = qib.get_QO()
-                            ->get_mul_nucomp()
+                            ->get_mul_comp()
                             ->get_RelativeGenerator()
                             ->template to_log<S>();
+
 
   update_distance_add(Distance, Distance, relative_distance_1);
   update_distance_add(Distance, Distance, relative_distance_2);
@@ -80,6 +82,27 @@ void QuadraticInfElement<T, S>::adjust(const ZZ &a) {
 
   else {
     while (Distance <= bound) {
+      baby_step();
+    }
+    inverse_rho();
+  }
+  return;
+}
+
+template <class T, class S>
+void QuadraticInfElement<T, S>::adjust(const S &bound) {
+
+  if (Distance > bound) {
+    while (Distance > bound) {
+      inverse_rho();
+    }
+  }
+
+  else {
+    // Testing Floating point equivalence is hard; a simple Distance <= bound
+    // won't work reliably. This workaround ensures correctness within a
+    // reasonable (read arbritaty) accuracy level
+    while (-0.000000001 < bound - Distance) {
       baby_step();
     }
     inverse_rho();
@@ -392,8 +415,7 @@ void nuclose(QuadraticInfElement<T, S> &C, const ZZ &n) {
     s <<= 1;
 
     C.giant_step(C);
-    //sqr(C, C); makeshift square above
-
+    // sqr(C, C); makeshift square above
 
     if (IsOdd(j))
       ++s;
