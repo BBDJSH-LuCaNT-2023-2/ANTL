@@ -6,6 +6,9 @@
 #include <ANTL/HashTable/HashEntryInt.hpp>
 #include <ANTL/HashTable/IndexedHashTable.hpp>
 
+#include <ANTL/Quadratic/QuadraticClassGroupElement.hpp>
+#include <ANTL/Quadratic/QuadraticInfElement.hpp>
+
 NTL_CLIENT;
 using namespace ANTL;
 
@@ -18,6 +21,31 @@ bool DBG_CGBGRL = false;
 // template restrictions.
 template <class T, class U> class ClassGroupBSGSReal {
 private:
+  U regulator;
+
+  T delta;
+
+  // factor base for computing CL
+  QuadraticClassGroupElement<T> *fact_base;
+
+  // indice of fact base elements that
+  long *contributors;
+
+  // number of primes used for BSGS
+  long num_prime_ideals;
+
+  // class number
+  ZZ h;
+
+  // invariants of CL
+  vec_ZZ CL;
+
+  // size of fact_base
+  long numFB;
+
+  // transformation matrix
+  mat_ZZ U_mat;
+
 public:
   void cg_bsgs_real(const U &hstar);
 
@@ -33,14 +61,14 @@ void ClassGroupBSGSReal<T, U>::cg_bsgs_real(const U &hstar) {
   U s, u, r, q, Bj, hS;
   long i, j, k, upper, crank, numRpr, numQ, idx;
 
-  qi_class<T> G, A, B, C, D, E, HI, Gq, GBj, RHO;
+  QuadraticClassGroupElement<T> G, A, B, C, D, E, HI, Gq, GBj, RHO;
   mat_ZZ Bmat, junk;
   vec_ZZ Rvec, Qvec;
 
   vec_long Rideals;
   long numRideals = 0;
-  qi_pair<T> F, RHOdist;
-  ZZ sqReg, Fstep, curr_dist, diff;
+  QuadraticInfElement<T, U> F, RHOdist;
+  U sqReg, Fstep, curr_dist, diff;
   bool done;
 
   HashEntryInt<T, U> *Inode;
@@ -56,24 +84,24 @@ void ClassGroupBSGSReal<T, U>::cg_bsgs_real(const U &hstar) {
     Rideals.SetLength(1024);
 
     // get giant step for equivalence testing
-    SqrRoot(sqReg, R.eval());
-    diff = get_dist_mod(Delta);
+    SqrRoot(sqReg, regulator);
+    diff = get_dist_mod(delta);
     F.assign_one();
 
-    if (sqReg + get_dist_mod(Delta) < R.eval())
+    if (-0.000000001 < regulator - (sqReg + get_dist_mod(delta)))
       nuclose(F, sqReg);
 
     if (F.is_one())
-      Fstep = R.eval();
+      Fstep = regulator;
     else
-      Fstep = F.get_distance().eval();
+      Fstep = F.get_distance();
 
     if (DBG_CGBGRL)
       std::cout << "sqReg = " << sqReg << std::endl;
     if (DBG_CGBGRL)
-      std::cout << "R = " << R.eval() << std::endl;
+      std::cout << "regulator = " << regulator << std::endl;
     if (DBG_CGBGRL)
-      std::cout << "mod = " << get_dist_mod(Delta) << std::endl;
+      std::cout << "mod = " << get_dist_mod(delta) << std::endl;
     if (DBG_CGBGRL)
       std::cout << "Fstep = " << Fstep << std::endl;
     if (DBG_CGBGRL)
@@ -96,17 +124,17 @@ void ClassGroupBSGSReal<T, U>::cg_bsgs_real(const U &hstar) {
     RHO.assign(B);
     RHOdist.assign(B);
     do {
-      RT.hash(RHO.hash_int(to<S>(0)));
+      RT.hash(RHO.hash_int(to<U>(0)));
       RHOdist.rho();
       RHO.assign(RHOdist);
       if (F.is_one())
         done = (RHO.is_one());
       else
-        done = (RHOdist.get_distance().eval() > sqReg + diff || RHO.is_one());
+        done = (RHOdist.get_distance() > sqReg + diff || RHO.is_one());
     } while (!done);
   }
 
-  fact_base = new qi_class<T>[100];
+  fact_base = new QuadraticClassGroupElement<T>[100];
   contributors = new long[100];
 
   num_prime_ideals = 0;
@@ -186,7 +214,7 @@ void ClassGroupBSGSReal<T, U>::cg_bsgs_real(const U &hstar) {
             nucomp(RHOdist, RHOdist, F);
             RHOdist.adjust(curr_dist);
           }
-        } while (RHOdist.get_distance().eval() <= R.eval() && ::IsZero(Bjj));
+        } while (RHOdist.get_distance().eval() <= regulator && ::IsZero(Bjj));
       }
     }
 
@@ -316,7 +344,7 @@ void ClassGroupBSGSReal<T, U>::cg_bsgs_real(const U &hstar) {
                 nucomp(RHOdist, RHOdist, F);
                 RHOdist.adjust(curr_dist);
               }
-            } while (RHOdist.get_distance().eval() <= R.eval() &&
+            } while (RHOdist.get_distance() <= regulator &&
                      ::IsZero(Bjj));
           }
         }
@@ -422,7 +450,7 @@ void ClassGroupBSGSReal<T, U>::cg_bsgs_real(const U &hstar) {
     numFB = crank;
 
     mat_ZZ SNF;
-    SNF = SmithNormalForm(Bmat, U, junk);
+    SNF = SmithNormalForm(Bmat, U_mat, junk);
 
     i = 0;
     for (j = 0; j < crank; ++j) {
