@@ -19,6 +19,8 @@
 #include <NTL/lzz_pEX.h>
 #include <NTL/lzz_pX.h>
 
+#include <NTL/mat_ZZ.h>
+
 #include <NTL/GF2EXFactoring.h>
 #include <NTL/GF2XFactoring.h>
 #include <NTL/ZZ_pEXFactoring.h>
