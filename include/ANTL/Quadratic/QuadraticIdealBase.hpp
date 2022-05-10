@@ -6,136 +6,166 @@
 #ifndef QUADRATICIDEALBASE_H
 #define QUADRATICIDEALBASE_H
 
-#include <string>
-#include <ANTL/common.hpp>
-#include <ANTL/Quadratic/QuadraticOrder.hpp>
+#include <ANTL/HashTable/HashEntryInt.hpp>
 #include <ANTL/Quadratic/QuadraticNumber.hpp>
+#include <ANTL/Quadratic/QuadraticOrder.hpp>
+#include <ANTL/common.hpp>
+#include <string>
 
 using namespace ANTL;
 
 namespace ANTL {
 
-  template < class T > class QuadraticIdealBase;
-  template < class T > class QuadraticOrder;
-  template < class T > class QuadraticNumber;
+template <class T> class QuadraticIdealBase;
+template <class T> class QuadraticOrder;
+template <class T> class QuadraticNumber;
 
-  // declare templated friend functions
-  template <class T> void conjugate (QuadraticIdealBase<T> & C, const QuadraticIdealBase<T> &A);
+// declare templated friend functions
+template <class T>
+void conjugate(QuadraticIdealBase<T> &C, const QuadraticIdealBase<T> &A);
 
-  template <class T> void mul (QuadraticIdealBase<T> &C, const QuadraticIdealBase<T> &A, const QuadraticIdealBase<T> &B);
+template <class T>
+void mul(QuadraticIdealBase<T> &C, const QuadraticIdealBase<T> &A,
+         const QuadraticIdealBase<T> &B);
 
-  template <class T> void mul (QuadraticIdealBase<T> &C, ANTL::QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A, const QuadraticIdealBase<T> &B);
+template <class T>
+void mul(QuadraticIdealBase<T> &C, ANTL::QuadraticNumber<T> &gamma,
+         const QuadraticIdealBase<T> &A, const QuadraticIdealBase<T> &B);
 
-  template <class T> void sqr (QuadraticIdealBase<T> &C, const QuadraticIdealBase<T> &A);
+template <class T>
+void sqr(QuadraticIdealBase<T> &C, const QuadraticIdealBase<T> &A);
 
-  template <class T> void sqr (QuadraticIdealBase<T> &C, ANTL::QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A);
+template <class T>
+void sqr(QuadraticIdealBase<T> &C, ANTL::QuadraticNumber<T> &gamma,
+         const QuadraticIdealBase<T> &A);
 
-  template <class T> void cube (QuadraticIdealBase<T> &C, const QuadraticIdealBase<T> &A);
+template <class T>
+void cube(QuadraticIdealBase<T> &C, const QuadraticIdealBase<T> &A);
 
-  template <class T> void cube (QuadraticIdealBase<T> &C, ANTL::QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A);
+template <class T>
+void cube(QuadraticIdealBase<T> &C, ANTL::QuadraticNumber<T> &gamma,
+          const QuadraticIdealBase<T> &A);
 
-  template <class T> bool operator == (const QuadraticIdealBase<T> &A, const QuadraticIdealBase<T> &B);
+template <class T>
+bool operator==(const QuadraticIdealBase<T> &A, const QuadraticIdealBase<T> &B);
 
-  template <class T> bool operator != (const QuadraticIdealBase<T> &A, const QuadraticIdealBase<T> &B);
+template <class T>
+bool operator!=(const QuadraticIdealBase<T> &A, const QuadraticIdealBase<T> &B);
 
-  template <class T> std::istream & operator >> (std::istream & in, QuadraticIdealBase<T> &A);
+template <class T>
+std::istream &operator>>(std::istream &in, QuadraticIdealBase<T> &A);
 
-  template <class T> std::ostream & operator << (std::ostream & out, const QuadraticIdealBase<T> &A);
+template <class T>
+std::ostream &operator<<(std::ostream &out, const QuadraticIdealBase<T> &A);
 
-  // Class: QuadraticIdealBase<T>
-  //
-  // This class represents a primtive integral ideal as a binary quadratic form with coefficients a,b,c of type T.
-  template <class T> class QuadraticIdealBase {
-    protected:
-      // BQF coefficients
-      T a;
-      T b;
-      T c;
-      QuadraticOrder<T> *QO;
+// Class: QuadraticIdealBase<T>
+//
+// This class represents a primtive integral ideal as a binary quadratic form
+// with coefficients a,b,c of type T.
+template <class T> class QuadraticIdealBase {
+protected:
+  // BQF coefficients
+  T a;
+  T b;
+  T c;
+  QuadraticOrder<T> *QO;
 
-    public:
-      // Constructor(s) and destructor
-      QuadraticIdealBase ();
-      QuadraticIdealBase (ANTL::QuadraticOrder<T> & inQO);
-      ~QuadraticIdealBase ();
+public:
+  // Constructor(s) and destructor
+  QuadraticIdealBase();
+  QuadraticIdealBase(ANTL::QuadraticOrder<T> &inQO);
+  ~QuadraticIdealBase();
 
-      // Assignment
-      void assign_one   ();
-      bool assign_prime (const T & p);
-      void assign       (const QuadraticIdealBase<T> &B);
-      void assign       (const T & na, const T & nb, const T & nc);
+  // Assignment
+  void assign_one();
+  bool assign_prime(const T &p);
+  void assign(const QuadraticIdealBase<T> &B);
+  void assign(const T &na, const T &nb, const T &nc);
+  template <class S> void assign(const HashEntryInt<T, S> &B);
 
-      QuadraticIdealBase<T> &operator = (const QuadraticIdealBase<T> &A);
+  QuadraticIdealBase<T> &operator=(const QuadraticIdealBase<T> &A);
 
-      // Checks whether ideal coeffs are valid (b^2 + bh - ac = Delta)
-      void ensure_valid (std::string msg);
+  // Checks whether ideal coeffs are valid (b^2 + bh - ac = Delta)
+  void ensure_valid(std::string msg);
 
-      // Getters and Setters
-      T get_a () const;
-      T get_b () const;
-      T get_c () const;
-      QuadraticOrder<T> * get_QO () const;
+  // Getters and Setters
+  T get_a() const;
+  T get_b() const;
+  T get_c() const;
+  QuadraticOrder<T> *get_QO() const;
 
-      void set_a  (T x);
-      void set_b  (T x);
-      void set_c  (T x);
-      void set_QO (QuadraticOrder<T> *qo);
+  void set_a(T x);
+  void set_b(T x);
+  void set_c(T x);
+  void set_QO(QuadraticOrder<T> *qo);
 
-      // arithmetic operations
-      friend void conjugate < T > (QuadraticIdealBase<T> & C, const QuadraticIdealBase<T> &A);
-      friend void mul < T > (QuadraticIdealBase<T> &C, const QuadraticIdealBase<T> &A, const QuadraticIdealBase<T> &B);
-      friend void sqr < T > (QuadraticIdealBase<T> &C, const QuadraticIdealBase<T> &A);
-      friend void cube < T > (QuadraticIdealBase<T> &C, const QuadraticIdealBase<T> &A);
+  // Hashers
+  template <class S> HashEntryInt<T, S> hash_int(const S &newd) const;
 
-      // arithmetic with relative generator
-      //   friend void mul < T > (QuadraticIdealBase<T> &C, ANTL::QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A, const QuadraticIdealBase<T> &B);
-      //   friend void sqr < T > (QuadraticIdealBase<T> &C, ANTL::QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A);
-      //   friend void cube < T > (QuadraticIdealBase<T> &C, ANTL::QuadraticNumber<T> & gamma, const QuadraticIdealBase<T> &A);
+  // arithmetic operations
+  friend void conjugate<T>(QuadraticIdealBase<T> &C,
+                           const QuadraticIdealBase<T> &A);
+  friend void mul<T>(QuadraticIdealBase<T> &C, const QuadraticIdealBase<T> &A,
+                     const QuadraticIdealBase<T> &B);
+  friend void sqr<T>(QuadraticIdealBase<T> &C, const QuadraticIdealBase<T> &A);
+  friend void cube<T>(QuadraticIdealBase<T> &C, const QuadraticIdealBase<T> &A);
 
-      void reduce();
-      void reduce(ANTL::QuadraticNumber<T> & gamma);
+  // arithmetic with relative generator
+  //   friend void mul < T > (QuadraticIdealBase<T> &C, ANTL::QuadraticNumber<T>
+  //   & gamma, const QuadraticIdealBase<T> &A, const QuadraticIdealBase<T> &B);
+  //   friend void sqr < T > (QuadraticIdealBase<T> &C, ANTL::QuadraticNumber<T>
+  //   & gamma, const QuadraticIdealBase<T> &A); friend void cube < T >
+  //   (QuadraticIdealBase<T> &C, ANTL::QuadraticNumber<T> & gamma, const
+  //   QuadraticIdealBase<T> &A);
 
-      // comparisons
-      bool IsOne () const;
-      bool IsEqual (const QuadraticIdealBase<T> &B) const;
+  void reduce();
+  void reduce(ANTL::QuadraticNumber<T> &gamma);
 
-      bool is_normal();
-      bool is_reduced();
+  // comparisons
+  bool IsOne() const;
+  bool IsEqual(const QuadraticIdealBase<T> &B) const;
 
-      void normalize();
+  bool is_normal();
+  bool is_reduced();
 
-      friend bool operator == < T > (const QuadraticIdealBase<T> &A, const QuadraticIdealBase<T> &B);
-      friend bool operator != < T > (const QuadraticIdealBase<T> &A, const QuadraticIdealBase<T> &B);
+  void normalize();
 
-      // input/output
-      friend std::istream & operator >> < T > (std::istream & in, QuadraticIdealBase<T> &A);
-      friend std::ostream & operator << < T > (std::ostream & out, const QuadraticIdealBase<T> &A);
-    };
+  friend bool operator==
+      <T>(const QuadraticIdealBase<T> &A, const QuadraticIdealBase<T> &B);
+  friend bool operator!=
+      <T>(const QuadraticIdealBase<T> &A, const QuadraticIdealBase<T> &B);
 
-  // Declare specialized methods
-  template <> void QuadraticIdealBase<ZZ>::ensure_valid(std::string msg);
-  template <> void QuadraticIdealBase<ZZ>::assign_one();
-  template <> bool QuadraticIdealBase<ZZ>::assign_prime (const ZZ & p);
-  template <> bool QuadraticIdealBase<ZZ>::is_normal();
-  template <> bool QuadraticIdealBase<ZZ>::is_reduced();
+  // input/output
+  friend std::istream &operator>>
+      <T>(std::istream &in, QuadraticIdealBase<T> &A);
+  friend std::ostream &operator<<<T>(std::ostream &out,
+                                     const QuadraticIdealBase<T> &A);
+};
 
+// Declare specialized methods
+template <> void QuadraticIdealBase<ZZ>::ensure_valid(std::string msg);
+template <> void QuadraticIdealBase<ZZ>::assign_one();
+template <> bool QuadraticIdealBase<ZZ>::assign_prime(const ZZ &p);
+template <> bool QuadraticIdealBase<ZZ>::is_normal();
+template <> bool QuadraticIdealBase<ZZ>::is_reduced();
 
-  template <> void QuadraticIdealBase<long>::ensure_valid(std::string msg);
-  template <> void QuadraticIdealBase<long>::assign_one();
-  template <> bool QuadraticIdealBase<long>::assign_prime (const long & p);
-  template <> bool QuadraticIdealBase<long>::is_normal();
-  template <> bool QuadraticIdealBase<long>::is_reduced();
-  template <> void QuadraticIdealBase<ZZ>::normalize();
+template <> void QuadraticIdealBase<long>::ensure_valid(std::string msg);
+template <> void QuadraticIdealBase<long>::assign_one();
+template <> bool QuadraticIdealBase<long>::assign_prime(const long &p);
+template <> bool QuadraticIdealBase<long>::is_normal();
+template <> bool QuadraticIdealBase<long>::is_reduced();
+template <> void QuadraticIdealBase<ZZ>::normalize();
 
-  template <> void QuadraticIdealBase<GF2EX>::ensure_valid(std::string msg);
-  template <> void QuadraticIdealBase<GF2EX>::assign_one();
-  template <> bool QuadraticIdealBase<GF2EX>::assign_prime (const GF2EX & p);
-  template <> void conjugate (QuadraticIdealBase<GF2EX> &C, const QuadraticIdealBase<GF2EX> &A);
+template <> void QuadraticIdealBase<GF2EX>::ensure_valid(std::string msg);
+template <> void QuadraticIdealBase<GF2EX>::assign_one();
+template <> bool QuadraticIdealBase<GF2EX>::assign_prime(const GF2EX &p);
+template <>
+void conjugate(QuadraticIdealBase<GF2EX> &C,
+               const QuadraticIdealBase<GF2EX> &A);
 
-} // ANTL
+} // namespace ANTL
 
 // Unspecialized template definitions.
 #include "../src/Quadratic/QuadraticIdealBase_impl.hpp"
 
 #endif // guard
-

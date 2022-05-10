@@ -7,190 +7,216 @@
 #ifndef ANTL_QUADRATIC_QI_CLASS_H
 #define ANTL_QUADRATIC_QI_CLASS_H
 
+#include <ANTL/HashTable/HashEntryInt.hpp>
+#include <ANTL/HashTable/HashEntryVec.hpp>
+#include <ANTL/HashTable/IndexedHashTable.hpp>
 #include <ANTL/Quadratic/QuadraticIdealBase.hpp>
 
-namespace ANTL
-{
+namespace ANTL {
 
-  template < class T > class QuadraticClassGroupElement;
+template <class T> class QuadraticClassGroupElement;
 
-  template < class T >
-  void multiply_imag(QuadraticClassGroupElement<T> & C, const QuadraticClassGroupElement<T> & A,
-		     const QuadraticClassGroupElement<T> & B);
+// template <class T>
+// void conjugate(QuadraticClassGroupElement<T> &C,
+//                const QuadraticClassGroupElement<T> &A);
 
-  template < class T >
-  void multiply_real(QuadraticClassGroupElement<T> & C, const QuadraticClassGroupElement<T> & A,
-		     const QuadraticClassGroupElement<T> & B);
+template <class T>
+QuadraticClassGroupElement<T> conjugate(const QuadraticClassGroupElement<T> &C);
 
-  template < class T >
-  void multiply(QuadraticClassGroupElement<T> & C, const QuadraticClassGroupElement<T> & A,
-		const QuadraticClassGroupElement<T> & B);
+template <class T>
+void multiply_imag(QuadraticClassGroupElement<T> &C,
+                   const QuadraticClassGroupElement<T> &A,
+                   const QuadraticClassGroupElement<T> &B);
 
-  template < class T >
-  void square_imag(QuadraticClassGroupElement<T> & C, const QuadraticClassGroupElement<T> & A);
+template <class T>
+void multiply_real(QuadraticClassGroupElement<T> &C,
+                   const QuadraticClassGroupElement<T> &A,
+                   const QuadraticClassGroupElement<T> &B);
 
-  template < class T >
-  void square_real(QuadraticClassGroupElement<T> & C, const QuadraticClassGroupElement<T> & A);
+template <class T>
+void mul(QuadraticClassGroupElement<T> &C,
+              const QuadraticClassGroupElement<T> &A,
+              const QuadraticClassGroupElement<T> &B);
 
-  template < class T >
-  void square(QuadraticClassGroupElement<T> & C, const QuadraticClassGroupElement<T> & A);
+template <class T>
+void square_imag(QuadraticClassGroupElement<T> &C,
+                 const QuadraticClassGroupElement<T> &A);
 
-  template < class T >
-  void power_imag(QuadraticClassGroupElement<T> & C, const QuadraticClassGroupElement<T> & A, const ZZ & n);
+template <class T>
+void square_real(QuadraticClassGroupElement<T> &C,
+                 const QuadraticClassGroupElement<T> &A);
 
-  template < class T >
-  void power_real(QuadraticClassGroupElement<T> & C, const QuadraticClassGroupElement<T> & A, const ZZ & n);
+template <class T>
+void square(QuadraticClassGroupElement<T> &C,
+            const QuadraticClassGroupElement<T> &A);
 
-  template < class T >
-  void power(QuadraticClassGroupElement<T> & C, const QuadraticClassGroupElement<T> & A, const ZZ & n);
+template <class T>
+void power_imag(QuadraticClassGroupElement<T> &C,
+                const QuadraticClassGroupElement<T> &A, const ZZ &n);
 
-  template < class T >
-  void nupower_imag(QuadraticClassGroupElement<T> & C, const QuadraticClassGroupElement<T> & A, const ZZ & n);
+template <class T>
+void power_real(QuadraticClassGroupElement<T> &C,
+                const QuadraticClassGroupElement<T> &A, const ZZ &n);
 
-  template < class T >
-  void nupower_real(QuadraticClassGroupElement<T> & C, const QuadraticClassGroupElement<T> & A, const ZZ & n);
+template <class T>
+void power(QuadraticClassGroupElement<T> &C,
+           const QuadraticClassGroupElement<T> &A, const ZZ &n);
 
-  template < class T >
-  void nupower(QuadraticClassGroupElement<T> & C, const QuadraticClassGroupElement<T> & A, const ZZ & n);
+template <class T>
+void nupower_imag(QuadraticClassGroupElement<T> &C,
+                  const QuadraticClassGroupElement<T> &A, const ZZ &n);
 
-  template < class T >
-  QuadraticClassGroupElement<T> operator * (const QuadraticClassGroupElement<T> & A, const QuadraticClassGroupElement<T> & B);
+template <class T>
+void nupower_real(QuadraticClassGroupElement<T> &C,
+                  const QuadraticClassGroupElement<T> &A, const ZZ &n);
 
-  template < class T >
-  void swap(QuadraticClassGroupElement<T> & A, QuadraticClassGroupElement<T> & B);
+template <class T>
+void nupower(QuadraticClassGroupElement<T> &C,
+             const QuadraticClassGroupElement<T> &A, const ZZ &n);
 
-  template < class T >
-  std::istream & operator >> (std::istream & in, QuadraticClassGroupElement<T> & A);
+template <class T>
+QuadraticClassGroupElement<T> operator*(const QuadraticClassGroupElement<T> &A,
+                                        const QuadraticClassGroupElement<T> &B);
+
+template <class T>
+void swap(QuadraticClassGroupElement<T> &A, QuadraticClassGroupElement<T> &B);
+
+template <class T>
+std::istream &operator>>(std::istream &in, QuadraticClassGroupElement<T> &A);
+
+//
+// Class: QuadraticClassGroupElement<T>
+//
+// This class represents an element in the class group of a quadratic
+//    order, i.e., a reduced, primitive, invertible ideal
+//    aZ + (b+sqrt(Delta))/2 Z  where Delta is the discriminant of the
+//    quadratic order.  This class is derived from QuadraticIdealBase and shares
+//    all its properties, but each instance is forced to be reduced.
+//
+
+template <class T>
+class QuadraticClassGroupElement : public QuadraticIdealBase<T> {
+public:
+  using QuadraticIdealBase<T>::a;
+  using QuadraticIdealBase<T>::b;
+  using QuadraticIdealBase<T>::c;
+  using QuadraticIdealBase<T>::QO;
+  //
+  // constructors and destructor
+  //
+
+  QuadraticClassGroupElement();
+  QuadraticClassGroupElement(QuadraticOrder<T> &qo_a);
+  QuadraticClassGroupElement(const QuadraticIdealBase<T> &A);
+  QuadraticClassGroupElement(const HashEntry<T> &A);
+
+  template <class S> QuadraticClassGroupElement(const HashEntryInt<T, S> &A);
+
+  QuadraticClassGroupElement(const HashEntryVec<T> &A);
+  QuadraticClassGroupElement(const QuadraticClassGroupElement<T> &A);
+
+  ~QuadraticClassGroupElement();
+
+  /*
+  //
+  // initialization
+  //
+
+  static void set_current_order(const T & newf, const T & newh);
+  static void set_current_order(const T & newDelta);
+  */
 
   //
-  // Class: QuadraticClassGroupElement<T>
-  //
-  // This class represents an element in the class group of a quadratic
-  //    order, i.e., a reduced, primitive, invertible ideal
-  //    aZ + (b+sqrt(Delta))/2 Z  where Delta is the discriminant of the
-  //    quadratic order.  This class is derived from QuadraticIdealBase and shares all
-  //    its properties, but each instance is forced to be reduced.
+  // assignment
   //
 
-  template < class  T >
-  class QuadraticClassGroupElement : public QuadraticIdealBase<T>
-  {
-  public:
+  bool assign_prime(const T &p);
+  bool assign(const T &a2, const T &b2);
+  void assign(const HashEntry<T> &B);
 
-    //
-    // constructors and destructor
-    //
+  template <class S> void assign(const HashEntryInt<T, S> &B);
 
-    QuadraticClassGroupElement();
-    QuadraticClassGroupElement(const QuadraticIdealBase<T> & A);
-    QuadraticClassGroupElement(const HashEntry<T> & A);
+  void assign(const HashEntryVec<T> &B);
+  void assign(const QuadraticClassGroupElement<T> &B);
 
-    template < class S >
-    QuadraticClassGroupElement(const HashEntryInt<T,S> & A);
+  QuadraticClassGroupElement<T> &
+  operator=(const QuadraticClassGroupElement<T> &A);
 
-    QuadraticClassGroupElement(const HashEntryVec<T> & A);
-    QuadraticClassGroupElement(const QuadraticClassGroupElement<T> & A);
+  //
+  // arithmetic operations
+  //
 
-    ~QuadraticClassGroupElement();
+//   friend void conjugate<T>(QuadraticClassGroupElement<T> &C,
+//                            const QuadraticClassGroupElement<T> &A);
 
-
-    /*
-    //
-    // initialization
-    //
-
-    static void set_current_order(const T & newf, const T & newh);
-    static void set_current_order(const T & newDelta);
-    */
+  friend QuadraticClassGroupElement<T> conjugate<T>(const QuadraticClassGroupElement<T> &C);
 
 
-    //
-    // assignment
-    //
+  friend void multiply_imag<T>(QuadraticClassGroupElement<T> &C,
+                               const QuadraticClassGroupElement<T> &A,
+                               const QuadraticClassGroupElement<T> &B);
 
-    bool assign_prime(const T & p);
-    bool assign(const T & a2, const T & b2);
-    void assign(const HashEntry<T> & B);
+  friend void multiply_real<T>(QuadraticClassGroupElement<T> &C,
+                               const QuadraticClassGroupElement<T> &A,
+                               const QuadraticClassGroupElement<T> &B);
 
-    template < class S >
-    void assign(const HashEntryInt<T,S> & B);
+  friend void mul<T>(QuadraticClassGroupElement<T> &C,
+                          const QuadraticClassGroupElement<T> &A,
+                          const QuadraticClassGroupElement<T> &B);
 
-    void assign(const HashEntryVec<T> & B);
-    void assign(const QuadraticClassGroupElement<T> & B);
-    QuadraticClassGroupElement<T> & operator = (const QuadraticClassGroupElement<T> & A);
+  friend void square_imag<T>(QuadraticClassGroupElement<T> &C,
+                             const QuadraticClassGroupElement<T> &A);
+  friend void square_real<T>(QuadraticClassGroupElement<T> &C,
+                             const QuadraticClassGroupElement<T> &A);
+  friend void square<T>(QuadraticClassGroupElement<T> &C,
+                        const QuadraticClassGroupElement<T> &A);
 
+  friend void power_imag<T>(QuadraticClassGroupElement<T> &C,
+                            const QuadraticClassGroupElement<T> &A,
+                            const ZZ &n);
+  friend void power_real<T>(QuadraticClassGroupElement<T> &C,
+                            const QuadraticClassGroupElement<T> &A,
+                            const ZZ &n);
+  friend void power<T>(QuadraticClassGroupElement<T> &C,
+                       const QuadraticClassGroupElement<T> &A, const ZZ &n);
 
-    //
-    // arithmetic operations
-    //
+  friend void nupower_imag<T>(QuadraticClassGroupElement<T> &C,
+                              const QuadraticClassGroupElement<T> &A,
+                              const ZZ &n);
+  friend void nupower_real<T>(QuadraticClassGroupElement<T> &C,
+                              const QuadraticClassGroupElement<T> &A,
+                              const ZZ &n);
+  friend void nupower<T>(QuadraticClassGroupElement<T> &C,
+                         const QuadraticClassGroupElement<T> &A, const ZZ &n);
 
-    friend void multiply_imag <T> (QuadraticClassGroupElement<T> & C,
-                                   const QuadraticClassGroupElement<T> & A,
-                                   const QuadraticClassGroupElement<T> & B);
+  friend QuadraticClassGroupElement<T> operator*
+      <T>(const QuadraticClassGroupElement<T> &A,
+          const QuadraticClassGroupElement<T> &B);
+  QuadraticClassGroupElement<T> &
+  operator*=(const QuadraticClassGroupElement<T> &A);
 
-    friend void multiply_real <T> (QuadraticClassGroupElement<T> & C,
-                                   const QuadraticClassGroupElement<T> & A,
-                                   const QuadraticClassGroupElement<T> & B);
+  //
+  // basic functions
+  //
 
-    friend void multiply <T> (QuadraticClassGroupElement<T> & C,
-			      const QuadraticClassGroupElement<T> & A,
-			      const QuadraticClassGroupElement<T> & B);
+  friend void swap<T>(QuadraticClassGroupElement<T> &A,
+                      QuadraticClassGroupElement<T> &B);
 
-    friend void square_imag <T> (QuadraticClassGroupElement<T> & C,
-                                 const QuadraticClassGroupElement<T> & A);
-    friend void square_real <T> (QuadraticClassGroupElement<T> & C,
-                                 const QuadraticClassGroupElement<T> & A);
-    friend void square <T> (QuadraticClassGroupElement<T> & C,
-			    const QuadraticClassGroupElement<T> & A);
+  friend ZZ hash_value(const QuadraticClassGroupElement<T> &A) {
+    return hash_value_base(A.a);
+  }
 
-    friend void power_imag <T> (QuadraticClassGroupElement<T> & C,
-				const QuadraticClassGroupElement<T> & A,
-				const ZZ & n);
-    friend void power_real <T> (QuadraticClassGroupElement<T> & C,
-				const QuadraticClassGroupElement<T> & A,
-				const ZZ & n);
-    friend void power <T> (QuadraticClassGroupElement<T> & C,
-			   const QuadraticClassGroupElement<T> & A,
-			   const ZZ & n);
+  //
+  // input/output
+  //
 
-    friend void nupower_imag <T> (QuadraticClassGroupElement<T> & C,
-				  const QuadraticClassGroupElement<T> & A,
-				  const ZZ & n);
-    friend void nupower_real <T> (QuadraticClassGroupElement<T> & C,
-				  const QuadraticClassGroupElement<T> & A,
-				  const ZZ & n);
-    friend void nupower <T> (QuadraticClassGroupElement<T> & C,
-			     const QuadraticClassGroupElement<T> & A,
-			     const ZZ & n);
+  friend std::istream &operator>>
+      <T>(std::istream &in, QuadraticClassGroupElement<T> &A);
+};
 
-    friend QuadraticClassGroupElement<T> operator * <T> (const QuadraticClassGroupElement<T> & A,
-				       const QuadraticClassGroupElement<T> & B);
-    QuadraticClassGroupElement<T> & operator *= (const QuadraticClassGroupElement<T> & A);
-
-
-
-    //
-    // basic functions
-    //
-
-    friend void swap <T> (QuadraticClassGroupElement<T> & A, QuadraticClassGroupElement<T> & B);
-    friend ZZ hash_value (const QuadraticClassGroupElement<T> &A)
-    { return hash_value_base(A.a); }
-
-
-
-
-    //
-    // input/output
-    //
-
-    friend std::istream & operator >> <T> (std::istream & in, QuadraticClassGroupElement<T> & A);
-  };
-
-} // ANTL
+} // namespace ANTL
 
 // Unspecialized template definitions.
 #include "../../../src/Quadratic/QuadraticClassGroupElement_impl.hpp"
 
 #endif // guard
-

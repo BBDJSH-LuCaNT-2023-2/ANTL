@@ -6,22 +6,22 @@
 using namespace NTL;
 using namespace ANTL;
 
-//DBG_CONSTANTS
-bool DBG_LENSTR = false;
-bool DBG_EHRERR = false;
-bool DBG_GOQCNM = false;
-bool DBG_BSGSGL = false;
-bool DBG_BSGSES = false;
-bool DBG_IPLIST = false;
-bool DBG_SHANKS = false;
-bool DBG_APPRHR = false;
-bool DBG_OPTIMK = false;
-
-
 // Partial class specializtion as a temporary work around multi-pararameter
 // template restrictions.
 template <class U> class RegulatorLenstraData<ZZ, U> {
 private:
+
+  //DBG_CONSTANTS
+  bool DBG_LENSTR = false;
+  bool DBG_EHRERR = false;
+  bool DBG_GOQCNM = false;
+  bool DBG_BSGSGL = false;
+  bool DBG_BSGSES = false;
+  bool DBG_IPLIST = false;
+  bool DBG_SHANKS = false;
+  bool DBG_APPRHR = false;
+  bool DBG_OPTIMK = false;
+
   U regulator;
 
   QuadraticOrder<ZZ> *quadratic_order;
@@ -36,6 +36,10 @@ private:
                                 30631,  39209,  48731,  59063,  70237,
                                 82223,  95009,  108571, 122921, 137983,
                                 153817, 170341, 187631, 205589, 224261};
+
+  const long OQvals[20] = {947,   2269,  3929,  6011,  8447,  11093, 14149,
+                           17393, 20921, 24733, 28807, 33151, 37619, 42533,
+                           47507, 52859, 58321, 64231, 70099, 76463};
 
   ZZ max_memory{4000000000};
 
@@ -57,6 +61,8 @@ public:
   void regulator_lenstra();
 
   U get_regulator();
+
+  ZZ lower_bound_hR();
 
 private:
   ZZ estimate_hR_error();
@@ -83,6 +89,11 @@ private:
 
   void combine_conj_BSGS(U &dist, const QuadraticInfElement<ZZ, U> &DD,
                          const HashEntryReal<ZZ, U> *F);
+
+  long get_optimal_Q();
+
+  long generate_optimal_Q();
+
 };
 
 // Method definitions - Everything below will eventually go into a
@@ -719,5 +730,139 @@ template <class U>
 void RegulatorLenstraData<ZZ, U>::combine_conj_BSGS(
     U &dist, const QuadraticInfElement<ZZ, U> &DD, const HashEntryReal<ZZ, U> *F) {
   dist = DD.get_distance() + F->get_d() - deg(DD.get_qib().get_a());
+}
+
+
+//
+// lower_bound_hR()
+// Task: returns a lower bound of hR such that L < hR < 2L
+//
+template <class U>
+ZZ RegulatorLenstraData<ZZ, U>::lower_bound_hR() {
+  ZZ hR;
+  RR temp, FI;
+
+  //START: Temporary variables needed (previously declared in ANTL-Import's quadratic_order
+  bool unconditional = true;
+  int info = 0;
+  bool use_tables = false;
+  //FINISH: Temporary variables needed (previously declared in ANTL-Import's quadratic_order
+
+  if (unconditional) {
+    if (info > 1) {
+      cout << "Lower bound hR with L(0,X)" << endl;
+    }
+
+    // compute hR apporximation
+
+    if (quadratic_order->is_imaginary()) {
+      if (use_tables)
+        FI = l_function->approximateL0_ImaginaryNumberField_table(
+            log(sqrt(double(2))));
+      else
+        FI = l_function->approximateL0_ImaginaryNumberField(log(sqrt(double(2))));
+
+      if (info > 1) {
+        cout << "L(0,X) approx " << FI << endl;
+      }
+
+      temp = FI;
+      if (delta == -4)
+        temp *= 2;
+      if (delta == -3)
+        temp *= 3;
+
+    } else {
+      if (use_tables)
+        FI = l_function->approximateL0_RealNumberField_table(log(sqrt(double(2))));
+      else
+        FI = l_function->approximateL0_RealNumberField(log(sqrt(double(2))));
+
+      if (info > 1) {
+        cout << "L(0,X) approx " << FI << endl;
+      }
+      temp = FI;
+    }
+  } else {
+    if (info > 1) {
+      cout << "Lower bound hR with L(1,X)" << endl;
+    }
+
+    if (use_tables)
+      FI = l_function->approximateL1_table();
+    else {
+      long n = get_optimal_Q();
+      if (info > 2)
+        cout << "using n = " << n << endl;
+      FI = l_function->approximateL1(n);
+    }
+
+    if (info > 1) {
+      cout << "L(1,X) approx " << FI << endl;
+    }
+
+    if (quadratic_order->is_imaginary()) {
+      // h = sqrt(delta) L / Pi
+      temp = FI * SqrRoot(to_RR(-delta)) / ComputePi_RR();
+      if (delta == -4)
+        temp *= 2;
+      if (delta == -3)
+        temp *= 3;
+    } else {
+      // hR = sqrt(delta) L / 2
+      temp = FI * SqrRoot(to_RR(delta)) / 2;
+    }
+  }
+
+  hR = CeilToZZ(temp / SqrRoot(to_RR(2)));
+
+  if (info > 1)
+    cout << "Lower bound = " << hR << endl;
+
+  return hR;
+}
+
+//
+// quadratic_order<ZZ>::get_optimal_Q()
+//
+// Task: returns a value of Q from a pre-computed table which will compute h*
+// such that h* < h < 2h*.
+//
+
+template <class U>
+long RegulatorLenstraData<ZZ, U>::get_optimal_Q() {
+  long Dlog;
+  ZZ temp;
+
+  temp = FloorToZZ(log10(to_RR(abs(delta))));
+  conv(Dlog, temp);
+
+  if ((Dlog / 5) > 19)
+    return generate_optimal_Q();
+
+  return OQvals[Dlog / 5];
+}
+
+//
+// quadratic_order<ZZ>::generate_optimal_Q()
+// Task: computes the optimal value of Q for computing h* such that h* < h < 2h*
+//
+
+template <class U> long RegulatorLenstraData<ZZ, U>::generate_optimal_Q() {
+  long OQ;
+  RR A, l2;
+  PrimeSeq primes;
+
+  l2 = log(sqrt(to_RR(2)));
+
+  // set OQ = 3
+  OQ = primes.next();
+
+  do {
+    OQ = primes.next();
+    A = l_function->calculate_L1_error(delta, OQ);
+  } while (A >= l2);
+
+  return OQ;
 }
 #endif

@@ -118,6 +118,7 @@ public:
   void adjust(const ZZ &a);
   void adjust(const S &a);
   void assign(const HashEntryReal<T, S> &her_a);
+  void assign (const QuadraticIdealBase < T > &B);
   void assign_one();
 
   friend void conjugate<T, S>(QuadraticInfElement<T, S> &qie_a,

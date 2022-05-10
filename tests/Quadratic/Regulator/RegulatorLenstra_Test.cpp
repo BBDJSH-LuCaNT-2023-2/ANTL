@@ -1,5 +1,5 @@
-#ifndef QUADRATICORDER_ZZ_TEST
-#define QUADRATICORDER_ZZ_TEST
+#ifndef REGULATOR_LENSTRA_ZZ_TEST
+#define REGULATOR_LENSTRA_ZZ_TEST
 
 #include "../../catch.hpp"
 #include <ANTL/Quadratic/Regulator/RegulatorLenstra.hpp>
@@ -10,17 +10,18 @@ using namespace ANTL;
 
 bool DBG_LENSTRA_TEST = true;
 
-int discriminants[10] = {55661, 63361, 72673, 86341, 38593,
-                         54269, 41513, 74021, 45677, 17909};
-
-double correct_regulators[10] = {
-    25.4538649123, 17.5077374033, 357.702597578, 148.556426268, 105.442818369,
-    49.458153743,  130.11243841,  62.8055127479, 54.4615644632, 44.1429273524};
-
-double computed_regulators[10];
-bool computed_correctly[10];
-
 TEST_CASE("RegulatorLenstra<ZZ>: Does it work?", "[RegulatorLenstra]") {
+
+  int discriminants[10] = {55661, 63361, 72673, 86341, 38593,
+                           54269, 41513, 74021, 45677, 17909};
+
+  double correct_regulators[10] = {25.4538649123, 17.5077374033, 357.702597578,
+                                   148.556426268, 105.442818369, 49.458153743,
+                                   130.11243841,  62.8055127479, 54.4615644632,
+                                   44.1429273524};
+
+  double computed_regulators[10];
+  bool computed_correctly[10];
 
   for (int i = 0; i < 10; i++) {
 

@@ -106,6 +106,8 @@ inline void MakeMonic(ZZ &X) { X = to_ZZ(1); }
 template <class T> inline void assign(T &C, const T &A) { C = A; }
 
 inline void SqrRoot(double &x, const double &a) { x = std::sqrt(a); }
+inline void SqrRoot(ZZ &x, const double &a) { x = std::sqrt(a); }
+
 inline void ComputePi(double &p) { p = 3.141592653589793; }
 // procedural arithmetic operations for standard types, to increase
 // compatibility with NTL
