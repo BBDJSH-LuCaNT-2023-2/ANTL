@@ -2,12 +2,26 @@
 #define CLASSGROUP_BSGS_H
 
 #include <ANTL/common.hpp>
+#include <unordered_set>
 
 #include <ANTL/HashTable/HashEntryInt.hpp>
 #include <ANTL/HashTable/IndexedHashTable.hpp>
 
+#include <ANTL/LinearAlgebra/Smith.hpp>
+
 #include <ANTL/Quadratic/QuadraticClassGroupElement.hpp>
 #include <ANTL/Quadratic/QuadraticInfElement.hpp>
+
+template<>
+struct std::hash<QuadraticIdealBase<ZZ>>
+{
+    std::size_t operator()(QuadraticIdealBase<ZZ> const& qib) const noexcept
+    {
+        std::size_t h1 = std::hash<int>{}(to<int>(qib.get_a()));
+        std::size_t h2 = std::hash<int>{}(to<int>(qib.get_b()));
+        return h1 ^ (h2 << 1); // or use boost::hash_combine
+    }
+};
 
 NTL_CLIENT;
 using namespace ANTL;
@@ -17,11 +31,16 @@ namespace ANTL {
 // DBG_CONSTANTS
 bool DBG_CGBGRL = false;
 
+void decode_vector(mat_ZZ &Bmat, const ZZ &Bjj, const ZZ &r, const ZZ &q,
+                   vec_ZZ &Rvec, vec_ZZ &Qvec, long nR, long nQ);
+
 // Partial class specializtion as a temporary work around multi-pararameter
 // template restrictions.
-template <class T, class U> class ClassGroupBSGSReal {
+template <class T> class ClassGroupBSGSReal {
 private:
-  U regulator;
+  QuadraticOrder<T> *quadratic_order;
+
+  double regulator;
 
   T delta;
 
@@ -47,32 +66,54 @@ private:
   mat_ZZ U_mat;
 
 public:
-  void cg_bsgs_real(const U &hstar);
+  ClassGroupBSGSReal(QuadraticOrder<T> *quadratic_order);
+
+  void cg_bsgs_real(const ZZ &hstar);
 
 private:
+  T get_dist_mod(const T &Delta) { return CeilToZZ(log(to_RR(Delta))); }
+
+  void get_next_prime(QuadraticClassGroupElement<T> &G);
+
+  bool is_principal(const QuadraticClassGroupElement<T> &G);
 };
 
 // Method definitions - Everything below will eventually go into a
 // RegulatorLenstraData_impl.hpp file.
 
-template <class T, class U>
-void ClassGroupBSGSReal<T, U>::cg_bsgs_real(const U &hstar) {
-  U y, usqr, det, Bjj, temp, curr_index;
-  U s, u, r, q, Bj, hS;
+template <class T>
+ClassGroupBSGSReal<T>::ClassGroupBSGSReal(QuadraticOrder<T> *quadratic_order_arg) {
+
+  quadratic_order = quadratic_order_arg;
+  delta = quadratic_order->get_discriminant();
+
+//   parallel = false;
+//   Rbsgs = false;        // true if R was computed using BSGS
+//   Rconditional = false; // true if correctness of R relies on ERH
+}
+
+template <class T>
+void ClassGroupBSGSReal<T>::cg_bsgs_real(const ZZ &hstar) {
+  ZZ y, usqr, det, Bjj, temp, curr_index;
+  ZZ s, u, r, q, Bj, hS;
   long i, j, k, upper, crank, numRpr, numQ, idx;
 
-  QuadraticClassGroupElement<T> G, A, B, C, D, E, HI, Gq, GBj, RHO;
+  QuadraticClassGroupElement<T> G{*quadratic_order}, A{*quadratic_order},
+      B{*quadratic_order}, C{*quadratic_order}, D{*quadratic_order},
+      E{*quadratic_order}, HI{*quadratic_order}, Gq{*quadratic_order},
+      GBj{*quadratic_order}, RHO{*quadratic_order};
+
   mat_ZZ Bmat, junk;
   vec_ZZ Rvec, Qvec;
 
   vec_long Rideals;
   long numRideals = 0;
-  QuadraticInfElement<T, U> F, RHOdist;
-  U sqReg, Fstep, curr_dist, diff;
+  QuadraticInfElement<T, double> F{*quadratic_order}, RHOdist{*quadratic_order};
+  ZZ sqReg, Fstep, curr_dist, diff;
   bool done;
 
-  HashEntryInt<T, U> *Inode;
-  IndexedHashTable<HashEntryInt<T, U>> QT, RT;
+  HashEntryInt<T, ZZ> *Inode;
+  IndexedHashTable<HashEntryInt<T, ZZ>> QT, RT;
   //  RR nFI = to<RR>(hstar) * SqrRoot (to_RR (2));
 
   if (DBG_CGBGRL)
@@ -88,10 +129,10 @@ void ClassGroupBSGSReal<T, U>::cg_bsgs_real(const U &hstar) {
     diff = get_dist_mod(delta);
     F.assign_one();
 
-    if (-0.000000001 < regulator - (sqReg + get_dist_mod(delta)))
+    if (-0.000000001 < regulator - to<double>(sqReg + get_dist_mod(delta)))
       nuclose(F, sqReg);
 
-    if (F.is_one())
+    if (F.get_qib().IsOne())
       Fstep = regulator;
     else
       Fstep = F.get_distance();
@@ -104,8 +145,8 @@ void ClassGroupBSGSReal<T, U>::cg_bsgs_real(const U &hstar) {
       std::cout << "mod = " << get_dist_mod(delta) << std::endl;
     if (DBG_CGBGRL)
       std::cout << "Fstep = " << Fstep << std::endl;
-    if (DBG_CGBGRL)
-      std::cout << "F = " << F << std::endl;
+//     if (DBG_CGBGRL)
+//       std::cout << "F = " << F << std::endl;
 
     // initialize sets R and Q
     temp = SqrRoot(hstar << 1);
@@ -113,7 +154,7 @@ void ClassGroupBSGSReal<T, U>::cg_bsgs_real(const U &hstar) {
 
     QT.initialize(upper << 1);
     B.assign_one();
-    QT.hash(B.hash_int(to<U>(0)));
+    QT.hash(B.hash_int(to<ZZ>(0)));
 
     RT.initialize(upper << 1);
     //    RT.hash (B.hash_int (to<S>(0)));
@@ -124,13 +165,13 @@ void ClassGroupBSGSReal<T, U>::cg_bsgs_real(const U &hstar) {
     RHO.assign(B);
     RHOdist.assign(B);
     do {
-      RT.hash(RHO.hash_int(to<U>(0)));
-      RHOdist.rho();
-      RHO.assign(RHOdist);
-      if (F.is_one())
-        done = (RHO.is_one());
+      RT.hash(RHO.hash_int(to<ZZ>(0)));
+      RHOdist.baby_step();
+      RHO.assign(RHOdist.get_qib());
+      if (F.get_qib().IsOne())
+        done = (RHO.IsOne());
       else
-        done = (RHOdist.get_distance() > sqReg + diff || RHO.is_one());
+        done = (RHOdist.get_distance() > sqReg + diff || RHO.IsOne());
     } while (!done);
   }
 
@@ -139,8 +180,8 @@ void ClassGroupBSGSReal<T, U>::cg_bsgs_real(const U &hstar) {
 
   num_prime_ideals = 0;
   crank = 0;
-  ::set(det);
-  ::set(hS);
+  NTL::set(det);
+  NTL::set(hS);
   G.assign_one();
 
   // while h < hstar, we only have a subgroup
@@ -188,14 +229,15 @@ void ClassGroupBSGSReal<T, U>::cg_bsgs_real(const U &hstar) {
     // check whether current ideal is in previously generated subgroup
     for (i = 0; i < numQ && ::IsZero(Bjj); ++i) {
       D.assign(QT[i]);
-      nucomp_real(E, D, G);
+//       nucomp_real(E, D, G);
+      mul(E, D, G);
 
       // test for all RHO equivalent to E
-      if (F.is_one()) {
+      if (F.get_qib().IsOne()) {
         // entire equivalence classes are stored in RT
-        Inode = RT.search(E.hash_int(to<U>(0)));
+        Inode = RT.search(E.hash_int(to<ZZ>(0)));
         if (Inode) {
-          ::set(Bjj);
+          NTL::set(Bjj);
         }
       } else {
         // use baby-step giant-step for equivalence testing
@@ -203,18 +245,19 @@ void ClassGroupBSGSReal<T, U>::cg_bsgs_real(const U &hstar) {
         RHOdist.assign(E);
         ::clear(curr_dist);
         do {
-          RHO.assign(RHOdist);
-          Inode = RT.search(RHO.hash_int(to<U>(0)));
+          RHO.assign(RHOdist.get_qib());
+          Inode = RT.search(RHO.hash_int(to<ZZ>(0)));
           if (Inode) {
-            ::set(Bjj);
+            NTL::set(Bjj);
           }
 
           if (::IsZero(Bjj)) {
             curr_dist += Fstep;
-            nucomp(RHOdist, RHOdist, F);
+//             nucomp(RHOdist, RHOdist, F);
+            mul(RHOdist, RHOdist, F);
             RHOdist.adjust(curr_dist);
           }
-        } while (RHOdist.get_distance().eval() <= regulator && ::IsZero(Bjj));
+        } while (RHOdist.get_distance() <= regulator && ::IsZero(Bjj));
       }
     }
 
@@ -230,14 +273,16 @@ void ClassGroupBSGSReal<T, U>::cg_bsgs_real(const U &hstar) {
 
       // compute more baby steps
       for (r = s; r <= u && ::IsZero(Bjj); ++r) {
-        nucomp_real(A, A, HI);
+//         nucomp_real(A, A, HI);
+        mul(A, A, HI);
 
         if (DBG_CGBGRL)
           std::cout << "\nr = " << r << ", A = " << A << std::endl;
 
         for (k = 0; k < numRideals; ++k) {
           D.assign(RT[Rideals[k]]);
-          nucomp_real(E, D, A);
+//           nucomp_real(E, D, A);
+          mul(E, D, A);
 
           if (curr_index == Rideals.MaxLength())
             Rideals.SetLength(Rideals.MaxLength() << 1);
@@ -251,12 +296,12 @@ void ClassGroupBSGSReal<T, U>::cg_bsgs_real(const U &hstar) {
           RHOdist.assign(E);
           do {
             RT.hash(RHO.hash_int(curr_index));
-            RHOdist.rho();
-            RHO.assign(RHOdist);
-            if (F.is_one())
+            RHOdist.baby_step();
+            RHO.assign(RHOdist.get_qib());
+            if (F.get_qib().IsOne())
               done = (RHO == E);
             else
-              done = (RHOdist.get_distance().eval() > sqReg + diff || RHO == E);
+              done = (RHOdist.get_distance() > sqReg + diff || RHO == E);
           } while (!done);
 
           ++curr_index;
@@ -282,13 +327,14 @@ void ClassGroupBSGSReal<T, U>::cg_bsgs_real(const U &hstar) {
         // search
         for (i = 0; i < numQ && ::IsZero(Bjj); ++i) {
           E.assign(QT[i]);
-          nucomp_real(D, E, B);
+//           nucomp_real(D, E, B);
+          mul(D, E, B);
 
           // test for all RHO equivalent to E
-          if (F.is_one()) {
+          if (F.get_qib().IsOne()) {
             // entire equivalence classes are stored in RT
-            Inode = RT.search(D.hash_int(to<U>(0)));
-            if (Inode && !D.is_one()) {
+            Inode = RT.search(D.hash_int(to<ZZ>(0)));
+            if (Inode && !D.IsOne()) {
 
               if (DBG_CGBGRL)
                 std::cout << "FOUND GIANT" << std::endl;
@@ -302,7 +348,7 @@ void ClassGroupBSGSReal<T, U>::cg_bsgs_real(const U &hstar) {
                           << std::endl;
 
               if (Bjj > 1) {
-                r %= to<U>(numRideals);
+                r %= to<ZZ>(numRideals);
                 decode_vector(Bmat, to<ZZ>(Bjj), to<ZZ>(r), to<ZZ>(q), Rvec,
                               Qvec, numRideals, numQ);
 
@@ -315,9 +361,9 @@ void ClassGroupBSGSReal<T, U>::cg_bsgs_real(const U &hstar) {
             RHOdist.assign(D);
             ::clear(curr_dist);
             do {
-              RHO.assign(RHOdist);
-              Inode = RT.search(RHO.hash_int(to<U>(0)));
-              if (Inode && !D.is_one()) {
+              RHO.assign(RHOdist.get_qib());
+              Inode = RT.search(RHO.hash_int(to<ZZ>(0)));
+              if (Inode && !D.IsOne()) {
 
                 if (DBG_CGBGRL)
                   std::cout << "FOUND GIANT" << std::endl;
@@ -331,7 +377,7 @@ void ClassGroupBSGSReal<T, U>::cg_bsgs_real(const U &hstar) {
                             << std::endl;
 
                 if (Bjj > 1) {
-                  r %= to<U>(numRideals);
+                  r %= to<ZZ>(numRideals);
                   decode_vector(Bmat, to<ZZ>(Bjj), to<ZZ>(r), to<ZZ>(q), Rvec,
                                 Qvec, numRideals, numQ);
                   // PART_OF_OLD_DEBUG: test_relation_cg(fact_base, crank,
@@ -341,18 +387,19 @@ void ClassGroupBSGSReal<T, U>::cg_bsgs_real(const U &hstar) {
 
               if (::IsZero(Bjj)) {
                 curr_dist += Fstep;
-                nucomp(RHOdist, RHOdist, F);
+//                 nucomp(RHOdist, RHOdist, F);
+                RHOdist.giant_step(F);
                 RHOdist.adjust(curr_dist);
               }
-            } while (RHOdist.get_distance() <= regulator &&
-                     ::IsZero(Bjj));
+            } while (RHOdist.get_distance() <= regulator && ::IsZero(Bjj));
           }
         }
 
         if (::IsZero(Bjj)) {
           // not found, take another giant step
           y += u;
-          nucomp_real(B, B, C);
+//           nucomp_real(B, B, C);
+          mul(B, B, C);
         }
       }
 
@@ -363,7 +410,8 @@ void ClassGroupBSGSReal<T, U>::cg_bsgs_real(const U &hstar) {
       if (::IsZero(Bjj)) {
         s = u + 1;
         u <<= 1;
-        nudupl_real(C, C);
+//         nudupl_real(C, C);
+        sqr(C, C);
       }
     }
 
@@ -378,7 +426,7 @@ void ClassGroupBSGSReal<T, U>::cg_bsgs_real(const U &hstar) {
       std::cout << "h = " << hS << std::endl;
 
     if (hS < hstar) {
-      Bj = to<U>(CeilToZZ(sqrt(to<RR>(Bjj))));
+      Bj = to<ZZ>(CeilToZZ(sqrt(to<RR>(Bjj))));
 
       // compute new R' (remove entries with too large exponents)
       det *= Bj;
@@ -421,11 +469,13 @@ void ClassGroupBSGSReal<T, U>::cg_bsgs_real(const U &hstar) {
             break;
           for (k = 0; k < numQ; ++k) {
             E.assign(QT[k]);
-            nucomp_real(D, E, Gq);
+//             nucomp_real(D, E, Gq);
+            mul(D, E, Gq);
             QT.hash(D.hash_int(curr_index));
             ++curr_index;
           }
-          nucomp_real(Gq, Gq, GBj);
+//           nucomp_real(Gq, Gq, GBj);
+          mul(Gq, Gq, GBj);
           ++Qvec[crank - 1];
         }
         if (DBG_CGBGRL)
@@ -454,12 +504,131 @@ void ClassGroupBSGSReal<T, U>::cg_bsgs_real(const U &hstar) {
 
     i = 0;
     for (j = 0; j < crank; ++j) {
-      Bjj = to<U>(SNF[j][j]);
+      Bjj = to<ZZ>(SNF[j][j]);
       if (!::IsOne(Bjj)) {
         CL.SetLength(i + 1);
         CL[i++] = to<ZZ>(Bjj);
       }
     }
+  }
+}
+
+//
+// quadratic_order<T>::get_next_prime
+// Task: Computes the next smallest prime ideal (in terms of norm)
+//
+template <class T> void ClassGroupBSGSReal<T>::get_next_prime(QuadraticClassGroupElement<T> &G) {
+  static ZZ X, q;
+  T P;
+
+  if (G.IsOne()) {
+    q = CARDINALITY<T>();
+    X = q - 1;
+  }
+
+  do {
+    do {
+      ++X;
+      get_poly_modq(P, X, q);
+    } while (!::IsOne(LeadCoeff(P)) || !DetIrredTest(P));
+  } while (!G.assign_prime(P));
+}
+
+template <>
+void ClassGroupBSGSReal<ZZ>::get_next_prime(QuadraticClassGroupElement<ZZ> &G) {
+  static PrimeSeq PS;
+
+  if (G.IsOne())
+    PS.reset(0);
+
+  long p = PS.next();
+
+  while (!G.assign_prime(to_ZZ(p)))
+    p = PS.next();
+}
+
+template <class T>
+bool ClassGroupBSGSReal<T>::is_principal(
+    const QuadraticClassGroupElement<T> &G) {
+  double sqrt_regulator = sqrt(regulator);
+
+  QuadraticInfElement<T, double> baby_step_list_generator{*quadratic_order};
+
+  std::unordered_set<QuadraticIdealBase<T>> baby_step_list = {};
+  baby_step_list_generator.baby_step();
+
+  while (baby_step_list_generator.get_distance() < sqrt_regulator &&
+         baby_step_list.count(baby_step_list_generator.get_qib()) == 0) {
+    baby_step_list.insert(baby_step_list_generator.get_qib());
+    baby_step_list_generator.baby_step();
+  }
+
+  if (baby_step_list.count(G) != 0) {
+    return true;
+  }
+
+  else {
+
+    QuadraticClassGroupElement<T> giant_step{*quadratic_order}, G_copy{*quadratic_order};
+    G_copy.assign(G);
+    giant_step.assign(G);
+
+
+    for(int i = 0; i <= CeilToZZ(to_RR(sqrt_regulator)); i++){
+      mul(G_copy, G_copy, giant_step);
+      if(baby_step_list.count(G) != 0){
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+
+
+void decode_vector(mat_ZZ &Bmat, const ZZ &Bjj, const ZZ &r, const ZZ &q,
+                   vec_ZZ &Rvec, vec_ZZ &Qvec, long nR, long nQ) {
+  long i, j, rrank;
+  ZZ temp, nRR, nQQ, rr, qq;
+  vec_ZZ Bj;
+  mat_ZZ tmat;
+
+  rr = r;
+  qq = q;
+  nRR = nR;
+  nQQ = nQ;
+
+  // compute powers in index vector
+  rrank = Bmat.NumCols();
+
+  if (rrank == 0) {
+    Bmat.SetDims(1, 1);
+    Bmat[0][0] = Bjj;
+  } else {
+    Bj.SetLength(rrank + 1);
+
+    Bj[rrank] = Bjj;
+    for (i = rrank - 1; i >= 0; --i) {
+      nRR /= Rvec[i];
+      nQQ /= Qvec[i];
+      Bj[i] = (rr / nRR) + (qq / nQQ) * Rvec[i];
+      rr %= nRR;
+      qq %= nQQ;
+    }
+
+    // new row and column
+    ++rrank;
+    tmat.SetDims(rrank, rrank);
+    for (i = 0; i < rrank - 1; ++i)
+      for (j = 0; j < rrank - 1; ++j)
+        tmat[i][j] = Bmat[i][j];
+
+    for (i = 0; i < rrank; ++i)
+      tmat[i][rrank - 1] = Bj[i];
+
+    Bmat.kill();
+    Bmat.SetDims(rrank, rrank);
+    Bmat = tmat;
   }
 }
 

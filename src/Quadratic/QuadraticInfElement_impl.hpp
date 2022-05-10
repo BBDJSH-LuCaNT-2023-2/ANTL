@@ -110,6 +110,18 @@ void QuadraticInfElement<T, S>::adjust(const S &bound) {
   return;
 }
 
+//
+// qi_pair<T>::assign(quadratic_form<T>)
+// Task: set to a copy of B.
+//
+
+template <class T, class S>
+void QuadraticInfElement<T, S>::assign(const QuadraticIdealBase<T> &B) {
+  qib.assign(B);
+  qib.reduce();
+  clear(Distance);
+}
+
 template <class T, class S>
 void QuadraticInfElement<T, S>::assign(const HashEntryReal<T, S> &her_a) {
   T a = her_a.get_a();

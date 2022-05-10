@@ -33,6 +33,16 @@ template <class T> void QuadraticIdealBase<T>::set_c  (T x) {c = x;}
 template <class T> QuadraticOrder<T>* QuadraticIdealBase<T>::get_QO () const {return QO;}
 template <class T> void QuadraticIdealBase<T>::set_QO (QuadraticOrder<T> *x) {QO = x;}
 
+//
+// hash_int
+// Task: Creates a qo_hash_entry_int representing the form
+//
+
+template <class T> template <class S>
+HashEntryInt<T, S> QuadraticIdealBase<T>::hash_int(const S &newd) const {
+  return HashEntryInt<T, S>(a, b, newd);
+}
+
 // template <class T> void QuadraticIdealBase<T>::ensure_valid (std::string msg) {
 //   T temp = b * b - 4 * a * c;
 //   if (temp != QO->get_discriminant())
@@ -116,6 +126,16 @@ template <class T> void QuadraticIdealBase<T>::assign (const QuadraticIdealBase<
   else {
   std::cout << "Coeffecients not valid!" << std::endl;
   }
+}
+
+// QuadraticClassGroupElement<T>::assign(HashEntryInt<T>)
+//
+// Task: set to a copy of B.
+
+template <class T>
+template <class S>
+void QuadraticIdealBase<T>::assign(const HashEntryInt<T, S> &B) {
+  assign(B);
 }
 
 // operator =
