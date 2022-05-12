@@ -210,7 +210,9 @@ S QuadraticInfElement<T, S>::get_baby_steps(
   // it is here in the generic implementation temporarily
   // eventually a QuadraticInfElement<ZZ, S> class definition will be required
 
-  ZZ old_a = qib.get_a(), old_b = qib.get_b(), old_c = qib.get_c();
+  std::cout << "get_baby_steps(): B is " << B <<std::endl;
+  ZZ old_a = qib.get_a(), old_b = qib.get_b(), old_c = qib.get_c(),
+     a_zero = A.get_qib().get_a();
   ZZ q, r, new_c, new_a, new_b;
   S relative_generator, relative_distance, regulator;
 
@@ -232,16 +234,16 @@ S QuadraticInfElement<T, S>::get_baby_steps(
 
     // The two checks below are for the cases where consecutive coefficients are
     // found to be equal in the continued fraction expansion
-    if (A.is_one() && old_a == new_a) {
+    if (old_a == new_a) {
       regulator = 2 * Distance;
-      update_distance_add(regulator, Distance, relative_distance);
-      regulator = regulator / to<S>(old_a);
+      update_distance_add(regulator, regulator, relative_distance);
+      regulator = regulator - log(to<S>(old_a));
       return regulator;
     }
 
-    if (A.is_one() && old_b == new_b && (!IsOne(old_a))) {
+    if (old_b == new_b && (!IsOne(old_a))) {
       regulator = 2 * Distance;
-      regulator = regulator / to<S>(old_a);
+      regulator = regulator - log(to<S>(old_a));
       return regulator;
     }
 
@@ -260,7 +262,7 @@ S QuadraticInfElement<T, S>::get_baby_steps(
 
     prin_list.hash(hash_real());
 
-  } while (eval() <= B);
+  } while (-0.000000001 <= to<double>(B) - Distance);
 
   regulator = 0;
   return regulator;
@@ -402,13 +404,12 @@ QuadraticInfElement<T, S> QuadraticInfElement<T, S>::conjugate() {
 
 template <class T, class S>
 void nuclose(QuadraticInfElement<T, S> &C, const ZZ &n) {
+  std::cout << "nuclose 1" << std::endl;
   long i, k = 0;
   ZZ j, ex, s;
-
   C.assign_one();
   if (IsZero(n))
     return;
-
   // compute binary expansion of ex (hi order to low order)
   ex = abs(n);
   clear(j);
@@ -419,19 +420,15 @@ void nuclose(QuadraticInfElement<T, S> &C, const ZZ &n) {
     ex >>= 1;
     ++k;
   }
-
   s = 1;
   C.adjust(s);
-
   for (i = 1; i <= k; ++i) {
     s <<= 1;
-
     C.giant_step(C);
     // sqr(C, C); makeshift square above
 
     if (IsOdd(j))
       ++s;
-
     C.adjust(s);
 
     j >>= 1;

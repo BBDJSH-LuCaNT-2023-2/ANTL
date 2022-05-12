@@ -29,7 +29,7 @@ using namespace ANTL;
 namespace ANTL {
 
 // DBG_CONSTANTS
-bool DBG_CGBGRL = false;
+bool DBG_CGBGRL = true;
 
 void decode_vector(mat_ZZ &Bmat, const ZZ &Bjj, const ZZ &r, const ZZ &q,
                    vec_ZZ &Rvec, vec_ZZ &Qvec, long nR, long nQ);
@@ -70,6 +70,10 @@ public:
 
   void cg_bsgs_real(const ZZ &hstar);
 
+  void set_regulator(double &ext_regulator){regulator = ext_regulator;}
+
+  vec_ZZ get_class_group(){return CL;}
+
 private:
   T get_dist_mod(const T &Delta) { return CeilToZZ(log(to_RR(Delta))); }
 
@@ -94,6 +98,8 @@ ClassGroupBSGSReal<T>::ClassGroupBSGSReal(QuadraticOrder<T> *quadratic_order_arg
 
 template <class T>
 void ClassGroupBSGSReal<T>::cg_bsgs_real(const ZZ &hstar) {
+  if (DBG_CGBGRL) {std::cout << "CGBGRL: STEP 1 - Initialize variables" << std::endl;}
+
   ZZ y, usqr, det, Bjj, temp, curr_index;
   ZZ s, u, r, q, Bj, hS;
   long i, j, k, upper, crank, numRpr, numQ, idx;
@@ -137,17 +143,14 @@ void ClassGroupBSGSReal<T>::cg_bsgs_real(const ZZ &hstar) {
     else
       Fstep = F.get_distance();
 
-    if (DBG_CGBGRL)
-      std::cout << "sqReg = " << sqReg << std::endl;
-    if (DBG_CGBGRL)
-      std::cout << "regulator = " << regulator << std::endl;
-    if (DBG_CGBGRL)
-      std::cout << "mod = " << get_dist_mod(delta) << std::endl;
-    if (DBG_CGBGRL)
-      std::cout << "Fstep = " << Fstep << std::endl;
+    if (DBG_CGBGRL) {std::cout << "sqReg = " << sqReg << std::endl;}
+    if (DBG_CGBGRL) {std::cout << "regulator = " << regulator << std::endl;}
+    if (DBG_CGBGRL) {std::cout << "mod = " << get_dist_mod(delta) << std::endl;}
+    if (DBG_CGBGRL) {std::cout << "Fstep = " << Fstep << std::endl;}
 //     if (DBG_CGBGRL)
 //       std::cout << "F = " << F << std::endl;
 
+    if (DBG_CGBGRL) {std::cout << "CGBGRL: STEP 2 - Initialize sets R and Q" << std::endl;}
     // initialize sets R and Q
     temp = SqrRoot(hstar << 1);
     upper = to<long>(temp);
@@ -175,6 +178,7 @@ void ClassGroupBSGSReal<T>::cg_bsgs_real(const ZZ &hstar) {
     } while (!done);
   }
 
+  if (DBG_CGBGRL) {std::cout << "CGBGRL: STEP 3 - Initialize fact_base and contributors" << std::endl;}
   fact_base = new QuadraticClassGroupElement<T>[100];
   contributors = new long[100];
 
@@ -184,9 +188,11 @@ void ClassGroupBSGSReal<T>::cg_bsgs_real(const ZZ &hstar) {
   NTL::set(hS);
   G.assign_one();
 
+  if (DBG_CGBGRL) {std::cout << "CGBGRL: STEP 4 - (hS < hstar) loop" << std::endl;}
   // while h < hstar, we only have a subgroup
   while (hS < hstar) {
     // get prime ideal
+    if (DBG_CGBGRL) {std::cout << "CGBGRL: STEP 4.1 - the do while(is_principal(G)) loop" << std::endl;}
     do {
       get_next_prime(G);
       ++num_prime_ideals;
@@ -195,6 +201,7 @@ void ClassGroupBSGSReal<T>::cg_bsgs_real(const ZZ &hstar) {
     fact_base[crank] = G;
     contributors[crank] = crank;
 
+    if (DBG_CGBGRL) {std::cout << "CGBGRL: STEP 4.2 - set initial step-width" << std::endl;}
     // set initial step-width
     u = y = 1;
     s = 1;
@@ -226,12 +233,17 @@ void ClassGroupBSGSReal<T>::cg_bsgs_real(const ZZ &hstar) {
 
     ::clear(Bjj);
 
+    if (DBG_CGBGRL) {std::cout << "CGBGRL: STEP 4.3 - check whether current ideal is in previously generated subgroup" << std::endl;}
     // check whether current ideal is in previously generated subgroup
     for (i = 0; i < numQ && ::IsZero(Bjj); ++i) {
+
+      if (DBG_CGBGRL) {std::cout << "CGBGRL: STEP 4.3.0 - assign;" << std::endl;}
       D.assign(QT[i]);
+      if (DBG_CGBGRL) {std::cout << "CGBGRL: STEP 4.3.1 - mul(E, D, G);" << std::endl;}
 //       nucomp_real(E, D, G);
       mul(E, D, G);
 
+      if (DBG_CGBGRL) {std::cout << "CGBGRL: STEP 4.3.2 - test for all RHO equivalent to E" << std::endl;}
       // test for all RHO equivalent to E
       if (F.get_qib().IsOne()) {
         // entire equivalence classes are stored in RT
@@ -254,13 +266,14 @@ void ClassGroupBSGSReal<T>::cg_bsgs_real(const ZZ &hstar) {
           if (::IsZero(Bjj)) {
             curr_dist += Fstep;
 //             nucomp(RHOdist, RHOdist, F);
-            mul(RHOdist, RHOdist, F);
+            RHOdist.giant_step(F);
             RHOdist.adjust(curr_dist);
           }
         } while (RHOdist.get_distance() <= regulator && ::IsZero(Bjj));
       }
     }
 
+    if (DBG_CGBGRL) {std::cout << "CGBGRL: STEP 4.3 - while (::IsZero(Bjj))" << std::endl;}
     while (::IsZero(Bjj)) {
 
       if (DBG_CGBGRL)
@@ -403,16 +416,16 @@ void ClassGroupBSGSReal<T>::cg_bsgs_real(const ZZ &hstar) {
         }
       }
 
-      if (DBG_CGBGRL)
-        std::cout << "Got giant" << std::endl;
+      if (DBG_CGBGRL) {std::cout << "Got giant" << std::endl;}
 
       // double u
       if (::IsZero(Bjj)) {
         s = u + 1;
         u <<= 1;
 //         nudupl_real(C, C);
-        sqr(C, C);
+        mul(C, C, C);
       }
+      if (DBG_CGBGRL) {std::cout << "Just after Got giant" << std::endl;}
     }
 
     if (!::IsOne(Bjj)) {
@@ -484,6 +497,7 @@ void ClassGroupBSGSReal<T>::cg_bsgs_real(const ZZ &hstar) {
     }
   }
 
+  if (DBG_CGBGRL) {std::cout << "CGBGRL: STEP 5 - compute structure" << std::endl;}
   // compute structure
   if (DBG_CGBGRL)
     std::cout << "COMPUTING STRUCTURE" << std::endl;

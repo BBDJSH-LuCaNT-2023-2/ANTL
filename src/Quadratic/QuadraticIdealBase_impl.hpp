@@ -135,7 +135,11 @@ template <class T> void QuadraticIdealBase<T>::assign (const QuadraticIdealBase<
 template <class T>
 template <class S>
 void QuadraticIdealBase<T>::assign(const HashEntryInt<T, S> &B) {
-  assign(B);
+  std::cout << "Hello there!" << std::endl;
+  a = B.get_a();
+  b = B.get_b();
+  c = (b*b - QO->get_discriminant()) / (4*a);
+  normalize();
 }
 
 // operator =
