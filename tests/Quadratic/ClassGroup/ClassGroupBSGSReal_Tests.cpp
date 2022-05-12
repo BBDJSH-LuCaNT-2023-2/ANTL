@@ -24,7 +24,7 @@ TEST_CASE("ClassGroupReal<ZZ>: Does it work?", "[RegulatorLenstra]") {
   double computed_regulators[10];
   bool computed_correctly[10];
 
-  int i = 0;
+  int i = 4;
 
   QuadraticOrder<ZZ> quad_order{ZZ(discriminants[i])};
   QuadraticNumber<ZZ> quad_number1{quad_order};
@@ -46,12 +46,28 @@ TEST_CASE("ClassGroupReal<ZZ>: Does it work?", "[RegulatorLenstra]") {
   RegulatorLenstraData<ZZ, double> regulator_lenstra_data{&quad_order,
                                                           &l_function};
   regulator_lenstra_data.regulator_lenstra();
+  double regulator = regulator_lenstra_data.get_regulator();
 
   ClassGroupBSGSReal<ZZ> class_group_bsgs_real1{&quad_order};
+  class_group_bsgs_real1.set_regulator(regulator);
 
-  ZZ h_star = regulator_lenstra_data.lower_bound_hR() /
-              regulator_lenstra_data.get_regulator();
+  std::cout << "CG_BSGS_REAL_TEST: lower_bound_hR is " << regulator_lenstra_data.lower_bound_hR() << std::endl;
+  std::cout << "CG_BSGS_REAL_TEST: get_regulator is " << regulator_lenstra_data.get_regulator() << std::endl;
+  std::cout << "CG_BSGS_REAL_TEST: Start computing h_star" << std::endl;
+  ZZ h_star = regulator_lenstra_data.lower_bound_hR() / regulator;
+
+  std::cout << "CG_BSGS_REAL_TEST: h_star is " << h_star << std::endl;
+  std::cout << "CG_BSGS_REAL_TEST: Start computing cg_bsgs_real" << std::endl;
   class_group_bsgs_real1.cg_bsgs_real(h_star);
+
+  std::cout << "CG_BSGS_REAL_TEST: Finish computing cg_bsgs_real" << std::endl;
+
+  vec_ZZ class_group = class_group_bsgs_real1.get_class_group();
+  std::cout << "CG_BSGS_REAL_TEST: class group is " << class_group << std::endl;
+
+  for(auto class_group_element : class_group) {
+    std::cout << "CG_BSGS_REAL_TEST: one class group element is " << class_group_element << std::endl;
+  }
 
   REQUIRE(1 == 1);
 }

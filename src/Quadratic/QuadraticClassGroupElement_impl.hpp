@@ -28,7 +28,6 @@ template <class T>
 QuadraticClassGroupElement<T>::QuadraticClassGroupElement(
     QuadraticOrder<T> &qo_a) {
   QO = &qo_a;
-  this->reduce();
 }
 
 
@@ -184,7 +183,9 @@ void QuadraticClassGroupElement<T>::assign(const HashEntry<T> &B) {
 template <class T>
 template <class S>
 void QuadraticClassGroupElement<T>::assign(const HashEntryInt<T, S> &B) {
+  std::cout << "assign: assigning HashEntryInt<T, S>!" << std::endl;
   QuadraticIdealBase<T>::assign(B);
+  std::cout << "assign: reducing!" << std::endl;
   this->reduce();
 }
 
@@ -233,7 +234,13 @@ QuadraticClassGroupElement<T> &QuadraticClassGroupElement<T>::operator=(
 
 template <class T>
 QuadraticClassGroupElement<T> conjugate(const QuadraticClassGroupElement<T> &C){
+  //std::cout << "Conjugating!" << std::endl;
   QuadraticClassGroupElement<T> conj_C(C);
+
+  conj_C.a = C.a;
+  conj_C.b = -C.b;
+  conj_C.c = C.c;
+
   conj_C.reduce();
   return conj_C;
 }
