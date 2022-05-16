@@ -63,6 +63,7 @@ template <class T> void QuadraticIdealBase<T>::assign_one () {
   set (a);
   clear (b);
   c = -QO->get_discriminant();
+  normalize();
 }
 
 // assign_prime
@@ -109,6 +110,7 @@ template <class T> void QuadraticIdealBase<T>::assign (const T & na, const T & n
   a = na;
   b = nb;
   c = nc;
+  normalize();
 }
 
 // QuadraticIdealBase<T>::assign(QuadraticIdealBase<T>)
@@ -121,6 +123,7 @@ template <class T> void QuadraticIdealBase<T>::assign (const QuadraticIdealBase<
     a = B.a;
     b = B.b;
     c = B.c;
+    normalize();
     return;
   }
   else {
@@ -135,7 +138,6 @@ template <class T> void QuadraticIdealBase<T>::assign (const QuadraticIdealBase<
 template <class T>
 template <class S>
 void QuadraticIdealBase<T>::assign(const HashEntryInt<T, S> &B) {
-  std::cout << "Hello there!" << std::endl;
   a = B.get_a();
   b = B.get_b();
   c = (b*b - QO->get_discriminant()) / (4*a);
@@ -205,7 +207,7 @@ void QuadraticIdealBase<T>::reduce(QuadraticNumber<T> & gamma) {
 //
 // Task: tests if the ideal is the unit ideal
 template <class T> bool QuadraticIdealBase<T>::IsOne () const {
-  return (NTL::IsOne(a) && IsZero(b));
+  return (NTL::IsOne(a));
 }
 
 // QuadraticIdealBase<T>::IsEqual()

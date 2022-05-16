@@ -13,7 +13,8 @@
 
 #include <cassert>
 #include <iostream>
-#include <vector>
+#include <streambuf>
+#include <string>
 #include <NTL/ZZ.h>
 #include <NTL/RR.h>
 
@@ -238,9 +239,11 @@ namespace ANTL
   std::ostream & operator << (std::ostream & os,
 			      const std::vector<T> & vector)
   {
-    os << "[ ";
-    for (size_t i = 0; i < vector.size(); ++i) os << vector[i] << " ";
-    os << "]";
+    std::string output = "[ ";
+    for (size_t i = 0; i < vector.size(); ++i) output += to_string(vector[i]) + " ";
+    output += "]";
+
+    os << output;
     return os;
   }
 

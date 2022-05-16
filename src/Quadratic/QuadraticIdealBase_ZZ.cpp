@@ -27,6 +27,8 @@ template <> void QuadraticIdealBase<ZZ>::assign_one() {
 
   div(c,c,a);
   RightShift(c,c,2);
+
+  normalize();
 }
 
 // assign_prime()

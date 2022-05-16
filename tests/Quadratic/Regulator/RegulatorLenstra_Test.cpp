@@ -2,6 +2,8 @@
 #define REGULATOR_LENSTRA_ZZ_TEST
 
 #include "../../catch.hpp"
+#include "../../Quadratic/TestData/TestData.hpp"
+
 #include <ANTL/Quadratic/Regulator/RegulatorLenstra.hpp>
 #include <ANTL/Quadratic/Regulator/RegulatorLenstra_ZZ.hpp>
 
@@ -12,18 +14,22 @@ bool DBG_LENSTRA_TEST = true;
 
 TEST_CASE("RegulatorLenstra<ZZ>: Does it work?", "[RegulatorLenstra]") {
 
-  int discriminants[10] = {55661, 63361, 72673, 86341, 38593,
-                           54269, 41513, 74021, 45677, 17909};
+  extern const std::array<long, 1000> discriminants;
+  extern const std::array<double, 1000> correct_regulators;
 
-  double correct_regulators[10] = {25.4538649123, 17.5077374033, 357.702597578,
-                                   148.556426268, 105.442818369, 49.458153743,
-                                   130.11243841,  62.8055127479, 54.4615644632,
-                                   44.1429273524};
+//   int discriminants[10] = {55661, 63361, 72673, 86341, 38593,
+//                            54269, 41513, 74021, 45677, 17909};
+//
+//   double correct_regulators[10] = {25.4538649123, 17.5077374033, 357.702597578,
+//                                    148.556426268, 105.442818369, 49.458153743,
+//                                    130.11243841,  62.8055127479, 54.4615644632,
+//                                    44.1429273524};
 
-  double computed_regulators[10];
-  bool computed_correctly[10];
+  double computed_regulators[1000];
+  bool computed_correctly[1000];
+  int correct_count = 0;
 
-  for (int i = 0; i < 10; i++) {
+  for (int i = 0; i < 1000; i++) {
 
     QuadraticOrder<ZZ> quad_order{ZZ(discriminants[i])};
     QuadraticNumber<ZZ> quad_number1{quad_order};
@@ -65,16 +71,24 @@ TEST_CASE("RegulatorLenstra<ZZ>: Does it work?", "[RegulatorLenstra]") {
     std::cout << std::setw(38) << std::setfill('=') << "" << std::endl;
   }
 
-  for (int i = 0; i < 10; i++) {
+  for (int i = 0; i < 1000; i++) {
     if (DBG_LENSTRA_TEST) {
-      std::cout << std::setfill('0') << std::setw(4) << i + 1
+      std::cout << std::setfill('0') << std::setw(3) << i
                 << std::setfill(' ') << std::setw(6) << computed_correctly[i]
                 << std::setw(11) << correct_regulators[i] << std::setw(10)
                 << computed_regulators[i] << std::setw(7) << discriminants[i]
                 << std::endl;
+
+      if(computed_correctly[i]) {
+        correct_count++;
+      }
     }
 
     test_bool = test_bool && computed_correctly[i];
+  }
+
+  if (DBG_LENSTRA_TEST) {
+    std::cout << correct_count << "/1000 tests passed!" << std::endl;
   }
 
   REQUIRE(test_bool == true);
