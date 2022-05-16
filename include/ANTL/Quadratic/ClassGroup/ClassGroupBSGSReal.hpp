@@ -29,7 +29,7 @@ using namespace ANTL;
 namespace ANTL {
 
 // DBG_CONSTANTS
-bool DBG_CGBGRL = true;
+bool DBG_CGBGRL = false;
 
 void decode_vector(mat_ZZ &Bmat, const ZZ &Bjj, const ZZ &r, const ZZ &q,
                    vec_ZZ &Rvec, vec_ZZ &Qvec, long nR, long nQ);
@@ -57,7 +57,7 @@ private:
   ZZ h;
 
   // invariants of CL
-  vec_ZZ CL;
+  vector<ZZ> CL;
 
   // size of fact_base
   long numFB;
@@ -72,7 +72,7 @@ public:
 
   void set_regulator(double &ext_regulator){regulator = ext_regulator;}
 
-  vec_ZZ get_class_group(){return CL;}
+  vector<ZZ> get_class_group(){return CL;}
 
 private:
   T get_dist_mod(const T &Delta) { return CeilToZZ(log(to_RR(Delta))); }
@@ -123,7 +123,7 @@ void ClassGroupBSGSReal<T>::cg_bsgs_real(const ZZ &hstar) {
   //  RR nFI = to<RR>(hstar) * SqrRoot (to_RR (2));
 
   if (DBG_CGBGRL)
-    std::cout << "CG_BSGS_REAL:  hstar = " << hstar << std::endl;
+    std::cout << "CGBGRL: hstar = " << hstar << std::endl;
 
   if (hstar > 1) {
     Rvec.kill();
@@ -135,21 +135,29 @@ void ClassGroupBSGSReal<T>::cg_bsgs_real(const ZZ &hstar) {
     diff = get_dist_mod(delta);
     F.assign_one();
 
-    if (-0.000000001 < regulator - to<double>(sqReg + get_dist_mod(delta)))
+    if (DBG_CGBGRL) {std::cout << "CGBGRL: F is " << F.get_qib() <<  " with distance " << F.get_distance() << std::endl;}
+    if (-0.000000001 < regulator - to<double>(sqReg + get_dist_mod(delta))) {
+      if (DBG_CGBGRL) {std::cout << "CGBGRL: Performing nuclose(F, sqReg)" << std::endl;}
+      if (DBG_CGBGRL) {std::cout << "CGBGRL: sqReg = " << sqReg << std::endl;}
       nuclose(F, sqReg);
+      if (DBG_CGBGRL) {std::cout << "CGBGRL: F is " << F.get_qib() <<  " with distance " << F.get_distance() << std::endl;}
+    }
 
-    if (F.get_qib().IsOne())
+    if (F.get_qib().IsOne()) {
+      if (DBG_CGBGRL) {std::cout << "CGBGRL: Fstep = regulator" << std::endl;}
       Fstep = regulator;
-    else
+    }
+    else {
+      if (DBG_CGBGRL) {std::cout << "CGBGRL: Fstep = F.get_distance()" << std::endl;}
       Fstep = F.get_distance();
+    }
 
-    if (DBG_CGBGRL) {std::cout << "sqReg = " << sqReg << std::endl;}
-    if (DBG_CGBGRL) {std::cout << "regulator = " << regulator << std::endl;}
-    if (DBG_CGBGRL) {std::cout << "mod = " << get_dist_mod(delta) << std::endl;}
-    if (DBG_CGBGRL) {std::cout << "Fstep = " << Fstep << std::endl;}
+    if (DBG_CGBGRL) {std::cout << "CGBGRL: sqReg = " << sqReg << std::endl;}
+    if (DBG_CGBGRL) {std::cout << "CGBGRL: regulator = " << regulator << std::endl;}
+    if (DBG_CGBGRL) {std::cout << "CGBGRL: mod = " << get_dist_mod(delta) << std::endl;}
+    if (DBG_CGBGRL) {std::cout << "CGBGRL: Fstep = " << Fstep << std::endl;}
 //     if (DBG_CGBGRL)
 //       std::cout << "F = " << F << std::endl;
-
     if (DBG_CGBGRL) {std::cout << "CGBGRL: STEP 2 - Initialize sets R and Q" << std::endl;}
     // initialize sets R and Q
     temp = SqrRoot(hstar << 1);
@@ -254,10 +262,13 @@ void ClassGroupBSGSReal<T>::cg_bsgs_real(const ZZ &hstar) {
       } else {
         // use baby-step giant-step for equivalence testing
         // baby steps are all in RT
+//         if (DBG_CGBGRL) {std::cout << "CGBGRL: STEP 4.3.2.1 - E is " << E << std::endl;}
         RHOdist.assign(E);
+//         if (DBG_CGBGRL) {std::cout << "CGBGRL: STEP 4.3.2.1 - RHOdist is " << RHOdist.get_qib() << std::endl;}
         ::clear(curr_dist);
         do {
           RHO.assign(RHOdist.get_qib());
+//           if (DBG_CGBGRL) {std::cout << "CGBGRL: STEP 4.3.2.1 - RHO is " << RHO << std::endl;}
           Inode = RT.search(RHO.hash_int(to<ZZ>(0)));
           if (Inode) {
             NTL::set(Bjj);
@@ -265,9 +276,12 @@ void ClassGroupBSGSReal<T>::cg_bsgs_real(const ZZ &hstar) {
 
           if (::IsZero(Bjj)) {
             curr_dist += Fstep;
+//             if (DBG_CGBGRL) {std::cout << "CGBGRL: STEP 4.3.2.1 - curr_dist is " << curr_dist << std::endl;}
 //             nucomp(RHOdist, RHOdist, F);
             RHOdist.giant_step(F);
+//             if (DBG_CGBGRL) {std::cout << "CGBGRL: STEP 4.3.2.1 - RHOdist is " << RHOdist.get_qib() << std::endl;}
             RHOdist.adjust(curr_dist);
+//             if (DBG_CGBGRL) {std::cout << "CGBGRL: STEP 4.3.2.1 - RHOdist is " << RHOdist.get_qib() << std::endl;}
           }
         } while (RHOdist.get_distance() <= regulator && ::IsZero(Bjj));
       }
@@ -499,29 +513,35 @@ void ClassGroupBSGSReal<T>::cg_bsgs_real(const ZZ &hstar) {
 
   if (DBG_CGBGRL) {std::cout << "CGBGRL: STEP 5 - compute structure" << std::endl;}
   // compute structure
-  if (DBG_CGBGRL)
-    std::cout << "COMPUTING STRUCTURE" << std::endl;
-
   h = to<ZZ>(hS);
-  CL.SetLength(1);
+//   CL.SetLength(1);
   if (h == 1) {
-    CL[0] = 1;
-    fact_base[0].assign_one();
+    if (DBG_CGBGRL) {std::cout << "CGBGRL: STEP 5.1 - h == 1" << std::endl;}
+    if (DBG_CGBGRL) {std::cout << "CGBGRL: STEP 5.2 - h == 1" << std::endl;}
+    CL.push_back(ZZ(1));
+    if (DBG_CGBGRL) {std::cout << "CGBGRL: STEP 5.3 - h == 1" << std::endl;}
+    QuadraticClassGroupElement<T> identity{*quadratic_order};
+    fact_base[0] = identity;
+    if (DBG_CGBGRL) {std::cout << "CGBGRL: STEP 5.4 - h == 1" << std::endl;}
     contributors[0] = 0;
+    if (DBG_CGBGRL) {std::cout << "CGBGRL: STEP 5.5 - h == 1" << std::endl;}
     numFB = 1;
+    if (DBG_CGBGRL) {std::cout << "CGBGRL: STEP 5.6 - h == 1" << std::endl;}
   } else {
     // delete all rows and columns with diagonal 1
     numFB = crank;
 
+    if (DBG_CGBGRL) {std::cout << "CGBGRL: STEP 5.2 - SmithNormalForm(Bmat, U_mat, junk)" << std::endl;}
     mat_ZZ SNF;
     SNF = SmithNormalForm(Bmat, U_mat, junk);
 
     i = 0;
+    if (DBG_CGBGRL) {std::cout << "CGBGRL: STEP 5.3 - for loop" << std::endl;}
     for (j = 0; j < crank; ++j) {
       Bjj = to<ZZ>(SNF[j][j]);
       if (!::IsOne(Bjj)) {
-        CL.SetLength(i + 1);
-        CL[i++] = to<ZZ>(Bjj);
+//         CL.SetLength(i + 1);
+        CL.push_back(to<ZZ>(Bjj));
       }
     }
   }

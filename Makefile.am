@@ -35,6 +35,7 @@ regulator_SOURCES = tests/UnitTests.cpp                                     \
                     src/Quadratic/Reduce/ReducePlainReal_ZZ.cpp             \
                     src/Quadratic/Square/SquareNudupl_ZZ.cpp                \
                     src/Quadratic/Square/SquarePlain_ZZ.cpp                 \
+                    tests/Quadratic/TestData/TestData.cpp                   \
                     src/thresholds.cpp                                      \
                     src/XGCD/hxgcd.cpp                                      \
                     src/XGCD/xgcd.cpp                                       \

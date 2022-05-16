@@ -183,9 +183,7 @@ void QuadraticClassGroupElement<T>::assign(const HashEntry<T> &B) {
 template <class T>
 template <class S>
 void QuadraticClassGroupElement<T>::assign(const HashEntryInt<T, S> &B) {
-  std::cout << "assign: assigning HashEntryInt<T, S>!" << std::endl;
   QuadraticIdealBase<T>::assign(B);
-  std::cout << "assign: reducing!" << std::endl;
   this->reduce();
 }
 

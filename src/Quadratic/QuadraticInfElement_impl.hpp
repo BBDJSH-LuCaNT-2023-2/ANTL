@@ -92,7 +92,7 @@ void QuadraticInfElement<T, S>::adjust(const ZZ &a) {
 template <class T, class S>
 void QuadraticInfElement<T, S>::adjust(const S &bound) {
 
-  if (Distance > bound) {
+  if (-0.000000001 >= bound - Distance) {
     while (Distance > bound) {
       inverse_rho();
     }
@@ -210,7 +210,6 @@ S QuadraticInfElement<T, S>::get_baby_steps(
   // it is here in the generic implementation temporarily
   // eventually a QuadraticInfElement<ZZ, S> class definition will be required
 
-  std::cout << "get_baby_steps(): B is " << B <<std::endl;
   ZZ old_a = qib.get_a(), old_b = qib.get_b(), old_c = qib.get_c(),
      a_zero = A.get_qib().get_a();
   ZZ q, r, new_c, new_a, new_b;
@@ -404,10 +403,10 @@ QuadraticInfElement<T, S> QuadraticInfElement<T, S>::conjugate() {
 
 template <class T, class S>
 void nuclose(QuadraticInfElement<T, S> &C, const ZZ &n) {
-  std::cout << "nuclose 1" << std::endl;
   long i, k = 0;
   ZZ j, ex, s;
   C.assign_one();
+
   if (IsZero(n))
     return;
   // compute binary expansion of ex (hi order to low order)
@@ -422,6 +421,7 @@ void nuclose(QuadraticInfElement<T, S> &C, const ZZ &n) {
   }
   s = 1;
   C.adjust(s);
+
   for (i = 1; i <= k; ++i) {
     s <<= 1;
     C.giant_step(C);

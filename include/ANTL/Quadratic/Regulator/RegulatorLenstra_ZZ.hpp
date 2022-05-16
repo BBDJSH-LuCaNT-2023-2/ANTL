@@ -138,6 +138,7 @@ void RegulatorLenstraData<ZZ, U>::regulator_lenstra() {
   if(DBG_LENSTR) std::cout << "LENSTR: K is " << K << std::endl;
   if(DBG_LENSTR) std::cout << "LENSTR: into BSGSGL" << std::endl;
   l = bsgs_getl(K, N, entry_size, mu, false);
+  //l is baby-step increment for which are stored in the table
   if(DBG_LENSTR) std::cout << "LENSTR: out of BSGSGL" << std::endl;
 
   if(DBG_LENSTR) std::cout << "LENSTR: into IPLIST" << std::endl;
