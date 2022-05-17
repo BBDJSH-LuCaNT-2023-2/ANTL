@@ -404,4 +404,73 @@ int64_t negate_using_mask<int64_t>(const uint64_t m, const int64_t x){
   return (x ^ m) - m;
 }
 
+int64_t inline sub_with_mask(uint64_t & m, const int64_t & a, const int64_t & b){
+  int64_t r;
+  #if defined(__x86_64)
+  asm("subq %3, %0\n\t"
+      "sbbq %1, %1\n\t"  // %1 is either 0 or -1
+      : "=r"(r), "=&r"(m)
+      : "0"(a), "r"(b)
+      : "cc");
+
+#else
+  m = a < b ? -1 : 0;
+  r = a - b;
+#endif  
+return r;
+}
+inline void cond_swap2_s64(int64_t & u1, int64_t & u2, int64_t & v1, int64_t & v2){
+  uint64_t m;
+  int64_t d2 = sub_with_mask(m, u2, v2);
+  int64_t d1 = (u1 - v1) & m;
+  d2 &= m;
+  u1 -= d1;
+  u2 -= d2;
+  v1 += d1;
+  v2 += d2;
+}
+
+inline uint64_t cond_swap3_s64(int64_t & u1,
+				      int64_t & u2,
+				      int64_t & u3,
+				      int64_t & v1,
+				      int64_t & v2,
+				      int64_t & v3){
+                  
+  uint64_t m;
+  int64_t d3 = sub_with_mask(m, u3, v3);
+  int64_t d1 = (u1 - v1) & m;
+  int64_t d2 = (u2 - v2) & m;
+  d3 &= m;
+  u1 -= d1;
+  u2 -= d2;
+  u3 -= d3;
+  v1 += d1;
+  v2 += d2;
+  v3 += d3;
+  return m;;
+}
+
+inline int msb_u64(uint64_t x){
+  #if defined(__x86_64)
+  int64_t k = -1;
+  asm("bsrq %1, %0\n\t"
+      : "=r"(k)
+      : "r"(x), "0"(k)
+      : "cc");
+  return k;
+#else
+  // a binary search approach to finding the most significant set bit
+  int n = 0;
+  if (x == 0) return -1;
+  if (x > 0xFFFFFFFFULL) { n += 32; x >>= 32; }
+  if (x > 0xFFFF) { n += 16; x >>= 16; }
+  if (x > 0xFF) { n += 8;  x >>= 8; }
+  if (x > 0xF) { n += 4;  x >>= 4; }
+  if (x > 0x7) { n += 2;  x >>= 2; }
+  if (x > 0x3) { n += 1;  x >>= 1; }
+  if (x > 0x1) { n ++; }
+  return n;
+#endif
+}
 } // ANTL

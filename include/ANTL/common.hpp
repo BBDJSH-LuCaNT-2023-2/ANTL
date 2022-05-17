@@ -204,6 +204,17 @@ namespace ANTL {
   template <class T>
   T negate_using_mask(const uint64_t m, const T x);
 
+  inline int64_t sub_with_mask(uint64_t & m, const int64_t & a, const int64_t & b);
+
+  inline void cond_swap2_s64(int64_t & u1, int64_t & u2, int64_t & v1, int64_t & v2);
+  inline uint64_t cond_swap3_s64(int64_t & u1,
+				      int64_t & u2,
+				      int64_t & u3,
+				      int64_t & v1,
+				      int64_t & v2,
+				      int64_t & v3);
+              
+  inline int msb_u64(uint64_t x); 
   // finite field cardinality macros
   template <class> ZZ CARDINALITY(void);
 
