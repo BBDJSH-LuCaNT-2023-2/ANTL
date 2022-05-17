@@ -8,6 +8,7 @@
 #include <boost/qvm/mat_access.hpp>
 #include <boost/qvm/mat_operations.hpp>
 #include "../../include/ANTL/XGCD/xgcd_plain.hpp"
+#include "../../include/ANTL/XGCD/xgcd_binary_l2r.hpp"
 #include <boost/math/tools/polynomial.hpp>
 #include <boost/multiprecision/gmp.hpp>
 #include <vector>
@@ -119,8 +120,9 @@ class XGCDTestInstance {
  */
 template<typename T>
 class XGCDPlainTestInstance: public XGCDTestInstance<T> {
-    T v;
+    
     public:
+    T v;
         /**
          * @brief Construct a new XGCDPlainTestInstance object
          * 
@@ -143,7 +145,7 @@ class XGCDPlainTestInstance: public XGCDTestInstance<T> {
         /**
          * @brief Create  a vector of member variables. Overrides parent impl
          * 
-         * @return vector of member variables, in order: (g,u,a,v,b) 
+         * @return v ector of member variables, in order: (g,u,a,v,b) 
          */
         vector<T> createMemberVector(){
             vector<T> members;
@@ -181,6 +183,16 @@ class XGCDPlainTestInstance: public XGCDTestInstance<T> {
 
 };
 
+template<typename T>
+class XGCDBinaryL2RPlainTestInstance: public XGCDPlainTestInstance<T>{
+    public:
+        XGCDBinaryL2RPlainTestInstance(T a, T b) : XGCDPlainTestInstance<T>(a,b){    
+        }
+        void evaluateXGCD(){
+            XGCD_BINARY_L2R(this->g,this->u,this->v,this->a,this->b);
+        }
+};
+
 template <typename T>
 class XGCDLeftPlainTestInstance: public XGCDTestInstance<T> {
     public:
@@ -201,17 +213,6 @@ class XGCDLeftPlainTestInstance: public XGCDTestInstance<T> {
         }
 };
 
-/*int main(){
-long a,b,r,s,g;
-a = 3;
-b= 5;
-XGCD(g, r,s,a,b);
-cout << g << " = " << a << "*" << r <<  " + " << b << "*" << s << endl;
-
-XGCD_PLAIN(r,s,a,b);
-cout << r << " " << s << " " << a << " " << b << "\n";
-return 0;
-}*/
 
 TEMPLATE_TEST_CASE("XGCD_PLAIN tests", "[XGCD][XGCD_PLAIN]", int64_t){
     TestType a,b,g;
@@ -343,4 +344,30 @@ TEMPLATE_TEST_CASE("XGCD_LEFT_PLAIN tests","[XGCD][XGCD_LEFT][XGCD_LEFT_PLAIN]",
         REQUIRE(inst.testXGCD(sol));
     }
 
+}
+
+TEMPLATE_TEST_CASE("XGCD_BINARY_L2R tests", "[XGCD][XGCD_BINARY_L2R]", int64_t){
+    TestType g,x,y,b,a;
+    vector<TestType> sol;
+
+    XGCDBinaryL2RPlainTestInstance<TestType>* inst = new XGCDBinaryL2RPlainTestInstance<TestType>(a,b);
+    SECTION("Basic Test"){
+        g = 1;
+        a = 3;
+        b = 5;
+        x = 2;
+        y = 1;
+
+        sol.push_back(g);
+        sol.push_back(x);
+        sol.push_back(a);
+        sol.push_back(y);
+        sol.push_back(b);
+        
+        inst->refreshInstance(a,b);
+        REQUIRE(inst->testXGCD(g));
+
+        
+
+    }
 }
