@@ -60,7 +60,7 @@ void XGCD_PLAIN(ZZ&, ZZ&, ZZ&, const ZZ&, const ZZ&);
 template < class T >
 void XGCD_LEFT_PLAIN(T & G, T & X, const T & A, const T & B);
 template<>
-void XGCD_LEFT_PLAIN(int64_t & g, int64_t & u, const int64_t & a, const int64_t & b);
+void XGCD_LEFT_PLAIN(int64_t & G, int64_t & X, const int64_t & A, const int64_t & B);
 
 
 //

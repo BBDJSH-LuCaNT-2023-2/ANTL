@@ -43,15 +43,15 @@ void XGCD_PLAIN(ZZ_pEX & G, ZZ_pEX & X, ZZ_pEX & Y, const ZZ_pEX & A, const ZZ_p
 //Plain XGCD from liboptarith 
 //Written by Maxwell Sayles 
 template<> 
-void XGCD_PLAIN(int64_t & g, int64_t & x, int64_t & y, const int64_t & a, const int64_t & b){
+void XGCD_PLAIN(int64_t & G, int64_t & X, int64_t & Y, const int64_t & A, const int64_t & B){
 
-  int64_t t_a = a;
-  int64_t t_b = b;
+  int64_t t_a = A;
+  int64_t t_b = B;
 
-  uint64_t sm = a >> 63;
-  uint64_t sn = b >> 63;
-  t_a = ANTL::negate_using_mask<int64_t>(sm, a);
-  t_b = ANTL::negate_using_mask<int64_t>(sn, b);
+  uint64_t sm = A >> 63;
+  uint64_t sn = B >> 63;
+  t_a = ANTL::negate_using_mask<int64_t>(sm, A);
+  t_b = ANTL::negate_using_mask<int64_t>(sn, B);
     
   int64_t m = 0;
   int64_t n = 1;
@@ -59,15 +59,15 @@ void XGCD_PLAIN(int64_t & g, int64_t & x, int64_t & y, const int64_t & a, const 
   int64_t v = 0;
   
   if (t_a == 0) {
-    x = 1;
-    y = 0;
-    g = b;
+    X = 1;
+    Y = 0;
+    G = B;
     return;
   }
   if (t_b == 0) {
-    x = 0;
-    y = 1;
-    g = a;
+    X = 0;
+    Y = 1;
+    G = A;
     return;
   }
 
@@ -99,10 +99,10 @@ void XGCD_PLAIN(int64_t & g, int64_t & x, int64_t & y, const int64_t & a, const 
       : "cc", "rax", "rdx");
 #else
   int64_t q, t;
-  while (b != 0) {
+  while (B != 0) {
     q = t_a / t_b;
     
-    t = b;
+    t = B;
     t_b = t_a - q*t_b;
     t_a = t;
     
@@ -116,9 +116,9 @@ void XGCD_PLAIN(int64_t & g, int64_t & x, int64_t & y, const int64_t & a, const 
   }
 #endif
 
-  x = ANTL::negate_using_mask<int64_t>(sm, u);
-  y = ANTL::negate_using_mask<int64_t>(sn, v);
-  g = t_a;
+  X = ANTL::negate_using_mask<int64_t>(sm, u);
+  Y = ANTL::negate_using_mask<int64_t>(sn, v);
+  G = t_a;
 
 }
 
@@ -239,9 +239,9 @@ void XGCD_LEFT_PLAIN(ZZ_pEX & G, ZZ_pEX & X, const ZZ_pEX & A, const ZZ_pEX & B)
 }
 
 template<>
-void XGCD_LEFT_PLAIN(int64_t & g, int64_t & u, const int64_t & a, const int64_t & b) {
-  int64_t ma = a;
-  int64_t mb = b;
+void XGCD_LEFT_PLAIN(int64_t & G, int64_t & X, const int64_t & A, const int64_t & B) {
+  int64_t ma = A;
+  int64_t mb = B;
 
   int64_t ta;
   int sa;
@@ -260,15 +260,15 @@ void XGCD_LEFT_PLAIN(int64_t & g, int64_t & u, const int64_t & a, const int64_t 
   }
 
   ta = 0;
-  u = 1;
+  X = 1;
 
   if (mb == 0) {
-    g = ma;
+    G = ma;
     return;
   }
   if (ma == 0) {
-    u = 0;
-    g = mb;
+    X = 0;
+    G = mb;
     return;
   }
 
@@ -295,8 +295,8 @@ void XGCD_LEFT_PLAIN(int64_t & g, int64_t & u, const int64_t & a, const int64_t 
       "jg 0b\n\t"
 
       "1:\n\t"
-      : "=r"(u), "=r"(ma), "=r"(mb), "=r"(ta)
-      : "0"(u), "1"(ma), "2"(mb), "3"(ta), "r"((int64_t)0x7FFFFFFFLL)
+      : "=r"(X), "=r"(ma), "=r"(mb), "=r"(ta)
+      : "0"(X), "1"(ma), "2"(mb), "3"(ta), "r"((int64_t)0x7FFFFFFFLL)
       : "cc", "rax", "rdx");
   // either b == 0, or both a and b are 32bit
 
@@ -319,27 +319,27 @@ void XGCD_LEFT_PLAIN(int64_t & g, int64_t & u, const int64_t & a, const int64_t 
 
 	"testl %2, %2\n\t"
 	"jnz 0b\n\t"
-	: "=r"(u), "=r"(a32), "=r"(b32), "=r"(ta)
-	: "0"(u), "1"(a32), "2"(b32), "3"(ta)
+	: "=r"(X), "=r"(a32), "=r"(b32), "=r"(ta)
+	: "0"(X), "1"(a32), "2"(b32), "3"(ta)
 	: "cc", "rax", "rdx");
     ma = a32;
     mb = b32;
   }
 #else
-  while (b != 0) {
-    q = a / b;
+  while (B != 0) {
+    q = A / B;
 
-    t = b;
-    b = a - q*b;
-    a = t;
+    t = B;
+    B = A - q*B;
+    A = t;
 
     t = ta;
-    ta = (u) - q*ta;
-    u = t;
+    ta = (X) - q*ta;
+    X = t;
   }
 #endif
-  u *= sa;
-  g = ma;
+  X *= sa;
+  G = ma;
 }
 
 
