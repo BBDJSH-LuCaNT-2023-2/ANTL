@@ -14,7 +14,6 @@ using namespace ANTL;
 
 template <> void QuadraticIdealBase<ZZ>::assign_one() {
   set(a);
-
   if (rem(QO->get_discriminant(),4) == 1) {
     set(b);
     sub(c,1,QO->get_discriminant());

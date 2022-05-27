@@ -55,6 +55,8 @@ public:
 
   void regulator_lenstra();
 
+  void regulator_bsgs(ZZ &bound);
+
   U get_regulator();
 
 private:
@@ -71,8 +73,6 @@ private:
 
   void init_prinlist(const ZZ &N, long l, ZZ &s, long &M,
                      QuadraticInfElement<T, U> &G);
-
-  void regulator_bsgs(ZZ &bound);
 
   ZZ approximate_hR();
 
@@ -583,7 +583,7 @@ void RegulatorLenstraData<T, U>::optimize_K(ZZ &bound, const ZZ &S, const ZZ &N,
 
   F = func(K, rS, rN, mu, rn, l);
   dF = dfunc(K, rS, rN, mu, rn, l);
-  cout << "K = " << K << ", F(K) = " << F << ", F'(K) = " << dF << endl;
+//   std::cout << "K = " << K << ", F(K) = " << F << ", F'(K) = " << dF << endl;
 
   while (abs(F) > to_RR(0.00001)) {
     K = K - F / dF;
@@ -591,7 +591,7 @@ void RegulatorLenstraData<T, U>::optimize_K(ZZ &bound, const ZZ &S, const ZZ &N,
     dF = dfunc(K, rS, rN, mu, rn, l);
     //    cout << "K = " << K << ", F(K) = " << F << ", F'(K) = " << dF << endl;
   }
-  cout << "K = " << K << ", F(K) = " << F << endl;
+//   std::cout << "K = " << K << ", F(K) = " << F << endl;
 
   bound = FloorToZZ(K);
 }
@@ -600,7 +600,7 @@ inline RR func(const RR &K, const RR &S, const RR &N, const RR &G, const RR &n,
                long l) {
   RR val;
 
-  //  cout << "\nF:  K = " << K << ", S = " << S << endl;
+//   std::cout << "Func:  K = " << K << ", S = " << S << ", N = " << N << ", G = " << G << ", n = " << n << ", l = " << l << endl;
 
   //  val = (1.5*(G+1)*S*log(K)) / (n*K*(log(S)-log(K)));
   val = ((G + 1) * S * (log(K) - log(N * l))) / (n * K * (log(S) - log(K)));
@@ -614,6 +614,8 @@ inline RR func(const RR &K, const RR &S, const RR &N, const RR &G, const RR &n,
 inline RR dfunc(const RR &K, const RR &S, const RR &N, const RR &G, const RR &n,
                 long l) {
   RR val, temp;
+
+//   std::cout << "Func:  K = " << K << ", S = " << S << ", N = " << N << ", G = " << G << ", n = " << n << ", l = " << l << endl;
 
   temp = log(S) - log(K);
 

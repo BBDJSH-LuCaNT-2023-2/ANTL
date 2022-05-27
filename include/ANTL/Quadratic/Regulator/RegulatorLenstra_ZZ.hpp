@@ -10,17 +10,21 @@ using namespace ANTL;
 // template restrictions.
 template <class U> class RegulatorLenstraData<ZZ, U> {
 private:
-
-  //DBG_CONSTANTS
-  bool DBG_LENSTR = false;
+  // DBG_CONSTANTS
+  bool DBG_LENSTR = true;
   bool DBG_EHRERR = false;
   bool DBG_GOQCNM = false;
   bool DBG_BSGSGL = false;
+  bool DBG_GETMU_ = false;
   bool DBG_BSGSES = false;
-  bool DBG_IPLIST = false;
-  bool DBG_SHANKS = false;
+  bool DBG_IPLIST = true;
+  bool DBG_SHANKS = true;
   bool DBG_APPRHR = false;
   bool DBG_OPTIMK = false;
+  bool DBG_LOBOHR = false;
+  bool DBG_GETOPQ = false;
+  bool DBG_GENOPQ = false;
+  bool DBG_FHSTAR = true;
 
   U regulator;
 
@@ -41,18 +45,21 @@ private:
                            17393, 20921, 24733, 28807, 33151, 37619, 42533,
                            47507, 52859, 58321, 64231, 70099, 76463};
 
-  ZZ max_memory{4000000000};
+  ZZ max_memory{8000000000};
 
   IndexedHashTable<HashEntryReal<ZZ, U>> prin_list;
+
   long prinlist_l; // distance between consecutive table entries
 
   long prinlist_M; // max # of baby-steps between table entries
 
-  ZZ prinlist_s; // giant-step distance
+  U prinlist_s; // giant-step distance
 
   bool Rbsgs; // true if R was computed using BSGS
 
   bool Rconditional; // true if correctness of R relies on ERH
+
+  std::string case_type = "";
 
 public:
   RegulatorLenstraData(QuadraticOrder<ZZ> *quadratic_order_arg,
@@ -60,9 +67,15 @@ public:
 
   void regulator_lenstra();
 
+  void regulator_bsgs(ZZ &bound);
+
   U get_regulator();
 
   ZZ lower_bound_hR();
+
+  void set_case_type(std::string found_case_type) {case_type = found_case_type;}
+
+  std::string get_case_type() {return case_type;}
 
 private:
   ZZ estimate_hR_error();
@@ -75,12 +88,10 @@ private:
 
   void bsgs_getentrysize(ZZ &entry_size, bool nodist);
 
-  void init_prinlist(const ZZ &N, long l, ZZ &s, long &M,
+  void init_prinlist(const ZZ &N, long l, U &s, long &M,
                      QuadraticInfElement<ZZ, U> &G);
 
-  void regulator_bsgs(ZZ &bound);
-
-  ZZ approximate_hR();
+  U approximate_hR();
 
   void optimize_K(ZZ &bound, const ZZ &S, const ZZ &N, long l);
 
@@ -94,6 +105,7 @@ private:
 
   long generate_optimal_Q();
 
+  void find_hstar(ZZ &hstar, const U &S, const ZZ &Pmax);
 };
 
 // Method definitions - Everything below will eventually go into a
@@ -117,13 +129,13 @@ RegulatorLenstraData<ZZ, U>::RegulatorLenstraData(
 // Task: Computes the regulator using an O(D^1/5) baby-step giant-step algorithm
 // of Shanks and improvements of Lenstra.
 
-template <class U>
-void RegulatorLenstraData<ZZ, U>::regulator_lenstra() {
+template <class U> void RegulatorLenstraData<ZZ, U>::regulator_lenstra() {
 
   //
   // initialize hash table
   //
-  ZZ K, N, B, entry_size, u, s, s2;
+  ZZ K, N, B, entry_size;
+  U u, s, s2;
   long l = 1, M = 1;
   RR mu;
   QuadraticInfElement<ZZ, U> AA{*quadratic_order}, G{*quadratic_order};
@@ -131,65 +143,86 @@ void RegulatorLenstraData<ZZ, U>::regulator_lenstra() {
   U S;
   // qo_distance<ZZ> S;
   clear(S);
+  clear(regulator);
 
-  if(DBG_LENSTR) std::cout << "LENSTR: into EHRERR" << std::endl;
+  U E = approximate_hR();
+
   K = estimate_hR_error() >> 1;
-  if(DBG_LENSTR) std::cout << "LENSTR: out of EHRERR" << std::endl;
-  if(DBG_LENSTR) std::cout << "LENSTR: K is " << K << std::endl;
-  if(DBG_LENSTR) std::cout << "LENSTR: into BSGSGL" << std::endl;
+
+  if (DBG_LENSTR) {
+    std::cout << "LENSTR: K is " << K << std::endl;
+  }
+
+  // l is baby-step increment for which are stored in the table
   l = bsgs_getl(K, N, entry_size, mu, false);
-  //l is baby-step increment for which are stored in the table
-  if(DBG_LENSTR) std::cout << "LENSTR: out of BSGSGL" << std::endl;
 
-  if(DBG_LENSTR) std::cout << "LENSTR: into IPLIST" << std::endl;
   init_prinlist(N, l, s, M, G);
-  if(DBG_LENSTR) std::cout << "LENSTR: out of IPLIST" << std::endl;
 
-  if(DBG_LENSTR) std::cout << "LENSTR: N is " << N << std::endl;
-  if(DBG_LENSTR) std::cout << "LENSTR: l is " << l << std::endl;
+  if (DBG_LENSTR) {
+    std::cout << "LENSTR: s is " << s << std::endl;
+    std::cout << "LENSTR: N is " << N << std::endl;
+    std::cout << "LENSTR: l is " << l << std::endl;
+  }
+
 
   B = N * l;
-  if(DBG_LENSTR) std::cout << "LENSTR: B is " << B << std::endl;
+  if (DBG_LENSTR) {
+    std::cout << "LENSTR: B is " << B << std::endl;
+  }
+
   if (IsZero(B)) {
-    if(DBG_LENSTR) std::cout << "LENSTR: into SHANKS" << std::endl;
     regulator_bsgs(B);
-    if(DBG_LENSTR) std::cout << "LENSTR: out of SHANKS" << std::endl;
     S = regulator;
   }
 
-  if(DBG_LENSTR) std::cout << "LENSTR: regulator is " << regulator << std::endl;
-  if(DBG_LENSTR) std::cout << "LENSTR: S is " << S << std::endl;
+  if (DBG_LENSTR) {
+    std::cout << "LENSTR: regulator is " << regulator << std::endl;
+    std::cout << "LENSTR: S is " << S << std::endl;
+    std::cout << "LENSTR: E is " << E << std::endl;
+  }
+
   if (IsZero(S)) {
     //
     // compute approximation of hR
     //
-    if(DBG_LENSTR) std::cout << "LENSTR: into APPRHR" << std::endl;
-    ZZ E = approximate_hR();
-    if(DBG_LENSTR) std::cout << "LENSTR: out of APPRHR" << std::endl;
-    nuclose(AA, E);
 
-    if (AA.is_one())
+    nuclose(AA, FloorToZZ(E));
+    AA.adjust(E);
+
+    if (AA.is_one()) {
       S = AA.get_distance();
+      if (DBG_LENSTR) {
+        std::cout << "LENSTR: AA.is_one() - setting S!" << std::endl;
+        std::cout << "LENSTR: S is " << S << std::endl;
+      }
+    }
   }
+
   //
   // compute list of baby steps (distance < B)
   //
   QuadraticInfElement<ZZ, U> A{*quadratic_order}, C{*quadratic_order},
-      CC{*quadratic_order}, D{*quadratic_order}, DD{*quadratic_order},
-      GG{*quadratic_order};
+      C_gap_check{*quadratic_order}, D{*quadratic_order}, D_gap_check{*quadratic_order},
+      GG{*quadratic_order}, C1{*quadratic_order}, D1{*quadratic_order};
   HashEntryReal<ZZ, U> *F;
 
   if (IsZero(S)) {
 
     A.assign_one();
-    if (l == 1)
+    if (l == 1) {
       regulator = G.get_baby_steps(prin_list, B, A);
-    else
+      if (DBG_LENSTR) {
+        std::cout << "LENSTR: G.get_baby_steps(prin_list, B, A) " << std::endl;
+      }
+    } else {
       regulator = G.get_baby_steps(prin_list, B, A, l, M);
+      if (DBG_LENSTR) {
+        std::cout << "LENSTR: G.get_baby_steps(prin_list, B, A, l, M) "
+                  << std::endl;
+      }
+    }
 
     if (!IsZero(regulator)) {
-      nuclose(C, FloorToZZ(regulator));
-      regulator = C.get_distance();
       Rbsgs = true;
     }
 
@@ -197,133 +230,314 @@ void RegulatorLenstraData<ZZ, U>::regulator_lenstra() {
 
     if (IsZero(regulator)) {
       G.adjust(s);
-
-      u = (s << 1);
+      if (DBG_LENSTR) {
+        std::cout << "LENSTR: G.adjust(s) " << std::endl;
+        std::cout << "LENSTR: s is " << s << std::endl;
+      }
+      u = 2*s;
+      if (DBG_LENSTR) {
+      std::cout << "LENSTR: u is " << u << std::endl;
+      }
       G.giant_step(G);
-      //sqr(G, G); makeshift square above
+      if (DBG_LENSTR) {
+        std::cout << "LENSTR: G.giant_step(G) " << std::endl;
+      }
+      // sqr(G, G); makeshift square above
       G.adjust(u);
-      if (G.is_one())
+      if (DBG_LENSTR) {
+        std::cout << "LENSTR: G.adjust(s) " << std::endl;
+      }
+      if (G.is_one()) {
         G.baby_step();
+        if (DBG_LENSTR) {
+          std::cout << "LENSTR: G.baby_step() " << std::endl;
+        }
+      }
 
       conjugate(GG, G);
-      while (abs(GG.eval()) <= u)
+      if (DBG_LENSTR) {
+        std::cout << "LENSTR: conjugate(GG, G) " << std::endl;
+      }
+      // return;
+      while (abs(GG.eval()) <= u) {
         GG.inverse_rho();
-      while (abs(GG.eval()) > u)
-        GG.baby_step();
+        if (DBG_LENSTR) {
+          std::cout << "LENSTR: GG.inverse_rho() " << std::endl;
+        }
+      }
+      while (abs(GG.eval()) > u) {
+        if (DBG_LENSTR) {
+            std::cout << "LENSTR: GG.eval()) > u" << std::endl;
+        }
 
-      s2 = s = AA.eval();
+        if (DBG_LENSTR) {
+          std::cout << "LENSTR: GG is (" << GG.get_qib().get_a() << ", "
+                    << GG.get_qib().get_b() << " , " << GG.get_qib().get_c()
+                    << ") with distance " << GG.get_distance() << std::endl;
+          std::cout << "LENSTR: u is " << u << std::endl;
+        }
+
+        GG.baby_step();
+        if (DBG_LENSTR) {
+          std::cout << "LENSTR: GG.baby_step() " << std::endl;
+        }
+      }
+
+      s2 = s = AA.get_distance();
       C = AA;
-      D = AA;
+      D = AA.conjugate();
     }
   }
-  if(DBG_LENSTR) std::cout << "LENSTR: regulator is " << regulator << std::endl;
+
+  if (DBG_LENSTR) {
+    std::cout << "LENSTR: regulator is " << regulator << std::endl;
+    std::cout << "LENSTR: S is " << S << std::endl;
+  }
+
   //
   // compute giant steps until R is found or the bound is exceeded
   //
 
-  long i;
+  //Saving initial ideals
+  C1 = C;
+  D1 = D;
 
+  // Perform giant-steps on both C and D until one is found in the
+  // baby-step list
   while (IsZero(regulator) && IsZero(S)) {
 
-    // search for C, rho_1(C), ..., rho_l(C) in the hash table
-    CC = C;
-    DD = D;
-    for (i = 0; i < M && IsZero(S); ++i) {
-      F = prin_list.search(CC.hash_real());
-      if (F) {
-        // found CC in the hash table!
-
-        combine_BSGS(S, CC, F);
-      } else {
-        F = prin_list.search((CC.conjugate()).hash_real());
-        if (F) {
-          // found CC^-1 in the hash table!
-
-          combine_conj_BSGS(S, CC, F);
-        } else {
-          F = prin_list.search(DD.hash_real());
-          if (F) {
-            // found DD in the hash table!
-
-            combine_BSGS(S, DD, F);
-          } else {
-            F = prin_list.search((DD.conjugate()).hash_real());
-            if (F) {
-              // found DD^-1 in the hash table!
-
-              combine_conj_BSGS(S, DD, F);
-            } else if (i < M) {
-              CC.baby_step();
-              DD.baby_step();
-            }
-          }
-        }
-      }
+    if(DBG_LENSTR) {
+      std::cout << "C distance is " << C.get_distance() << std::endl;
+      std::cout << "D distance is " << D.get_distance() << std::endl;
     }
 
+
+    C_gap_check = C;
+    D_gap_check = D;
+
+    // If there are gaps of M baby-steps in our baby-step list, we must perform
+    // M baby-steps on C and D and check for each of these in the list
+    for (long i = 0; i < M && IsZero(S); ++i) {
+
+      F = prin_list.search(C_gap_check.hash_real());
+      if (F) {
+        //found C in the hash table!
+        set_case_type("C found");
+        if(DBG_LENSTR) {
+          std::cout << "found C in the hash table!" << std::endl;
+        }
+
+        //combine_BSGS(S, C_gap_check, F);
+        S = C_gap_check.get_distance() - F->get_d();
+        break;
+      }
+
+      F = prin_list.search(D_gap_check.hash_real());
+      if (F) {
+        //found D in the hash table!
+        set_case_type("D found");
+        if(DBG_LENSTR) {
+          std::cout << "found D in the hash table!" << std::endl;
+        }
+
+        // combine_BSGS(S, D_gap_check, F);
+        S = C1.get_distance() -
+            ((D_gap_check.get_distance() - D1.get_distance()) - F->get_d()) -
+            log(C1.get_qib().get_a());
+        break;
+      }
+
+      C_gap_check.baby_step();
+      D_gap_check.baby_step();
+    }
+
+    // If nothing has been found, S will still be zero; Continue with giant steps
     if (IsZero(S)) {
       s += u;
-
-      C.giant_step(G);
-      //mul(C, C, G); makeshift multiplication above
-      C.adjust(s);
-
       s2 -= u;
 
-      D.giant_step(GG);
-      //mul(D, D, GG); makeshift multiplication above
-      D.adjust(s2);
+      //mul(C, C, G); makeshift multiplication below
+      C.giant_step(G);
+      C.adjust(s);
+
+//       mul(D, D, GG); makeshift multiplication below
+//       D.giant_step(G);
+//       D.adjust(s2);
     }
   }
-  if(DBG_LENSTR) std::cout << "LENSTR: regulator is " << regulator << std::endl;
+
+
+
+//   long i;
+//   C1 = C, D1 = D;
+//
+//   while (IsZero(regulator) && IsZero(S)) {
+//
+//     search for C, rho_1(C), ..., rho_l(C) in the hash table
+//     CC = C;
+//     DD = D;
+//
+//     for (i = 0; i < M && IsZero(S); ++i) {
+//       F = prin_list.search(CC.hash_real());
+//       if (F) {
+//         //found CC in the hash table!
+//         set_case_type("CC found");
+//         if(DBG_LENSTR) {
+//           std::cout << "found CC in the hash table!" << std::endl;
+//         }
+//
+//         combine_BSGS(S, CC, F);
+//       } else {
+//         F = prin_list.search((CC.conjugate()).hash_real());
+//         if (F) {
+//           //found CC^-1 in the hash table!
+//           set_case_type("CC^-1 found");
+//           if(DBG_LENSTR) {
+//             std:: cout << "found CC^-1 in the hash table!" << std::endl;
+//           }
+//
+//           combine_conj_BSGS(S, CC, F);
+//         } else {
+//           F = prin_list.search(DD.hash_real());
+//           if (F) {
+//             //found DD in the hash table!
+//             set_case_type("DD found");
+//
+//             combine_conj_BSGS(S, DD, F);
+//           } else {
+//             F = prin_list.search((DD.conjugate()).hash_real());
+//             if (F) {
+//               //found DD^-1 in the hash table!
+//               set_case_type("DD^-1 found");
+//               if(DBG_LENSTR) {
+//                 std::cout << "found DD^-1 in the hash table!" << std::endl;
+//               }
+//
+//               combine_conj_BSGS(S, DD, F);
+//             } else if (i < M) {
+//               CC.baby_step();
+//               DD.baby_step();
+//             }
+//           }
+//         }
+//       }
+//     }
+//
+//     if (IsZero(S)) {
+//       s += u;
+//
+//       C.giant_step(G);
+//       //mul(C, C, G); makeshift multiplication above
+//       C.adjust(s);
+//
+//       s2 -= u;
+//
+//       D.giant_step(GG);
+//       //mul(D, D, GG); makeshift multiplication above
+//       D.adjust(s2);
+//     }
+//   }
+
+  if (DBG_LENSTR) {
+    std::cout << "LENSTR: regulator is " << regulator << std::endl;
+    std::cout << "LENSTR: S is " << S << std::endl;
+  }
 
   //
   // factor out h*
   //
-
+  if (S < 0) {
+    S *= -1;
+  }
   if (IsZero(regulator)) {
 
-    if(DBG_LENSTR) std::cout << "LENSTR: Factoring out h* " << std::endl;
-    if(DBG_LENSTR) std::cout << "LENSTR: regulator is " << regulator << std::endl;
-    if(DBG_LENSTR) std::cout << "LENSTR: S is* " << S << std::endl;
+    if (DBG_LENSTR) {
+      std::cout << "LENSTR: Factoring out h* " << std::endl;
+      std::cout << "LENSTR: regulator is " << regulator << std::endl;
+      std::cout << "LENSTR: S is " << S << std::endl;
+    }
 
     // verify that Regulator > S^2/3 (= B) using BS-GS
     ZZ B, N, entry_size;
     RR mu;
     long l;
-    RR temp = log(to_RR(S)) * to_RR (2) / to_RR (3);
+    if (DBG_LENSTR) {
+      std::cout << "LENSTR: Before log(S), S is " << S << std::endl;
+    }
+    RR temp = log(to_RR(S)) * to_RR(2) / to_RR(3);
+
+    if (DBG_LENSTR) {
+      std::cout << "LENSTR: After log(S)" << std::endl;
+      std::cout << "LENSTR: Before conv(B, ceil(exp(temp)))" << std::endl;
+    }
 
     conv(B, ceil(exp(temp)));
+    if (DBG_LENSTR) {
+      std::cout << "LENSTR: After conv(B, ceil(exp(temp)))" << std::endl;
+    }
 
     l = bsgs_getl(B, N, entry_size, mu, true);
-    optimize_K(B, FloorToZZ(S), N, l);
 
-    if(DBG_LENSTR) std::cout << "LENSTR: B is* " << B << std::endl;
-    if(DBG_LENSTR) std::cout << "LENSTR: Factoring out h* - regulator_bsgs(B) start" << std::endl;
+
+    if (DBG_LENSTR) {
+      std::cout << "LENSTR: B is " << B << std::endl;
+      std::cout << "LENSTR: FloorToZZ(S) is " << FloorToZZ(S) << std::endl;
+      std::cout << "LENSTR: N is " << N << std::endl;
+      std::cout << "LENSTR: l is " << l << std::endl;
+    }
+
+    //THE BELOW LINE SHOULD EVENTUALLY BE UNCOMMENTED
+//     optimize_K(B, FloorToZZ(S), N, l);
+
+    if (DBG_LENSTR) {
+      std::cout << "LENSTR: After optimize_K(B, FloorToZZ(S), N, l)" << std::endl;
+      std::cout << "LENSTR: B is " << B << std::endl;
+    }
+
+    //THE BELOW LINE SHOULD EVENTUALLY BE UNCOMMENTED
+    B = CeilToZZ(E / SqrRoot(to_RR(K)));
     regulator_bsgs(B);
-    if(DBG_LENSTR) std::cout << "LENSTR: Factoring out h* - regulator_bsgs(B) finish" << std::endl;
 
     ZZ hstar, Pmax;
+    if (!IsZero(regulator)) {
+      hstar = (FloorToZZ(log(S) / log(RR(2)))) /
+              (FloorToZZ(log(regulator) / log(RR(2))));
+      if (DBG_LENSTR) {
+        std::cout << "Found R = " << regulator << std::endl;
+        std::cout << "h* = " << hstar << std::endl;
+      }
+    } else {
+      Pmax = 1 + CeilToZZ(to_RR(S) / to_RR(B));
+      //       Pmax = FloorToZZ(sqrt(S));
+      if (DBG_LENSTR) {
+        std::cout << "LENSTR: Pmax is " << Pmax << std::endl;
+      }
+      find_hstar(hstar, S, Pmax);
+    }
 
-//         if (info > 1 && !IsZero(regulator)) {
-//           hstar = (FloorToZZ(log(S) / log(RR(2)))) /
-//           (FloorToZZ(log(regulator) / log(RR(2))));
-//
-//           cout << "Found R = " << regulator << endl;
-//           cout << "h* = " << hstar << endl;
-//         } else {
-//           Pmax = 1 + FloorToZZ(log(S) / log(RR(2))) / RR(B);
-//           find_hstar(hstar, S, Pmax, t1);
-//         }
+    if (DBG_LENSTR) {
+      std::cout << "LENSTR: Factoring out h* - S is " << S << std::endl;
+      std::cout << "LENSTR: Factoring out h* - hstar is " << hstar << std::endl;
+      std::cout << "LENSTR: Factoring out h* - regulator is " << regulator << std::endl;
+      std::cout << "LENSTR: Factoring out h* - nuclose start" << std::endl;
+    }
 
-    if(DBG_LENSTR) std::cout << "LENSTR: Factoring out h* - nuclose start" << std::endl;
     nuclose(C, FloorToZZ(regulator));
-    if(DBG_LENSTR) std::cout << "LENSTR: Factoring out h* - nuclose finish" << std::endl;
-    if(DBG_LENSTR) std::cout << "LENSTR: Factoring out h* - assign regulator" << std::endl;
+    C.adjust(regulator);
+
+    if (DBG_LENSTR) {
+      std::cout << "LENSTR: Factoring out h* - nuclose finish" << std::endl;
+      std::cout << "LENSTR: Factoring out h* - assign regulator" << std::endl;
+    }
+
     regulator = C.get_distance();
   }
-  if(DBG_LENSTR) std::cout << "LENSTR: Factoring out h* - END S is" << S << std::endl;
-  if(DBG_LENSTR) std::cout << "LENSTR: Factoring out h* - END regulator is" << regulator << std::endl;
+
+  if (DBG_LENSTR) {
+    std::cout << "LENSTR: Factoring out h* - END S is" << S << std::endl;
+    std::cout << "LENSTR: Factoring out h* - END regulator is" << regulator
+              << std::endl;
+  }
 }
 
 template <class U> U RegulatorLenstraData<ZZ, U>::get_regulator() {
@@ -335,25 +549,35 @@ template <class U> U RegulatorLenstraData<ZZ, U>::get_regulator() {
 // Task: returns L such that |hR - hR'| < exp(L)^2
 
 template <class U> ZZ RegulatorLenstraData<ZZ, U>::estimate_hR_error() {
+  if(DBG_LENSTR || DBG_EHRERR) {std::cout << "EHRERR: START" << std::endl;}
   ZZ err;
   RR Aval, Fval, temp;
 
-  if (l_function->terms_used(1) == 0){
-    if(DBG_EHRERR) std::cout << "EHRERR: terms_used == 0 !" << std::endl;
-    return ZZ::zero();
-  }
+  if (DBG_EHRERR)
+    std::cout << "EHRERR: l_function->terms_used(1) is "
+              << l_function->terms_used(1) << std::endl;
 
   long n = get_optimal_Q_cnum();
   RR FI = l_function->approximateL1(n);
 
-  if(DBG_EHRERR) std::cout << "EHRERR: n is " << n << std::endl;
-  if(DBG_EHRERR) std::cout << "EHRERR: FI is " << FI << std::endl;
+  if (l_function->terms_used(1) == 0) {
+    if (DBG_EHRERR)
+      std::cout << "EHRERR: terms_used == 0 !" << std::endl;
+    return ZZ::zero();
+  }
+
+  if (DBG_EHRERR)
+    std::cout << "EHRERR: n is " << n << std::endl;
+  if (DBG_EHRERR)
+    std::cout << "EHRERR: FI is " << FI << std::endl;
 
   Aval = l_function->calculate_L1_error(delta, l_function->terms_used(1));
   Fval = exp(Aval) - 1;
 
-  if(DBG_EHRERR) std::cout << "EHRERR: Aval is " << Aval << std::endl;
-  if(DBG_EHRERR) std::cout << "EHRERR: Fval is " << Fval << std::endl;
+  if (DBG_EHRERR)
+    std::cout << "EHRERR: Aval is " << Aval << std::endl;
+  if (DBG_EHRERR)
+    std::cout << "EHRERR: Fval is " << Fval << std::endl;
 
   temp = 1 - exp(-Aval);
   if (temp > Fval)
@@ -371,25 +595,32 @@ template <class U> ZZ RegulatorLenstraData<ZZ, U>::estimate_hR_error() {
     Fval *= FI * SqrRoot(to_RR(delta)) / 2;
   }
 
-  if(DBG_EHRERR) std::cout << "EHRERR: Fval is " << Fval << std::endl;
+  if (DBG_EHRERR)
+    std::cout << "EHRERR: Fval is " << Fval << std::endl;
 
   err = CeilToZZ(Fval * log(to_RR(2))) >> 1;
+
+  if(DBG_LENSTR || DBG_EHRERR) {std::cout << "EHRERR: FINISH" << std::endl;}
   return err;
 }
 
 template <class U> long RegulatorLenstraData<ZZ, U>::get_optimal_Q_cnum() {
+  if(DBG_LENSTR || DBG_GOQCNM) {std::cout << "DBG_GOQCNM: START" << std::endl;}
+
   long dlog;
   ZZ temp;
 
   temp = FloorToZZ(NTL::log10(to_RR(abs(delta))));
   conv(dlog, temp);
 
+  if(DBG_LENSTR || DBG_GOQCNM) {std::cout << "DBG_GOQCNM: FINISH" << std::endl;}
   return OQvals_cnum[(dlog / 5)];
 }
 
 template <class U>
 long RegulatorLenstraData<ZZ, U>::bsgs_getl(const ZZ &K, ZZ &N, ZZ &entry_size,
-                                           RR &mu, bool nodist) {
+                                            RR &mu, bool nodist) {
+  if(DBG_LENSTR || DBG_BSGSGL) {std::cout << "BSGSGL: START" << std::endl;}
   ZZ maxN, rootK;
   RR n, temp;
   long l;
@@ -408,13 +639,17 @@ long RegulatorLenstraData<ZZ, U>::bsgs_getl(const ZZ &K, ZZ &N, ZZ &entry_size,
   maxN = 1 + (max_memory / (to_ZZ(n) * entry_size));
 
   // compute number of baby steps assuming l=1, N=sqrt(KG/2n)
-  if (DBG_BSGSGL) std::cout << "BSGSGL: K is "  << K << std::endl;
-  if (DBG_BSGSGL) std::cout << "BSGSGL: mu is " << mu << std::endl;
-  if (DBG_BSGSGL) std::cout << "BSGSGL: n is "  << n << std::endl;
+  if (DBG_BSGSGL)
+    std::cout << "BSGSGL: K is " << K << std::endl;
+  if (DBG_BSGSGL)
+    std::cout << "BSGSGL: mu is " << mu << std::endl;
+  if (DBG_BSGSGL)
+    std::cout << "BSGSGL: n is " << n << std::endl;
   temp = floor(SqrRoot(to_RR(K) * mu / (to_RR(1) * n)));
   conv(N, temp);
   l = 1;
-  if (DBG_BSGSGL) std::cout << "BSGSGL: N is " << N << std::endl;
+  if (DBG_BSGSGL)
+    std::cout << "BSGSGL: N is " << N << std::endl;
   if (N > maxN) {
     // compute l = sqrt(KG/2n) / N;
     //    N = maxN;
@@ -426,7 +661,9 @@ long RegulatorLenstraData<ZZ, U>::bsgs_getl(const ZZ &K, ZZ &N, ZZ &entry_size,
     if (l < 1)
       l = 1;
   }
-  if (DBG_BSGSGL) std::cout << "BSGSGL: N is " << N << std::endl;
+  if (DBG_BSGSGL)
+    std::cout << "BSGSGL: N is " << N << std::endl;
+  if(DBG_LENSTR || DBG_BSGSGL) {std::cout << "BSGSGL: FINISH" << std::endl;}
   return l;
 }
 
@@ -436,29 +673,56 @@ long RegulatorLenstraData<ZZ, U>::bsgs_getl(const ZZ &K, ZZ &N, ZZ &entry_size,
 // computed at compile-time.
 
 template <class U> RR RegulatorLenstraData<ZZ, U>::get_mu(const ZZ &delta) {
+  if(DBG_LENSTR || DBG_GETMU_) {std::cout << "GETMU_: START" << std::endl;}
+
   //  return to_RR(2)*((to_RR(NumBits(delta) - 5) / to_RR(10)) + to_RR(6));
   //  return (to_RR(NumBits(delta) - 5) / to_RR(10)) + to_RR(6);
-  return to_RR(6.85) + to_RR(10.62) * to_RR(NumBits(delta)) / to_RR(135);
+  RR mu = to_RR(6.85) + to_RR(10.62) * to_RR(NumBits(delta)) / to_RR(135);
+  if(DBG_LENSTR || DBG_GETMU_) {std::cout << "GETMU_: FINISH" << std::endl;}
+  return mu;
 }
 
 template <class U>
 void RegulatorLenstraData<ZZ, U>::bsgs_getentrysize(ZZ &entry_size,
                                                     bool nodist) {
+  if(DBG_LENSTR || DBG_BSGSES) {std::cout << "BSGSES: START" << std::endl;}
   ZZ temp;
 
   entry_size = 3 * NTL_BITS_PER_LONG; // space for pointers
+  if (DBG_BSGSES) {
+    std::cout << "DBG_BSGSES: entry_size is " << entry_size << std::endl;
+  }
   if (nodist) {
+    if (DBG_BSGSES) {
+      std::cout << "DBG_BSGSES: nodist is true" << std::endl;
+    }
     entry_size += SqrRoot(delta).size() * NTL_ZZ_NBITS; // a coeff
-    entry_size += 8;                                    // b coeff
+    if (DBG_BSGSES) {
+      std::cout << "DBG_BSGSES: entry_size is " << entry_size << std::endl;
+    }
+    entry_size += 8; // b coeff
+    if (DBG_BSGSES) {
+      std::cout << "DBG_BSGSES: entry_size is " << entry_size << std::endl;
+    }
   } else {
+    if (DBG_BSGSES) {
+      std::cout << "DBG_BSGSES: nodist is false" << std::endl;
+    }
     // temp = to_ZZ(1) << qo_distance<ZZ>::get_p();
     temp = to_ZZ(1) << 64;
     entry_size +=
         temp.size() * NTL_ZZ_NBITS + 3 * SqrRoot(delta).size() * NTL_ZZ_NBITS;
+    if (DBG_BSGSES) {
+      std::cout << "DBG_BSGSES: entry_size is " << entry_size << std::endl;
+    }
   }
 
   // convert bits to bytes
   entry_size >>= 2;
+  if (DBG_BSGSES) {
+    std::cout << "DBG_BSGSES: End - entry_size is " << entry_size << std::endl;
+  }
+  if(DBG_LENSTR || DBG_BSGSES) {std::cout << "BSGSES: FINSH" << std::endl;}
 }
 
 // quadratic_order<ZZ>::init_prinlist
@@ -466,47 +730,57 @@ void RegulatorLenstraData<ZZ, U>::bsgs_getentrysize(ZZ &entry_size,
 // computations. Uses current contents if appropriate.
 
 template <class U>
-void RegulatorLenstraData<ZZ, U>::init_prinlist(const ZZ &N, long l, ZZ &s,
-                                               long &M,
-                                               QuadraticInfElement<ZZ, U> &G) {
+void RegulatorLenstraData<ZZ, U>::init_prinlist(const ZZ &N, long l, U &s,
+                                                long &M,
+                                                QuadraticInfElement<ZZ, U> &G) {
+
+  if(DBG_LENSTR || DBG_IPLIST) {std::cout << "IPLIST: START" << std::endl;}
+
+  if (DBG_IPLIST) {
+    std::cout << "IPLIST: Begin" << std::endl;
+    std::cout << "IPLIST: N is " << N << std::endl;
+    std::cout << "IPLIST: l is " << l << std::endl;
+  }
+
   long lsize, P;
-  if(DBG_IPLIST) std::cout << "IPLIST: Begin" << std::endl;
 
   // compute B and s
-  if(DBG_IPLIST) std::cout << "IPLIST: N is " << N << std::endl;
-  if(DBG_IPLIST) std::cout << "IPLIST: l is " << l << std::endl;
+  s = to<U>((N + 2) * l);
 
-  P = 3 + NumBits(SqrRoot(delta));
-  s = N * l - P;
+  if (DBG_IPLIST){
+    std::cout << "IPLIST: s is " << s << std::endl;
+  }
 
-  if(DBG_IPLIST) std::cout << "IPLIST: P is " << P << std::endl;
-  if(DBG_IPLIST) std::cout << "IPLIST: s is " << s << std::endl;
   // initialize hash table
   if (prin_list.no_of_elements() > 0) {
     G.assign(prin_list.last_entry());
+    if (DBG_IPLIST){
+      std::cout << "IPLIST: G.assign(prin_list.last_entry())" << std::endl;
+      std::cout << "SHANKS: last_entry is " << prin_list.last_entry() << std::endl;
+      std::cout << "SHANKS: G is " << G.get_qib() << " with distance " << G.get_distance() << std::endl;
+    }
     l = prinlist_l;
     M = prinlist_M;
-    if (prinlist_s > s)
+
+    if (prinlist_s > s) {
       s = prinlist_s;
-    else
+    } else {
       prinlist_s = s;
+    }
   } else {
-    if(DBG_IPLIST) std::cout << "IPLIST! 1.1" << std::endl;
     conv(lsize, N + P);
-    if(DBG_IPLIST) std::cout << "IPLIST! 1.2" << std::endl;
     lsize += 100;
-    if(DBG_IPLIST) std::cout << "IPLIST! 1.3" << std::endl;
     prin_list.initialize(lsize);
-    if(DBG_IPLIST) std::cout << "IPLIST! 1.4" << std::endl;
     G.assign_one();
-    if(DBG_IPLIST) std::cout << "IPLIST! 1.5" << std::endl;
+    if (DBG_IPLIST){
+      std::cout << "IPLIST: G.assign_one()" << std::endl;
+      std::cout << "SHANKS: G is " << G.get_qib() << " with distance " << G.get_distance() << std::endl;
+    }
     prinlist_l = l;
-    if(DBG_IPLIST) std::cout << "IPLIST! 1.6" << std::endl;
     prinlist_s = s;
-    if(DBG_IPLIST) std::cout << "IPLIST! 1.7" << std::endl;
   }
-  if(DBG_IPLIST) std::cout << "IPLIST: N is " << N << std::endl;
-  if(DBG_IPLIST) std::cout << "IPLIST: End" << std::endl;
+
+  if(DBG_LENSTR || DBG_IPLIST) {std::cout << "IPLIST: FINISH" << std::endl;}
 }
 
 //
@@ -515,56 +789,71 @@ void RegulatorLenstraData<ZZ, U>::init_prinlist(const ZZ &N, long l, ZZ &s,
 // algorithm.
 //
 
-template <class U>
-void RegulatorLenstraData<ZZ, U>::regulator_bsgs(ZZ &bound) {
+template <class U> void RegulatorLenstraData<ZZ, U>::regulator_bsgs(ZZ &bound) {
 
+  if(DBG_LENSTR || DBG_SHANKS) {std::cout << "SHANKS: START" << std::endl;}
   // initialize hash table
-  ZZ K, B, N, entry_size, u, s;
+  ZZ K, B, N, entry_size;
+  U u, s;
   RR mu;
   long l, M = 1;
 
   QuadraticInfElement<ZZ, U> G{*quadratic_order};
 
-//   if(DBG_SHANKS) std::cout << "SHANKS: Begin" << std::endl;
-//   if(DBG_SHANKS) std::cout << "K is " << K << std::endl;
-//   if(DBG_SHANKS) std::cout << "delta is " << delta << std::endl;
+  //   if(DBG_SHANKS) std::cout << "SHANKS: Begin" << std::endl;
+  //   if(DBG_SHANKS) std::cout << "K is " << K << std::endl;
+  //   if(DBG_SHANKS) std::cout << "delta is " << delta << std::endl;
 
-  if (bound == 0)
+  if (bound == 0) {
     // replacing get_bound for now...
     K = SqrRoot(delta);
-  // get_bound(K);
-  else
+    // get_bound(K);
+  }
+  else {
     K = bound;
+  }
 
-//   if(DBG_SHANKS) std::cout << "K is " << K << std::endl;
+  if(DBG_SHANKS) {
+    std::cout << "K is " << K << std::endl;
+  }
 
-//   if(DBG_SHANKS) std::cout << "SHANKS: into BSGSGL" << std::endl;
   l = bsgs_getl(K, N, entry_size, mu, false);
-//   if(DBG_SHANKS) std::cout << "SHANKS: out of BSGSGL" << std::endl;
-
-//   if(DBG_SHANKS) std::cout << "SHANKS: into IPLIST" << std::endl;
   init_prinlist(N, l, s, M, G);
-//   if(DBG_SHANKS) std::cout << "SHANKS: out of IPLIST" << std::endl;
 
   B = N * l;
-  if(DBG_SHANKS) std::cout << "SHANKS: Begin baby step list computation" << std::endl;
+
   // compute list of baby steps (distance < B)
-  QuadraticInfElement<ZZ, U> A{*quadratic_order}, C{*quadratic_order}, AA{*quadratic_order};
+  if (DBG_SHANKS) {
+    std::cout << "SHANKS: G is " << G.get_qib() << " with distance " << G.get_distance() << std::endl;
+    std::cout << "SHANKS: B is " << B << std::endl;
+    std::cout << "SHANKS: Begin baby step list computation" << std::endl;
+  }
+
+  QuadraticInfElement<ZZ, U> A{*quadratic_order}, C{*quadratic_order},
+      AA{*quadratic_order};
   HashEntryReal<ZZ, U> *F;
 
-  if(DBG_SHANKS) std::cout << "SHANKS: regulator is " << regulator << std::endl;
-
   A.assign_one();
-  if(DBG_SHANKS) std::cout << "SHANKS: Begin get_baby_steps" << std::endl;
-  if(DBG_SHANKS) std::cout << "SHANKS: l == " << l << std::endl;
-  if (l == 1)
-    regulator = G.get_baby_steps(prin_list, B, A);
-  else
-    regulator = G.get_baby_steps(prin_list, B, A, l, M);
 
-  if(DBG_SHANKS) std::cout << "SHANKS: End get_baby_steps" << std::endl;
+  if (DBG_SHANKS) {
+    std::cout << "SHANKS: Begin get_baby_steps" << std::endl;
+    std::cout << "SHANKS: l == " << l << std::endl;
+  }
+
+  if (l == 1) {
+    regulator = G.get_baby_steps(prin_list, B, A);
+  }
+  else {
+    regulator = G.get_baby_steps(prin_list, B, A, l, M);
+  }
   prinlist_M = M;
-  if(DBG_SHANKS) std::cout << "SHANKS: regulator is " << regulator << std::endl;
+
+  if (DBG_SHANKS) {
+    std::cout << "SHANKS: End get_baby_steps" << std::endl;
+    std::cout << "SHANKS: prin_list is " << prin_list << std::endl;
+    std::cout << "SHANKS: G is " << G.get_qib() << " with distance " << G.get_distance() << std::endl;
+    std::cout << "SHANKS: regulator is " << regulator << std::endl;
+  }
 
   if (!IsZero(regulator)) {
     Rbsgs = true;
@@ -572,109 +861,135 @@ void RegulatorLenstraData<ZZ, U>::regulator_bsgs(ZZ &bound) {
 
   if (IsZero(regulator)) {
     Rbsgs = false;
-//     if(DBG_SHANKS) std::cout << "SHANKS: Begin adjust" << std::endl;
     G.adjust(s);
-//     if(DBG_SHANKS) std::cout << "SHANKS: End adjust" << std::endl;
-    u = (s << 1);
+    u = 2*s;
 
-    A = G;
-    if(DBG_SHANKS) std::cout << "SHANKS: Begin giant_step" << std::endl;
-    if(DBG_SHANKS) std::cout << "SHANKS: (" << G.get_qib().get_a() << ", "
-                    << G.get_qib().get_b() << ", "
-                    << G.get_qib().get_c() << ") "
-                    << G.get_distance() << std::endl;
+    A = G;/*
+    if (DBG_SHANKS){
+      std::cout << "SHANKS: Begin giant_step" << std::endl;
+      std::cout << "SHANKS: (" << G.get_qib().get_a() << ", "
+                << G.get_qib().get_b() << ", " << G.get_qib().get_c() << ") "
+                << G.get_distance() << std::endl;
+    }
 
     G.giant_step(G);
 
-    if(DBG_SHANKS) std::cout << "SHANKS: (" << G.get_qib().get_a() << ", "
-                    << G.get_qib().get_b() << ", "
-                    << G.get_qib().get_c() << ") "
-                    << G.get_distance() << std::endl;
-    if(DBG_SHANKS) std::cout << "SHANKS: End giant_step" << std::endl;
-    //sqr(G, G); makeshift square above
-//     if(DBG_SHANKS) std::cout << "SHANKS: Begin adjust, baby_step" << std::endl;
-    if(DBG_SHANKS) std::cout << "SHANKS: G distance is " << G.get_distance() << std::endl;
+    if (DBG_SHANKS)
+      std::cout << "SHANKS: (" << G.get_qib().get_a() << ", "
+                << G.get_qib().get_b() << ", " << G.get_qib().get_c() << ") "
+                << G.get_distance() << std::endl;
+    if (DBG_SHANKS)
+      std::cout << "SHANKS: End giant_step" << std::endl;
+    sqr(G, G); makeshift square above
+        if(DBG_SHANKS) std::cout << "SHANKS: Begin adjust, baby_step" <<
+        std::endl;
+    if (DBG_SHANKS)
+      std::cout << "SHANKS: G distance is " << G.get_distance() << std::endl;
     G.adjust(u);
-    if(DBG_SHANKS) std::cout << "SHANKS: G distance is " << G.get_distance() << std::endl;
+    if (DBG_SHANKS)
+      std::cout << "SHANKS: G distance is " << G.get_distance() << std::endl;
     if (G.is_one())
       G.baby_step();
-//     if(DBG_SHANKS) std::cout << "SHANKS: End adjust, baby_step" << std::endl;
-    if(DBG_SHANKS) std::cout << "SHANKS: G distance is " << G.get_distance() << std::endl;
+        if(DBG_SHANKS) std::cout << "SHANKS: End adjust, baby_step" <<
+        std::endl;
+    if (DBG_SHANKS)
+      std::cout << "SHANKS: G distance is " << G.get_distance() << std::endl;*/
   }
 
-//   if(DBG_SHANKS) std::cout << "SHANKS: End baby step list computation" << std::endl;
+  //   if(DBG_SHANKS) std::cout << "SHANKS: End baby step list computation" <<
+  //   std::endl;
   //
   // compute giant steps until R is found or the bound is exceeded
   //
-//   if(DBG_SHANKS) std::cout << "SHANKS: Begin giant step traversal" << std::endl;
+  //   if(DBG_SHANKS) std::cout << "SHANKS: Begin giant step traversal" <<
+  //   std::endl;
   long i;
 
-//   if(DBG_SHANKS) std::cout << "SHANKS: s and u are " << s << " and " << u << std::endl;
+  //   if(DBG_SHANKS) std::cout << "SHANKS: s and u are " << s << " and " << u
+  //   << std::endl;
   while (IsZero(regulator) && (bound == 0 || A.eval() <= bound)) {
     s += u;
 
+    if (DBG_SHANKS)
+      std::cout << "SHANKS: (" << G.get_qib().get_a() << ", "
+                << G.get_qib().get_b() << ", " << G.get_qib().get_c() << ") "
+                << G.get_distance() << std::endl;
 
-    if(DBG_SHANKS) std::cout << "SHANKS: (" << G.get_qib().get_a() << ", "
-                    << G.get_qib().get_b() << ", "
-                    << G.get_qib().get_c() << ") "
-                    << G.get_distance() << std::endl;
-
-    if(DBG_SHANKS) std::cout << "SHANKS: (" << A.get_qib().get_a() << ", "
-                    << A.get_qib().get_b() << ", "
-                    << A.get_qib().get_c() << ") "
-                    << A.get_distance() << std::endl;
+    if (DBG_SHANKS)
+      std::cout << "SHANKS: (" << A.get_qib().get_a() << ", "
+                << A.get_qib().get_b() << ", " << A.get_qib().get_c() << ") "
+                << A.get_distance() << std::endl;
     A.giant_step(G);
 
-    if(DBG_SHANKS) std::cout << "SHANKS: (" << A.get_qib().get_a() << ", "
-                    << A.get_qib().get_b() << ", "
-                    << A.get_qib().get_c() << ") "
-                    << A.get_distance() << std::endl;
+    if (DBG_SHANKS)
+      std::cout << "SHANKS: (" << A.get_qib().get_a() << ", "
+                << A.get_qib().get_b() << ", " << A.get_qib().get_c() << ") "
+                << A.get_distance() << std::endl;
 
-                    //mul(A, A, G); makeshift multiplication above
-    A.adjust(s);
+    // mul(A, A, G); makeshift multiplication above
+    //A.adjust(s);
 
     // search for A, rho_1(A), ..., rho_l(A) in the hash table
-    if(DBG_SHANKS) std::cout << "SHANKS: A distance is " << A.get_distance() << std::endl;
+    if (DBG_SHANKS)
+      std::cout << "SHANKS: A distance is " << A.get_distance() << std::endl;
     AA = A;
-    if(DBG_SHANKS) std::cout << "SHANKS: AA distance is " << AA.get_distance() << std::endl;
-    if(DBG_SHANKS) std::cout << "SHANKS: M  is " << M << std::endl;
-    if(DBG_SHANKS) std::cout << "SHANKS: regulator is " << regulator << std::endl;
+    if (DBG_SHANKS)
+      std::cout << "SHANKS: AA distance is " << AA.get_distance() << std::endl;
+    if (DBG_SHANKS)
+      std::cout << "SHANKS: M  is " << M << std::endl;
+    if (DBG_SHANKS)
+      std::cout << "SHANKS: regulator is " << regulator << std::endl;
     for (i = 0; i < M && IsZero(regulator); ++i) {
       F = prin_list.search(AA.hash_real());
       if (F) {
         // found AA in the hash table!
-        if(DBG_SHANKS) std::cout << "SHANKS: found AA in the hash table! " << std::endl;
+        if (DBG_SHANKS) {
+          std::cout << "SHANKS: found AA in the hash table! " << std::endl;
+          std::cout << "SHANKS: AA distance is " << AA.get_distance() << std::endl;
+          std::cout << "SHANKS: F distance is " << F->get_d() << std::endl;
+          }
         combine_BSGS(regulator, AA, F);
-        if(DBG_SHANKS) std::cout << "SHANKS: regulator is " << regulator << std::endl;
+        if (DBG_SHANKS)
+          std::cout << "SHANKS: regulator is " << regulator << std::endl;
         nuclose(C, FloorToZZ(regulator));
         C.adjust(regulator);
         regulator = C.get_distance();
-        if(DBG_SHANKS) std::cout << "SHANKS: regulator is " << regulator << std::endl;
+        if (DBG_SHANKS)
+          std::cout << "SHANKS: regulator is " << regulator << std::endl;
 
       } else {
         F = prin_list.search((AA.conjugate()).hash_real());
         if (F) {
           // found A^-1 in the hash table!
-          if(DBG_SHANKS) std::cout << "SHANKS: found AA^-1 in the hash table! " << std::endl;
+          if (DBG_SHANKS) {
+            std::cout << "SHANKS: found AA^-1 in the hash table! " << std::endl;
+          }
           combine_conj_BSGS(regulator, AA, F);
           nuclose(C, FloorToZZ(regulator));
           C.adjust(regulator);
           regulator = C.get_distance();
         } else if (i < M)
           // AA.rho(); Swapping this out for AA.baby_step();
-          if(DBG_SHANKS) std::cout << "SHANKS: AA distance is " << AA.get_distance() << std::endl;
-          AA.baby_step();
-          if(DBG_SHANKS) std::cout << "SHANKS: AA distance is " << AA.get_distance() << std::endl;
+          if (DBG_SHANKS)
+            std::cout << "SHANKS: AA distance is " << AA.get_distance()
+                      << std::endl;
+        AA.baby_step();
+        if (DBG_SHANKS)
+          std::cout << "SHANKS: AA distance is " << AA.get_distance()
+                    << std::endl;
       }
     }
-    if(DBG_SHANKS) std::cout << "SHANKS: regulator is " << regulator << std::endl;
-
+    if (DBG_SHANKS)
+      std::cout << "SHANKS: regulator is " << regulator << std::endl;
   }
-  if(DBG_SHANKS) std::cout << "SHANKS: End giant step traversal" << std::endl;
+  if (DBG_SHANKS)
+    std::cout << "SHANKS: End giant step traversal" << std::endl;
   if (!IsZero(regulator))
     Rconditional = false;
 
-  if(DBG_SHANKS) std::cout << "SHANKS: End - regulator is " << regulator << std::endl;
+  if (DBG_SHANKS)
+    std::cout << "SHANKS: End - regulator is " << regulator << std::endl;
+  if(DBG_LENSTR || DBG_SHANKS) {std::cout << "SHANKS: FINISH" << std::endl;}
 }
 
 //
@@ -684,39 +999,54 @@ void RegulatorLenstraData<ZZ, U>::regulator_bsgs(ZZ &bound) {
 //      returns an approximation of hR
 //
 
-template <class U> ZZ RegulatorLenstraData<ZZ, U>::approximate_hR() {
-  ZZ hR;
-  RR temp, FI;
+template <class U> U RegulatorLenstraData<ZZ, U>::approximate_hR() {
+
+  if(DBG_LENSTR || DBG_APPRHR) {std::cout << "APPRHR: STARTING" << std::endl;}
+  RR hR, FI;
 
   long n = get_optimal_Q_cnum();
-
   FI = l_function->approximateL1(n);
+
+  if (DBG_APPRHR) {
+    std::cout << "APPRHR: get_optimal_Q_cnum() returned " << n << std::endl;
+    std::cout << "APPRHR: FI = l_function->approximateL1(n) is " << FI
+              << std::endl;
+  }
 
   if (quadratic_order->is_imaginary()) {
     // h = sqrt(delta) L / Pi
-    temp = FI * SqrRoot(to_RR(-delta)) / ComputePi_RR();
+    hR = FI * SqrRoot(to_RR(-delta)) / ComputePi_RR();
     if (delta == -4)
-      temp *= 2;
+      hR *= 2;
     if (delta == -3)
-      temp *= 3;
+      hR *= 3;
   } else {
     // hR = sqrt(delta) L / 2
-    temp = FI * SqrRoot(to_RR(delta)) / 2;
+    hR = FI * SqrRoot(to_RR(delta)) / to_RR(2);
   }
 
-  hR = CeilToZZ(temp);
-
-  return hR;
+  if(DBG_LENSTR || DBG_APPRHR) {std::cout << "APPRHR: FINISHED" << std::endl;}
+  return to<U>(hR);
 }
 
 template <class U>
-void RegulatorLenstraData<ZZ, U>::optimize_K(ZZ &bound, const ZZ &S, const ZZ &N,
-                                            long l) {
+void RegulatorLenstraData<ZZ, U>::optimize_K(ZZ &bound, const ZZ &S,
+                                             const ZZ &N, long l) {
+  if(DBG_LENSTR || DBG_OPTIMK) {std::cout << "OPTIMK: STARTING" << std::endl;}
   RR K = to_RR(bound);
   RR mu = get_mu(delta);
   RR rS = to_RR(S);
   RR rN = to_RR(N);
   RR rn;
+
+  if (DBG_OPTIMK) {
+  std::cout << "K0 = " << bound << endl;
+  std::cout << "mu = " << mu << endl;
+  std::cout << "S = " << S << endl;
+  std::cout << "N = " << N << endl;
+  std::cout << "l = " << l << endl;
+  std::cout << endl;
+  }
 
   if (parallel)
     rn = to_RR(parallel);
@@ -727,51 +1057,57 @@ void RegulatorLenstraData<ZZ, U>::optimize_K(ZZ &bound, const ZZ &S, const ZZ &N
 
   F = func(K, rS, rN, mu, rn, l);
   dF = dfunc(K, rS, rN, mu, rn, l);
-  if(DBG_OPTIMK) {cout << "K = " << K << ", F(K) = " << F << ", F'(K) = " << dF << endl;}
+  if (DBG_OPTIMK) {
+  std::cout << "K = " << K << ", F(K) = " << F << ", F'(K) = " << dF
+            << std::endl;
+  }
 
-  while (abs(F) > to_RR(0.00001)) {
+  while (abs(F) > to_RR(0.00001) && K - F / dF > 0) {
     K = K - F / dF;
     F = func(K, rS, rN, mu, rn, l);
     dF = dfunc(K, rS, rN, mu, rn, l);
-    if(DBG_OPTIMK) {cout << "K = " << K << ", F(K) = " << F << ", F'(K) = " << dF << endl;}
   }
-  if(DBG_OPTIMK) {cout << "K = " << K << ", F(K) = " << F << endl;}
-  if(DBG_OPTIMK) {std::cout << "OPTIMK: assign bound" << std::endl;}
   bound = FloorToZZ(K);
-  if(DBG_OPTIMK) {std::cout << "OPTIMK: End" << std::endl;}
+  if(DBG_LENSTR || DBG_OPTIMK) {std::cout << "OPTIMK: FINISHED" << std::endl;}
 }
 
 template <class U>
 void RegulatorLenstraData<ZZ, U>::combine_BSGS(
-    U &dist, const QuadraticInfElement<ZZ, U> &DD, const HashEntryReal<ZZ, U> *F) {
+    U &dist, const QuadraticInfElement<ZZ, U> &DD,
+    const HashEntryReal<ZZ, U> *F) {
+
   dist = DD.get_distance() - F->get_d();
 }
 
 template <class U>
 void RegulatorLenstraData<ZZ, U>::combine_conj_BSGS(
-    U &dist, const QuadraticInfElement<ZZ, U> &DD, const HashEntryReal<ZZ, U> *F) {
-  dist = DD.get_distance() + F->get_d() - deg(DD.get_qib().get_a());
-}
+    U &dist, const QuadraticInfElement<ZZ, U> &DD,
+    const HashEntryReal<ZZ, U> *F) {
 
+  dist = F->get_d() - DD.get_distance() - log(to<U>(DD.get_qib().get_a()));
+}
 
 //
 // lower_bound_hR()
 // Task: returns a lower bound of hR such that L < hR < 2L
 //
-template <class U>
-ZZ RegulatorLenstraData<ZZ, U>::lower_bound_hR() {
+template <class U> ZZ RegulatorLenstraData<ZZ, U>::lower_bound_hR() {
+
+  if(DBG_LENSTR || DBG_LOBOHR) {std::cout << "LOBOHR: STARTING" << std::endl;}
   ZZ hR;
   RR temp, FI;
 
-  //START: Temporary variables needed (previously declared in ANTL-Import's quadratic_order
-  bool unconditional = true;
+  // START: Temporary variables needed (previously declared in ANTL-Import's
+  // quadratic_order
+  bool unconditional = false;
   int info = 0;
   bool use_tables = false;
-  //FINISH: Temporary variables needed (previously declared in ANTL-Import's quadratic_order
+  // FINISH: Temporary variables needed (previously declared in ANTL-Import's
+  // quadratic_order
 
   if (unconditional) {
     if (info > 1) {
-      cout << "Lower bound hR with L(0,X)" << endl;
+      std::cout << "Lower bound hR with L(0,X)" << std::endl;
     }
 
     // compute hR apporximation
@@ -781,10 +1117,11 @@ ZZ RegulatorLenstraData<ZZ, U>::lower_bound_hR() {
         FI = l_function->approximateL0_ImaginaryNumberField_table(
             log(sqrt(double(2))));
       else
-        FI = l_function->approximateL0_ImaginaryNumberField(log(sqrt(double(2))));
+        FI = l_function->approximateL0_ImaginaryNumberField(
+            log(sqrt(double(2))));
 
       if (info > 1) {
-        cout << "L(0,X) approx " << FI << endl;
+        std::cout << "L(0,X) approx " << FI << std::endl;
       }
 
       temp = FI;
@@ -795,18 +1132,19 @@ ZZ RegulatorLenstraData<ZZ, U>::lower_bound_hR() {
 
     } else {
       if (use_tables)
-        FI = l_function->approximateL0_RealNumberField_table(log(sqrt(double(2))));
+        FI = l_function->approximateL0_RealNumberField_table(
+            log(sqrt(double(2))));
       else
         FI = l_function->approximateL0_RealNumberField(log(sqrt(double(2))));
 
       if (info > 1) {
-        cout << "L(0,X) approx " << FI << endl;
+        std::cout << "L(0,X) approx " << FI << std::endl;
       }
       temp = FI;
     }
   } else {
     if (info > 1) {
-      cout << "Lower bound hR with L(1,X)" << endl;
+      std::cout << "Lower bound hR with L(1,X)" << std::endl;
     }
 
     if (use_tables)
@@ -814,12 +1152,12 @@ ZZ RegulatorLenstraData<ZZ, U>::lower_bound_hR() {
     else {
       long n = get_optimal_Q();
       if (info > 2)
-        cout << "using n = " << n << endl;
+        std::cout << "using n = " << n << std::endl;
       FI = l_function->approximateL1(n);
     }
 
     if (info > 1) {
-      cout << "L(1,X) approx " << FI << endl;
+      std::cout << "L(1,X) approx " << FI << std::endl;
     }
 
     if (quadratic_order->is_imaginary()) {
@@ -838,8 +1176,9 @@ ZZ RegulatorLenstraData<ZZ, U>::lower_bound_hR() {
   hR = CeilToZZ(temp / SqrRoot(to_RR(2)));
 
   if (info > 1)
-    cout << "Lower bound = " << hR << endl;
+    std::cout << "Lower bound = " << hR << std::endl;
 
+  if(DBG_LENSTR || DBG_LOBOHR) {std::cout << "LOBOHR: FINISH" << std::endl;}
   return hR;
 }
 
@@ -850,8 +1189,8 @@ ZZ RegulatorLenstraData<ZZ, U>::lower_bound_hR() {
 // such that h* < h < 2h*.
 //
 
-template <class U>
-long RegulatorLenstraData<ZZ, U>::get_optimal_Q() {
+template <class U> long RegulatorLenstraData<ZZ, U>::get_optimal_Q() {
+  if(DBG_LENSTR || DBG_GETOPQ) {std::cout << "GETOPQ: STARTING" << std::endl;}
   long Dlog;
   ZZ temp;
 
@@ -861,7 +1200,10 @@ long RegulatorLenstraData<ZZ, U>::get_optimal_Q() {
   if ((Dlog / 5) > 19)
     return generate_optimal_Q();
 
-  return OQvals[Dlog / 5];
+  long optimal_Q = OQvals[Dlog / 5];
+
+  if(DBG_LENSTR || DBG_GETOPQ) {std::cout << "GETOPQ: FINISH" << std::endl;}
+  return optimal_Q;
 }
 
 //
@@ -870,6 +1212,7 @@ long RegulatorLenstraData<ZZ, U>::get_optimal_Q() {
 //
 
 template <class U> long RegulatorLenstraData<ZZ, U>::generate_optimal_Q() {
+  if(DBG_LENSTR || DBG_GENOPQ) {std::cout << "GENOPQ: STARTING" << std::endl;}
   long OQ;
   RR A, l2;
   PrimeSeq primes;
@@ -884,6 +1227,120 @@ template <class U> long RegulatorLenstraData<ZZ, U>::generate_optimal_Q() {
     A = l_function->calculate_L1_error(delta, OQ);
   } while (A >= l2);
 
+  if(DBG_LENSTR || DBG_GENOPQ) {std::cout << "GENOPQ: FINISHED" << std::endl;}
   return OQ;
 }
+
+//
+// quadratic_order<T>::find_hstar
+//
+// Task:
+//      finds the regulator unconditionally given a multiple.  If S is the
+//      multiply, requires S^1/3 operations.
+//
+
+template <class U>
+void RegulatorLenstraData<ZZ, U>::find_hstar(ZZ &hstar, const U &S,
+                                             const ZZ &Pmax) {
+  if(DBG_LENSTR || DBG_FHSTAR) {std::cout << "FHSTAR: STARTING" << std::endl;}
+
+  set(hstar);
+
+  if (DBG_FHSTAR) {
+    std::cout << "FHSTAR: hstar = " << S << std::endl;
+    std::cout << "FHSTAR: S = " << S << std::endl;
+    std::cout << "FHSTAR: Pmax = " << Pmax << std::endl;
+  }
+
+  // Generate a list of primes
+  std::vector<int> primes;
+
+  if (DBG_FHSTAR) {
+    std::cout << "Generating candidate primes" << std::endl;
+  }
+
+  for (int i = 2; i <= Pmax; i++) {
+    primes.push_back(i);
+  }
+
+  if (DBG_FHSTAR) {
+    std::cout << "Sieving primes" << std::endl;
+  }
+
+  for (int i = 0; i < primes.size(); i++) {
+    for (int j = i + 1; j < primes.size(); j++) {
+      if (primes.at(j) % primes.at(i) == 0) {
+        primes.erase(primes.begin() + j);
+      }
+    }
+  }
+
+  // Preparation for
+  QuadraticInfElement<ZZ, U> target_qie{*quadratic_order};
+  U target_distance;
+
+  // Compute the power of each prime in the factorization of hstar
+  if (DBG_FHSTAR) {
+    std::cout << "FHSTAR: Testing each prime" << std::endl;
+  }
+  for (auto prime : primes) {
+    if (DBG_FHSTAR) {
+      std::cout << "FHSTAR: prime is " << prime << std::endl;
+    }
+    int power = 1;
+    target_distance = S / to<U>(prime);
+    nuclose(target_qie, FloorToZZ(target_distance));
+    target_qie.adjust(target_distance);
+
+    if (DBG_FHSTAR) {
+        std::cout << "FHSTAR: target_distance was " << target_distance << std::endl;
+        std::cout << "FHSTAR: target_qie was " << target_qie.get_qib() << std::endl;
+        std::cout << "FHSTAR: target_qie distance was " << target_qie.get_distance() << std::endl;
+      }
+
+    // Increase prime power until corresponding distance is no longer a multiple
+    // of the regulator
+    if (DBG_FHSTAR) {
+    std::cout << "FHSTAR: Finding power of current prime" << std::endl;
+    }
+    while (target_qie.is_one() && abs(target_qie.get_distance() - target_distance) < 0.0000001) {
+      if (DBG_FHSTAR) {
+        std::cout << "FHSTAR: power is " << power << std::endl;
+      }
+      power++;
+      target_distance = target_distance / to<U>(prime);
+      nuclose(target_qie, FloorToZZ(target_distance));
+      target_qie.adjust(target_distance);
+
+      if (DBG_FHSTAR) {
+        std::cout << "FHSTAR: target_distance was " << target_distance << std::endl;
+        std::cout << "FHSTAR: target_qie was " << target_qie.get_qib() << std::endl;
+        std::cout << "FHSTAR: target_qie distance was " << target_qie.get_distance() << std::endl;
+      }
+
+    }
+    if (DBG_FHSTAR) {
+        std::cout << "FHSTAR: hstar was " << hstar <<  std::endl;
+        std::cout << "FHSTAR: prime was " << prime << std::endl;
+        std::cout << "FHSTAR: power was " << power-1 << std::endl;
+      }
+    hstar *= FloorToZZ(pow(double(prime), double(power-1)));
+    if (DBG_FHSTAR) {
+        std::cout << "FHSTAR: hstar is " << hstar << std::endl;
+      }
+  }
+
+  // Using hstar, computer the regulator
+  target_distance = S / to<U>(hstar);
+  nuclose(target_qie, FloorToZZ(target_distance));
+  target_qie.adjust(target_distance);
+  regulator = target_qie.get_distance();
+
+  if (DBG_FHSTAR) {
+    std::cout << "FHSTAR: hstar = " << hstar << std::endl;
+    std::cout << "FHSTAR: R = " << regulator << std::endl;
+  }
+  if(DBG_LENSTR || DBG_FHSTAR) {std::cout << "FHSTAR: FINISHED" << std::endl;}
+}
+
 #endif

@@ -58,7 +58,7 @@ TEST_CASE("ClassGroupReal<ZZ>: Does it work?", "[ClassGroupReal]") {
 
     // Computing h*
     double regulator = correct_regulators.at(i);
-    ZZ h_star = regulator_lenstra_data.lower_bound_hR() / regulator;
+    ZZ h_star = CeilToZZ(to_RR(regulator_lenstra_data.lower_bound_hR()) / to_RR(regulator));
 
     // Setting up the ClassGroupBSGSReal object
     ClassGroupBSGSReal<ZZ> class_group_bsgs_real1{&quad_order};
