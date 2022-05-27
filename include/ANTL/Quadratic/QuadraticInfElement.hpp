@@ -24,6 +24,10 @@ template <class T, class S> class QuadraticInfElement;
 // Forward declarations of friend functions
 
 template <class T, class S>
+bool operator==(const QuadraticInfElement<T, S> &qie_a,
+                const QuadraticInfElement<T, S> &qie_b);
+
+template <class T, class S>
 void mul(QuadraticInfElement<T, S> qie_a, QuadraticInfElement<T, S> qie_b);
 template <class T, class S>
 void mul(QuadraticInfElement<T, S> qie_a, QuadraticInfElement<T, S> qie_b,
@@ -81,6 +85,9 @@ public:
   QuadraticIdealBase<T> get_qib() const;
   S get_distance() const;
 
+  // Friend functions for overloaded binary operators
+  friend bool operator==<T, S>(const QuadraticInfElement<T, S> &qie_a,
+                               const QuadraticInfElement<T, S> &qie_b);
   // Friend functions for arithmetic
   friend void mul<T, S>(QuadraticInfElement<T, S> qie_a,
                         QuadraticInfElement<T, S> qie_b);
@@ -118,7 +125,7 @@ public:
   void adjust(const ZZ &a);
   void adjust(const S &a);
   void assign(const HashEntryReal<T, S> &her_a);
-  void assign (const QuadraticIdealBase < T > &B);
+  void assign(const QuadraticIdealBase<T> &B);
   void assign_one();
 
   friend void conjugate<T, S>(QuadraticInfElement<T, S> &qie_a,

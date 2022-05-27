@@ -2,8 +2,7 @@ using namespace ANTL;
 
 namespace ANTL {
 
-template <class T, class S>
-QuadraticInfElement<T, S>::QuadraticInfElement(){};
+template <class T, class S> QuadraticInfElement<T, S>::QuadraticInfElement(){};
 
 template <class T, class S>
 QuadraticInfElement<T, S>::QuadraticInfElement(QuadraticOrder<T> &quad_o)
@@ -62,7 +61,6 @@ void QuadraticInfElement<T, S>::giant_step(
                             ->get_mul_comp()
                             ->get_RelativeGenerator()
                             ->template to_log<S>();
-
 
   update_distance_add(Distance, Distance, relative_distance_1);
   update_distance_add(Distance, Distance, relative_distance_2);
@@ -128,15 +126,15 @@ void QuadraticInfElement<T, S>::assign(const HashEntryReal<T, S> &her_a) {
   T b = her_a.get_b();
   T c = (b * b - Delta) / (a << 2);
 
-  get_qib().assign(a, b, c);
-  get_qib().normalize();
+  qib.assign(a, b, c);
+  qib.normalize();
 
   // this->reduce_real ();
   Distance = her_a.get_d();
 }
 
 template <class T, class S> void QuadraticInfElement<T, S>::assign_one() {
-  this->get_qib().assign_one();
+  qib.assign_one();
   Distance = 0;
 }
 
@@ -150,9 +148,7 @@ HashEntryReal<T, S> QuadraticInfElement<T, S>::hash_real() const {
   // it is here in the generic implementation temporarily
   // eventually a QuadraticInfElement<ZZ, S> class definition will be required
 
-  return HashEntryReal<T, S>(get_qib().get_a(),
-                             get_qib().get_b() % (get_qib().get_a() << 1),
-                             Distance);
+  return HashEntryReal<T, S>(get_qib().get_a(), get_qib().get_b(), Distance);
 }
 
 template <class T, class S> bool QuadraticInfElement<T, S>::is_one() const {
@@ -209,11 +205,9 @@ S QuadraticInfElement<T, S>::get_baby_steps(
   // below is the implementation for class T = ZZ
   // it is here in the generic implementation temporarily
   // eventually a QuadraticInfElement<ZZ, S> class definition will be required
-
-  ZZ old_a = qib.get_a(), old_b = qib.get_b(), old_c = qib.get_c(),
-     a_zero = A.get_qib().get_a();
+  ZZ old_a = qib.get_a(), old_b = qib.get_b(), old_c = qib.get_c();
   ZZ q, r, new_c, new_a, new_b;
-  S relative_generator, relative_distance, regulator;
+  S relative_generator, relative_distance, regulator, initial_distance = Distance;
 
   prin_list.hash(this->hash_real());
 
@@ -228,20 +222,22 @@ S QuadraticInfElement<T, S>::get_baby_steps(
 
     // Computation of the relative distance
     relative_generator =
-        abs(to<S>(2 * new_a) / (to<S>(new_b) - sqrt(to<S>(Delta))));
+        abs(to<S>(2*new_a) / (to<S>(new_b) - sqrt(to<S>(Delta))));
     relative_distance = log(relative_generator);
 
     // The two checks below are for the cases where consecutive coefficients are
     // found to be equal in the continued fraction expansion
     if (old_a == new_a) {
-      regulator = 2 * Distance;
+      regulator = 2 * (Distance);
+      std::cout << "old_a == new_a" << std::endl;
       update_distance_add(regulator, regulator, relative_distance);
       regulator = regulator - log(to<S>(old_a));
       return regulator;
     }
 
     if (old_b == new_b && (!IsOne(old_a))) {
-      regulator = 2 * Distance;
+      std::cout << "old_b == new_b" << std::endl;
+      regulator = 2 * (Distance);
       regulator = regulator - log(to<S>(old_a));
       return regulator;
     }
@@ -256,8 +252,9 @@ S QuadraticInfElement<T, S>::get_baby_steps(
     old_b = new_b;
     old_c = new_c;
 
-    if (qib == A.get_qib())
+    if (qib == A.get_qib()) {
       return Distance;
+    }
 
     prin_list.hash(hash_real());
 
@@ -339,6 +336,7 @@ S QuadraticInfElement<T, S>::get_baby_steps(
     }
 
     if (A.is_one() && old_b == new_b && (!IsOne(old_a))) {
+      std::cout << "old_b == new_b" << std::endl;
       regulator = 2 * Distance;
       regulator = regulator / to<S>(old_a);
       return regulator;
@@ -387,18 +385,24 @@ void conjugate(QuadraticInfElement<T, S> &qie_a,
 template <class T, class S>
 QuadraticInfElement<T, S> QuadraticInfElement<T, S>::conjugate() {
 
-  QuadraticInfElement<T, S> qie_a_conj;
+  QuadraticInfElement<T, S> qie_conj{*qib.get_QO()};
 
-  qie_a_conj = *this;
-  qie_a_conj.get_qib().set_b(-qie_a_conj.get_qib().get_b());
+  qie_conj.qib = qib;
+  qie_conj.get_qib().set_b(-qie_conj.get_qib().get_b());
 
-  update_distance_negate(qie_a_conj.Distance, qie_a_conj.Distance);
-  update_distance_subtract(qie_a_conj.Distance, qie_a_conj.Distance,
-                           to<S>(qie_a_conj.get_qib().get_a()));
+  update_distance_negate(qie_conj.Distance, qie_conj.Distance);
+  update_distance_subtract(qie_conj.Distance, qie_conj.Distance,
+                           to<S>(qie_conj.get_qib().get_a()));
 
-  qie_a_conj.get_qib().normalize();
+  qie_conj.get_qib().normalize();
 
-  return qie_a_conj;
+  return qie_conj;
+}
+
+template <class T, class S>
+bool operator==(const QuadraticInfElement<T, S> &qie_a,
+                const QuadraticInfElement<T, S> &qie_b) {
+  return qie_a.qib == qie_a.qib;
 }
 
 template <class T, class S>
@@ -407,8 +411,9 @@ void nuclose(QuadraticInfElement<T, S> &C, const ZZ &n) {
   ZZ j, ex, s;
   C.assign_one();
 
-  if (IsZero(n))
+  if (IsZero(n)) {
     return;
+  }
   // compute binary expansion of ex (hi order to low order)
   ex = abs(n);
   clear(j);
@@ -419,12 +424,15 @@ void nuclose(QuadraticInfElement<T, S> &C, const ZZ &n) {
     ex >>= 1;
     ++k;
   }
+
   s = 1;
   C.adjust(s);
+
 
   for (i = 1; i <= k; ++i) {
     s <<= 1;
     C.giant_step(C);
+
     // sqr(C, C); makeshift square above
 
     if (IsOdd(j))
