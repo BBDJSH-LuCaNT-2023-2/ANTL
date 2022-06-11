@@ -640,7 +640,13 @@ template <class T, class U>
 void RegulatorLenstraData<T, U>::combine_conj_BSGS(
     RR &dist, const QuadraticInfElement<T, U> &DD,
     const HashEntryReal<T, U> *F) {
-  dist = DD.get_distance() + F->get_d() - deg(DD.get_qib().get_a());
+    QuadraticInfElement<T, U> C{*quadratic_order}, DD_conj{*quadratic_order};
+    C.assign(*F);
+    DD_conj = DD.conjugate();
+    C.nuclose(FloorToZZ(DD_conj.get_distance()));
+    C.adjust (DD_conj.get_distance());
+    dist = DD.get_distance () + C.get_distance ();
+    dist = dist - to<U>(DD.get_a());
 }
 
 } // namespace ANTL

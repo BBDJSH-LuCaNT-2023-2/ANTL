@@ -14,34 +14,23 @@ bool DBG_LENSTRA_TEST = true;
 
 TEST_CASE("RegulatorLenstra<ZZ>: Does it work?", "[RegulatorLenstra]") {
 
-  extern const std::array<long, 1000> discriminants;
-  extern const std::array<double, 1000> correct_regulators;
+  extern const std::array<long, 1100> discriminants;
+  extern const std::array<double, 1100> correct_regulators;
 
-//   QuadraticOrder<ZZ> quad_order1{ZZ(504204)};
-//   QuadraticInfElement<ZZ, double> quad_inf_element1{quad_order1};
-//
-//   for(int i = 0; i < 180; ++i) {
-//     std::cout << quad_inf_element1.get_qib() << " with distance " << quad_inf_element1.get_distance() << std::endl;
-//     quad_inf_element1.baby_step();
-//   }
-
-  double computed_regulators[1000];
-  bool computed_correctly[1000];
-  std::vector<std::string> case_types{1000, ""};
+  QuadraticOrder<ZZ> quad_order1{ZZ(30061)};
+  QuadraticInfElement<ZZ, double> quad_inf_element1{quad_order1};
 
   int correct_count = 0;
   int test_start = 0;
-  int test_bound = 1000;
+  int test_bound = correct_regulators.size();
 
-//   int test_start = 993;
-//   int test_bound = test_start + 1;
+  double computed_regulators[test_bound];
+  bool computed_correctly[test_bound];
+  std::vector<std::string> case_types{size_t(test_bound), ""};
 
-//     std::vector<int> test_cases= {381, 431, 458};
-  //   std::vector<int> test_cases= {28};
-
-//     for(auto i : test_cases) {
   for (int i = test_start; i < test_bound; i++) {
-    std::cout << "Running Lenstra test " << i << std::endl;
+    std::cout << "Running Lenstra test " << i << " expected regulator is " << correct_regulators[i] << std::endl;
+    std::cout << "Discriminat is " << discriminants[i] << std::endl;
     QuadraticOrder<ZZ> quad_order{ZZ(discriminants[i])};
     QuadraticNumber<ZZ> quad_number1{quad_order};
     QuadraticNumber<ZZ> quad_number2{quad_order};
@@ -92,7 +81,7 @@ TEST_CASE("RegulatorLenstra<ZZ>: Does it work?", "[RegulatorLenstra]") {
                 << std::setw(6) << computed_correctly[i] << std::setw(11)
                 << correct_regulators[i] << std::setw(10)
                 << computed_regulators[i] << std::setw(7) << discriminants[i]
-                << std::setw(11) << case_types.at(i) << std::endl;
+                << std::setw(35) << case_types.at(i) << std::endl;
 
       if (computed_correctly[i]) {
         correct_count++;
