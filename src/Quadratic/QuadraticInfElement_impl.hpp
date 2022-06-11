@@ -229,14 +229,14 @@ S QuadraticInfElement<T, S>::get_baby_steps(
     // found to be equal in the continued fraction expansion
     if (old_a == new_a) {
       regulator = 2 * (Distance);
-      std::cout << "old_a == new_a" << std::endl;
+//       std::cout << "old_a == new_a" << std::endl;
       update_distance_add(regulator, regulator, relative_distance);
       regulator = regulator - log(to<S>(old_a));
       return regulator;
     }
 
     if (old_b == new_b && (!IsOne(old_a))) {
-      std::cout << "old_b == new_b" << std::endl;
+//       std::cout << "old_b == new_b" << std::endl;
       regulator = 2 * (Distance);
       regulator = regulator - log(to<S>(old_a));
       return regulator;
@@ -336,7 +336,7 @@ S QuadraticInfElement<T, S>::get_baby_steps(
     }
 
     if (A.is_one() && old_b == new_b && (!IsOne(old_a))) {
-      std::cout << "old_b == new_b" << std::endl;
+//       std::cout << "old_b == new_b" << std::endl;
       regulator = 2 * Distance;
       regulator = regulator / to<S>(old_a);
       return regulator;
@@ -373,13 +373,14 @@ void conjugate(QuadraticInfElement<T, S> &qie_a,
                QuadraticInfElement<T, S> const &qie_b) {
 
   qie_a = qie_b;
-  qie_a.get_qib().set_b(-qie_a.get_qib().get_b());
+  qie_a.qib.set_b(-qie_b.qib.get_b());
 
+  update_distance_add(qie_a.Distance, qie_a.get_distance(), qie_b.get_distance());
   update_distance_negate(qie_a.Distance, qie_a.Distance);
   update_distance_subtract(qie_a.Distance, qie_a.Distance,
-                           to<S>(qie_a.get_qib().get_a()));
+                           log(to<S>(qie_a.qib.get_a())));
 
-  qie_a.get_qib().normalize();
+  qie_a.qib.normalize();
 }
 
 template <class T, class S>
@@ -388,13 +389,15 @@ QuadraticInfElement<T, S> QuadraticInfElement<T, S>::conjugate() {
   QuadraticInfElement<T, S> qie_conj{*qib.get_QO()};
 
   qie_conj.qib = qib;
-  qie_conj.get_qib().set_b(-qie_conj.get_qib().get_b());
+  qie_conj.qib.set_b(-qib.get_b());
 
+
+  update_distance_add(qie_conj.Distance, Distance, qie_conj.Distance);
   update_distance_negate(qie_conj.Distance, qie_conj.Distance);
   update_distance_subtract(qie_conj.Distance, qie_conj.Distance,
-                           to<S>(qie_conj.get_qib().get_a()));
+                           log(to<S>(qie_conj.qib.get_a())));
 
-  qie_conj.get_qib().normalize();
+  qie_conj.qib.normalize();
 
   return qie_conj;
 }

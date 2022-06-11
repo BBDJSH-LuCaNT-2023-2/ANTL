@@ -11,20 +11,20 @@ using namespace ANTL;
 template <class U> class RegulatorLenstraData<ZZ, U> {
 private:
   // DBG_CONSTANTS
-  bool DBG_LENSTR = true;
+  bool DBG_LENSTR = false;
   bool DBG_EHRERR = false;
   bool DBG_GOQCNM = false;
   bool DBG_BSGSGL = false;
   bool DBG_GETMU_ = false;
   bool DBG_BSGSES = false;
-  bool DBG_IPLIST = true;
-  bool DBG_SHANKS = true;
+  bool DBG_IPLIST = false;
+  bool DBG_SHANKS = false;
   bool DBG_APPRHR = false;
   bool DBG_OPTIMK = false;
   bool DBG_LOBOHR = false;
   bool DBG_GETOPQ = false;
   bool DBG_GENOPQ = false;
-  bool DBG_FHSTAR = true;
+  bool DBG_FHSTAR = false;
 
   U regulator;
 
@@ -73,9 +73,11 @@ public:
 
   ZZ lower_bound_hR();
 
-  void set_case_type(std::string found_case_type) {case_type = found_case_type;}
+  void set_case_type(std::string found_case_type) {
+    case_type += found_case_type;
+  }
 
-  std::string get_case_type() {return case_type;}
+  std::string get_case_type() { return case_type; }
 
 private:
   ZZ estimate_hR_error();
@@ -164,7 +166,6 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_lenstra() {
     std::cout << "LENSTR: l is " << l << std::endl;
   }
 
-
   B = N * l;
   if (DBG_LENSTR) {
     std::cout << "LENSTR: B is " << B << std::endl;
@@ -173,6 +174,9 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_lenstra() {
   if (IsZero(B)) {
     regulator_bsgs(B);
     S = regulator;
+    if (!IsZero(regulator)) {
+      set_case_type("Initial regulator_bsfs ");
+    }
   }
 
   if (DBG_LENSTR) {
@@ -202,8 +206,9 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_lenstra() {
   // compute list of baby steps (distance < B)
   //
   QuadraticInfElement<ZZ, U> A{*quadratic_order}, C{*quadratic_order},
-      C_gap_check{*quadratic_order}, D{*quadratic_order}, D_gap_check{*quadratic_order},
-      GG{*quadratic_order}, C1{*quadratic_order}, D1{*quadratic_order};
+      C_gap_check{*quadratic_order}, D{*quadratic_order},
+      D_gap_check{*quadratic_order}, GG{*quadratic_order}, C1{*quadratic_order},
+      D1{*quadratic_order};
   HashEntryReal<ZZ, U> *F;
 
   if (IsZero(S)) {
@@ -213,6 +218,7 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_lenstra() {
       regulator = G.get_baby_steps(prin_list, B, A);
       if (DBG_LENSTR) {
         std::cout << "LENSTR: G.get_baby_steps(prin_list, B, A) " << std::endl;
+        std::cout << "LENSTR: B is " << B << std::endl;
       }
     } else {
       regulator = G.get_baby_steps(prin_list, B, A, l, M);
@@ -220,6 +226,10 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_lenstra() {
         std::cout << "LENSTR: G.get_baby_steps(prin_list, B, A, l, M) "
                   << std::endl;
       }
+    }
+
+    if (DBG_LENSTR) {
+        std::cout << "LENSTR: prin_list is " << prin_list << std::endl;
     }
 
     if (!IsZero(regulator)) {
@@ -234,9 +244,9 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_lenstra() {
         std::cout << "LENSTR: G.adjust(s) " << std::endl;
         std::cout << "LENSTR: s is " << s << std::endl;
       }
-      u = 2*s;
+      u = 2 * s;
       if (DBG_LENSTR) {
-      std::cout << "LENSTR: u is " << u << std::endl;
+        std::cout << "LENSTR: u is " << u << std::endl;
       }
       G.giant_step(G);
       if (DBG_LENSTR) {
@@ -267,7 +277,7 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_lenstra() {
       }
       while (abs(GG.eval()) > u) {
         if (DBG_LENSTR) {
-            std::cout << "LENSTR: GG.eval()) > u" << std::endl;
+          std::cout << "LENSTR: GG.eval()) > u" << std::endl;
         }
 
         if (DBG_LENSTR) {
@@ -283,9 +293,17 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_lenstra() {
         }
       }
 
+      if (DBG_LENSTR) {
+        std::cout << "AA is " << AA.get_qib() << " with distance "
+                  << AA.get_distance() << std::endl;
+      }
       s2 = s = AA.get_distance();
       C = AA;
       D = AA.conjugate();
+    }
+
+    else {
+      set_case_type("baby_step list construction ");
     }
   }
 
@@ -298,7 +316,7 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_lenstra() {
   // compute giant steps until R is found or the bound is exceeded
   //
 
-  //Saving initial ideals
+  // Saving initial ideals
   C1 = C;
   D1 = D;
 
@@ -306,11 +324,10 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_lenstra() {
   // baby-step list
   while (IsZero(regulator) && IsZero(S)) {
 
-    if(DBG_LENSTR) {
+    if (DBG_LENSTR) {
       std::cout << "C distance is " << C.get_distance() << std::endl;
       std::cout << "D distance is " << D.get_distance() << std::endl;
     }
-
 
     C_gap_check = C;
     D_gap_check = D;
@@ -321,29 +338,30 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_lenstra() {
 
       F = prin_list.search(C_gap_check.hash_real());
       if (F) {
-        //found C in the hash table!
-        set_case_type("C found");
-        if(DBG_LENSTR) {
+
+        // found C in the hash table!
+        set_case_type("C found ");
+        if (DBG_LENSTR) {
           std::cout << "found C in the hash table!" << std::endl;
         }
 
-        //combine_BSGS(S, C_gap_check, F);
-        S = C_gap_check.get_distance() - F->get_d();
+        combine_BSGS(S, C_gap_check, F);
         break;
       }
 
       F = prin_list.search(D_gap_check.hash_real());
       if (F) {
-        //found D in the hash table!
-        set_case_type("D found");
-        if(DBG_LENSTR) {
+
+        // found D in the hash table!
+        set_case_type("D found ");
+        if (DBG_LENSTR) {
           std::cout << "found D in the hash table!" << std::endl;
         }
 
-        // combine_BSGS(S, D_gap_check, F);
-        S = C1.get_distance() -
+        // combine_conj_BSGS(S, D_gap_check, F);
+        S = AA.get_distance() -
             ((D_gap_check.get_distance() - D1.get_distance()) - F->get_d()) -
-            log(C1.get_qib().get_a());
+            log(AA.get_qib().get_a());
         break;
       }
 
@@ -351,92 +369,95 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_lenstra() {
       D_gap_check.baby_step();
     }
 
-    // If nothing has been found, S will still be zero; Continue with giant steps
+    if(abs(S) < 1) {
+      S = 0;
+    }
+
+    // If nothing has been found, S will still be zero; Continue with giant
+    // steps
     if (IsZero(S)) {
       s += u;
       s2 -= u;
 
-      //mul(C, C, G); makeshift multiplication below
+      // mul(C, C, G); makeshift multiplication below
       C.giant_step(G);
       C.adjust(s);
 
-//       mul(D, D, GG); makeshift multiplication below
-//       D.giant_step(G);
-//       D.adjust(s2);
+      // mul(D, D, GG); makeshift multiplication below
+      D.giant_step(G);
+      // D.adjust(s2);
     }
   }
 
-
-
-//   long i;
-//   C1 = C, D1 = D;
-//
-//   while (IsZero(regulator) && IsZero(S)) {
-//
-//     search for C, rho_1(C), ..., rho_l(C) in the hash table
-//     CC = C;
-//     DD = D;
-//
-//     for (i = 0; i < M && IsZero(S); ++i) {
-//       F = prin_list.search(CC.hash_real());
-//       if (F) {
-//         //found CC in the hash table!
-//         set_case_type("CC found");
-//         if(DBG_LENSTR) {
-//           std::cout << "found CC in the hash table!" << std::endl;
-//         }
-//
-//         combine_BSGS(S, CC, F);
-//       } else {
-//         F = prin_list.search((CC.conjugate()).hash_real());
-//         if (F) {
-//           //found CC^-1 in the hash table!
-//           set_case_type("CC^-1 found");
-//           if(DBG_LENSTR) {
-//             std:: cout << "found CC^-1 in the hash table!" << std::endl;
-//           }
-//
-//           combine_conj_BSGS(S, CC, F);
-//         } else {
-//           F = prin_list.search(DD.hash_real());
-//           if (F) {
-//             //found DD in the hash table!
-//             set_case_type("DD found");
-//
-//             combine_conj_BSGS(S, DD, F);
-//           } else {
-//             F = prin_list.search((DD.conjugate()).hash_real());
-//             if (F) {
-//               //found DD^-1 in the hash table!
-//               set_case_type("DD^-1 found");
-//               if(DBG_LENSTR) {
-//                 std::cout << "found DD^-1 in the hash table!" << std::endl;
-//               }
-//
-//               combine_conj_BSGS(S, DD, F);
-//             } else if (i < M) {
-//               CC.baby_step();
-//               DD.baby_step();
-//             }
-//           }
-//         }
-//       }
-//     }
-//
-//     if (IsZero(S)) {
-//       s += u;
-//
-//       C.giant_step(G);
-//       //mul(C, C, G); makeshift multiplication above
-//       C.adjust(s);
-//
-//       s2 -= u;
-//
-//       D.giant_step(GG);
-//       //mul(D, D, GG); makeshift multiplication above
-//       D.adjust(s2);
-//     }
-//   }
+  //   long i;
+  //   C1 = C, D1 = D;
+  //
+  //   while (IsZero(regulator) && IsZero(S)) {
+  //
+  //     search for C, rho_1(C), ..., rho_l(C) in the hash table
+  //     CC = C;
+  //     DD = D;
+  //
+  //     for (i = 0; i < M && IsZero(S); ++i) {
+  //       F = prin_list.search(CC.hash_real());
+  //       if (F) {
+  //         //found CC in the hash table!
+  //         set_case_type("CC found");
+  //         if(DBG_LENSTR) {
+  //           std::cout << "found CC in the hash table!" << std::endl;
+  //         }
+  //
+  //         combine_BSGS(S, CC, F);
+  //       } else {
+  //         F = prin_list.search((CC.conjugate()).hash_real());
+  //         if (F) {
+  //           //found CC^-1 in the hash table!
+  //           set_case_type("CC^-1 found");
+  //           if(DBG_LENSTR) {
+  //             std:: cout << "found CC^-1 in the hash table!" << std::endl;
+  //           }
+  //
+  //           combine_conj_BSGS(S, CC, F);
+  //         } else {
+  //           F = prin_list.search(DD.hash_real());
+  //           if (F) {
+  //             //found DD in the hash table!
+  //             set_case_type("DD found");
+  //
+  //             combine_conj_BSGS(S, DD, F);
+  //           } else {
+  //             F = prin_list.search((DD.conjugate()).hash_real());
+  //             if (F) {
+  //               //found DD^-1 in the hash table!
+  //               set_case_type("DD^-1 found");
+  //               if(DBG_LENSTR) {
+  //                 std::cout << "found DD^-1 in the hash table!" << std::endl;
+  //               }
+  //
+  //               combine_conj_BSGS(S, DD, F);
+  //             } else if (i < M) {
+  //               CC.baby_step();
+  //               DD.baby_step();
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //
+  //     if (IsZero(S)) {
+  //       s += u;
+  //
+  //       C.giant_step(G);
+  //       //mul(C, C, G); makeshift multiplication above
+  //       C.adjust(s);
+  //
+  //       s2 -= u;
+  //
+  //       D.giant_step(GG);
+  //       //mul(D, D, GG); makeshift multiplication above
+  //       D.adjust(s2);
+  //     }
+  //   }
 
   if (DBG_LENSTR) {
     std::cout << "LENSTR: regulator is " << regulator << std::endl;
@@ -478,7 +499,6 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_lenstra() {
 
     l = bsgs_getl(B, N, entry_size, mu, true);
 
-
     if (DBG_LENSTR) {
       std::cout << "LENSTR: B is " << B << std::endl;
       std::cout << "LENSTR: FloorToZZ(S) is " << FloorToZZ(S) << std::endl;
@@ -486,17 +506,27 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_lenstra() {
       std::cout << "LENSTR: l is " << l << std::endl;
     }
 
-    //THE BELOW LINE SHOULD EVENTUALLY BE UNCOMMENTED
-//     optimize_K(B, FloorToZZ(S), N, l);
+    // THE BELOW LINE SHOULD EVENTUALLY BE UNCOMMENTED
+    //     optimize_K(B, FloorToZZ(S), N, l);
 
     if (DBG_LENSTR) {
-      std::cout << "LENSTR: After optimize_K(B, FloorToZZ(S), N, l)" << std::endl;
+      std::cout << "LENSTR: After optimize_K(B, FloorToZZ(S), N, l)"
+                << std::endl;
       std::cout << "LENSTR: B is " << B << std::endl;
     }
 
-    //THE BELOW LINE SHOULD EVENTUALLY BE UNCOMMENTED
+    // THE BELOW LINE SHOULD EVENTUALLY BE UNCOMMENTED
     B = CeilToZZ(E / SqrRoot(to_RR(K)));
     regulator_bsgs(B);
+    if(!IsZero(regulator)){
+      set_case_type("second regulator_bsgs ");
+    }
+
+    if (DBG_LENSTR) {
+      std::cout << "LENSTR: After regulator_bsgs(B) regulator is " << regulator
+                << std::endl;
+      std::cout << "LENSTR: S is " << S << std::endl;
+    }
 
     ZZ hstar, Pmax;
     if (!IsZero(regulator)) {
@@ -518,7 +548,8 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_lenstra() {
     if (DBG_LENSTR) {
       std::cout << "LENSTR: Factoring out h* - S is " << S << std::endl;
       std::cout << "LENSTR: Factoring out h* - hstar is " << hstar << std::endl;
-      std::cout << "LENSTR: Factoring out h* - regulator is " << regulator << std::endl;
+      std::cout << "LENSTR: Factoring out h* - regulator is " << regulator
+                << std::endl;
       std::cout << "LENSTR: Factoring out h* - nuclose start" << std::endl;
     }
 
@@ -549,7 +580,9 @@ template <class U> U RegulatorLenstraData<ZZ, U>::get_regulator() {
 // Task: returns L such that |hR - hR'| < exp(L)^2
 
 template <class U> ZZ RegulatorLenstraData<ZZ, U>::estimate_hR_error() {
-  if(DBG_LENSTR || DBG_EHRERR) {std::cout << "EHRERR: START" << std::endl;}
+  if (DBG_LENSTR || DBG_EHRERR) {
+    std::cout << "EHRERR: START" << std::endl;
+  }
   ZZ err;
   RR Aval, Fval, temp;
 
@@ -600,12 +633,16 @@ template <class U> ZZ RegulatorLenstraData<ZZ, U>::estimate_hR_error() {
 
   err = CeilToZZ(Fval * log(to_RR(2))) >> 1;
 
-  if(DBG_LENSTR || DBG_EHRERR) {std::cout << "EHRERR: FINISH" << std::endl;}
+  if (DBG_LENSTR || DBG_EHRERR) {
+    std::cout << "EHRERR: FINISH" << std::endl;
+  }
   return err;
 }
 
 template <class U> long RegulatorLenstraData<ZZ, U>::get_optimal_Q_cnum() {
-  if(DBG_LENSTR || DBG_GOQCNM) {std::cout << "DBG_GOQCNM: START" << std::endl;}
+  if (DBG_LENSTR || DBG_GOQCNM) {
+    std::cout << "DBG_GOQCNM: START" << std::endl;
+  }
 
   long dlog;
   ZZ temp;
@@ -613,14 +650,18 @@ template <class U> long RegulatorLenstraData<ZZ, U>::get_optimal_Q_cnum() {
   temp = FloorToZZ(NTL::log10(to_RR(abs(delta))));
   conv(dlog, temp);
 
-  if(DBG_LENSTR || DBG_GOQCNM) {std::cout << "DBG_GOQCNM: FINISH" << std::endl;}
+  if (DBG_LENSTR || DBG_GOQCNM) {
+    std::cout << "DBG_GOQCNM: FINISH" << std::endl;
+  }
   return OQvals_cnum[(dlog / 5)];
 }
 
 template <class U>
 long RegulatorLenstraData<ZZ, U>::bsgs_getl(const ZZ &K, ZZ &N, ZZ &entry_size,
                                             RR &mu, bool nodist) {
-  if(DBG_LENSTR || DBG_BSGSGL) {std::cout << "BSGSGL: START" << std::endl;}
+  if (DBG_LENSTR || DBG_BSGSGL) {
+    std::cout << "BSGSGL: START" << std::endl;
+  }
   ZZ maxN, rootK;
   RR n, temp;
   long l;
@@ -663,7 +704,9 @@ long RegulatorLenstraData<ZZ, U>::bsgs_getl(const ZZ &K, ZZ &N, ZZ &entry_size,
   }
   if (DBG_BSGSGL)
     std::cout << "BSGSGL: N is " << N << std::endl;
-  if(DBG_LENSTR || DBG_BSGSGL) {std::cout << "BSGSGL: FINISH" << std::endl;}
+  if (DBG_LENSTR || DBG_BSGSGL) {
+    std::cout << "BSGSGL: FINISH" << std::endl;
+  }
   return l;
 }
 
@@ -673,19 +716,25 @@ long RegulatorLenstraData<ZZ, U>::bsgs_getl(const ZZ &K, ZZ &N, ZZ &entry_size,
 // computed at compile-time.
 
 template <class U> RR RegulatorLenstraData<ZZ, U>::get_mu(const ZZ &delta) {
-  if(DBG_LENSTR || DBG_GETMU_) {std::cout << "GETMU_: START" << std::endl;}
+  if (DBG_LENSTR || DBG_GETMU_) {
+    std::cout << "GETMU_: START" << std::endl;
+  }
 
   //  return to_RR(2)*((to_RR(NumBits(delta) - 5) / to_RR(10)) + to_RR(6));
   //  return (to_RR(NumBits(delta) - 5) / to_RR(10)) + to_RR(6);
   RR mu = to_RR(6.85) + to_RR(10.62) * to_RR(NumBits(delta)) / to_RR(135);
-  if(DBG_LENSTR || DBG_GETMU_) {std::cout << "GETMU_: FINISH" << std::endl;}
+  if (DBG_LENSTR || DBG_GETMU_) {
+    std::cout << "GETMU_: FINISH" << std::endl;
+  }
   return mu;
 }
 
 template <class U>
 void RegulatorLenstraData<ZZ, U>::bsgs_getentrysize(ZZ &entry_size,
                                                     bool nodist) {
-  if(DBG_LENSTR || DBG_BSGSES) {std::cout << "BSGSES: START" << std::endl;}
+  if (DBG_LENSTR || DBG_BSGSES) {
+    std::cout << "BSGSES: START" << std::endl;
+  }
   ZZ temp;
 
   entry_size = 3 * NTL_BITS_PER_LONG; // space for pointers
@@ -722,7 +771,9 @@ void RegulatorLenstraData<ZZ, U>::bsgs_getentrysize(ZZ &entry_size,
   if (DBG_BSGSES) {
     std::cout << "DBG_BSGSES: End - entry_size is " << entry_size << std::endl;
   }
-  if(DBG_LENSTR || DBG_BSGSES) {std::cout << "BSGSES: FINSH" << std::endl;}
+  if (DBG_LENSTR || DBG_BSGSES) {
+    std::cout << "BSGSES: FINSH" << std::endl;
+  }
 }
 
 // quadratic_order<ZZ>::init_prinlist
@@ -734,7 +785,9 @@ void RegulatorLenstraData<ZZ, U>::init_prinlist(const ZZ &N, long l, U &s,
                                                 long &M,
                                                 QuadraticInfElement<ZZ, U> &G) {
 
-  if(DBG_LENSTR || DBG_IPLIST) {std::cout << "IPLIST: START" << std::endl;}
+  if (DBG_LENSTR || DBG_IPLIST) {
+    std::cout << "IPLIST: START" << std::endl;
+  }
 
   if (DBG_IPLIST) {
     std::cout << "IPLIST: Begin" << std::endl;
@@ -747,17 +800,19 @@ void RegulatorLenstraData<ZZ, U>::init_prinlist(const ZZ &N, long l, U &s,
   // compute B and s
   s = to<U>((N + 2) * l);
 
-  if (DBG_IPLIST){
+  if (DBG_IPLIST) {
     std::cout << "IPLIST: s is " << s << std::endl;
   }
 
   // initialize hash table
   if (prin_list.no_of_elements() > 0) {
     G.assign(prin_list.last_entry());
-    if (DBG_IPLIST){
+    if (DBG_IPLIST) {
       std::cout << "IPLIST: G.assign(prin_list.last_entry())" << std::endl;
-      std::cout << "SHANKS: last_entry is " << prin_list.last_entry() << std::endl;
-      std::cout << "SHANKS: G is " << G.get_qib() << " with distance " << G.get_distance() << std::endl;
+      std::cout << "SHANKS: last_entry is " << prin_list.last_entry()
+                << std::endl;
+      std::cout << "SHANKS: G is " << G.get_qib() << " with distance "
+                << G.get_distance() << std::endl;
     }
     l = prinlist_l;
     M = prinlist_M;
@@ -772,15 +827,18 @@ void RegulatorLenstraData<ZZ, U>::init_prinlist(const ZZ &N, long l, U &s,
     lsize += 100;
     prin_list.initialize(lsize);
     G.assign_one();
-    if (DBG_IPLIST){
+    if (DBG_IPLIST) {
       std::cout << "IPLIST: G.assign_one()" << std::endl;
-      std::cout << "SHANKS: G is " << G.get_qib() << " with distance " << G.get_distance() << std::endl;
+      std::cout << "SHANKS: G is " << G.get_qib() << " with distance "
+                << G.get_distance() << std::endl;
     }
     prinlist_l = l;
     prinlist_s = s;
   }
 
-  if(DBG_LENSTR || DBG_IPLIST) {std::cout << "IPLIST: FINISH" << std::endl;}
+  if (DBG_LENSTR || DBG_IPLIST) {
+    std::cout << "IPLIST: FINISH" << std::endl;
+  }
 }
 
 //
@@ -791,7 +849,9 @@ void RegulatorLenstraData<ZZ, U>::init_prinlist(const ZZ &N, long l, U &s,
 
 template <class U> void RegulatorLenstraData<ZZ, U>::regulator_bsgs(ZZ &bound) {
 
-  if(DBG_LENSTR || DBG_SHANKS) {std::cout << "SHANKS: START" << std::endl;}
+  if (DBG_LENSTR || DBG_SHANKS) {
+    std::cout << "SHANKS: START" << std::endl;
+  }
   // initialize hash table
   ZZ K, B, N, entry_size;
   U u, s;
@@ -808,12 +868,11 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_bsgs(ZZ &bound) {
     // replacing get_bound for now...
     K = SqrRoot(delta);
     // get_bound(K);
-  }
-  else {
+  } else {
     K = bound;
   }
 
-  if(DBG_SHANKS) {
+  if (DBG_SHANKS) {
     std::cout << "K is " << K << std::endl;
   }
 
@@ -824,7 +883,8 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_bsgs(ZZ &bound) {
 
   // compute list of baby steps (distance < B)
   if (DBG_SHANKS) {
-    std::cout << "SHANKS: G is " << G.get_qib() << " with distance " << G.get_distance() << std::endl;
+    std::cout << "SHANKS: G is " << G.get_qib() << " with distance "
+              << G.get_distance() << std::endl;
     std::cout << "SHANKS: B is " << B << std::endl;
     std::cout << "SHANKS: Begin baby step list computation" << std::endl;
   }
@@ -842,8 +902,7 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_bsgs(ZZ &bound) {
 
   if (l == 1) {
     regulator = G.get_baby_steps(prin_list, B, A);
-  }
-  else {
+  } else {
     regulator = G.get_baby_steps(prin_list, B, A, l, M);
   }
   prinlist_M = M;
@@ -851,7 +910,8 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_bsgs(ZZ &bound) {
   if (DBG_SHANKS) {
     std::cout << "SHANKS: End get_baby_steps" << std::endl;
     std::cout << "SHANKS: prin_list is " << prin_list << std::endl;
-    std::cout << "SHANKS: G is " << G.get_qib() << " with distance " << G.get_distance() << std::endl;
+    std::cout << "SHANKS: G is " << G.get_qib() << " with distance "
+              << G.get_distance() << std::endl;
     std::cout << "SHANKS: regulator is " << regulator << std::endl;
   }
 
@@ -862,38 +922,38 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_bsgs(ZZ &bound) {
   if (IsZero(regulator)) {
     Rbsgs = false;
     G.adjust(s);
-    u = 2*s;
+    u = 2 * s;
 
-    A = G;/*
-    if (DBG_SHANKS){
-      std::cout << "SHANKS: Begin giant_step" << std::endl;
-      std::cout << "SHANKS: (" << G.get_qib().get_a() << ", "
-                << G.get_qib().get_b() << ", " << G.get_qib().get_c() << ") "
-                << G.get_distance() << std::endl;
-    }
+    A = G; /*
+     if (DBG_SHANKS){
+       std::cout << "SHANKS: Begin giant_step" << std::endl;
+       std::cout << "SHANKS: (" << G.get_qib().get_a() << ", "
+                 << G.get_qib().get_b() << ", " << G.get_qib().get_c() << ") "
+                 << G.get_distance() << std::endl;
+     }
 
-    G.giant_step(G);
+     G.giant_step(G);
 
-    if (DBG_SHANKS)
-      std::cout << "SHANKS: (" << G.get_qib().get_a() << ", "
-                << G.get_qib().get_b() << ", " << G.get_qib().get_c() << ") "
-                << G.get_distance() << std::endl;
-    if (DBG_SHANKS)
-      std::cout << "SHANKS: End giant_step" << std::endl;
-    sqr(G, G); makeshift square above
-        if(DBG_SHANKS) std::cout << "SHANKS: Begin adjust, baby_step" <<
-        std::endl;
-    if (DBG_SHANKS)
-      std::cout << "SHANKS: G distance is " << G.get_distance() << std::endl;
-    G.adjust(u);
-    if (DBG_SHANKS)
-      std::cout << "SHANKS: G distance is " << G.get_distance() << std::endl;
-    if (G.is_one())
-      G.baby_step();
-        if(DBG_SHANKS) std::cout << "SHANKS: End adjust, baby_step" <<
-        std::endl;
-    if (DBG_SHANKS)
-      std::cout << "SHANKS: G distance is " << G.get_distance() << std::endl;*/
+     if (DBG_SHANKS)
+       std::cout << "SHANKS: (" << G.get_qib().get_a() << ", "
+                 << G.get_qib().get_b() << ", " << G.get_qib().get_c() << ") "
+                 << G.get_distance() << std::endl;
+     if (DBG_SHANKS)
+       std::cout << "SHANKS: End giant_step" << std::endl;
+     sqr(G, G); makeshift square above
+         if(DBG_SHANKS) std::cout << "SHANKS: Begin adjust, baby_step" <<
+         std::endl;
+     if (DBG_SHANKS)
+       std::cout << "SHANKS: G distance is " << G.get_distance() << std::endl;
+     G.adjust(u);
+     if (DBG_SHANKS)
+       std::cout << "SHANKS: G distance is " << G.get_distance() << std::endl;
+     if (G.is_one())
+       G.baby_step();
+         if(DBG_SHANKS) std::cout << "SHANKS: End adjust, baby_step" <<
+         std::endl;
+     if (DBG_SHANKS)
+       std::cout << "SHANKS: G distance is " << G.get_distance() << std::endl;*/
   }
 
   //   if(DBG_SHANKS) std::cout << "SHANKS: End baby step list computation" <<
@@ -927,7 +987,7 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_bsgs(ZZ &bound) {
                 << A.get_distance() << std::endl;
 
     // mul(A, A, G); makeshift multiplication above
-    //A.adjust(s);
+    // A.adjust(s);
 
     // search for A, rho_1(A), ..., rho_l(A) in the hash table
     if (DBG_SHANKS)
@@ -945,9 +1005,10 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_bsgs(ZZ &bound) {
         // found AA in the hash table!
         if (DBG_SHANKS) {
           std::cout << "SHANKS: found AA in the hash table! " << std::endl;
-          std::cout << "SHANKS: AA distance is " << AA.get_distance() << std::endl;
+          std::cout << "SHANKS: AA distance is " << AA.get_distance()
+                    << std::endl;
           std::cout << "SHANKS: F distance is " << F->get_d() << std::endl;
-          }
+        }
         combine_BSGS(regulator, AA, F);
         if (DBG_SHANKS)
           std::cout << "SHANKS: regulator is " << regulator << std::endl;
@@ -957,27 +1018,29 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_bsgs(ZZ &bound) {
         if (DBG_SHANKS)
           std::cout << "SHANKS: regulator is " << regulator << std::endl;
 
-      } else {
-        F = prin_list.search((AA.conjugate()).hash_real());
-        if (F) {
-          // found A^-1 in the hash table!
-          if (DBG_SHANKS) {
-            std::cout << "SHANKS: found AA^-1 in the hash table! " << std::endl;
-          }
-          combine_conj_BSGS(regulator, AA, F);
-          nuclose(C, FloorToZZ(regulator));
-          C.adjust(regulator);
-          regulator = C.get_distance();
-        } else if (i < M)
-          // AA.rho(); Swapping this out for AA.baby_step();
-          if (DBG_SHANKS)
-            std::cout << "SHANKS: AA distance is " << AA.get_distance()
-                      << std::endl;
-        AA.baby_step();
-        if (DBG_SHANKS)
-          std::cout << "SHANKS: AA distance is " << AA.get_distance()
-                    << std::endl;
       }
+
+//       else {
+//         F = prin_list.search((AA.conjugate()).hash_real());
+//         if (F) {
+//           //found A^-1 in the hash table!
+//           if (DBG_SHANKS) {
+//             std::cout << "SHANKS: found AA^-1 in the hash table! " << std::endl;
+//           }
+//           combine_conj_BSGS(regulator, AA, F);
+//           nuclose(C, FloorToZZ(regulator));
+//           C.adjust(regulator);
+//           regulator = C.get_distance();
+//         } else if (i < M)
+//           //AA.rho(); Swapping this out for AA.baby_step();
+//           if (DBG_SHANKS)
+//             std::cout << "SHANKS: AA distance is " << AA.get_distance()
+//                       << std::endl;
+//         AA.baby_step();
+//         if (DBG_SHANKS)
+//           std::cout << "SHANKS: AA distance is " << AA.get_distance()
+//                     << std::endl;
+//       }
     }
     if (DBG_SHANKS)
       std::cout << "SHANKS: regulator is " << regulator << std::endl;
@@ -989,7 +1052,9 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_bsgs(ZZ &bound) {
 
   if (DBG_SHANKS)
     std::cout << "SHANKS: End - regulator is " << regulator << std::endl;
-  if(DBG_LENSTR || DBG_SHANKS) {std::cout << "SHANKS: FINISH" << std::endl;}
+  if (DBG_LENSTR || DBG_SHANKS) {
+    std::cout << "SHANKS: FINISH" << std::endl;
+  }
 }
 
 //
@@ -1001,7 +1066,9 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_bsgs(ZZ &bound) {
 
 template <class U> U RegulatorLenstraData<ZZ, U>::approximate_hR() {
 
-  if(DBG_LENSTR || DBG_APPRHR) {std::cout << "APPRHR: STARTING" << std::endl;}
+  if (DBG_LENSTR || DBG_APPRHR) {
+    std::cout << "APPRHR: STARTING" << std::endl;
+  }
   RR hR, FI;
 
   long n = get_optimal_Q_cnum();
@@ -1025,14 +1092,18 @@ template <class U> U RegulatorLenstraData<ZZ, U>::approximate_hR() {
     hR = FI * SqrRoot(to_RR(delta)) / to_RR(2);
   }
 
-  if(DBG_LENSTR || DBG_APPRHR) {std::cout << "APPRHR: FINISHED" << std::endl;}
+  if (DBG_LENSTR || DBG_APPRHR) {
+    std::cout << "APPRHR: FINISHED" << std::endl;
+  }
   return to<U>(hR);
 }
 
 template <class U>
 void RegulatorLenstraData<ZZ, U>::optimize_K(ZZ &bound, const ZZ &S,
                                              const ZZ &N, long l) {
-  if(DBG_LENSTR || DBG_OPTIMK) {std::cout << "OPTIMK: STARTING" << std::endl;}
+  if (DBG_LENSTR || DBG_OPTIMK) {
+    std::cout << "OPTIMK: STARTING" << std::endl;
+  }
   RR K = to_RR(bound);
   RR mu = get_mu(delta);
   RR rS = to_RR(S);
@@ -1040,12 +1111,12 @@ void RegulatorLenstraData<ZZ, U>::optimize_K(ZZ &bound, const ZZ &S,
   RR rn;
 
   if (DBG_OPTIMK) {
-  std::cout << "K0 = " << bound << endl;
-  std::cout << "mu = " << mu << endl;
-  std::cout << "S = " << S << endl;
-  std::cout << "N = " << N << endl;
-  std::cout << "l = " << l << endl;
-  std::cout << endl;
+    std::cout << "K0 = " << bound << endl;
+    std::cout << "mu = " << mu << endl;
+    std::cout << "S = " << S << endl;
+    std::cout << "N = " << N << endl;
+    std::cout << "l = " << l << endl;
+    std::cout << endl;
   }
 
   if (parallel)
@@ -1058,8 +1129,8 @@ void RegulatorLenstraData<ZZ, U>::optimize_K(ZZ &bound, const ZZ &S,
   F = func(K, rS, rN, mu, rn, l);
   dF = dfunc(K, rS, rN, mu, rn, l);
   if (DBG_OPTIMK) {
-  std::cout << "K = " << K << ", F(K) = " << F << ", F'(K) = " << dF
-            << std::endl;
+    std::cout << "K = " << K << ", F(K) = " << F << ", F'(K) = " << dF
+              << std::endl;
   }
 
   while (abs(F) > to_RR(0.00001) && K - F / dF > 0) {
@@ -1068,7 +1139,9 @@ void RegulatorLenstraData<ZZ, U>::optimize_K(ZZ &bound, const ZZ &S,
     dF = dfunc(K, rS, rN, mu, rn, l);
   }
   bound = FloorToZZ(K);
-  if(DBG_LENSTR || DBG_OPTIMK) {std::cout << "OPTIMK: FINISHED" << std::endl;}
+  if (DBG_LENSTR || DBG_OPTIMK) {
+    std::cout << "OPTIMK: FINISHED" << std::endl;
+  }
 }
 
 template <class U>
@@ -1093,7 +1166,9 @@ void RegulatorLenstraData<ZZ, U>::combine_conj_BSGS(
 //
 template <class U> ZZ RegulatorLenstraData<ZZ, U>::lower_bound_hR() {
 
-  if(DBG_LENSTR || DBG_LOBOHR) {std::cout << "LOBOHR: STARTING" << std::endl;}
+  if (DBG_LENSTR || DBG_LOBOHR) {
+    std::cout << "LOBOHR: STARTING" << std::endl;
+  }
   ZZ hR;
   RR temp, FI;
 
@@ -1178,7 +1253,9 @@ template <class U> ZZ RegulatorLenstraData<ZZ, U>::lower_bound_hR() {
   if (info > 1)
     std::cout << "Lower bound = " << hR << std::endl;
 
-  if(DBG_LENSTR || DBG_LOBOHR) {std::cout << "LOBOHR: FINISH" << std::endl;}
+  if (DBG_LENSTR || DBG_LOBOHR) {
+    std::cout << "LOBOHR: FINISH" << std::endl;
+  }
   return hR;
 }
 
@@ -1190,7 +1267,9 @@ template <class U> ZZ RegulatorLenstraData<ZZ, U>::lower_bound_hR() {
 //
 
 template <class U> long RegulatorLenstraData<ZZ, U>::get_optimal_Q() {
-  if(DBG_LENSTR || DBG_GETOPQ) {std::cout << "GETOPQ: STARTING" << std::endl;}
+  if (DBG_LENSTR || DBG_GETOPQ) {
+    std::cout << "GETOPQ: STARTING" << std::endl;
+  }
   long Dlog;
   ZZ temp;
 
@@ -1202,7 +1281,9 @@ template <class U> long RegulatorLenstraData<ZZ, U>::get_optimal_Q() {
 
   long optimal_Q = OQvals[Dlog / 5];
 
-  if(DBG_LENSTR || DBG_GETOPQ) {std::cout << "GETOPQ: FINISH" << std::endl;}
+  if (DBG_LENSTR || DBG_GETOPQ) {
+    std::cout << "GETOPQ: FINISH" << std::endl;
+  }
   return optimal_Q;
 }
 
@@ -1212,7 +1293,9 @@ template <class U> long RegulatorLenstraData<ZZ, U>::get_optimal_Q() {
 //
 
 template <class U> long RegulatorLenstraData<ZZ, U>::generate_optimal_Q() {
-  if(DBG_LENSTR || DBG_GENOPQ) {std::cout << "GENOPQ: STARTING" << std::endl;}
+  if (DBG_LENSTR || DBG_GENOPQ) {
+    std::cout << "GENOPQ: STARTING" << std::endl;
+  }
   long OQ;
   RR A, l2;
   PrimeSeq primes;
@@ -1227,7 +1310,9 @@ template <class U> long RegulatorLenstraData<ZZ, U>::generate_optimal_Q() {
     A = l_function->calculate_L1_error(delta, OQ);
   } while (A >= l2);
 
-  if(DBG_LENSTR || DBG_GENOPQ) {std::cout << "GENOPQ: FINISHED" << std::endl;}
+  if (DBG_LENSTR || DBG_GENOPQ) {
+    std::cout << "GENOPQ: FINISHED" << std::endl;
+  }
   return OQ;
 }
 
@@ -1242,7 +1327,9 @@ template <class U> long RegulatorLenstraData<ZZ, U>::generate_optimal_Q() {
 template <class U>
 void RegulatorLenstraData<ZZ, U>::find_hstar(ZZ &hstar, const U &S,
                                              const ZZ &Pmax) {
-  if(DBG_LENSTR || DBG_FHSTAR) {std::cout << "FHSTAR: STARTING" << std::endl;}
+  if (DBG_LENSTR || DBG_FHSTAR) {
+    std::cout << "FHSTAR: STARTING" << std::endl;
+  }
 
   set(hstar);
 
@@ -1293,17 +1380,21 @@ void RegulatorLenstraData<ZZ, U>::find_hstar(ZZ &hstar, const U &S,
     target_qie.adjust(target_distance);
 
     if (DBG_FHSTAR) {
-        std::cout << "FHSTAR: target_distance was " << target_distance << std::endl;
-        std::cout << "FHSTAR: target_qie was " << target_qie.get_qib() << std::endl;
-        std::cout << "FHSTAR: target_qie distance was " << target_qie.get_distance() << std::endl;
-      }
+      std::cout << "FHSTAR: target_distance was " << target_distance
+                << std::endl;
+      std::cout << "FHSTAR: target_qie was " << target_qie.get_qib()
+                << std::endl;
+      std::cout << "FHSTAR: target_qie distance was "
+                << target_qie.get_distance() << std::endl;
+    }
 
     // Increase prime power until corresponding distance is no longer a multiple
     // of the regulator
     if (DBG_FHSTAR) {
-    std::cout << "FHSTAR: Finding power of current prime" << std::endl;
+      std::cout << "FHSTAR: Finding power of current prime" << std::endl;
     }
-    while (target_qie.is_one() && abs(target_qie.get_distance() - target_distance) < 0.0000001) {
+    while (target_qie.is_one() &&
+           abs(target_qie.get_distance() - target_distance) < 0.0000001) {
       if (DBG_FHSTAR) {
         std::cout << "FHSTAR: power is " << power << std::endl;
       }
@@ -1313,21 +1404,23 @@ void RegulatorLenstraData<ZZ, U>::find_hstar(ZZ &hstar, const U &S,
       target_qie.adjust(target_distance);
 
       if (DBG_FHSTAR) {
-        std::cout << "FHSTAR: target_distance was " << target_distance << std::endl;
-        std::cout << "FHSTAR: target_qie was " << target_qie.get_qib() << std::endl;
-        std::cout << "FHSTAR: target_qie distance was " << target_qie.get_distance() << std::endl;
+        std::cout << "FHSTAR: target_distance was " << target_distance
+                  << std::endl;
+        std::cout << "FHSTAR: target_qie was " << target_qie.get_qib()
+                  << std::endl;
+        std::cout << "FHSTAR: target_qie distance was "
+                  << target_qie.get_distance() << std::endl;
       }
-
     }
     if (DBG_FHSTAR) {
-        std::cout << "FHSTAR: hstar was " << hstar <<  std::endl;
-        std::cout << "FHSTAR: prime was " << prime << std::endl;
-        std::cout << "FHSTAR: power was " << power-1 << std::endl;
-      }
-    hstar *= FloorToZZ(pow(double(prime), double(power-1)));
+      std::cout << "FHSTAR: hstar was " << hstar << std::endl;
+      std::cout << "FHSTAR: prime was " << prime << std::endl;
+      std::cout << "FHSTAR: power was " << power - 1 << std::endl;
+    }
+    hstar *= FloorToZZ(pow(double(prime), double(power - 1)));
     if (DBG_FHSTAR) {
-        std::cout << "FHSTAR: hstar is " << hstar << std::endl;
-      }
+      std::cout << "FHSTAR: hstar is " << hstar << std::endl;
+    }
   }
 
   // Using hstar, computer the regulator
@@ -1340,7 +1433,9 @@ void RegulatorLenstraData<ZZ, U>::find_hstar(ZZ &hstar, const U &S,
     std::cout << "FHSTAR: hstar = " << hstar << std::endl;
     std::cout << "FHSTAR: R = " << regulator << std::endl;
   }
-  if(DBG_LENSTR || DBG_FHSTAR) {std::cout << "FHSTAR: FINISHED" << std::endl;}
+  if (DBG_LENSTR || DBG_FHSTAR) {
+    std::cout << "FHSTAR: FINISHED" << std::endl;
+  }
 }
 
 #endif

@@ -14,30 +14,19 @@ bool DBG_CGBSGSR_TEST = true;
 
 TEST_CASE("ClassGroupReal<ZZ>: Does it work?", "[ClassGroupReal]") {
 
-  extern const std::array<long, 1000> discriminants;
-  extern const std::array<double, 1000> correct_regulators;
+  extern const std::array<long, 1100> discriminants;
+  extern const std::array<double, 1100> correct_regulators;
   extern const std::vector<std::vector<long>> correct_class_groups;
 
-  //   int discriminants[10] = {55661, 63361, 72673, 86341, 38593,
-  //                            54269, 41513, 74021, 45677, 17909};
-  //
-  //   double correct_regulators[10] = {25.4538649123, 17.5077374033,
-  //   357.702597578,
-  //                                    148.556426268,
-  //                                    105.442818369, 49.458153743,
-  //                                    130.11243841,  62.8055127479, 54.4615644632,
-  //                                    44.1429273524};
-  //
-  //   vector<vector<ZZ>> correct_class_groups = {
-  //       {ZZ(3)}, {ZZ(33)}, {ZZ(1)}, {ZZ(1)}, {ZZ(3)},
-  //       {ZZ(1)}, {ZZ(1)},  {ZZ(1)}, {ZZ(1)}, {ZZ(1)}};
+  int correct_count = 0;
+  int test_start = 0;
+  int test_bound = correct_class_groups.size();
 
   vector<vector<long>> computed_class_groups;
 
-  std::array<bool, 1000> computed_correctly;
-  int correct_count = 0;
+  std::array<bool, 1100> computed_correctly;
 
-  for (int i = 0; i < 1000; i++) {
+  for (int i = test_start; i < test_bound; i++) {
     // Setting up neccessary objects
     QuadraticOrder<ZZ> quad_order{ZZ(discriminants.at(i))};
     QuadraticNumber<ZZ> quad_number1{quad_order};
@@ -94,7 +83,7 @@ TEST_CASE("ClassGroupReal<ZZ>: Does it work?", "[ClassGroupReal]") {
     std::cout << std::setw(42) << std::setfill('=') << "" << std::endl;
   }
 
-  for (int i = 0; i < 1000; i++) {
+  for (int i = test_start; i < test_bound; i++) {
     if (DBG_CGBSGSR_TEST) {
       std::cout << std::setfill('0') << std::setw(4) << i + 1
                 << std::setfill(' ') << std::setw(6) << computed_correctly.at(i)
