@@ -127,6 +127,7 @@ template <> void SquareNudupl<ZZ>::square(QuadraticIdealBase<ZZ> & C, const Quad
 
   ANTL::mul(*RelativeGenerator, *RelativeGenerator, *C.get_QO()->get_red_best()->get_RelativeGenerator());
 }
+
 //Debug Tools
 // std::cout << "USING NUCOMP" << std::endl;
 // std::cout << "rgA is " << rgA << std::endl;

@@ -14,8 +14,8 @@ bool DBG_LENSTRA_TEST = true;
 
 TEST_CASE("RegulatorLenstra<ZZ>: Does it work?", "[RegulatorLenstra]") {
 
-  extern const std::array<long, 1100> discriminants;
-  extern const std::array<double, 1100> correct_regulators;
+  extern const std::vector<long> discriminants;
+  extern const std::vector<double> correct_regulators;
 
   QuadraticOrder<ZZ> quad_order1{ZZ(30061)};
   QuadraticInfElement<ZZ, double> quad_inf_element1{quad_order1};
@@ -26,10 +26,13 @@ TEST_CASE("RegulatorLenstra<ZZ>: Does it work?", "[RegulatorLenstra]") {
 
   double computed_regulators[test_bound];
   bool computed_correctly[test_bound];
+  ZZ computed_hstars[test_bound];
+
   std::vector<std::string> case_types{size_t(test_bound), ""};
 
   for (int i = test_start; i < test_bound; i++) {
-    std::cout << "Running Lenstra test " << i << " expected regulator is " << correct_regulators[i] << std::endl;
+    std::cout << "Running Lenstra test " << i << " expected regulator is "
+              << correct_regulators[i] << std::endl;
     std::cout << "Discriminat is " << discriminants[i] << std::endl;
     QuadraticOrder<ZZ> quad_order{ZZ(discriminants[i])};
     QuadraticNumber<ZZ> quad_number1{quad_order};
@@ -43,8 +46,6 @@ TEST_CASE("RegulatorLenstra<ZZ>: Does it work?", "[RegulatorLenstra]") {
     red_plain_real_object.set_RelativeGenerator(quad_number2);
     quad_order.set_red_best(red_plain_real_object);
 
-    QuadraticInfElement<ZZ, double> qif_1{quad_order};
-
     L_function<ZZ> l_function;
     l_function.init(ZZ(discriminants[i]), 2);
 
@@ -53,10 +54,12 @@ TEST_CASE("RegulatorLenstra<ZZ>: Does it work?", "[RegulatorLenstra]") {
 
     ZZ bound = ZZ(0);
     regulator_lenstra_data.regulator_lenstra();
-//     regulator_lenstra_data.regulator_bsgs(bound);
+    //     regulator_lenstra_data.regulator_bsgs(bound);
 
     computed_regulators[i] = regulator_lenstra_data.get_regulator();
     case_types.at(i) = regulator_lenstra_data.get_case_type();
+
+    computed_hstars[i] = regulator_lenstra_data.get_hstar();
 
     if (std::abs(computed_regulators[i] - correct_regulators[i]) < 0.000001) {
       computed_correctly[i] = true;
@@ -69,19 +72,19 @@ TEST_CASE("RegulatorLenstra<ZZ>: Does it work?", "[RegulatorLenstra]") {
 
   if (DBG_LENSTRA_TEST) {
     std::cout << "CASE" << std::setw(8) << "RESULT" << std::setw(9) << "CORRECT"
-              << std::setw(10) << "COMPUTED" << std::setw(7) << "DELTA"
+              << std::setw(10) << "COMPUTED" << std::setw(8) << "H_STAR" << std::setw(7) << "DELTA"
               << std::setw(11) << "CASE TYPE" << std::endl;
-    std::cout << std::setw(49) << std::setfill('=') << "" << std::endl;
+    std::cout << std::setw(57) << std::setfill('=') << "" << std::endl;
   }
 
-//     for(auto i : test_cases) {
+  //     for(auto i : test_cases) {
   for (int i = test_start; i < test_bound; i++) {
     if (DBG_LENSTRA_TEST) {
       std::cout << std::setfill('0') << std::setw(3) << i << std::setfill(' ')
                 << std::setw(6) << computed_correctly[i] << std::setw(11)
                 << correct_regulators[i] << std::setw(10)
-                << computed_regulators[i] << std::setw(7) << discriminants[i]
-                << std::setw(35) << case_types.at(i) << std::endl;
+                << computed_regulators[i] << std::setw(8) << computed_hstars[i] << std::setw(7) << discriminants[i]
+                << std::setw(35) << std::endl;
 
       if (computed_correctly[i]) {
         correct_count++;
