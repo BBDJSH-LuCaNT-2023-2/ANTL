@@ -12,8 +12,14 @@ AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_LN_S
 
-# this macro figures out how to build with pthreads 
+# this macro figures out how to build with pthreads
 AX_PTHREAD(, )
+
+# this macro figures out how to build with pthreads
+AX_MPI(, )
+
+# this macro figures out how to build with coverage
+# AX_CODE_COVERAGE
 
 # Checks for libraries. They all have a main function
 AC_CHECK_LIB([gmp], [main])
@@ -21,6 +27,8 @@ AC_CHECK_LIB([m], [main])
 AC_CHECK_LIB([mpfr], [main])
 AC_CHECK_LIB([mpfi], [main])
 AC_CHECK_LIB([ntl], [main])
+AC_CHECK_LIB([gcov], [main])
+AC_CHECK_LIB([lcov], [main])
 
 # see https://www.gnu.org/software/autoconf/manual/autoconf-2.60/html_node/External-Software.html
 # run ./configure --help in the top level directory to list all options for configure

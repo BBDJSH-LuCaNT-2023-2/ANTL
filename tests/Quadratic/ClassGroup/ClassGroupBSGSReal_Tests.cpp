@@ -5,6 +5,7 @@
 #include "../../Quadratic/TestData/TestData.hpp"
 
 #include <ANTL/Quadratic/ClassGroup/ClassGroupBSGSReal.hpp>
+// #include "../../../src/Quadratic/ClassGroup/ClassGroupBSGSReal.cpp"
 #include <ANTL/Quadratic/Regulator/RegulatorLenstra_ZZ.hpp>
 
 using namespace NTL;
@@ -14,8 +15,8 @@ bool DBG_CGBSGSR_TEST = true;
 
 TEST_CASE("ClassGroupReal<ZZ>: Does it work?", "[ClassGroupReal]") {
 
-  extern const std::array<long, 1100> discriminants;
-  extern const std::array<double, 1100> correct_regulators;
+  extern const std::vector<long> discriminants;
+  extern const std::vector<double> correct_regulators;
   extern const std::vector<std::vector<long>> correct_class_groups;
 
   int correct_count = 0;
@@ -24,9 +25,10 @@ TEST_CASE("ClassGroupReal<ZZ>: Does it work?", "[ClassGroupReal]") {
 
   vector<vector<long>> computed_class_groups;
 
-  std::array<bool, 1100> computed_correctly;
+  std::vector<bool> computed_correctly;
 
   for (int i = test_start; i < test_bound; i++) {
+    std::cout << "computing test " << i << std::endl;
     // Setting up neccessary objects
     QuadraticOrder<ZZ> quad_order{ZZ(discriminants.at(i))};
     QuadraticNumber<ZZ> quad_number1{quad_order};
@@ -47,7 +49,8 @@ TEST_CASE("ClassGroupReal<ZZ>: Does it work?", "[ClassGroupReal]") {
 
     // Computing h*
     double regulator = correct_regulators.at(i);
-    ZZ h_star = CeilToZZ(to_RR(regulator_lenstra_data.lower_bound_hR()) / to_RR(regulator));
+    RR h_star_close = to_RR(regulator_lenstra_data.lower_bound_hR()) / to_RR(regulator);
+    ZZ h_star = CeilToZZ(h_star_close);
 
     // Setting up the ClassGroupBSGSReal object
     ClassGroupBSGSReal<ZZ> class_group_bsgs_real1{&quad_order};
@@ -59,18 +62,19 @@ TEST_CASE("ClassGroupReal<ZZ>: Does it work?", "[ClassGroupReal]") {
     // Adding computed class group to reslults vector
     vector<ZZ> class_group_ZZ = class_group_bsgs_real1.get_class_group();
     vector<long> class_group_long = {};
+
     for(auto num : class_group_ZZ) {
       class_group_long.push_back(to<long>(num));
     }
+
     std::sort(class_group_long.begin(), class_group_long.end());
     computed_class_groups.push_back(class_group_long);
 
-
     // Checking for corect output
-    if (correct_class_groups.at(i) == computed_class_groups.at(i)) {
-      computed_correctly.at(i) = true;
+    if (correct_class_groups.at(i) == computed_class_groups.at(i-test_start)) {
+      computed_correctly.push_back(true);
     } else {
-      computed_correctly.at(i) = false;
+      computed_correctly.push_back(false);
     }
   }
 
@@ -78,18 +82,18 @@ TEST_CASE("ClassGroupReal<ZZ>: Does it work?", "[ClassGroupReal]") {
 
   if (DBG_CGBSGSR_TEST) {
     std::cout << "CASE" << std::setw(8) << "RESULT" << std::setw(10) << "CORRECT"
-              << std::setw(12) << "COMPUTED" << std::setw(8) << "DELTA"
+              << std::setw(21) << "COMPUTED" << std::setw(21) << "DELTA"
               << std::endl;
-    std::cout << std::setw(42) << std::setfill('=') << "" << std::endl;
+    std::cout << std::setw(65) << std::setfill('=') << "" << std::endl;
   }
 
   for (int i = test_start; i < test_bound; i++) {
     if (DBG_CGBSGSR_TEST) {
       std::cout << std::setfill('0') << std::setw(4) << i + 1
                 << std::setfill(' ') << std::setw(6) << computed_correctly.at(i)
-                << std::setw(12) << correct_class_groups.at(i)
-                << std::setw(12) << computed_class_groups.at(i)
-                << std::setw(8) << discriminants.at(i)
+                << std::setw(21) << correct_class_groups.at(i)
+                << std::setw(21) << computed_class_groups.at(i)
+                << std::setw(14) << discriminants.at(i)
                 << std::endl;
       if(computed_correctly[i]) {
         correct_count++;
@@ -100,7 +104,12 @@ TEST_CASE("ClassGroupReal<ZZ>: Does it work?", "[ClassGroupReal]") {
   }
 
   if (DBG_CGBSGSR_TEST) {
-    std::cout << correct_count << "/1000 tests passed!" << std::endl;
+    std::cout << correct_count << "/" << test_bound - test_start << " tests passed!" << std::endl;
+    for(int i = test_start; i < test_bound; i++) {
+      if(!computed_correctly.at(i)){
+        std::cout << "case " << i << " was wrong!" << std::endl;
+      }
+    }
   }
 
 

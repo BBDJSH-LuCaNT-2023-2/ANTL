@@ -137,8 +137,9 @@ template <class T>
 bool QuadraticClassGroupElement<T>::assign_prime(const T &p) {
   bool OK = QuadraticIdealBase<T>::assign_prime(p);
 
-  if (OK)
+  if (OK) {
     this->reduce();
+  }
 
   return OK;
 }

@@ -1,6 +1,7 @@
 #ifndef REGULATOR_LENSTRA_DATA_ZZ_H
 #define REGULATOR_LENSTRA_DATA_ZZ_H
 
+#include <list>
 #include <ANTL/Quadratic/Regulator/RegulatorLenstra.hpp>
 
 using namespace NTL;
@@ -27,6 +28,8 @@ private:
   bool DBG_FHSTAR = false;
 
   U regulator;
+
+  ZZ hstar;
 
   QuadraticOrder<ZZ> *quadratic_order;
 
@@ -71,13 +74,15 @@ public:
 
   U get_regulator();
 
-  ZZ lower_bound_hR();
+  ZZ get_hstar() {return hstar;}
 
-  void set_case_type(std::string found_case_type) {
-    case_type += found_case_type;
-  }
+  RR lower_bound_hR();
 
-  std::string get_case_type() { return case_type; }
+  void set_case_type(std::string found_case_type);
+
+  std::string get_case_type();
+
+  U approximate_hR();
 
 private:
   ZZ estimate_hR_error();
@@ -92,8 +97,6 @@ private:
 
   void init_prinlist(const ZZ &N, long l, U &s, long &M,
                      QuadraticInfElement<ZZ, U> &G);
-
-  U approximate_hR();
 
   void optimize_K(ZZ &bound, const ZZ &S, const ZZ &N, long l);
 
@@ -125,6 +128,15 @@ RegulatorLenstraData<ZZ, U>::RegulatorLenstraData(
   parallel = false;
   Rbsgs = false;        // true if R was computed using BSGS
   Rconditional = false; // true if correctness of R relies on ERH
+}
+
+template <class U>
+void RegulatorLenstraData<ZZ, U>::set_case_type(std::string found_case_type) {
+  case_type += found_case_type;
+}
+
+template <class U> std::string RegulatorLenstraData<ZZ, U>::get_case_type() {
+  return case_type;
 }
 
 // RegulatorLenstraData<ZZ, U>::regulator_lenstra
@@ -175,7 +187,7 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_lenstra() {
     regulator_bsgs(B);
     S = regulator;
     if (!IsZero(regulator)) {
-      set_case_type("Initial regulator_bsfs ");
+      set_case_type(" -- Initial regulator_bsfs -- ");
     }
   }
 
@@ -303,7 +315,7 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_lenstra() {
     }
 
     else {
-      set_case_type("baby_step list construction ");
+      set_case_type(" -- baby_step list construction -- ");
     }
   }
 
@@ -340,7 +352,7 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_lenstra() {
       if (F) {
 
         // found C in the hash table!
-        set_case_type("C found ");
+        set_case_type(" -- C found -- ");
         if (DBG_LENSTR) {
           std::cout << "found C in the hash table!" << std::endl;
         }
@@ -353,7 +365,7 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_lenstra() {
       if (F) {
 
         // found D in the hash table!
-        set_case_type("D found ");
+        set_case_type(" -- D found -- ");
         if (DBG_LENSTR) {
           std::cout << "found D in the hash table!" << std::endl;
         }
@@ -388,76 +400,6 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_lenstra() {
       // D.adjust(s2);
     }
   }
-
-  //   long i;
-  //   C1 = C, D1 = D;
-  //
-  //   while (IsZero(regulator) && IsZero(S)) {
-  //
-  //     search for C, rho_1(C), ..., rho_l(C) in the hash table
-  //     CC = C;
-  //     DD = D;
-  //
-  //     for (i = 0; i < M && IsZero(S); ++i) {
-  //       F = prin_list.search(CC.hash_real());
-  //       if (F) {
-  //         //found CC in the hash table!
-  //         set_case_type("CC found");
-  //         if(DBG_LENSTR) {
-  //           std::cout << "found CC in the hash table!" << std::endl;
-  //         }
-  //
-  //         combine_BSGS(S, CC, F);
-  //       } else {
-  //         F = prin_list.search((CC.conjugate()).hash_real());
-  //         if (F) {
-  //           //found CC^-1 in the hash table!
-  //           set_case_type("CC^-1 found");
-  //           if(DBG_LENSTR) {
-  //             std:: cout << "found CC^-1 in the hash table!" << std::endl;
-  //           }
-  //
-  //           combine_conj_BSGS(S, CC, F);
-  //         } else {
-  //           F = prin_list.search(DD.hash_real());
-  //           if (F) {
-  //             //found DD in the hash table!
-  //             set_case_type("DD found");
-  //
-  //             combine_conj_BSGS(S, DD, F);
-  //           } else {
-  //             F = prin_list.search((DD.conjugate()).hash_real());
-  //             if (F) {
-  //               //found DD^-1 in the hash table!
-  //               set_case_type("DD^-1 found");
-  //               if(DBG_LENSTR) {
-  //                 std::cout << "found DD^-1 in the hash table!" << std::endl;
-  //               }
-  //
-  //               combine_conj_BSGS(S, DD, F);
-  //             } else if (i < M) {
-  //               CC.baby_step();
-  //               DD.baby_step();
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }
-  //
-  //     if (IsZero(S)) {
-  //       s += u;
-  //
-  //       C.giant_step(G);
-  //       //mul(C, C, G); makeshift multiplication above
-  //       C.adjust(s);
-  //
-  //       s2 -= u;
-  //
-  //       D.giant_step(GG);
-  //       //mul(D, D, GG); makeshift multiplication above
-  //       D.adjust(s2);
-  //     }
-  //   }
 
   if (DBG_LENSTR) {
     std::cout << "LENSTR: regulator is " << regulator << std::endl;
@@ -519,7 +461,7 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_lenstra() {
     B = CeilToZZ(E / SqrRoot(to_RR(K)));
     regulator_bsgs(B);
     if(!IsZero(regulator)){
-      set_case_type("second regulator_bsgs ");
+      set_case_type(" -- second regulator_bsgs -- ");
     }
 
     if (DBG_LENSTR) {
@@ -528,7 +470,7 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_lenstra() {
       std::cout << "LENSTR: S is " << S << std::endl;
     }
 
-    ZZ hstar, Pmax;
+    ZZ Pmax;
     if (!IsZero(regulator)) {
       hstar = (FloorToZZ(log(S) / log(RR(2)))) /
               (FloorToZZ(log(regulator) / log(RR(2))));
@@ -916,6 +858,7 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_bsgs(ZZ &bound) {
   }
 
   if (!IsZero(regulator)) {
+    set_case_type(" -- Found during bsgs baby-step -- ");
     Rbsgs = true;
   }
 
@@ -1017,7 +960,7 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_bsgs(ZZ &bound) {
         regulator = C.get_distance();
         if (DBG_SHANKS)
           std::cout << "SHANKS: regulator is " << regulator << std::endl;
-
+        set_case_type(" -- Found during bsgs giant-step -- ");
       }
 
 //       else {
@@ -1164,12 +1107,12 @@ void RegulatorLenstraData<ZZ, U>::combine_conj_BSGS(
 // lower_bound_hR()
 // Task: returns a lower bound of hR such that L < hR < 2L
 //
-template <class U> ZZ RegulatorLenstraData<ZZ, U>::lower_bound_hR() {
+template <class U> RR RegulatorLenstraData<ZZ, U>::lower_bound_hR() {
 
   if (DBG_LENSTR || DBG_LOBOHR) {
     std::cout << "LOBOHR: STARTING" << std::endl;
   }
-  ZZ hR;
+  RR hR;
   RR temp, FI;
 
   // START: Temporary variables needed (previously declared in ANTL-Import's
@@ -1248,7 +1191,7 @@ template <class U> ZZ RegulatorLenstraData<ZZ, U>::lower_bound_hR() {
     }
   }
 
-  hR = CeilToZZ(temp / SqrRoot(to_RR(2)));
+  hR = temp / SqrRoot(to_RR(2));
 
   if (info > 1)
     std::cout << "Lower bound = " << hR << std::endl;
@@ -1334,31 +1277,30 @@ void RegulatorLenstraData<ZZ, U>::find_hstar(ZZ &hstar, const U &S,
   set(hstar);
 
   if (DBG_FHSTAR) {
-    std::cout << "FHSTAR: hstar = " << S << std::endl;
+    std::cout << "FHSTAR: hstar = " << hstar << std::endl;
+    std::cout << "FHSTAR: to_RR(S) = " << to_RR(S) << std::endl;
     std::cout << "FHSTAR: S = " << S << std::endl;
     std::cout << "FHSTAR: Pmax = " << Pmax << std::endl;
   }
 
   // Generate a list of primes
-  std::vector<int> primes;
+  std::list<int> primes;
+  std::vector<bool> is_a_prime(to<long>(Pmax) + 1, true);
 
-  if (DBG_FHSTAR) {
-    std::cout << "Generating candidate primes" << std::endl;
-  }
+  is_a_prime[0] = false;
+  is_a_prime[1] = false;
 
-  for (int i = 2; i <= Pmax; i++) {
-    primes.push_back(i);
-  }
-
-  if (DBG_FHSTAR) {
-    std::cout << "Sieving primes" << std::endl;
-  }
-
-  for (int i = 0; i < primes.size(); i++) {
-    for (int j = i + 1; j < primes.size(); j++) {
-      if (primes.at(j) % primes.at(i) == 0) {
-        primes.erase(primes.begin() + j);
+  for(long current_prime = 2; current_prime*current_prime <= Pmax; current_prime++) {
+    if(is_a_prime[current_prime]){
+      for(long not_a_prime = current_prime*current_prime; not_a_prime <= Pmax; not_a_prime += current_prime) {
+        is_a_prime.at(not_a_prime) = 0;
       }
+    }
+  }
+
+  for(long i = 0; i < Pmax + 1; i++){
+    if (is_a_prime[i]) {
+     primes.push_back(i);
     }
   }
 

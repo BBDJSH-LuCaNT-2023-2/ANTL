@@ -90,23 +90,72 @@ void QuadraticInfElement<T, S>::adjust(const ZZ &a) {
 template <class T, class S>
 void QuadraticInfElement<T, S>::adjust(const S &bound) {
 
-  if (-0.000000001 >= bound - Distance) {
+  S current_difference, previous_difference;
+  current_difference = bound - Distance;
+//   std::cout << "ADJUST taraget distance is " << bound << std::endl;
+//   std::cout << qib << " with distance" << Distance << std::endl;
+  if (-0.000001 >= bound - Distance) {
     while (Distance > bound) {
       inverse_rho();
+      previous_difference = current_difference;
+      current_difference = bound - Distance;
+//       std::cout << qib << " with distance" << Distance << std::endl;
     }
+    if (abs(previous_difference) < abs(current_difference)) {
+      baby_step();
+    }
+      return;
   }
 
   else {
     // Testing Floating point equivalence is hard; a simple Distance <= bound
     // won't work reliably. This workaround ensures correctness within a
     // reasonable (read arbritaty) accuracy level
-    while (-0.000000001 < bound - Distance) {
+    while (-0.000001 < bound - Distance) {
       baby_step();
+      previous_difference = current_difference;
+      current_difference = bound - Distance;
+//       std::cout << qib << " with distance" << Distance << std::endl;
     }
     inverse_rho();
+    previous_difference = current_difference;
+    current_difference = bound - Distance;
+    if (abs(previous_difference) < abs(current_difference)) {
+      baby_step();
+    }
+//     std::cout << qib << " with distance" << Distance << std::endl;
   }
+
+
   return;
 }
+/*
+template <class T, class S>
+void QuadraticInfElement<T, S>::adjust_to_one() {
+
+  QuadraticInfElement<T, S> forward_qie{*qib.get_QO()}, backward_qie{*qib.get_QO()};
+
+  forward_qie.qib = qib;
+  forward_qie.Distance = Distance;
+
+  backward_qie.qib = qib;
+  backward_qie.Distance = Distance;
+
+  while(!(forward_qie.qib.IsOne() || backward_qie.qib.IsOne())) {
+    forward_qie.baby_step();
+    backward_qie.inverse_rho();
+  }
+
+  if(forward_qie.qib.IsOne()) {
+    qib = forward_qie.get_qib();
+    Distance = forward_qie.Distance;
+  } else {
+    qib = backward_qie.get_qib();
+    Distance = backward_qie.Distance;
+  }
+
+  return;
+}*/
 
 //
 // qi_pair<T>::assign(quadratic_form<T>)

@@ -649,5 +649,7 @@ void RegulatorLenstraData<T, U>::combine_conj_BSGS(
     dist = dist - to<U>(DD.get_a());
 }
 
+template <class U> class RegulatorLenstraData<ZZ, U>;
+
 } // namespace ANTL
 #endif
