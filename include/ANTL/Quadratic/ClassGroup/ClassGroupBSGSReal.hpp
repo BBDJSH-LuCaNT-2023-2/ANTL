@@ -592,33 +592,73 @@ template <class T>
 bool ClassGroupBSGSReal<T>::is_principal(
     const QuadraticClassGroupElement<T> &G) {
 
+  if (DBG_ISPRIN) {
+    std::cout << "ISPRIN: STEP 0" << std::endl;
+  }
   double sqrt_regulator = sqrt(regulator);
 
+  if (DBG_ISPRIN) {
+    std::cout << "ISPRIN: STEP 1" << std::endl;
+  }
   QuadraticInfElement<T, double> baby_step_list_generator{*quadratic_order};
 
+  if (DBG_ISPRIN) {
+    std::cout << "ISPRIN: STEP 2" << std::endl;
+  }
   std::unordered_set<QuadraticIdealBase<T>> baby_step_list = {};
   baby_step_list_generator.baby_step();
 
+  if (DBG_ISPRIN) {
+    std::cout << "ISPRIN: STEP 3" << std::endl;
+  }
   while (baby_step_list_generator.get_distance() < sqrt_regulator &&
          baby_step_list.count(baby_step_list_generator.get_qib()) == 0) {
     baby_step_list.insert(baby_step_list_generator.get_qib());
     baby_step_list_generator.baby_step();
   }
 
+  if (DBG_ISPRIN) {
+    std::cout << "ISPRIN: STEP 4" << std::endl;
+  }
+
   if (baby_step_list.count(G) != 0) {
+    if (DBG_ISPRIN) {
+      std::cout << "ISPRIN: STEP 5" << std::endl;
+    }
     return true;
   }
 
   else {
+    if (DBG_ISPRIN) {
+      std::cout << "ISPRIN: STEP 6" << std::endl;
+    }
 
-    QuadraticClassGroupElement<T> giant_step{*quadratic_order}, G_copy{*quadratic_order};
+    QuadraticClassGroupElement<T> giant_step{*quadratic_order},
+        G_copy{*quadratic_order};
+    if (DBG_ISPRIN) {
+      std::cout << "ISPRIN: STEP 7" << std::endl;
+    }
     G_copy.assign(G);
+    if (DBG_ISPRIN) {
+      std::cout << "ISPRIN: STEP 8" << std::endl;
+    }
     giant_step.assign(G);
 
-
-    for(int i = 0; i <= CeilToZZ(to_RR(sqrt_regulator)); i++){
+    if (DBG_ISPRIN) {
+      std::cout << "ISPRIN: STEP 9" << std::endl;
+    }
+    for (int i = 0; i <= CeilToZZ(to_RR(sqrt_regulator)); i++) {
+      if (DBG_ISPRIN) {
+        std::cout << "ISPRIN: STEP 10" << std::endl;
+      }
       mul(G_copy, G_copy, giant_step);
-      if(baby_step_list.count(G) != 0){
+      if (DBG_ISPRIN) {
+        std::cout << "ISPRIN: STEP 11" << std::endl;
+      }
+      if (baby_step_list.count(G) != 0) {
+        if (DBG_ISPRIN) {
+          std::cout << "ISPRIN: STEP 12" << std::endl;
+        }
         return true;
       }
     }

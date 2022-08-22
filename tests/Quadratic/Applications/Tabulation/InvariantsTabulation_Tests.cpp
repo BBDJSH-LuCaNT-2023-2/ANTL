@@ -24,6 +24,9 @@
 #define BUFLEN 50
 
 // #include <ANTL/quadratic/quadratic_order.hpp>
+
+#include "timer.hpp"
+
 #include <fstream>
 #include <mpi.h>
 #include <sys/stat.h>
@@ -32,7 +35,8 @@
 #ifndef INVARIANTS_TABULATION_TEST
 #define INVARIANTS_TABULATION_TEST
 
-#define LIST_SIZE_QUADRATIC 33554432
+// #define LIST_SIZE_QUADRATIC 33554432
+#define LIST_SIZE_QUADRATIC 1000000
 
 #include "AuxillaryFunctions.hpp"
 
@@ -59,9 +63,9 @@ using namespace ANTL;
 
     if (myrank == 0) {
       ZZ total_n, total_t1, IS;
-      register long type, L, H, i, idx, n, t1, jobs, saveH, savenf;
+      long type, L, H, i, idx, n, t1, jobs, saveH, savenf;
       bool done;
-      char fname[50], hname[50], prefix[50]; //,mkdir[50],check[50];
+      char fname[50], hname[50], prefix[100]; //,mkdir[50],check[50];
       ifstream infile;
       ofstream outfile;
 
@@ -96,7 +100,7 @@ using namespace ANTL;
       H = atol(argv[3]);
       conv(IS, argv[4]);
 
-      size_t len = 50;
+      size_t len = sizeof(char)*50;
       gethostname(hname, len);
 
       cout << "Master:  " << hname << endl;
@@ -118,8 +122,9 @@ using namespace ANTL;
       bool finished[1 + H];
       long numfinished = H - L;
 
-      for (i = L; i < H; ++i)
+      for (i = L; i < H; ++i) {
         finished[i] = false;
+      }
 
       sprintf(fname, "check-%ld-%s", L, argv[3]);
       cout << "checkpoint file = " << fname << endl << endl;
@@ -134,8 +139,10 @@ using namespace ANTL;
         if (H >= saveH) {
           infile >> total_n;
           infile >> total_t1;
-          for (i = 0; i < savenf; ++i)
+          for (i = 0; i < savenf; ++i) {
             infile >> finished[L + i];
+            std::cout << "heres your problem" << std::endl;
+          }
         } else {
           clear(total_n);
           clear(total_t1);
@@ -146,12 +153,21 @@ using namespace ANTL;
       saveH = H;
       savenf = numfinished;
 
+      std::cout << "continue to collect stats and start new jobs until all are finished" << std::endl;
       // continue to collect stats and start new jobs until all are finished
       done = true;
-      for (i = L; i < H && done; ++i)
+      for (i = L; i < H && done; ++i) {
+        std::cout << "DEBUGGING 0" << std::endl;
+        if(!finished[i]) {
+        std::cout << "DEBUGGING 0.1" << std::endl;
+        }
         done = finished[i];
-
+        if(!done) {
+        std::cout << "DEBUGGING 0.2" << std::endl;
+        }
+      }
       while (!done) {
+        std::cout << "DEBUGGING 1" << std::endl;
         // start first jobs on all machines
         idx = L;
         while (idx < H && finished[idx])
@@ -161,20 +177,26 @@ using namespace ANTL;
         for (i = 1; i <= machines && idx < H; ++i) {
           // get next interval to compute (idx < 0 indicates termination)
           MPI_Send(&idx, 1, MPI_LONG, i, INTERVAL_DATA, MPI_COMM_WORLD);
+          std::cout << "sent another job " << std::endl;
           ++jobs;
 
           ++idx;
-          while (idx < H && finished[idx])
+          while (idx < H && finished[idx]) {
             ++idx;
+          }
         }
 
         while (idx < H) {
           // receive computational data, start new job if necessary
-          MPI_Recv(buffer, BUFLEN, MPI_PACKED, MPI_ANY_SOURCE, TIME_DATA,
+          std::cout << "1" << std::endl;
+
+          MPI_Recv(buffer, sizeof(char)*BUFLEN, MPI_PACKED, MPI_ANY_SOURCE, TIME_DATA,
                    MPI_COMM_WORLD, &rc);
+          std::cout << "1.5" << std::endl;
           --jobs;
 
           position = 0;
+          std::cout << "2" << std::endl;
           MPI_Unpack(buffer, BUFLEN, &position, &i, 1, MPI_LONG,
                      MPI_COMM_WORLD);
           MPI_Unpack(buffer, BUFLEN, &position, &n, 1, MPI_LONG,
@@ -182,6 +204,7 @@ using namespace ANTL;
           MPI_Unpack(buffer, BUFLEN, &position, &t1, 1, MPI_LONG,
                      MPI_COMM_WORLD);
 
+          std::cout << "3" << std::endl;
           cout << "Interval " << i << " - " << n << " fields, time " << flush;
           MyTime(t1);
           cout << endl;
@@ -199,6 +222,7 @@ using namespace ANTL;
           outfile << endl;
           outfile.close();
 
+          std::cout << "4" << std::endl;
           // send next interval to compute
           while (idx < H && finished[idx])
             ++idx;
@@ -248,6 +272,7 @@ using namespace ANTL;
           done = finished[i];
       }
 
+      std::cout << "send a \"finished\" flag to all slaves" << std::endl;
       // send a "finished" flag to all slaves
       idx = -1;
       for (i = 1; i <= machines; ++i)
@@ -266,13 +291,13 @@ using namespace ANTL;
       MyTime(total_t1 / total_n);
       cout << endl << endl;
     } else {
-
+      std::cout << "this is not the main process!!" << std::endl;
       ZZ Dlist[LIST_SIZE_QUADRATIC], L, H, maxH, IS;
-      quadratic_order<long> QO;
-      vec_ZZ Cl;
-      register long n, i, j, idx, max_idx, Dl, oldDl, t1, rank;
+//       QuadraticOrder<ZZ> QO;
+//       vec_ZZ Cl;
+      long n, i, j, idx, max_idx, Dl, oldDl, t1, rank;
       long long D, oldD;
-      char fname[50], hname[50], zipper[100], check[50], mkdir[50];
+      char fname[50], hname[50], zipper[100], check[100], mkdir[100];
       timer t;
       ofstream outfile;
       MPI_Status rc;
@@ -282,43 +307,50 @@ using namespace ANTL;
       //
       // Initializations
       //
-
-      size_t len = 100;
+      size_t len = sizeof(char)*50;
       gethostname(hname, len);
 
       cout << "Proc " << myrank << " (" << hname << "):  Initializing" << endl;
 
       // turn off verbosity for h computations
-      quadratic_order<long>::verbose(0);
+      // quadratic_order<long>::verbose(0);
 
       long type = atol(argv[1]);
       conv(IS, argv[4]);
       maxH = to<ZZ>(atol(argv[3])) * IS;
 
+      cout << "Proc " << myrank << " (" << hname << "):  Initializing prrime list" << endl;
       // initialize prime list for discriminant generation
-      if (type == 0)
-        get_Dlist_imag(maxH, maxH, Dlist, n, 1);
-      else
+      if (type == 0) {
+//         get_Dlist_imag(maxH, maxH, Dlist, n, 1);
+      }
+      else {
         get_Dlist_real(maxH, maxH, Dlist, n, 1);
+      }
 
       // initialize L(1,X) tables and prime list for discriminant generation
-      QO.use_Lfunction_tables(to<long>(maxH));
+//       QO.use_Lfunction_tables(to<long>(maxH));
 
+      cout << "Proc " << myrank << " (" << hname << "): check directory" << endl;
       // check directory
       struct stat buf;
       sprintf(check, "%s/%s", argv[5], argv[6]);
+      cout << "Proc " << myrank << " (" << hname << "): check directory 1" << endl;
       if (stat(check, &buf)) {
+        cout << "Proc " << myrank << " (" << hname << "): check directory 2" << endl;
         sprintf(mkdir, "mkdir %s/%s", argv[5], argv[6]);
+        cout << "Proc " << myrank << " (" << hname << "): check directory 3" << endl;
         system(mkdir);
+        cout << "Proc " << myrank << " (" << hname << "): check directory 4" << endl;
       }
 
+      cout << "Proc " << myrank << " (" << hname << "): main loop - process interval idx until idx < 0 received" << endl;
       //
       // main loop - process interval idx until idx < 0 received
       //
 
       // get interval to compute (idx < 0 indicates termination)
       MPI_Recv(&idx, 1, MPI_LONG, 0, INTERVAL_DATA, MPI_COMM_WORLD, &rc);
-
       while (idx >= 0) {
         // get L and H
         L = to_ZZ(idx) * IS;
@@ -328,10 +360,12 @@ using namespace ANTL;
         cout << "Proc " << myrank << " (" << hname << "):  " << idx << ", " << L
              << " to " << H << endl;
 
-        if (type == 0)
+        if (type == 0) {
           sprintf(fname, "%s/%s/iq-data.%ld", argv[5], argv[6], idx);
-        else
+        }
+        else {
           sprintf(fname, "%s/%s/rq-data.%ld", argv[5], argv[6], idx);
+        }
         outfile.open(fname);
 
         t.start_timer();
@@ -343,38 +377,53 @@ using namespace ANTL;
         //   ...
         //   time (in csec)
 
-        if (type == 0)
-          get_Dlist_imag(L, H, Dlist, n);
+        if (type == 0) {
+//           get_Dlist_imag(L, H, Dlist, n);
+        }
         else {
-          if (L == 1)
-            get_Dlist_real(to_ZZ(2), H, Dlist, n);
-          else
-            get_Dlist_real(L, H, Dlist, n);
+          if (L == 1) {
+//             get_Dlist_real(to_ZZ(2), H, Dlist, n);
+            get_Dlist_real(to_ZZ(2), H, Dlist, n, 0);
+          }
+          else {
+//             get_Dlist_real(L, H, Dlist, n);
+            get_Dlist_real(L, H, Dlist, n, 0);
+          }
         }
 
         outfile << L << " " << H << " " << n << endl;
 
         // set global # of terms and prec for L-function approximations for this
         // interval
-        QO.set_Lfunction_global(to<long>(H));
+//         QO.set_Lfunction_global(to<long>(H));
 
         oldDl = to<long>(L);
         for (i = 0; i < n; ++i) {
+          std::cout << "Dlist[i] is " << Dlist[i] << std::endl;
           conv(Dl, Dlist[i]);
-          QO.assign(Dl);
-          Cl = QO.class_group(CLASS_GROUP_BSGS);
-          rank = QO.get_rank();
-          outfile << (labs(Dl) - oldDl) << " " << flush;
-          // outfile << Dl << " " << flush;
-          outfile << QO.get_nump() << " " << flush;
-          outfile << QO.get_pmax() << " " << flush;
-          if (type == 1)
-            outfile << QO.regulator().get_log() << " " << flush;
-          outfile << rank << flush;
-          for (j = 0; j < rank; ++j)
-            outfile << " " << Cl[j] << flush;
+//           QO.assign(Dl);
+          QuadraticOrder<ZZ> QO{ZZ(Dl)};
+//           Cl = QO.class_group(CLASS_GROUP_BSGS);
+//           rank = QO.get_rank();
+//           outfile << (labs(Dl) - oldDl) << " " << flush;
+          outfile << Dl << " " << flush;
+//           outfile << QO.get_nump() << " " << flush;
+//           outfile << QO.get_pmax() << " " << flush;
+          double regulator;
+          pair<double, vector<long>> regulator_and_class_group = get_regulator_and_class_group(QO);
+          if (type == 1) {
+            // outfile << QO.regulator().get_log() << " " << flush;
+            regulator = regulator_and_class_group.first;
+            outfile << regulator << " " << flush;
+          }
+          vector<long> Cl = regulator_and_class_group.second;
+//           outfile << rank << flush;
+          outfile << Cl.size() << " " << flush;
+//           for (j = 0; j < rank; ++j)
+//             outfile << " " << Cl[j] << flush;
+          outfile << Cl << flush;
           outfile << endl;
-          oldDl = labs(Dl);
+//           oldDl = labs(Dl);
         }
 
         t.stop_timer();

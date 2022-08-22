@@ -20,6 +20,7 @@ QuadraticOrder<ZZ>::QuadraticOrder(const ZZ & D)
   if (m4 == 0 || m4 == 1) {
     ZZ rD = SqrRoot (abs (D));
     if (rD * rD != abs (D)) {
+      std::cout << "all good here!" << std::endl;
       // assign new values
       Delta = D;
       g = 0;
