@@ -1,15 +1,71 @@
-#define INT_SIZE_QUADRATIC 100000000000
+#ifndef AUXILLARYFUNCTIONS_HPP_INCLUDED
+#define AUXILLARYFUNCTIONS_HPP_INCLUDED
+
+#define INT_SIZE_QUADRATIC 10000000
 
 #include <iostream>
 #include <list>
 #include <thread>
 #include <unordered_set>
+#include <utility>
 #include <vector>
 
+#include <ANTL/Quadratic/ClassGroup/ClassGroupBSGSReal.hpp>
 #include <ANTL/Quadratic/Regulator/RegulatorLenstra_ZZ.hpp>
+
+#include <ANTL/Quadratic/QuadraticClassGroupElement.hpp>
 
 using namespace NTL;
 using namespace ANTL;
+
+pair<double, vector<long>> get_regulator_and_class_group(QuadraticOrder<ZZ> &quad_order) {
+
+  QuadraticNumber<ZZ> quad_number1{quad_order};
+  QuadraticNumber<ZZ> quad_number2{quad_order};
+
+  MultiplyComp<ZZ> mul_comp_object{};
+  mul_comp_object.set_RelativeGenerator(quad_number1);
+  quad_order.set_mul_comp(mul_comp_object);
+
+  ReducePlainReal<ZZ> red_plain_real_object{};
+  red_plain_real_object.set_RelativeGenerator(quad_number2);
+  quad_order.set_red_best(red_plain_real_object);
+
+  L_function<ZZ> l_function;
+  l_function.init(quad_order.get_discriminant(), 2);
+
+  RegulatorLenstraData<ZZ, double> regulator_lenstra_data{&quad_order,
+                                                          &l_function};
+
+  //   ZZ bound = ZZ(0);
+  regulator_lenstra_data.regulator_lenstra();
+  //    regulator_lenstra_data.regulator_bsgs(bound);
+
+  double regulator = regulator_lenstra_data.get_regulator();
+
+  // Computing h*
+  RR h_star_close = to_RR(regulator_lenstra_data.lower_bound_hR()) / to_RR(regulator);
+  ZZ h_star = CeilToZZ(h_star_close);
+
+  // Setting up the ClassGroupBSGSReal object
+  ClassGroupBSGSReal<ZZ> class_group_bsgs_real1{&quad_order};
+  class_group_bsgs_real1.set_regulator(regulator);
+
+  // Computing the class group
+  class_group_bsgs_real1.cg_bsgs_real(h_star);
+
+  // Adding computed class group to reslults vector
+  vector<ZZ> class_group_ZZ = class_group_bsgs_real1.get_class_group();
+  vector<long> class_group_long = {};
+
+  for(auto num : class_group_ZZ) {
+    class_group_long.push_back(to<long>(num));
+  }
+
+  std::sort(class_group_long.begin(), class_group_long.end());
+
+  return {regulator, class_group_long};
+}
 
 void get_DList_real_custom(long ubound, std::list<long> &discriminants);
 
@@ -392,3 +448,204 @@ void get_Dlist_real(const ZZ &L, const ZZ &H, std::vector<ZZ> &Dlist, long &n, i
     }
   }
 }
+
+void get_Dlist_real(const ZZ &L, const ZZ &H, ZZ *Dlist, long &n, int init) {
+  static long prime_list[1049000]; // first 1000000 primes
+  static long numP = 0;
+  static unsigned char sieve0[INT_SIZE_QUADRATIC], sieve1[INT_SIZE_QUADRATIC];
+  unsigned char *end0, *end1;
+  ZZ B, PP0, PP1, P2, LL0, LL1, off;
+  long p, p2l, off0, off1;
+  unsigned char *sptr0, *sptr1;
+  long *pl;
+
+
+  if (init) {
+    // initialize static list of small odd primes <= sqrt(H)
+    std::cout << "begin: get_Dlist_real init" << std::endl;
+    PrimeSeq sP;
+    long bound = to<long>(SqrRoot(H)) + 100;
+    numP = 0;
+
+    std::cout << "get_Dlist_real init: 1" << std::endl;
+    sP.reset(3);
+    p = sP.next();
+    std::cout << "get_Dlist_real init: 2" << std::endl;
+    while (p <= bound) {
+      prime_list[numP] = p;
+      ++numP;
+      p = sP.next();
+      if (numP > 1049000) {
+        std::cout << "get_Dlist_real init: error" << std::endl;
+        cerr << "ERROR in get_Dlist_real:  prime list too small, numP = "
+             << numP << endl;
+        exit(1);
+      }
+    }
+    std::cout << "get_Dlist_real init: 3" << std::endl;
+    prime_list[numP] = p;
+    std::cout << "get_Dlist_real init: 4" << std::endl;
+    ++numP;
+
+    std::cout << "end: get_Dlist_real init" << std::endl;
+    return;
+  }
+
+  if (numP == 0) {
+    cerr << "ERROR in get_DList_real:  must call with init>0 first" << endl;
+    exit(1);
+  }
+
+  // initialize sieve
+  LL0 = L;
+  if (IsZero(LL0))
+    ++LL0;
+  while (rem(LL0, 4) != 0)
+    ++LL0;
+
+  LL1 = L;
+  while (rem(LL1, 4) != 1)
+    ++LL1;
+
+
+  conv(off0, 1 + ((H - LL0) >> 2));
+  end0 = sieve0 + off0;
+  conv(off1, 1 + ((H - LL1) >> 2));
+  end1 = sieve1 + off1;
+
+  memset(sieve0, '\0', (off0) * sizeof(unsigned char));
+  memset(sieve1, '\0', (off1) * sizeof(unsigned char));
+
+  B = SqrRoot(H);
+
+
+  if (B > prime_list[numP - 1]) {
+    cerr << "ERROR get_Dlist_real:  not enough primes for H = " << H << endl;
+    exit(1);
+  }
+
+  pl = prime_list;
+  p = *pl;
+  P2 = to<ZZ>(p) * to<ZZ>(p);
+
+  // sieve out all odd square factors
+  while (p <= B) {
+    if (P2.SinglePrecision()) {
+      conv(p2l, P2);
+
+
+
+      // process sieve0 (0 mod 4 integers)
+      off0 = rem(LL0, p2l);
+      if (off0)
+        off0 = rem(to<ZZ>(InvMod(4, p2l)) * to<ZZ>(-off0), p2l);
+      if (off0 < 0)
+        off0 += p2l;
+
+      sptr0 = sieve0 + off0;
+      while (sptr0 <= end0) {
+        (*sptr0) = 1;
+        sptr0 += p2l;
+      }
+
+      // process sieve1 (1 mod 4 integers)
+      off1 = rem(LL1, p2l);
+      if (off1)
+        off1 = rem(to<ZZ>(InvMod(4, p2l)) * to<ZZ>(-off1), p2l);
+      if (off1 < 0)
+        off1 += p2l;
+
+      sptr1 = sieve1 + off1;
+      while (sptr1 <= end1) {
+        (*sptr1) = 1;
+        sptr1 += p2l;
+      }
+    } else {
+
+
+      rem(off, LL0, P2);
+      if (!IsZero(off))
+        rem(off, InvMod(to<ZZ>(4), P2) * to<ZZ>(-off), P2);
+      if (off < 0)
+        off += P2;
+
+      if (off.SinglePrecision()) {
+        conv(off0, off);
+        sptr0 = sieve0 + off0;
+        if (sptr0 >= sieve0 && sptr0 <= end0)
+          (*sptr0) = 1;
+      }
+
+      // process sieve1 (1 mod 4 integers)
+      rem(off, LL1, P2);
+      if (!IsZero(off))
+        rem(off, InvMod(to<ZZ>(4), P2) * to<ZZ>(-off), P2);
+      if (off < 0)
+        off += P2;
+
+      if (off.SinglePrecision()) {
+        conv(off1, off);
+        sptr1 = sieve1 + off1;
+        if (sptr1 >= sieve1 && sptr1 <= end1)
+          (*sptr1) = 1;
+      }
+    }
+
+    ++pl;
+    p = *pl;
+    P2 = to<ZZ>(p) * to<ZZ>(p);
+  }
+
+  // sieve1 represents squarefree ints that are 1 mod 4
+  // sieve0 represetns ints 0 mod 4 with no odd square factors.  Record those
+  // for which
+  //   x / 4 is 2 or 3 mod 4
+
+  // get first D = 0 mod 4
+  PP0 = LL0;
+  sptr0 = sieve0;
+  while (*sptr0) {
+    PP0 += 4;
+    ++sptr0;
+  }
+
+
+  // get first D = 1 mod 4
+  PP1 = LL1;
+  sptr1 = sieve1;
+  while (*sptr1) {
+    PP1 += 4;
+    ++sptr1;
+  }
+
+
+  n = 0;
+  while (PP0 <= H || PP1 <= H) {
+    if (PP1 < PP0 && PP1 <= H) {
+      Dlist[n] = PP1;
+      ++n;
+
+      // get next D = 1 mod 4
+      do {
+        PP1 += 4;
+        ++sptr1;
+      } while (PP1 <= H && (*sptr1));
+    } else {
+      off = PP0 >> 2;
+      p2l = rem(off, 4);
+      if (p2l == 2 || p2l == 3) {
+        Dlist[n] = PP0;
+        ++n;
+
+      }
+
+      // get next D = 0 mod 4
+      do {
+        PP0 += 4;
+        ++sptr0;
+      } while (PP0 <= H && (*sptr0));
+    }
+  }
+}
+
+#endif // AUXILLARYFUNCTIONS_HPP_INCLUDED

@@ -20,8 +20,9 @@ TEST_CASE("ClassGroupReal<ZZ>: Does it work?", "[ClassGroupReal]") {
   extern const std::vector<std::vector<long>> correct_class_groups;
 
   int correct_count = 0;
-  int test_start = 0;
-  int test_bound = correct_class_groups.size();
+  int test_start = 11;
+//   int test_bound = correct_class_groups.size();
+  int test_bound = 12;
 
   vector<vector<long>> computed_class_groups;
 
@@ -68,6 +69,7 @@ TEST_CASE("ClassGroupReal<ZZ>: Does it work?", "[ClassGroupReal]") {
     }
 
     std::sort(class_group_long.begin(), class_group_long.end());
+    std:cout << class_group_long << std::endl;
     computed_class_groups.push_back(class_group_long);
 
     // Checking for corect output

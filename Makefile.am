@@ -15,8 +15,8 @@ endif
                src/Quadratic/QuadraticOrder_long.cpp \
                src/Quadratic/QuadraticOrder_ZZ.cpp
 
-tabulation_SOURCES = tests/UnitTests.cpp                                                        \
-                     tests/Quadratic/Applications/Tabulation/InvariantsTabulation_Tests.cpp     \
+tabulation_SOURCES = tests/Quadratic/Applications/Tabulation/InvariantsTabulation_Tests.cpp     \
+                     tests/Quadratic/Applications/Tabulation/timer.cpp                          \
                      src/common.cpp                                                             \
                      src/LinearAlgebra/Smith.cpp                                                \
                      src/L_function/Character.cpp                                               \
