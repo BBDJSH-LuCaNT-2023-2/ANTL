@@ -26,26 +26,75 @@ template <class T, class S> S QuadraticInfElement<T, S>::get_distance() const {
 
 // Infrastructure methods
 template <class T, class S> void QuadraticInfElement<T, S>::baby_step() {
-  T a = qib.get_a(), b = qib.get_b(), c = qib.get_c(), q, r, R, Q, P;
-  S relative_generator, relative_distance;
+  //   T a = qib.get_a(), b = qib.get_b(), c = qib.get_c(), q, r, R, Q, P;
+  //   S relative_generator, relative_distance;
+  //
+  //   // Computation of the QuadraticIdealBase via a single step in the
+  //   continued
+  //   // fraction expansion
+  //   DivRem(q, r, b + FloorRootDelta, 2 * a);
+  //
+  //   R = -a;
+  //   P = FloorRootDelta - r;
+  //   Q = q * ((b - P) / 2) - c;
+  //
+  //   qib.assign(Q, P, R);
+  //   qib.normalize();
+  //
+  //   // Computation of the relative distance
+  //   relative_generator = abs(to<S>(2 * Q) / (to<S>(P) - sqrt(to<S>(Delta))));
+  //   relative_distance = log(relative_generator);
+  //
+  //   // Updating the distance
+  //   update_distance_add(Distance, Distance, relative_distance);
 
-  // Computation of the QuadraticIdealBase via a single step in the continued
-  // fraction expansion
-  DivRem(q, r, b + FloorRootDelta, 2 * a);
+  T a, b, c, rootD, precision;
+  T q, r, a2, nb, na, temp, s;
+  S relative_distance;
 
-  R = -a;
-  P = FloorRootDelta - r;
-  Q = q * ((b - P) / 2) - c;
+  a = qib.get_a();
+  b = qib.get_b();
+  c = qib.get_c();
 
-  qib.assign(Q, P, R);
-  qib.normalize();
+//   Delta = qie->Delta;
+  rootD = FloorRootDelta;
+//   precision = qie->precision;
 
-  // Computation of the relative distance
-  relative_generator = abs(to<S>(2 * Q) / (to<S>(P) - sqrt(to<S>(Delta))));
-  relative_distance = log(relative_generator);
+  c = -c;
+
+  s = (a > 0) ? 0 : 1;
+
+  // (rootD-b) = (2a)*q + r
+  a2 = a << 1;
+  temp = rootD + b;
+  if (s == 1) {
+    ++temp;
+  }
+  DivRem(q, r, temp, a2);
+
+  // nb = rootD + s - r;
+  nb = rootD - r;
+  if (s == 1) {
+    ++nb;
+  }
+
+  // na = c -q*((nb - b) >> 1);
+  na = c - q * ((nb - b) >> 1);
+
+  // d += ln( (nb + rd) / 2a )
+//   arb_init(relative_generator);
+//   arb_add_si(relative_generator, qie->sqrt_Delta, nb, precision);
+//   arb_div_si(relative_generator, relative_generator, a2, precision);
+//   arb_log(relative_generator, relative_generator, precision);
+  relative_distance = log((to<S>(nb) + sqrt(to<S>(Delta))) / to<S>(a2));
 
   // Updating the distance
   update_distance_add(Distance, Distance, relative_distance);
+
+  //   qie->b = nb;
+  //   qie->c = -a;
+  //   qie->a = na;
+  qib.assign(na, nb, -a);
 }
 
 template <class T, class S>
@@ -92,19 +141,19 @@ void QuadraticInfElement<T, S>::adjust(const S &bound) {
 
   S current_difference, previous_difference;
   current_difference = bound - Distance;
-//   std::cout << "ADJUST taraget distance is " << bound << std::endl;
-//   std::cout << qib << " with distance" << Distance << std::endl;
+  //   std::cout << "ADJUST taraget distance is " << bound << std::endl;
+  //   std::cout << qib << " with distance" << Distance << std::endl;
   if (-0.000001 >= bound - Distance) {
     while (Distance > bound) {
       inverse_rho();
       previous_difference = current_difference;
       current_difference = bound - Distance;
-//       std::cout << qib << " with distance" << Distance << std::endl;
+      //       std::cout << qib << " with distance" << Distance << std::endl;
     }
     if (abs(previous_difference) < abs(current_difference)) {
       baby_step();
     }
-      return;
+    return;
   }
 
   else {
@@ -115,7 +164,7 @@ void QuadraticInfElement<T, S>::adjust(const S &bound) {
       baby_step();
       previous_difference = current_difference;
       current_difference = bound - Distance;
-//       std::cout << qib << " with distance" << Distance << std::endl;
+      //       std::cout << qib << " with distance" << Distance << std::endl;
     }
     inverse_rho();
     previous_difference = current_difference;
@@ -123,9 +172,8 @@ void QuadraticInfElement<T, S>::adjust(const S &bound) {
     if (abs(previous_difference) < abs(current_difference)) {
       baby_step();
     }
-//     std::cout << qib << " with distance" << Distance << std::endl;
+    //     std::cout << qib << " with distance" << Distance << std::endl;
   }
-
 
   return;
 }
@@ -133,7 +181,8 @@ void QuadraticInfElement<T, S>::adjust(const S &bound) {
 template <class T, class S>
 void QuadraticInfElement<T, S>::adjust_to_one() {
 
-  QuadraticInfElement<T, S> forward_qie{*qib.get_QO()}, backward_qie{*qib.get_QO()};
+  QuadraticInfElement<T, S> forward_qie{*qib.get_QO()},
+backward_qie{*qib.get_QO()};
 
   forward_qie.qib = qib;
   forward_qie.Distance = Distance;
@@ -256,7 +305,8 @@ S QuadraticInfElement<T, S>::get_baby_steps(
   // eventually a QuadraticInfElement<ZZ, S> class definition will be required
   ZZ old_a = qib.get_a(), old_b = qib.get_b(), old_c = qib.get_c();
   ZZ q, r, new_c, new_a, new_b;
-  S relative_generator, relative_distance, regulator, initial_distance = Distance;
+  S relative_generator, relative_distance, regulator,
+      initial_distance = Distance;
 
   prin_list.hash(this->hash_real());
 
@@ -271,21 +321,21 @@ S QuadraticInfElement<T, S>::get_baby_steps(
 
     // Computation of the relative distance
     relative_generator =
-        abs(to<S>(2*new_a) / (to<S>(new_b) - sqrt(to<S>(Delta))));
+        abs(to<S>(2 * new_a) / (to<S>(new_b) - sqrt(to<S>(Delta))));
     relative_distance = log(relative_generator);
 
     // The two checks below are for the cases where consecutive coefficients are
     // found to be equal in the continued fraction expansion
     if (old_a == new_a) {
       regulator = 2 * (Distance);
-//       std::cout << "old_a == new_a" << std::endl;
+      //       std::cout << "old_a == new_a" << std::endl;
       update_distance_add(regulator, regulator, relative_distance);
       regulator = regulator - log(to<S>(old_a));
       return regulator;
     }
 
     if (old_b == new_b && (!IsOne(old_a))) {
-//       std::cout << "old_b == new_b" << std::endl;
+      //       std::cout << "old_b == new_b" << std::endl;
       regulator = 2 * (Distance);
       regulator = regulator - log(to<S>(old_a));
       return regulator;
@@ -385,7 +435,7 @@ S QuadraticInfElement<T, S>::get_baby_steps(
     }
 
     if (A.is_one() && old_b == new_b && (!IsOne(old_a))) {
-//       std::cout << "old_b == new_b" << std::endl;
+      //       std::cout << "old_b == new_b" << std::endl;
       regulator = 2 * Distance;
       regulator = regulator / to<S>(old_a);
       return regulator;
@@ -424,7 +474,8 @@ void conjugate(QuadraticInfElement<T, S> &qie_a,
   qie_a = qie_b;
   qie_a.qib.set_b(-qie_b.qib.get_b());
 
-  update_distance_add(qie_a.Distance, qie_a.get_distance(), qie_b.get_distance());
+  update_distance_add(qie_a.Distance, qie_a.get_distance(),
+                      qie_b.get_distance());
   update_distance_negate(qie_a.Distance, qie_a.Distance);
   update_distance_subtract(qie_a.Distance, qie_a.Distance,
                            log(to<S>(qie_a.qib.get_a())));
@@ -439,7 +490,6 @@ QuadraticInfElement<T, S> QuadraticInfElement<T, S>::conjugate() {
 
   qie_conj.qib = qib;
   qie_conj.qib.set_b(-qib.get_b());
-
 
   update_distance_add(qie_conj.Distance, Distance, qie_conj.Distance);
   update_distance_negate(qie_conj.Distance, qie_conj.Distance);
@@ -479,7 +529,6 @@ void nuclose(QuadraticInfElement<T, S> &C, const ZZ &n) {
 
   s = 1;
   C.adjust(s);
-
 
   for (i = 1; i <= k; ++i) {
     s <<= 1;

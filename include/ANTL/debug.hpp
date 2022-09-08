@@ -239,8 +239,9 @@ namespace ANTL
   std::ostream & operator << (std::ostream & os,
 			      const std::vector<T> & vector)
   {
-    std::string output = "[ ";
-    for (size_t i = 0; i < vector.size(); ++i) output += to_string(vector[i]) + " ";
+    std::string output = "[";
+    for (size_t i = 0; i < vector.size() - 1; ++i) output += to_string(vector[i]) + ", ";
+    output += to_string(vector[vector.size() - 1]);
     output += "]";
 
     os << output;

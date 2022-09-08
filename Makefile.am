@@ -6,16 +6,16 @@ AM_CC = @PTHREAD_CC@
 AM_CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/include
 
 if EXTRADEPS
-bin_PROGRAMS = tabulation
+bin_PROGRAMS = regulator classgroup
 else
-bin_PROGRAMS = tabulation
+bin_PROGRAMS =  regulator classgroup
 endif
 
 #main_SOURCES = tests/HeaderTest.cpp                  \
                src/Quadratic/QuadraticOrder_long.cpp \
                src/Quadratic/QuadraticOrder_ZZ.cpp
 
-tabulation_SOURCES = tests/Quadratic/Applications/Tabulation/InvariantsTabulation_Tests.cpp     \
+# tabulation_SOURCES = tests/Quadratic/Applications/Tabulation/InvariantsTabulation_Tests.cpp     \
                      tests/Quadratic/Applications/Tabulation/timer.cpp                          \
                      src/common.cpp                                                             \
                      src/LinearAlgebra/Smith.cpp                                                \
@@ -42,7 +42,7 @@ tabulation_SOURCES = tests/Quadratic/Applications/Tabulation/InvariantsTabulatio
                      src/XGCD/xgcd_iter.cpp                                                     \
                      src/XGCD/xgcd_plain.cpp
 
-# regulator_SOURCES = tests/UnitTests.cpp                                     \
+regulator_SOURCES = tests/UnitTests.cpp                                     \
                     tests/Quadratic/Regulator/RegulatorLenstra_Test.cpp     \
                     tests/Quadratic/TestData/TestData.cpp                   \
                     src/common.cpp                                          \
@@ -70,7 +70,7 @@ tabulation_SOURCES = tests/Quadratic/Applications/Tabulation/InvariantsTabulatio
                     src/XGCD/xgcd_iter.cpp                                  \
                     src/XGCD/xgcd_plain.cpp
 
-# classgroup_SOURCES = tests/UnitTests.cpp                                     \
+classgroup_SOURCES = tests/UnitTests.cpp                                     \
                     tests/Quadratic/ClassGroup/ClassGroupBSGSReal_Tests.cpp  \
                     src/common.cpp                                           \
                     src/LinearAlgebra/Smith.cpp                              \
