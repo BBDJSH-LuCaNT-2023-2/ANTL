@@ -174,21 +174,54 @@ template <> bool QuadraticIdealBase<ZZ>::is_reduced() {
 }
 
 template <> void QuadraticIdealBase<ZZ>::normalize() {
-  ZZ Delta, FloorRootDelta, q, r;
+//   ZZ Delta, FloorRootDelta, q, r;
+//
+//   Delta = this->get_QO()->get_discriminant();
+//   FloorRootDelta = SqrRoot(Delta);
+//
+//   abs(a, a);
+//
+//   if(FloorRootDelta < a) {
+//     b += ((a-b) / (2*a)) * (2*a);
+//   }
+//
+//   else {
+//     b += ((FloorRootDelta-b) / (2*a)) * (2*a);
+//   }
+//
+//   c = (Delta - (b*b))/(-4*a);
 
-  Delta = this->get_QO()->get_discriminant();
-  FloorRootDelta = SqrRoot(Delta);
+  static ZZ rootD, a2, q, r, temp, nb;
 
-  abs(a, a);
 
-  if(FloorRootDelta < a) {
-    b += ((a-b) / (2*a)) * (2*a);
+  rootD = SqrRoot(get_QO()->get_discriminant());
+
+  a2 = a << 1;
+  if (a <= rootD) {
+    temp = rootD - a2;
+    if (!(temp < b && b <= rootD)) {
+      temp = rootD - b;
+      DivRem(q, r, temp, a2);
+
+      nb = rootD - r;
+
+      c += q * ((b + nb) >> 1);
+      b = nb;
+    }
+  } else {
+    if (!(b > -a && b <= a)) {
+      DivRem(q, r, b, a2);
+
+      if (r > a) {
+        r -= a2;
+        ++q;
+      }
+
+      c -= q * ((b + r) >> 1);
+      b = r;
+    }
   }
 
-  else {
-    b += ((FloorRootDelta-b) / (2*a)) * (2*a);
-  }
-
-  c = (Delta - (b*b))/(-4*a);
-
+//   qie->b = b;
+//   qie->c = c;
 }
