@@ -23,351 +23,161 @@ using std::endl;
 using std::vector;
 NTL_CLIENT
 
-
-/**
- * @brief Abstract Class for testing XGCD
- * @author Zack Baker
- * 
- * 
- * @param g the gcd of a and b
- * @param a first input parameter
- * @param b second input parameter
- * @param u Bezout coefficient for a
- * @param v Bezout coefficient for b
- * 
- * @tparam T The datatype to test 
- * 
- * Abstract class to form the foundation of a class-based testing framework for XGCD algorithms.
- * Generically, all XGCD methods require 5 parameters, intended as follows:
- */
-template<typename T>
-class XGCDTestInstance {
-    protected:
-        T g;
-        T u;
-        T a;
-        T b; 
-    public:
-        /**
-         * @brief Parent constructor, can be called by all implementing classes
-         * 
-         * @param a xgcd input a
-         * @param b xgcd input b
-         */
-        XGCDTestInstance(T a, T b){
-            this->g = 0;
-            this->u = 0;
-            this->a = a;
-            this->b = b;
-        }
-        /**
-         * @brief evaluation method for this XGCD class type
-         * 
-         * Implementing classes must implement this method to evaluate their XGCD algorithm,
-         * setting members equal to the evaluation results as appropriate
-         * 
-         */
-        virtual void evaluateXGCD();
-        /**
-         * @brief Generic test method. Compares the input vector to the stored vector of class members 
-         * 
-         * @param expected input vector of expected values
-         * @return true the expected members all match the actual members
-         * @return false the expected vector differed from the member vector
-         */
-        bool testXGCD(vector<T> expected){
-            evaluateXGCD();
-            return expected == createMemberVector(); 
-        }
-        /**
-         * @brief Create a vector of member variables
-         * 
-         * @return A vector of member variables, in order (g,u,a,v,b)  
-         */
-        vector<T> createMemberVector(){
-            vector<T> members;
-            members.push_back(g);
-            members.push_back(u);
-            members.push_back(a);
-            members.push_back(b);
-            return members;
-        }
-
-        /**
-         * @brief reset the values of the test object, providing new input values a and b
-         * 
-         * @note Reimplement this method if template assignment to 0 doesn't make sense
-         * 
-         * @param a first new input 
-         * @param b second new input
-         */
-        void refreshInstance(T a, T b){
-            g = 0;
-            u = 0;
-            this->a = a;
-            this->b = b;
-            
-        }
-         
-};
-
-/**
- * @brief Class template for testing XGCDPlain 
- * @author Zack Baker
- * 
- * 
- * @tparam T The datatype to test
- */
-template<typename T>
-class XGCDPlainTestInstance: public XGCDTestInstance<T> {
-    
-    public:
-    T v;
-        /**
-         * @brief Construct a new XGCDPlainTestInstance object
-         * 
-         * @param a first input parameter
-         * @param b second input parameter
-         * 
-         * Inherits parent constructor
-         */
-        XGCDPlainTestInstance(T a, T b) : XGCDTestInstance<T>(a,b){
-            v = 0;
-        }
-        /**
-         * @brief Evaluate this XGCDPlainTestInstance by calling XGCD_PLAIN
-         * 
-         */
-        void evaluateXGCD(){
-            //hooray for templating
-            XGCD_PLAIN(this->g,this->u,v,this->a,this->b);
-        }
-        /**
-         * @brief Create  a vector of member variables. Overrides parent impl
-         * 
-         * @return v ector of member variables, in order: (g,u,a,v,b) 
-         */
-        vector<T> createMemberVector(){
-            vector<T> members;
-
-            members.push_back(this->g);
-            members.push_back(this->u);
-            members.push_back(this->a);
-            members.push_back(v);
-            members.push_back(this->b);
-            
-            return members;
-
-        }
-        /**
-         * @brief Refresh test instance. Overrides parent impl
-         * 
-         * @param a first xgcd parameter
-         * @param b second xgcd parameter
-         */
-        void refreshInstance(T a, T b){
-            XGCDTestInstance<T>::refreshInstance(a,b);
-            v = 0;
-        }
-        /**
-         * @brief Simplified test method
-         * 
-         * @param gcd the expected GCD method
-         * @return true g is the expected gcd of a and b 
-         * @return false g is not the expected gcd of a and b
-         */
-        bool testXGCD(T gcd){
-            evaluateXGCD();
-            return gcd == this->g;
-        }
-
-};
-
-template<typename T>
-class XGCDBinaryL2RPlainTestInstance: public XGCDPlainTestInstance<T>{
-    public:
-        XGCDBinaryL2RPlainTestInstance(T a, T b) : XGCDPlainTestInstance<T>(a,b){    
-        }
-        void evaluateXGCD(){
-            XGCD_BINARY_L2R(this->g,this->u,this->v,this->a,this->b);
-        }
-};
-
-template <typename T>
-class XGCDLeftPlainTestInstance: public XGCDTestInstance<T> {
-    public:
-        /**
-         * @brief Construct a new XGCDLeftPlainTestInstance object
-         * 
-         * @param a first XGCD parameter
-         * @param b second XGCD parameter
-         */
-        XGCDLeftPlainTestInstance(T a, T b): XGCDTestInstance<T>(a,b){}
-
-        /**
-         * @brief XGCD Evaluation method. Uses the XGCD_LEFT_PLAIN method.
-         * 
-         */
-        void evaluateXGCD(){
-            XGCD_LEFT_PLAIN(this->g, this->u, this->a, this->b);
-        }
-};
-
-
 TEMPLATE_TEST_CASE("XGCD_PLAIN tests", "[XGCD][XGCD_PLAIN]", int64_t){
-    TestType a,b,g;
+    TestType a,b,x,y,g, expected_g;
     a = 0;
     b = 0;
-    XGCDPlainTestInstance<TestType>* inst = new XGCDPlainTestInstance<TestType>(a,b);
-    
+    //XGCDPlainTestInstance<TestType>* inst = new XGCDPlainTestInstance<TestType>(a,b);
+
     SECTION("Basic Test"){
         //basic initial test: (3,5) = 1
         a = 3;
         b = 5;
-        g = 1;
+        expected_g = 1;
 
-        inst->refreshInstance(a,b);
-        REQUIRE(inst->testXGCD(g));
+        XGCD_PLAIN(g,x,y,a,b);
+        REQUIRE(expected_g == g);
     }
     SECTION("Reverse Basic Test"){
         a = 5;
         b = 3;
-        g = 1;
-        inst->refreshInstance(a,b);
-        REQUIRE(inst->testXGCD(g));
+        expected_g = 1;
+    
+        XGCD_PLAIN(g,x,y,a,b);
+        REQUIRE(expected_g == g);
     }
 
     SECTION("Common Factor Test"){
         //common factor test: (5,20) = 5
         a = 5;
         b = 20;
-        g = 5;
-        inst->refreshInstance(a,b);
-        REQUIRE(inst->testXGCD(g));
+        expected_g = 5;
+
+        XGCD_PLAIN(g,x,y,a,b);
+        REQUIRE(g == expected_g);
     }
 
     SECTION("Unit Input Test"){
-        //unit test: (1, 999) = 1
+        //unit test: (1,999) = 1
         a = 1;
         b = 999;
-        g = 1;
-        inst->refreshInstance(a,b);
-        REQUIRE(inst->testXGCD(g));
+        expected_g = 1;
+
+        XGCD_PLAIN(g,x,y,a,b);
+        REQUIRE(g == expected_g);
     }
+
     SECTION("Negative Input Test"){
-        //sign permutation tests: (+/- 3, +/- 6) = 3
+        //unit test: (+/-3, +/-6) = 3
         a = -3;
         b = 6;
-        g = 3;
-        inst->refreshInstance(a,b);
-        REQUIRE(inst->testXGCD(g));
-    
+        expected_g = 3;
+
+        XGCD_PLAIN(g,x,y,a,b);
+        REQUIRE(g == expected_g);
+
         a = 3;
         b = -6;
-        inst->refreshInstance(a,b);
-        REQUIRE(inst->testXGCD(g));
+        expected_g = 3;
 
-        a=-3;
-        b=-6;
-        inst->refreshInstance(a,b);
-        REQUIRE(inst->testXGCD(g));
+        XGCD_PLAIN(g,x,y,a,b);
+        REQUIRE(g == expected_g);
+
+        a = -3;
+        b = 6;
+        expected_g = 3;
+
+        XGCD_PLAIN(g,x,y,a,b);
+        REQUIRE(g == expected_g);
     }
+
     SECTION("Large Random Positive Test"){
         //arbitrary large (2^32 < a,b < 2^63) positive test: (3166167471260038366, 2078992898117306689) = 1
         a = 3166167471260038366;
         b = 2078992898117306689;
-        g = 1;
-        inst->refreshInstance(a, b);
-        REQUIRE(inst->testXGCD(g));
+        expected_g = 1;
+
+        XGCD_PLAIN(g,x,y,a,b);
+        REQUIRE(g == expected_g);
+
     }
+
     SECTION("Large Random Negative Test"){
-        //arbitrary large (-2^32 > a,b > 2^63) negative test: (-3867470587490682194, -6531477986582055176) = 2 
+        //arbitrary large (-2^32 > a,b > 2^63) negative test: (-3867470587490682194, -6531477986582055176) = 2
         a = -3867470587490682194;
         b =  -6531477986582055176;
-        g = 2;
-        inst->refreshInstance(a, b);
-        REQUIRE(inst->testXGCD(g));
+        expected_g = 2;
+
+        XGCD_PLAIN(g,x,y,a,b);
+        REQUIRE(g == expected_g);
+
     }
-    SECTION("0 Input Tests"){
+    SECTION("0 Input Test"){
         //0 value tests
         a = 0;
         b = 100;
-        g = 100;
-        inst->refreshInstance(a,b);
-        REQUIRE(inst->testXGCD(g));
+        expected_g = 100;
+        XGCD_PLAIN(g,x,y,a,b);
+        REQUIRE(g == expected_g);
 
-        a = 50;
+        a = 100;
         b = 0;
-        g = 50;
-        inst->refreshInstance(a, b);
-        REQUIRE(inst->testXGCD(g));
-
+        expected_g = 100;
+        XGCD_PLAIN(g,x,y,a,b);
+        REQUIRE(g == expected_g);
+        
         a = 0;
         b = 0;
-        g = 0;
-        inst->refreshInstance(a,b);
-        REQUIRE(inst->testXGCD(g));
+        expected_g = 0;
+        XGCD_PLAIN(g,x,y,a,b);
+        REQUIRE(g == expected_g);
+        
     }
+
+
+
 }
 
 TEMPLATE_TEST_CASE("XGCD_LEFT_PLAIN tests","[XGCD][XGCD_LEFT][XGCD_LEFT_PLAIN]", int64_t){
-    TestType a, b, u, g;
+    TestType a, b, u, g, expected_g, expected_u;
     a = 0;
     b = 0;
-    XGCDLeftPlainTestInstance inst(a,b);
-    vector<TestType> sol;
+//    XGCDLeftPlainTestInstance inst(a,b);
 
     SECTION("Basic Test"){ // (3,5) = 1, specifically 2*3 -1*5 = 1
         a = 3;
         b = 5;
-        u = 2;
-        g = 1;
-        sol.push_back(g);
-        sol.push_back(u);
-        sol.push_back(a);
-        sol.push_back(b);
-        
-        inst.refreshInstance(a,b);
-        REQUIRE(inst.testXGCD(sol));
+        expected_u = 2;
+        expected_g = 1;
+
+        XGCD_LEFT_PLAIN(g,u,a,b);
+        REQUIRE(g==expected_g);
+        REQUIRE(u==expected_u);
+
     }
-    SECTION("Reverse basic test"){
+    SECTION("Reverse Basic Test"){
         a = 5;
         b = 3;
-        u = -1;
-        g = 1;
-        sol.push_back(g);
-        sol.push_back(u);
-        sol.push_back(a);
-        sol.push_back(b);
-        
-        inst.refreshInstance(a,b);
-        REQUIRE(inst.testXGCD(sol));
-    }
+        expected_u = -1;
+        expected_g = 1;
 
+        XGCD_LEFT_PLAIN(g,u,a,b);
+        REQUIRE(g==expected_g);
+        REQUIRE(u==expected_u);
+    }
 }
 
 TEMPLATE_TEST_CASE("XGCD_BINARY_L2R tests", "[XGCD][XGCD_BINARY_L2R]", int64_t){
-    TestType g,x,y,b,a;
-    vector<TestType> sol;
+    TestType g,x,y,b,a, expected_g;
+    //vector<TestType> sol;
 
-    XGCDBinaryL2RPlainTestInstance<TestType>* inst = new XGCDBinaryL2RPlainTestInstance<TestType>(a,b);
+    //XGCDBinaryL2RPlainTestInstance<TestType>* inst = new XGCDBinaryL2RPlainTestInstance<TestType>(a,b);
     SECTION("Basic Test"){
-        g = 1;
         a = 3;
         b = 5;
-        x = 2;
-        y = 1;
+        expected_g=1;
 
-        sol.push_back(g);
-        sol.push_back(x);
-        sol.push_back(a);
-        sol.push_back(y);
-        sol.push_back(b);
-        
-        inst->refreshInstance(a,b);
-        REQUIRE(inst->testXGCD(g));
-
-        
-
+        XGCD_BINARY_L2R(g,x,y,a,b);
+        REQUIRE(g==expected_g);
     }
 }
