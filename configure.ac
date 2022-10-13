@@ -1,3 +1,4 @@
+# if you run into any issues check that you have autoconf-archive (on Fedora you can install it with: sudo dnf install autoconf-archive)
 AUTOMAKE_OPTIONS = subdir-objects
 
 AC_PREREQ([2.69])
@@ -12,8 +13,8 @@ AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_LN_S
 
-# this macro figures out how to build with pthreads 
-AX_PTHREAD(, )
+# this macro figures out how to build with pthreads.
+AX_PTHREAD
 
 # Checks for libraries. They all have a main function
 AC_CHECK_LIB([gmp], [main])
