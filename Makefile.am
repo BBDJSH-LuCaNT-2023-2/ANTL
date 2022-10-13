@@ -56,4 +56,5 @@ test_SOURCES = tests/UnitTests.cpp                                    \
                src/XGCD/hxgcd.cpp                                     \
                src/XGCD/xgcd.cpp                                      \
                src/XGCD/xgcd_iter.cpp                                 \
-               src/XGCD/xgcd_plain.cpp
+               src/XGCD/xgcd_plain.cpp                                \
+               src/XGCD/xgcd_binary_l2r.cpp
