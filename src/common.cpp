@@ -404,7 +404,7 @@ int64_t negate_using_mask<int64_t>(const uint64_t m, const int64_t x){
   return (x ^ m) - m;
 }
 
-int64_t inline sub_with_mask(uint64_t & m, const int64_t & a, const int64_t & b){
+int64_t sub_with_mask(uint64_t & m, const int64_t & a, const int64_t & b){
   int64_t r;
   #if defined(__x86_64)
   asm("subq %3, %0\n\t"
@@ -419,7 +419,8 @@ int64_t inline sub_with_mask(uint64_t & m, const int64_t & a, const int64_t & b)
 #endif  
 return r;
 }
-inline void cond_swap2_s64(int64_t & u1, int64_t & u2, int64_t & v1, int64_t & v2){
+
+void cond_swap2_s64(int64_t & u1, int64_t & u2, int64_t & v1, int64_t & v2){
   uint64_t m;
   int64_t d2 = sub_with_mask(m, u2, v2);
   int64_t d1 = (u1 - v1) & m;
@@ -430,7 +431,7 @@ inline void cond_swap2_s64(int64_t & u1, int64_t & u2, int64_t & v1, int64_t & v
   v2 += d2;
 }
 
-inline uint64_t cond_swap3_s64(int64_t & u1,
+uint64_t cond_swap3_s64(int64_t & u1,
 				      int64_t & u2,
 				      int64_t & u3,
 				      int64_t & v1,
@@ -448,10 +449,10 @@ inline uint64_t cond_swap3_s64(int64_t & u1,
   v1 += d1;
   v2 += d2;
   v3 += d3;
-  return m;;
+  return m;
 }
 
-inline int msb_u64(uint64_t x){
+int msb_u64(uint64_t x){
   #if defined(__x86_64)
   int64_t k = -1;
   asm("bsrq %1, %0\n\t"

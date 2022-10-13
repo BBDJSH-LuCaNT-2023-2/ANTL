@@ -8,7 +8,7 @@
  */
 
 #include <ANTL/XGCD/xgcd_binary_l2r.hpp>
-//#include <ANTL/common.hpp>
+#include <ANTL/common.hpp>
 
 
 template<>
@@ -33,7 +33,8 @@ void XGCD_BINARY_L2R(int64_t & G, int64_t & X, int64_t & Y, const int64_t & A, c
 
     // Subtract 2^k times v from u, and make sure u3 >= 0.
     uint64_t m;
-    ANTL::sub_with_mask(u3, m, u3, v3 << k);
+   ANTL::sub_with_mask(m, u3, v3 << k);
+
     u1 -= v1 << k;
     u2 -= v2 << k;
     u1 = ANTL::negate_using_mask<int64_t>(m, u1);
@@ -108,7 +109,7 @@ void XGCD_BINARY_L2R_LEFT(int64_t & G, int64_t & X, const int64_t & A, const int
 }
 
 template<>
-void XGCD_PARTIAL_BINARY_L2R(int64_t & Z, int64_t & R2, int64_t & R1, int64_t & C2, int64_t & C1, const int64_t bound){
+void XGCD_PARTIAL_BINARY_L2R(long & Z, long & R2, long & R1, long & C2, long & C1, const long bound){
   assert(R2);
   assert(R1);
   assert(C2);
@@ -148,3 +149,4 @@ void XGCD_PARTIAL_BINARY_L2R(int64_t & Z, int64_t & R2, int64_t & R1, int64_t & 
   C2 = c2;
   C1 = c1;
 }
+
