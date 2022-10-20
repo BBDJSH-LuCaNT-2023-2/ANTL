@@ -277,6 +277,7 @@ template <> inline ZZ CARDINALITY<GF2EX>(void) { return GF2E::cardinality(); }
 
 template <class T> T to(const int &a) { return T(a); }
 template <class T> T to(const long &a) { return T(a); }
+template <class T> T to(const long long &a) { return T(a); }
 template <class T> T to(const float &a) { return T(a); }
 template <class T> T to(const double &a) { return T(a); }
 template <class T> T to(const ZZ &a) { return T(a); }
@@ -304,8 +305,18 @@ template <> inline long to<long>(const ZZ &a) { return to_long(a); }
 template <> inline long to<long>(const RR &a) { return to_long(a); }
 template <> inline long to<long>(const quad_float &a) { return to_long(a); }
 
+template<> inline long long to<long long>(const int& a)        { return (long long) a; }
+template<> inline long long to<long long>(const long& a)       { return (long long) a; }
+template<> inline long long to<long long>(const long long& a)  { return a; }
+template<> inline long long to<long long>(const float& a)      { return (long long) a; }
+template<> inline long long to<long long>(const double& a)     { return (long long) a; }
+template<> inline long long to<long long>(const ZZ& a)         { return (long long) to_double(a); }
+template<> inline long long to<long long>(const RR& a)         { return (long long) to_double(a); }
+template<> inline long long to<long long>(const quad_float& a) { return (long long) to_double(a); }
+
 template <> inline float to<float>(const int &a) { return to_float(a); }
 template <> inline float to<float>(const long &a) { return to_float(a); }
+template <> inline float to<float>(const long long &a) { return to_float(ZZ(a)); }
 template <> inline float to<float>(const float &a) { return a; }
 template <> inline float to<float>(const double &a) { return to_float(a); }
 template <> inline float to<float>(const ZZ &a) { return to_float(a); }

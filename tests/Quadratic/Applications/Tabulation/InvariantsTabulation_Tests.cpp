@@ -406,7 +406,7 @@ using namespace ANTL;
 //           Cl = QO.class_group(CLASS_GROUP_BSGS);
 //           rank = QO.get_rank();
 //           outfile << (labs(Dl) - oldDl) << " " << flush;
-          outfile << Dl << " " << flush;
+          outfile << Dl << " " << 0 << " " << 0 << " " << flush;
 //           outfile << QO.get_nump() << " " << flush;
 //           outfile << QO.get_pmax() << " " << flush;
           double regulator;
@@ -419,9 +419,9 @@ using namespace ANTL;
           vector<long> Cl = regulator_and_class_group.second;
 //           outfile << rank << flush;
           outfile << Cl.size() << " " << flush;
-//           for (j = 0; j < rank; ++j)
-//             outfile << " " << Cl[j] << flush;
-          outfile << Cl << flush;
+          for (j = 0; j < rank; ++j)
+            outfile << " " << Cl[j] << flush;
+//           outfile << Cl << flush;
           outfile << endl;
 //           oldDl = labs(Dl);
         }

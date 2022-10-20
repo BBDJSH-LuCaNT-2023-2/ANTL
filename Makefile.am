@@ -6,16 +6,16 @@ AM_CC = @PTHREAD_CC@
 AM_CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/include
 
 if EXTRADEPS
-bin_PROGRAMS = regulator classgroup
+bin_PROGRAMS = regulator classgroupBSGS classgroupBS interval tabulation harvest
 else
-bin_PROGRAMS =  regulator classgroup
+bin_PROGRAMS =  regulator classgroupBSGS classgroupBS interval tabulation harvest
 endif
 
 #main_SOURCES = tests/HeaderTest.cpp                  \
                src/Quadratic/QuadraticOrder_long.cpp \
                src/Quadratic/QuadraticOrder_ZZ.cpp
 
-# tabulation_SOURCES = tests/Quadratic/Applications/Tabulation/InvariantsTabulation_Tests.cpp     \
+tabulation_SOURCES = tests/Quadratic/Applications/Tabulation/InvariantsTabulation_Tests.cpp     \
                      tests/Quadratic/Applications/Tabulation/timer.cpp                          \
                      src/common.cpp                                                             \
                      src/LinearAlgebra/Smith.cpp                                                \
@@ -41,6 +41,62 @@ endif
                      src/XGCD/xgcd.cpp                                                          \
                      src/XGCD/xgcd_iter.cpp                                                     \
                      src/XGCD/xgcd_plain.cpp
+
+interval_SOURCES = tests/Quadratic/Applications/Tabulation/QCL_Tabulation_Interval.cpp        \
+                     tests/Quadratic/Applications/Tabulation/timer.cpp                          \
+                     src/common.cpp                                                             \
+                     src/LinearAlgebra/Smith.cpp                                                \
+                     src/L_function/Character.cpp                                               \
+                     src/L_function/L_function_util.cpp                                         \
+                     src/L_function/L_function_ZZ.cpp                                           \
+                     src/Quadratic/QuadraticIdealBase_ZZ.cpp                                    \
+                     src/Quadratic/QuadraticInfElement_ZZ.cpp                                   \
+                     src/Quadratic/QuadraticNumber_ZZ.cpp                                       \
+                     src/Quadratic/QuadraticOrder_ZZ.cpp                                        \
+                     src/Quadratic/Cube/CubePlain_ZZ.cpp                                        \
+                     src/Quadratic/Cube/CubeNucube_ZZ.cpp                                       \
+                     src/Quadratic/ClassGroup/ClassGroupBSGSReal.cpp                            \
+                     src/Quadratic/Multiply/MultiplyComp_ZZ.cpp                                 \
+                     src/Quadratic/Multiply/MultiplyNucomp_ZZ.cpp                               \
+                     src/Quadratic/Multiply/MultiplyPlain_ZZ.cpp                                \
+                     src/Quadratic/Regulator/RegulatorLenstra_ZZ.cpp                            \
+                     src/Quadratic/Reduce/ReducePlainReal_ZZ.cpp                                \
+                     src/Quadratic/Square/SquareNudupl_ZZ.cpp                                   \
+                     src/Quadratic/Square/SquarePlain_ZZ.cpp                                    \
+                     src/thresholds.cpp                                                         \
+                     src/XGCD/hxgcd.cpp                                                         \
+                     src/XGCD/xgcd.cpp                                                          \
+                     src/XGCD/xgcd_iter.cpp                                                     \
+                     src/XGCD/xgcd_plain.cpp
+
+harvest_SOURCES =    tests/Quadratic/Applications/Tabulation/QCL_Tabulation_Harvest.cpp         \
+                     tests/Quadratic/Applications/Tabulation/timer.cpp                          \
+                     tests/Quadratic/Applications/Tabulation/iq-data.cpp                        \
+                     src/common.cpp                                                             \
+                     src/LinearAlgebra/Smith.cpp                                                \
+                     src/L_function/Character.cpp                                               \
+                     src/L_function/L_function_util.cpp                                         \
+                     src/L_function/L_function_ZZ.cpp                                           \
+                     src/Quadratic/QuadraticIdealBase_ZZ.cpp                                    \
+                     src/Quadratic/QuadraticInfElement_ZZ.cpp                                   \
+                     src/Quadratic/QuadraticNumber_ZZ.cpp                                       \
+                     src/Quadratic/QuadraticOrder_ZZ.cpp                                        \
+                     src/Quadratic/Cube/CubePlain_ZZ.cpp                                        \
+                     src/Quadratic/Cube/CubeNucube_ZZ.cpp                                       \
+                     src/Quadratic/ClassGroup/ClassGroupBSGSReal.cpp                            \
+                     src/Quadratic/Multiply/MultiplyComp_ZZ.cpp                                 \
+                     src/Quadratic/Multiply/MultiplyNucomp_ZZ.cpp                               \
+                     src/Quadratic/Multiply/MultiplyPlain_ZZ.cpp                                \
+                     src/Quadratic/Regulator/RegulatorLenstra_ZZ.cpp                            \
+                     src/Quadratic/Reduce/ReducePlainReal_ZZ.cpp                                \
+                     src/Quadratic/Square/SquareNudupl_ZZ.cpp                                   \
+                     src/Quadratic/Square/SquarePlain_ZZ.cpp                                    \
+                     src/thresholds.cpp                                                         \
+                     src/XGCD/hxgcd.cpp                                                         \
+                     src/XGCD/xgcd.cpp                                                          \
+                     src/XGCD/xgcd_iter.cpp                                                     \
+                     src/XGCD/xgcd_plain.cpp
+
 
 regulator_SOURCES = tests/UnitTests.cpp                                     \
                     tests/Quadratic/Regulator/RegulatorLenstra_Test.cpp     \
@@ -70,8 +126,36 @@ regulator_SOURCES = tests/UnitTests.cpp                                     \
                     src/XGCD/xgcd_iter.cpp                                  \
                     src/XGCD/xgcd_plain.cpp
 
-classgroup_SOURCES = tests/UnitTests.cpp                                     \
+classgroupBSGS_SOURCES = tests/UnitTests.cpp                                     \
                     tests/Quadratic/ClassGroup/ClassGroupBSGSReal_Tests.cpp  \
+                    src/common.cpp                                           \
+                    src/LinearAlgebra/Smith.cpp                              \
+                    src/L_function/Character.cpp                             \
+                    src/L_function/L_function_util.cpp                       \
+                    src/L_function/L_function_ZZ.cpp                         \
+                    src/Quadratic/QuadraticIdealBase_ZZ.cpp                  \
+                    src/Quadratic/QuadraticInfElement_ZZ.cpp                 \
+                    src/Quadratic/QuadraticNumber_ZZ.cpp                     \
+                    src/Quadratic/QuadraticOrder_ZZ.cpp                      \
+                    src/Quadratic/Cube/CubePlain_ZZ.cpp                      \
+                    src/Quadratic/Cube/CubeNucube_ZZ.cpp                     \
+                    src/Quadratic/ClassGroup/ClassGroupBSGSReal.cpp          \
+                    src/Quadratic/Multiply/MultiplyComp_ZZ.cpp               \
+                    src/Quadratic/Multiply/MultiplyNucomp_ZZ.cpp             \
+                    src/Quadratic/Multiply/MultiplyPlain_ZZ.cpp              \
+                    src/Quadratic/Reduce/ReducePlainReal_ZZ.cpp              \
+                    src/Quadratic/Regulator/RegulatorLenstra_ZZ.cpp          \
+                    src/Quadratic/Square/SquareNudupl_ZZ.cpp                 \
+                    src/Quadratic/Square/SquarePlain_ZZ.cpp                  \
+                    tests/Quadratic/TestData/TestData.cpp                    \
+                    src/thresholds.cpp                                       \
+                    src/XGCD/hxgcd.cpp                                       \
+                    src/XGCD/xgcd.cpp                                        \
+                    src/XGCD/xgcd_iter.cpp                                   \
+                    src/XGCD/xgcd_plain.cpp
+
+classgroupBS_SOURCES = tests/UnitTests.cpp                                 \
+                    tests/Quadratic/ClassGroup/ClassGroupBSReal_Tests.cpp  \
                     src/common.cpp                                           \
                     src/LinearAlgebra/Smith.cpp                              \
                     src/L_function/Character.cpp                             \
