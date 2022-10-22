@@ -28,4 +28,15 @@ TEST_CASE("Common: Kronecker Symbol computes correctly", "[Common]") {
   REQUIRE(Kronecker(ZZ(10), long(12)) == 0);
 }
 
+TEST_CASE("Common: ZZToMpz works correctly", "[Common]"){
+  mpz_t a;
+  mpz_init(a);
+  mpz_t expected_a;
+  mpz_set_si(expected_a, 5);
+  ZZ A = ZZ(5);
+  ZZToMpz(A, a);
+  
+  REQUIRE(a == expected_a);
+}
+
 #endif
