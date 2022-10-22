@@ -214,8 +214,8 @@ namespace ANTL {
 				      int64_t & v1,
 				      int64_t & v2,
 				      int64_t & v3);
-              
-  int msb_u64(uint64_t x); 
+
+  int msb_u64(uint64_t x);
   // finite field cardinality macros
   template <class> ZZ CARDINALITY(void);
 
@@ -359,6 +359,8 @@ namespace ANTL {
   template<> inline zz_pEX to<zz_pEX>(const zz_pEX& a) { return a; }
 
   template<> inline zz_pX to<zz_pX>(const int & a) { return zz_pX(a,0); }
+
+  void ZZToMpz(const ZZ & A, mpz_t & a);
 } // ANTL
 
 
@@ -496,7 +498,7 @@ void compute_initial_s(const std::vector<PType> & alpha, const int k_bound);
 template<typename PType>
 void log_to_valuation(std::vector<PType> &valuation_vec, const std::vector<PType> & log_vec, const int r1);
 
-void ZZToMpz(ZZ & A, mpz_t & a);
+
 
 // Unspecialized template definitions.
 #include "../../src/common_impl.hpp"
