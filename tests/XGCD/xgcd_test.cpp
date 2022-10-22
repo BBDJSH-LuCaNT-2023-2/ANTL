@@ -139,7 +139,7 @@ TEMPLATE_TEST_CASE("XGCD_PLAIN tests", "[XGCD][XGCD_PLAIN]", int64_t){
 
 }
 
-/*TEMPLATE_TEST_CASE("XGCD_LEFT_PLAIN tests","[XGCD][XGCD_LEFT][XGCD_LEFT_PLAIN]", int64_t){
+TEMPLATE_TEST_CASE("XGCD_LEFT_PLAIN tests","[XGCD][XGCD_LEFT][XGCD_LEFT_PLAIN]", int64_t){
     TestType a, b, u, g, expected_g, expected_u;
     a = 0;
     b = 0;
@@ -167,20 +167,194 @@ TEMPLATE_TEST_CASE("XGCD_PLAIN tests", "[XGCD][XGCD_PLAIN]", int64_t){
         REQUIRE(u==expected_u);
     }
 }
-*/
-TEMPLATE_TEST_CASE("XGCD_BINARY_L2R tests", "[XGCD][XGCD_BINARY_L2R]", int64_t){
+
+TEMPLATE_TEST_CASE("XGCD_BINARY_L2R tests", "[XGCD][XGCD_PLAIN][XGCD_BINARY_L2R]", int64_t){
     TestType g,x,y,b,a, expected_g;
     //vector<TestType> sol;
     //XGCDBinaryL2RPlainTestInstance<TestType>* inst = new XGCDBinaryL2RPlainTestInstance<TestType>(a,b);
     SECTION("Basic Test"){
-        x = 1;
-        y = 1;
         a = 3;
         b = 5;
-        g = 2;
         expected_g=1;
 
         XGCD_BINARY_L2R(g,x,y,a,b);
         REQUIRE(g==expected_g);
     }
+    SECTION("Basic Test Reversed"){
+        a = 5;
+        b = 3;
+        expected_g = 1;
+        XGCD_BINARY_L2R(g,x,y,a,b);
+        REQUIRE(g==expected_g);
+    }
+    SECTION("Common Factor Test"){
+        //common factor test: (5,20) = 5
+        a = 5;
+        b = 20;
+        expected_g = 5;
+
+        XGCD_BINARY_L2R(g,x,y,a,b);
+        REQUIRE(g == expected_g);
+    }
+
+    SECTION("Unit Input Test"){
+        //unit test: (1,999) = 1
+        a = 1;
+        b = 999;
+        expected_g = 1;
+
+        XGCD_BINARY_L2R(g,x,y,a,b);
+        REQUIRE(g == expected_g);
+    }
+
+    SECTION("Negative Input Tests"){
+        //unit test: (+/-3, +/-6) = 3
+        a = -3;
+        b = 6;
+        expected_g = 3;
+
+        XGCD_BINARY_L2R(g,x,y,a,b);
+        REQUIRE(g == expected_g);
+
+        a = 3;
+        b = -6;
+        expected_g = 3;
+
+        XGCD_BINARY_L2R(g,x,y,a,b);
+        REQUIRE(g == expected_g);
+
+        a = -3;
+        b = 6;
+        expected_g = 3;
+
+        XGCD_BINARY_L2R(g,x,y,a,b);
+        REQUIRE(g == expected_g);
+    }
+
+    SECTION("64-bit Random Positive Test"){
+        //arbitrary large (2^32 < a,b < 2^63) positive test: (3166167471260038366, 2078992898117306689) = 1
+        a = 3166167471260038366;
+        b = 2078992898117306689;
+        expected_g = 1;
+
+        XGCD_BINARY_L2R(g,x,y,a,b);
+        REQUIRE(g == expected_g);
+
+    }
+
+    SECTION("64-bit Random Negative Test"){
+        //arbitrary large (-2^32 > a,b > 2^63) negative test: (-3867470587490682194, -6531477986582055176) = 2
+        a = -3867470587490682194;
+        b =  -6531477986582055176;
+        expected_g = 2;
+
+        XGCD_BINARY_L2R(g,x,y,a,b);
+        REQUIRE(g == expected_g);
+
+    }
+    
+}
+
+TEMPLATE_TEST_CASE("XGCD_BINARY_L2R_LEFT", "[XGCD][XGCD_LEFT][XGCD_BINARY_L2R]", int64_t){
+    TestType g,x=2,b,a, expected_g, expected_x;
+    SECTION("Basic Tests"){
+        a = 3;
+        b = 5;
+        expected_g = 1;
+        expected_x = 2;
+        XGCD_BINARY_L2R_LEFT(g, x, a, b);
+        REQUIRE(g==expected_g);
+        REQUIRE(x==expected_x);
+
+        a = 5;
+        b = 3;
+        expected_g = 1;
+        expected_x = -1;
+        XGCD_BINARY_L2R_LEFT(g,x,a,b);
+        REQUIRE(g==expected_g);
+        REQUIRE(x==expected_x);
+    }
+    SECTION("Common Factor Test"){
+        //common factor test: (5,20) = 5
+        a = 5;
+        b = 20;
+        expected_g = 5;
+        expected_x = 1;
+
+        XGCD_BINARY_L2R_LEFT(g,x,a,b);
+        REQUIRE(g == expected_g);
+        REQUIRE(x == expected_x);
+    }
+
+    SECTION("Unit Input Test"){
+        //unit test: (1,999) = 1
+        a = 1;
+        b = 999;
+        expected_g = 1;
+        expected_x = 1;
+
+        XGCD_BINARY_L2R_LEFT(g,x,a,b);
+        REQUIRE(g == expected_g);
+        REQUIRE(x == expected_x);
+    }
+
+    SECTION("Negative Input Tests"){
+        //unit test: (+/-3, +/-6) = 3
+        a = -3;
+        b = 6;
+        expected_g = 3;
+        expected_x = -1;
+
+        XGCD_BINARY_L2R_LEFT(g,x,a,b);
+        REQUIRE(x == expected_x);
+        REQUIRE(g == expected_g);
+
+        a = 3;
+        b = -6;
+        expected_g = 3;
+        expected_x = 1;
+
+        XGCD_BINARY_L2R_LEFT(g,x,a,b);
+        REQUIRE(g == expected_g);
+        REQUIRE(x == expected_x);
+
+        a = -3;
+        b = 6;
+        expected_g = 3;
+        expected_x = -1;
+
+        XGCD_BINARY_L2R_LEFT(g,x,a,b);
+        REQUIRE(x == expected_x);
+        REQUIRE(g == expected_g);
+    }
+
+    SECTION("64-bit Random Positive Test"){
+        //arbitrary large (2^32 < a,b < 2^63) positive test: (3166167471260038366, 2078992898117306689) = 1
+        a = 3166167471260038366;
+        b = 2078992898117306689;
+        expected_g = 1;
+        expected_x = -918826731003719737;
+
+        XGCD_BINARY_L2R_LEFT(g,x,a,b);
+        REQUIRE(g == expected_g);
+        REQUIRE(x == expected_x);
+
+    }
+
+    SECTION("64-bit Random Negative Test"){
+        //arbitrary large (-2^32 > a,b > 2^63) negative test: (-3867470587490682194, -6531477986582055176) = 2
+        a = -3867470587490682194;
+        b =  -6531477986582055176;
+        expected_g = 2;
+        expected_x = -357142171114937269;
+
+        XGCD_BINARY_L2R_LEFT(g,x,a,b);
+        REQUIRE(g == expected_g);
+
+    }
+
+}
+
+TEMPLATE_TEST_CASE("XGCD_BINARY_L2R_PARTIAL", "[XGCD][XGCD_PARTIAL][XGCD_BINARY_L2R]", int64_t){
+    //TODO: Add partial tests
 }
