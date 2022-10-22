@@ -474,4 +474,25 @@ int msb_u64(uint64_t x){
   return n;
 #endif
 }
+
+void ZZToMpz(const ZZ & A, mpz_t & a){
+  //get array of mpz limbs from ZZ
+  const mp_limb_t * zz_limbs = ZZ_limbs_get(A);
+  //get number of limbs in ZZ 
+  //the sign matters when reconstructing the mpz, see below
+  long num_limbs = sign(A)*A.size(); 
+
+  //get a pointer to a writable array of mp_limb_t s belonging to the mpz type
+  mp_limb_t* mpz_limbs = mpz_limbs_write(a, num_limbs);
+  for(int i=0; i<num_limbs;i++){
+    mpz_limbs[i] = zz_limbs[i];
+  }
+  //mpz_limbs_finish uses the sign of num_limbs to set the sign on the mpz_t value  
+  mpz_limbs_finish(a, num_limbs);
+
+  
+
+
+}
+  
 } // ANTL

@@ -17,6 +17,7 @@
 #include <NTL/lzz_pX.h>
 #include <NTL/ZZ_pEX.h>
 #include <NTL/lzz_pEX.h>
+#include <NTL/ZZ_limbs.h>
 
 #include <NTL/ZZ_pXFactoring.h>
 #include <NTL/lzz_pXFactoring.h>
@@ -495,6 +496,7 @@ void compute_initial_s(const std::vector<PType> & alpha, const int k_bound);
 template<typename PType>
 void log_to_valuation(std::vector<PType> &valuation_vec, const std::vector<PType> & log_vec, const int r1);
 
+void ZZToMpz(ZZ & A, mpz_t & a);
 
 // Unspecialized template definitions.
 #include "../../src/common_impl.hpp"
