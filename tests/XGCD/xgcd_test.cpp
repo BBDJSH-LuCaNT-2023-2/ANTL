@@ -34,8 +34,9 @@ TEMPLATE_TEST_CASE("XGCD_PLAIN tests", "[XGCD][XGCD_PLAIN]", int64_t){
         a = 3;
         b = 5;
         expected_g = 1;
-
+        cout << "A " << a << " B " << b << " G " << g << endl;
         XGCD_PLAIN(g,x,y,a,b);
+        cout << "A " << a << " B " << b << " G " << g << endl;
         REQUIRE(expected_g == g);
     }
     SECTION("Reverse Basic Test"){
@@ -138,7 +139,7 @@ TEMPLATE_TEST_CASE("XGCD_PLAIN tests", "[XGCD][XGCD_PLAIN]", int64_t){
 
 }
 
-TEMPLATE_TEST_CASE("XGCD_LEFT_PLAIN tests","[XGCD][XGCD_LEFT][XGCD_LEFT_PLAIN]", int64_t){
+/*TEMPLATE_TEST_CASE("XGCD_LEFT_PLAIN tests","[XGCD][XGCD_LEFT][XGCD_LEFT_PLAIN]", int64_t){
     TestType a, b, u, g, expected_g, expected_u;
     a = 0;
     b = 0;
@@ -166,15 +167,17 @@ TEMPLATE_TEST_CASE("XGCD_LEFT_PLAIN tests","[XGCD][XGCD_LEFT][XGCD_LEFT_PLAIN]",
         REQUIRE(u==expected_u);
     }
 }
-
+*/
 TEMPLATE_TEST_CASE("XGCD_BINARY_L2R tests", "[XGCD][XGCD_BINARY_L2R]", int64_t){
     TestType g,x,y,b,a, expected_g;
     //vector<TestType> sol;
-
     //XGCDBinaryL2RPlainTestInstance<TestType>* inst = new XGCDBinaryL2RPlainTestInstance<TestType>(a,b);
     SECTION("Basic Test"){
+        x = 1;
+        y = 1;
         a = 3;
         b = 5;
+        g = 2;
         expected_g=1;
 
         XGCD_BINARY_L2R(g,x,y,a,b);
