@@ -38,6 +38,7 @@ TEST_CASE("Common: Two mpz_z are equivalent"){
   REQUIRE(mpz_cmp(a,b)==0);
 }
 
+
 TEST_CASE("Common: ZZToMpz works correctly", "[Common]"){
   mpz_t a;
   mpz_init(a);
@@ -48,5 +49,45 @@ TEST_CASE("Common: ZZToMpz works correctly", "[Common]"){
   
   REQUIRE(mpz_cmp(a,expected_a)==0);
 }
+
+TEST_CASE("Common: ZZToMpz Negative case", "[Common]"){
+  mpz_t a;
+  mpz_init(a);
+  mpz_t expected_a;
+  mpz_set_si(expected_a, -101);
+  ZZ A = ZZ(-101);
+  ZZToMpz(A, a);
+  //cout << "A: " << A;
+  //gmp_printf(" a: %Zd\n", a);
+  //gmp_printf("expected_a: %Zd\n", expected_a);
+
+
+  REQUIRE(mpz_cmp(a, expected_a) == 0);
+}
+TEST_CASE("Common: ZZToMpz <128 bit test", "[Common]"){
+  mpz_t a;
+  mpz_init(a);
+  mpz_t expected_a;
+  mpz_init(expected_a);
+  mpz_set_str(expected_a, "249208652633223703531132231181060005980",10);
+  ZZ A;
+  A = conv<ZZ>("249208652633223703531132231181060005980");
+  ZZToMpz(A, a);
+
+  REQUIRE(mpz_cmp(a, expected_a) == 0);
+}
+TEST_CASE("Common: ZZToMpz <256 bit test", "[Common]"){
+  mpz_t a;
+  mpz_init(a);
+  mpz_t expected_a;
+  mpz_init(expected_a);
+  mpz_set_str(expected_a, "58963287023509755963336981841255765012854373639575441005988935943903024514155", 10);
+  ZZ A;
+  A = conv<ZZ>("58963287023509755963336981841255765012854373639575441005988935943903024514155");
+  ZZToMpz(A, a);
+
+  REQUIRE(mpz_cmp(a, expected_a) == 0);
+}
+
 
 #endif
