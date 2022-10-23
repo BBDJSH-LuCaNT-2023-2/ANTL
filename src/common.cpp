@@ -490,9 +490,20 @@ void ZZToMpz(const ZZ & A, mpz_t & a){
   }
   //mpz_limbs_finish uses the sign of num_limbs to set the sign on the mpz_t value  
   mpz_limbs_finish(a, sign(A)*num_limbs);
+}
 
-  
+void MpzToZZ(const mpz_t & a, ZZ & A){
+  //Get limbs from mpz_t
+  const mp_limb_t * mpz_limbs = mpz_limbs_read(a);
+  //Get number of limbs
+  size_t num_limbs = mpz_size(a);
+  //get mpz_t sign 
+  int sign = mpz_sgn(a);
 
+  //set the limbs of the ZZ object
+  ZZ_limbs_set(A, mpz_limbs, num_limbs);
+  //this seems slow
+  A = A*ZZ(sign);
 
 }
   

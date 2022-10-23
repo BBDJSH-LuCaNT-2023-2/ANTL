@@ -361,6 +361,7 @@ namespace ANTL {
   template<> inline zz_pX to<zz_pX>(const int & a) { return zz_pX(a,0); }
 
   void ZZToMpz(const ZZ & A, mpz_t & a);
+  void MpzToZZ(const mpz_t & a, ZZ & A);
 } // ANTL
 
 
