@@ -39,7 +39,7 @@ TEST_CASE("Common: Two mpz_z are equivalent"){
 }
 
 
-TEST_CASE("Common: ZZToMpz works correctly", "[Common]"){
+TEST_CASE("Common: ZZToMpz Basic case", "[Common]"){
   mpz_t a;
   mpz_init(a);
   mpz_t expected_a;
@@ -61,6 +61,16 @@ TEST_CASE("Common: ZZToMpz Negative case", "[Common]"){
   //gmp_printf(" a: %Zd\n", a);
   //gmp_printf("expected_a: %Zd\n", expected_a);
 
+  REQUIRE(mpz_cmp(a, expected_a) == 0);
+}
+
+TEST_CASE("Common: ZZToMpz Zero Case", "[Common]"){
+  mpz_t a;
+  mpz_init(a);
+  mpz_t expected_a;
+  mpz_set_si(expected_a, 0);
+  ZZ A = ZZ(0);
+  ZZToMpz(A, a);
 
   REQUIRE(mpz_cmp(a, expected_a) == 0);
 }
@@ -89,5 +99,61 @@ TEST_CASE("Common: ZZToMpz <256 bit test", "[Common]"){
   REQUIRE(mpz_cmp(a, expected_a) == 0);
 }
 
+TEST_CASE("Common: MpzToZZ Basic Test", "[Common]"){
+  mpz_t a;
+  mpz_init(a);
+  mpz_set_si(a, 5);
+  ZZ expected_A;
+  expected_A = 5;
+  ZZ A;
+  MpzToZZ(a,A);
 
+  REQUIRE(A == expected_A);
+
+}
+
+TEST_CASE("Common: MpzToZZ Negative Test", "[Common]"){
+  mpz_t a;
+  mpz_init(a);
+  mpz_set_si(a, -10);
+  ZZ expected_A;
+  expected_A = -10;
+  ZZ A;
+  MpzToZZ(a,A);
+
+  REQUIRE(A == expected_A);
+}
+
+TEST_CASE("Common: MpzToZZ Zero Test", "[Common]"){
+  mpz_t a;
+  mpz_init(a);
+  mpz_set_si(a, 0);
+  ZZ expected_A;
+  expected_A = 0;
+  ZZ A;
+  MpzToZZ(a, A);
+
+  REQUIRE(A == expected_A);
+}
+
+TEST_CASE("Common: MpzToZZ <128 bit test", "[Common]"){
+  mpz_t a;
+  mpz_init(a);
+  mpz_set_str(a, "263554072397940936318525601434069741669", 10);
+  ZZ expected_A = conv<ZZ>("263554072397940936318525601434069741669");
+  ZZ A;
+  MpzToZZ(a, A);
+
+  REQUIRE(A == expected_A);
+}
+TEST_CASE("Common: MpzToZZ <256 bit test", "[Common]"){
+  mpz_t a;
+  mpz_init(a);
+  mpz_set_str(a, "96647711664069877376733932946779407802298220209015413512147548816784005205108", 10);
+  ZZ expected_A = conv<ZZ>("96647711664069877376733932946779407802298220209015413512147548816784005205108");
+  ZZ A;
+  MpzToZZ(a, A);
+
+  REQUIRE(A == expected_A);
+}
 #endif
