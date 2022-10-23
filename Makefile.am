@@ -33,6 +33,7 @@ test_SOURCES = tests/UnitTests.cpp                                    \
                tests/Quadratic/Square/SquarePlain_ZZ_Tests.cpp        \
                tests/Quadratic/Square/SquarePlain_long_Tests.cpp      \
 			   tests/XGCD/xgcd_test.cpp								  \
+               tests/XGCD/xgcd_test_benchmark.cpp                     \
                src/common.cpp                                         \
                src/Quadratic/QuadraticIdealBase_long.cpp              \
                src/Quadratic/QuadraticIdealBase_ZZ.cpp                \
