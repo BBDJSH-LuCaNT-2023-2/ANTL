@@ -480,7 +480,8 @@ void ZZToMpz(const ZZ & A, mpz_t & a){
   const mp_limb_t * zz_limbs = ZZ_limbs_get(A);
   //get number of limbs in ZZ 
   //the sign matters when reconstructing the mpz, see below
-  long num_limbs = sign(A)*A.size(); 
+  long num_limbs = A.size(); 
+  
 
   //get a pointer to a writable array of mp_limb_t s belonging to the mpz type
   mp_limb_t* mpz_limbs = mpz_limbs_write(a, num_limbs);
@@ -488,7 +489,7 @@ void ZZToMpz(const ZZ & A, mpz_t & a){
     mpz_limbs[i] = zz_limbs[i];
   }
   //mpz_limbs_finish uses the sign of num_limbs to set the sign on the mpz_t value  
-  mpz_limbs_finish(a, num_limbs);
+  mpz_limbs_finish(a, sign(A)*num_limbs);
 
   
 
