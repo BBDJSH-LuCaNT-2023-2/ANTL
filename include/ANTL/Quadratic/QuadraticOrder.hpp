@@ -19,14 +19,17 @@
 #include <ANTL/Quadratic/Reduce/ReduceFast.hpp>
 #include <ANTL/Quadratic/Reduce/ReducePlainImag.hpp>
 #include <ANTL/Quadratic/Reduce/ReducePlainReal.hpp>
+#include <ANTL/Quadratic/Reduce/ReducePlainReal_Opt.hpp>
 #include <ANTL/Quadratic/Reduce/ReduceStrategy.hpp>
 
 #include <ANTL/Quadratic/Multiply/MultiplyComp.hpp>
 #include <ANTL/Quadratic/Multiply/MultiplyNucomp.hpp>
+#include <ANTL/Quadratic/Multiply/MultiplyNucomp_Opt.hpp>
 #include <ANTL/Quadratic/Multiply/MultiplyPlain.hpp>
 #include <ANTL/Quadratic/Multiply/MultiplyStrategy.hpp>
 
 #include <ANTL/Quadratic/Square/SquareNudupl.hpp>
+#include <ANTL/Quadratic/Square/SquareNudupl_Opt.hpp>
 #include <ANTL/Quadratic/Square/SquarePlain.hpp>
 #include <ANTL/Quadratic/Square/SquareStrategy.hpp>
 
@@ -60,16 +63,19 @@ template <class T> class QuadraticOrder;
 template <class T> class ReduceStrategy;
 template <class T> class ReducePlainImag;
 template <class T> class ReducePlainReal;
+template <class T> class ReducePlainRealOpt;
 template <class T> class ReduceFast;
 
 template <class T> class MultiplyStrategy;
 template <class T> class MultiplyPlain;
 template <class T> class MultiplyNucomp;
+template <class T> class MultiplyNucompOpt;
 template <class T> class MultiplyComp;
 
 template <class T> class SquareStrategy;
 template <class T> class SquarePlain;
 template <class T> class SquareNudupl;
+template <class T> class SquareNuduplOpt;
 
 template <class T> class CubeStrategy;
 template <class T> class CubePlain;
@@ -170,16 +176,19 @@ private:
   ReduceStrategy<T> *red_best;
   ReducePlainImag<T> *red_plain_imag;
   ReducePlainReal<T> *red_plain_real;
+  ReducePlainRealOpt<T> *red_plain_real_opt;
   ReduceFast<T> *red_fast;
 
   MultiplyStrategy<T> *mul_best;
   MultiplyPlain<T> *mul_plain;
   MultiplyNucomp<T> *mul_nucomp;
+  MultiplyNucompOpt<T> *mul_nucomp_opt;
   MultiplyComp<T> *mul_comp;
 
   SquareStrategy<T> *sqr_best;
   SquarePlain<T> *sqr_plain;
   SquareNudupl<T> *sqr_nudupl;
+  SquareNuduplOpt<T> *sqr_nudupl_opt;
 
   CubeStrategy<T> *cube_best;
   CubePlain<T> *cube_plain;
@@ -321,16 +330,19 @@ public:
   void set_red_best(ReduceStrategy<T> &A);
   void set_red_plain_imag(ReducePlainImag<T> &A);
   void set_red_plain_real(ReducePlainReal<T> &A);
+//   void set_red_plain_real_opt(ReducePlainReal_Opt<T> &A);
   void set_red_fast(ReduceFast<T> &A);
 
   void set_mul_best(MultiplyStrategy<T> &A);
   void set_mul_comp(MultiplyComp<T> &A);
   void set_mul_plain(MultiplyPlain<T> &A);
   void set_mul_nucomp(MultiplyNucomp<T> &A);
+  void set_mul_nucomp_opt(MultiplyNucompOpt<T> &A);
 
   void set_sqr_best(SquareStrategy<T> &A);
   void set_sqr_plain(SquarePlain<T> &A);
   void set_sqr_nudupl(SquareNudupl<T> &A);
+//   void set_sqr_nudupl_opt(SquareNudupl_Opt<T> &A);
 
   void set_cube_best(CubeStrategy<T> &A);
   void set_cube_plain(CubePlain<T> &A);
@@ -340,16 +352,19 @@ public:
   ReduceStrategy<T> *get_red_best();
   ReducePlainImag<T> *get_red_plain_imag();
   ReducePlainReal<T> *get_red_plain_real();
+//   ReducePlainReal_Opt<T> *get_red_plain_real_opt();
   ReduceFast<T> *get_red_fast();
 
   MultiplyStrategy<T> *get_mul_best();
   MultiplyComp<T> *get_mul_comp();
   MultiplyPlain<T> *get_mul_plain();
   MultiplyNucomp<T> *get_mul_nucomp();
+  MultiplyNucompOpt<T> *get_mul_nucomp_opt();
 
   SquareStrategy<T> *get_sqr_best();
   SquarePlain<T> *get_sqr_plain();
   SquareNudupl<T> *get_sqr_nudupl();
+//   SquareNudupl_Opt<T> *get_sqr_nudupl_opt();
 
   CubeStrategy<T> *get_cube_best();
   CubePlain<T> *get_cube_plain();

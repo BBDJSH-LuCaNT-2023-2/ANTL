@@ -37,7 +37,7 @@ template <class T> QuadraticOrder<T>::QuadraticOrder(const T &D) {
     gens.clear();
     clear (L);
     */
-    //Lfunc.init(Delta, QUADRATIC_MODE);
+    // Lfunc.init(Delta, QUADRATIC_MODE);
   }
 }
 
@@ -121,8 +121,7 @@ void QuadraticOrder<T>::set_mul_best(MultiplyStrategy<T> &A) {
   mul_best = &A;
 }
 
-template <class T>
-void QuadraticOrder<T>::set_mul_comp(MultiplyComp<T> &A) {
+template <class T> void QuadraticOrder<T>::set_mul_comp(MultiplyComp<T> &A) {
   mul_comp = &A;
 
   // If mul_best is not set, or if Nucomp is the preferred strategy, set
@@ -131,7 +130,6 @@ void QuadraticOrder<T>::set_mul_comp(MultiplyComp<T> &A) {
     mul_best = &A;
   }
 }
-
 
 template <class T> void QuadraticOrder<T>::set_mul_plain(MultiplyPlain<T> &A) {
   mul_plain = &A;
@@ -150,6 +148,17 @@ void QuadraticOrder<T>::set_mul_nucomp(MultiplyNucomp<T> &A) {
   // If mul_best is not set, or if Nucomp is the preferred strategy, set
   // mul_best to A as well
   if (mul_best == nullptr || preferred_mul == 1) {
+    mul_best = &A;
+  }
+}
+
+template <class T>
+void QuadraticOrder<T>::set_mul_nucomp_opt(MultiplyNucompOpt<T> &A) {
+  mul_nucomp_opt = &A;
+
+  // If mul_best is not set, or if Nucomp_Opt is the preferred strategy, set
+  // mul_best to A as well
+  if (mul_best == nullptr || preferred_mul == 3) {
     mul_best = &A;
   }
 }
@@ -238,6 +247,10 @@ template <class T> MultiplyPlain<T> *QuadraticOrder<T>::get_mul_plain() {
 }
 template <class T> MultiplyNucomp<T> *QuadraticOrder<T>::get_mul_nucomp() {
   return mul_nucomp;
+}
+template <class T>
+MultiplyNucompOpt<T> *QuadraticOrder<T>::get_mul_nucomp_opt() {
+  return mul_nucomp_opt;
 }
 
 template <class T> SquareStrategy<T> *QuadraticOrder<T>::get_sqr_best() {

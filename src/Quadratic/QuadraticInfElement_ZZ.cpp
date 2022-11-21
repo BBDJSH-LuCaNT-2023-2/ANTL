@@ -60,11 +60,21 @@ public:
 
   void giant_step(QuadraticInfElement<ZZ, S> &quad_ib) {
 
-    mul(qib, qib, quad_ib.get_qib());
+    if (quad_ib == *this) {
+      sqr(qib, qib);
+    }
+
+    else {
+      mul(qib, qib, quad_ib.get_qib());
+    }
 
     Distance += quad_ib.get_distance();
+
+    // the correcting factor below needs to go in each case above
+/*
     Distance +=
         log(qib.get_QO()->get_mul_nucomp()->get_RelativeGenerator()->conv_RR());
+*/
   }
 
   void adjust(const ZZ &a) {

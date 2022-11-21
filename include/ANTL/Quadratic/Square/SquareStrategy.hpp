@@ -28,6 +28,7 @@ using namespace ANTL;
 namespace ANTL {
 
   template <class T> class QuadraticIdealBase;
+  template <class T> class QuadraticNumber;
 
   template <class T> class SquareStrategy {
     protected:
@@ -52,6 +53,8 @@ namespace ANTL {
         genus = g_in;
         is_init = true;
       };
+
+      virtual QuadraticNumber<T> * get_RelativeGenerator() = 0;
 
     // Generic ideal squaring definition
     virtual void square(QuadraticIdealBase<T> & C, const QuadraticIdealBase<T> & A) = 0;

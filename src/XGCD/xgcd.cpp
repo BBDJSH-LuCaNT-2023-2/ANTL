@@ -49,12 +49,27 @@ void XGCD_LEFT(long & G, long & X, const long & A, const long & B)
 */
 
 void XGCD_PARTIAL(ZZ & R2, ZZ & R1, ZZ & C2, ZZ & C1, const ZZ & bound) {
-  static ZZ q, r, t1, t2;
-  static long A2, A1, TA, B2, B1, TB, rr2, rr1, Tr, qq, bb, T, T1;
-  static int i;
+    ZZ  q, r;
 
-  clear(C1);
-  C2 = to_ZZ(-1);
+    C2 = 0;
+    C1 = -1;
+
+    while (R1 > bound) {
+      DivRem(q,r,R2,R1);
+      R2 = R1;
+      R1 = r;
+
+      r = C2 - q * C1;
+      C2 = C1;
+      C1 = r;
+    }
+
+//   static ZZ q, r, t1, t2;
+//   static long A2, A1, TA, B2, B1, TB, rr2, rr1, Tr, qq, bb, T, T1;
+//   static int i;
+//
+//   clear(C1);
+//   C2 = to_ZZ(-1);
 
 /*
   ZZ ORIG_R2 = R2;
@@ -65,7 +80,7 @@ void XGCD_PARTIAL(ZZ & R2, ZZ & R1, ZZ & C2, ZZ & C1, const ZZ & bound) {
   }
 */
 
-
+/*
   while (!IsZero(R1) && R1 > bound) {
     T = NumBits (R2) - 31;
     T1 = NumBits (R1) - 31;
@@ -123,7 +138,7 @@ void XGCD_PARTIAL(ZZ & R2, ZZ & R1, ZZ & C2, ZZ & C1, const ZZ & bound) {
 
       if (R1 < 0) { NTL::negate(C1, C1); NTL::negate(R1, R1); }
       if (R2 < 0) { NTL::negate(C2, C2); NTL::negate(R2, R2); }
-    }
+    }*/
 
 /*
     tval = C2*R1 - C1*R2;
@@ -133,9 +148,9 @@ void XGCD_PARTIAL(ZZ & R2, ZZ & R1, ZZ & C2, ZZ & C1, const ZZ & bound) {
     }
 */
 
-  }
-
-  if (R2 < 0) { NTL::negate(C2, C2); NTL::negate(C1, C1); NTL::negate(R2, R2);  }
+//   }
+//
+//   if (R2 < 0) { NTL::negate(C2, C2); NTL::negate(C1, C1); NTL::negate(R2, R2);  }
 }
 
 void XGCD_PARTIAL(long & R2, long & R1, long & C2, long & C1, const ZZ & bound) {

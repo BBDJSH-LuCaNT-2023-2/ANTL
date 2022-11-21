@@ -15,6 +15,7 @@ template <class T> QuadraticIdealBase<T>::QuadraticIdealBase (QuadraticOrder<T> 
   NTL::clear(a);
   NTL::clear(b);
   NTL::clear(c);
+  NTL::clear(num_q);
   QO = &inQO;
 }
 
@@ -26,9 +27,15 @@ template <class T> T QuadraticIdealBase<T>::get_a () const {return a;}
 template <class T> T QuadraticIdealBase<T>::get_b () const {return b;}
 template <class T> T QuadraticIdealBase<T>::get_c () const {return c;}
 
+template <class T> T QuadraticIdealBase<T>::get_num_q() const {return num_q;}
+template <class T> T QuadraticIdealBase<T>::get_qlist_i(long &index) const {return qlist[index];}
+
 template <class T> void QuadraticIdealBase<T>::set_a  (T x) {a = x;}
 template <class T> void QuadraticIdealBase<T>::set_b  (T x) {b = x;}
 template <class T> void QuadraticIdealBase<T>::set_c  (T x) {c = x;}
+
+template <class T> void QuadraticIdealBase<T>::set_num_q(T new_num_q) {num_q = new_num_q;}
+template <class T> void QuadraticIdealBase<T>::set_qlist_i(long index, T &value) {qlist[index] = value;}
 
 template <class T> QuadraticOrder<T>* QuadraticIdealBase<T>::get_QO () const {return QO;}
 template <class T> void QuadraticIdealBase<T>::set_QO (QuadraticOrder<T> *x) {QO = x;}
