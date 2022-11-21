@@ -325,7 +325,7 @@ TEST_CASE("QuadraticInfElement<ZZ, double>: adjust correctly adjusts the "
   REQUIRE(quad_inf_element1.get_qib().get_c() == -4);
   REQUIRE(ANTL::abs(quad_inf_element1.get_distance() - 7.85709282) < 0.00000001);
 }
-/*
+
 TEST_CASE("QuadraticInfElement<ZZ, double>: Testing Nudupl_Opt and ReducePlainReal_Opt",
           "[QuadraticInfElement]") {
 
@@ -440,7 +440,7 @@ TEST_CASE("QuadraticInfElement<ZZ, double>: Testing Nudupl_Opt and ReducePlainRe
   std::cout << "NUDUPL_OPT cases tested: " << case_results.size() - 1 << std::endl;
   std::cout << failed_cases << "/" << discriminants.size() - 1 << " failed!" << std::endl;
   REQUIRE(final_result == true);
-}*/
+}
 
 TEST_CASE("QuadraticInfElement<ZZ, double>: Testing Nucomp_Opt and ReducePlainReal_Opt",
           "[QuadraticInfElement]") {
