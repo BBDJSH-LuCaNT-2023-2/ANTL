@@ -102,14 +102,27 @@ void QuadraticInfElement<T, S>::giant_step(
     const QuadraticInfElement<T, S> &qif_1) {
   S relative_distance_1, relative_distance_2;
 
-  mul(qib, qib, qif_1.get_qib());
+  std::cout << "giant_step: *this is " << this->get_qib() << std::endl;
+  std::cout << "giant_step: qif_1 is"  << qif_1.get_qib() << std::endl;
+  if (qif_1.get_qib() == this->get_qib()) {
+    std::cout << "giant_step: using sqr" << std::endl;
+    sqr(qib, qib);
+    relative_distance_2 = qib.get_QO()
+                              ->get_sqr_best()
+                              ->get_RelativeGenerator()
+                              ->template to_log<S>();
+  }
+
+  else {
+    std::cout << "giant_step: using mul" << std::endl;
+    mul(qib, qib, qif_1.get_qib());
+    relative_distance_2 = qib.get_QO()
+                              ->get_mul_nucomp_opt()
+                              ->get_RelativeGenerator()
+                              ->template to_log<S>();
+  }
 
   relative_distance_1 = qif_1.get_distance();
-
-  relative_distance_2 = qib.get_QO()
-                            ->get_mul_comp()
-                            ->get_RelativeGenerator()
-                            ->template to_log<S>();
 
   update_distance_add(Distance, Distance, relative_distance_1);
   update_distance_add(Distance, Distance, relative_distance_2);

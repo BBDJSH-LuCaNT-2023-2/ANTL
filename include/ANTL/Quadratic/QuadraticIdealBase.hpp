@@ -70,6 +70,9 @@ protected:
   T c;
   QuadraticOrder<T> *QO;
 
+  T qlist[100];
+  T num_q;
+
 public:
   // Constructor(s) and destructor
   QuadraticIdealBase();
@@ -94,10 +97,16 @@ public:
   T get_c() const;
   QuadraticOrder<T> *get_QO() const;
 
+  T get_num_q() const;
+  T get_qlist_i(long &index) const;
+
   void set_a(T x);
   void set_b(T x);
   void set_c(T x);
   void set_QO(QuadraticOrder<T> *qo);
+
+  void set_num_q(T new_num_q);
+  void set_qlist_i(long index, T &value);
 
   // Hashers
   template <class S> HashEntryInt<T, S> hash_int(const S &newd) const;

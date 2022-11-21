@@ -6,16 +6,18 @@ AM_CC = @PTHREAD_CC@
 AM_CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/include
 
 if EXTRADEPS
-bin_PROGRAMS = regulator classgroupBSGS classgroupBS interval tabulation harvest
+bin_PROGRAMS = quadinfelm
 else
-bin_PROGRAMS =  regulator classgroupBSGS classgroupBS interval tabulation harvest
+bin_PROGRAMS = quadinfelm
 endif
+
+#regulator classgroupBSGS classgroupBS interval tabulation harvest
 
 #main_SOURCES = tests/HeaderTest.cpp                  \
                src/Quadratic/QuadraticOrder_long.cpp \
                src/Quadratic/QuadraticOrder_ZZ.cpp
 
-tabulation_SOURCES = tests/Quadratic/Applications/Tabulation/InvariantsTabulation_Tests.cpp     \
+#tabulation_SOURCES = tests/Quadratic/Applications/Tabulation/InvariantsTabulation_Tests.cpp     \
                      tests/Quadratic/Applications/Tabulation/timer.cpp                          \
                      src/common.cpp                                                             \
                      src/LinearAlgebra/Smith.cpp                                                \
@@ -42,7 +44,7 @@ tabulation_SOURCES = tests/Quadratic/Applications/Tabulation/InvariantsTabulatio
                      src/XGCD/xgcd_iter.cpp                                                     \
                      src/XGCD/xgcd_plain.cpp
 
-interval_SOURCES = tests/Quadratic/Applications/Tabulation/QCL_Tabulation_Interval.cpp        \
+#interval_SOURCES = tests/Quadratic/Applications/Tabulation/QCL_Tabulation_Interval.cpp        \
                      tests/Quadratic/Applications/Tabulation/timer.cpp                          \
                      src/common.cpp                                                             \
                      src/LinearAlgebra/Smith.cpp                                                \
@@ -69,7 +71,7 @@ interval_SOURCES = tests/Quadratic/Applications/Tabulation/QCL_Tabulation_Interv
                      src/XGCD/xgcd_iter.cpp                                                     \
                      src/XGCD/xgcd_plain.cpp
 
-harvest_SOURCES =    tests/Quadratic/Applications/Tabulation/QCL_Tabulation_Harvest.cpp         \
+#harvest_SOURCES =    tests/Quadratic/Applications/Tabulation/QCL_Tabulation_Harvest.cpp         \
                      tests/Quadratic/Applications/Tabulation/timer.cpp                          \
                      tests/Quadratic/Applications/Tabulation/iq-data.cpp                        \
                      src/common.cpp                                                             \
@@ -98,7 +100,7 @@ harvest_SOURCES =    tests/Quadratic/Applications/Tabulation/QCL_Tabulation_Harv
                      src/XGCD/xgcd_plain.cpp
 
 
-regulator_SOURCES = tests/UnitTests.cpp                                     \
+#regulator_SOURCES = tests/UnitTests.cpp                                     \
                     tests/Quadratic/Regulator/RegulatorLenstra_Test.cpp     \
                     tests/Quadratic/TestData/TestData.cpp                   \
                     src/common.cpp                                          \
@@ -126,8 +128,9 @@ regulator_SOURCES = tests/UnitTests.cpp                                     \
                     src/XGCD/xgcd_iter.cpp                                  \
                     src/XGCD/xgcd_plain.cpp
 
-classgroupBSGS_SOURCES = tests/UnitTests.cpp                                     \
+#classgroupBSGS_SOURCES = tests/UnitTests.cpp                                     \
                     tests/Quadratic/ClassGroup/ClassGroupBSGSReal_Tests.cpp  \
+                    tests/Quadratic/TestData/TestData.cpp                   \
                     src/common.cpp                                           \
                     src/LinearAlgebra/Smith.cpp                              \
                     src/L_function/Character.cpp                             \
@@ -154,7 +157,7 @@ classgroupBSGS_SOURCES = tests/UnitTests.cpp                                    
                     src/XGCD/xgcd_iter.cpp                                   \
                     src/XGCD/xgcd_plain.cpp
 
-classgroupBS_SOURCES = tests/UnitTests.cpp                                 \
+#classgroupBS_SOURCES = tests/UnitTests.cpp                                 \
                     tests/Quadratic/ClassGroup/ClassGroupBSReal_Tests.cpp  \
                     src/common.cpp                                           \
                     src/LinearAlgebra/Smith.cpp                              \
@@ -182,7 +185,8 @@ classgroupBS_SOURCES = tests/UnitTests.cpp                                 \
                     src/XGCD/xgcd_iter.cpp                                   \
                     src/XGCD/xgcd_plain.cpp
 
-#quadinfelm_SOURCES = tests/UnitTests.cpp                                \
+quadinfelm_SOURCES = tests/UnitTests.cpp                                \
+                    tests/Quadratic/TestData/TestData.cpp               \
                     tests/Quadratic/QuadraticInfElement_ZZ_Tests.cpp    \
                     tests/Quadratic/Multiply/MultiplyPlain_ZZ_Tests.cpp \
                     tests/Quadratic/Reduce/ReducePlainReal_ZZ_Tests.cpp \
@@ -198,9 +202,12 @@ classgroupBS_SOURCES = tests/UnitTests.cpp                                 \
                     src/Quadratic/Cube/CubeNucube_ZZ.cpp                \
                     src/Quadratic/Multiply/MultiplyComp_ZZ.cpp          \
                     src/Quadratic/Multiply/MultiplyNucomp_ZZ.cpp        \
+                    src/Quadratic/Multiply/MultiplyNucomp_Opt_ZZ.cpp    \
                     src/Quadratic/Multiply/MultiplyPlain_ZZ.cpp         \
                     src/Quadratic/Reduce/ReducePlainReal_ZZ.cpp         \
+                    src/Quadratic/Reduce/ReducePlainReal_Opt_ZZ.cpp     \
                     src/Quadratic/Square/SquareNudupl_ZZ.cpp            \
+                    src/Quadratic/Square/SquareNudupl_Opt_ZZ.cpp        \
                     src/Quadratic/Square/SquarePlain_ZZ.cpp             \
                     src/thresholds.cpp                                  \
                     src/XGCD/hxgcd.cpp                                  \
@@ -210,7 +217,7 @@ classgroupBS_SOURCES = tests/UnitTests.cpp                                 \
 
 #cubic_SOURCES=tests/Cubic/cubicTestMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/GlobalCubicField.cpp src/Cubic/CubicNumberField.cpp src/Cubic/RealCubicNumberField.cpp src/Cubic/ComplexCubicNumberField.cpp src/Cubic/CubicOrder.cpp src/Cubic/CubicOrderReal.cpp src/Cubic/CubicElement.cpp src/Cubic/CubicIdeal.cpp src/Cubic/Multiplication/IdealMultiplicationStrategy.cpp src/Cubic/Multiplication/MultiplyStrategyWilliams.cpp src/Cubic/VoronoiMethods.cpp src/Cubic/VoronoiReal.cpp src/Cubic/VoronoiComplex.cpp src/Cubic/FundamentalUnits/BasicVoronoi.cpp src/Cubic/FundamentalUnits/BSGSVoronoi.cpp
 
-#testorder_SOURCES=tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cpp
+#testorder_SOURCES=tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cppquadinfelm
 
 #test_SOURCES = tests/UnitTests.cpp                                   \
                tests/IndexCalculus/IndCalc_Tests.cpp                  \
