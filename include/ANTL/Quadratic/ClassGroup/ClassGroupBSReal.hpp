@@ -59,6 +59,8 @@ private:
   // transformation matrix
   mat_ZZ U;
 
+  bool reset_prime_seq;
+
 public:
   ClassGroupBSReal(QuadraticOrder<T> *quadratic_order);
 
@@ -103,6 +105,8 @@ template <class T> void ClassGroupBSReal<T>::cg_bs_real(const ZZ &hstar) {
   long rem, divide, size;
   ZZ s, t, e, temp, product1, product2, vIndex, wIndex, Bjj;
   bool found;
+
+  reset_prime_seq = true;
 
   QuadraticClassGroupElement<T> giantElement{*quadratic_order}, babyElement{*quadratic_order}, RHO{*quadratic_order};
   QuadraticClassGroupElement<T> g{*quadratic_order}, gjx{*quadratic_order}, ginv{*quadratic_order}, h1{*quadratic_order}, h2{*quadratic_order}, a{*quadratic_order}, b{*quadratic_order}, c{*quadratic_order};
@@ -658,8 +662,15 @@ template <class T>
 void ClassGroupBSReal<T>::get_next_prime(QuadraticClassGroupElement<T> &G) {
   static PrimeSeq PS;
 
-  if (G.IsOne())
+//   if (G.IsOne()) {
+//     PS.reset(0);
+//   }
+
+    if (reset_prime_seq) {
+//     std::cout << "resetting PS!" << std::endl;
     PS.reset(0);
+    reset_prime_seq = false;
+  }
 
   long p = PS.next();
 
