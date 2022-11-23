@@ -24,10 +24,6 @@ template <> void ReducePlainRealOpt<ZZ>::reduce(QuadraticIdealBase<ZZ> &A) {
   if (temp < 0)
     ++temp;
 
-  printf("\nREDUCE:  num_q=%ld\n",to_long(A.get_num_q()));
-  printf("a=%ld, b=%ld, c=%ld\n",to_long(a),to_long(b),to_long(c));
-  printf("temp=%ld, rootD=%ld\n",to_long(temp),to_long(rootD));
-
   while ((abs(temp) >= b) || (b > rootD) || (a < 0)) {
     s = (a > 0) ? 0 : 1;
 
@@ -56,16 +52,10 @@ template <> void ReducePlainRealOpt<ZZ>::reduce(QuadraticIdealBase<ZZ> &A) {
     temp = rootD - a2;
     if (temp < 0)
        ++temp;
-
-    printf("\nq=%ld\n",to_long(q));
-    printf("a=%ld, b=%ld, c=%ld\n",to_long(a),to_long(b),to_long(c));
-    printf("\ntemp=%ld, rootD=%ld\n",to_long(temp),to_long(rootD));
   }
 
   c = -c;
   //  assign_abc (qie, a, b, c);
-  std::cout << "Reduce: " << A << std::endl;
   A.assign(a, b, c);
-  std::cout << "Reduce: " << A << std::endl;
 }
 

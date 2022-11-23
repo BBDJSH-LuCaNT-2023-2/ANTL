@@ -37,10 +37,12 @@ TEST_CASE("ClassGroupReal<ZZ>: Does it work?", "[ClassGroupReal]") {
     auto start = std::chrono::high_resolution_clock::now();
     for (int i = test_start; i < test_bound; i++) {
       std::cout << "computing test " << i << std::endl;
+      std::cout << "discriminant is  " << discriminants.at(i) << std::endl;
       // Setting up neccessary objects
       QuadraticOrder<ZZ> quad_order{ZZ(discriminants.at(i))};
       QuadraticNumber<ZZ> quad_number1{quad_order};
       QuadraticNumber<ZZ> quad_number2{quad_order};
+      QuadraticNumber<ZZ> quad_number3{quad_order};
 
       MultiplyComp<ZZ> mul_comp_object{};
       mul_comp_object.set_RelativeGenerator(quad_number1);
@@ -50,6 +52,18 @@ TEST_CASE("ClassGroupReal<ZZ>: Does it work?", "[ClassGroupReal]") {
       red_plain_real_object.set_RelativeGenerator(quad_number2);
       quad_order.set_red_best(red_plain_real_object);
 
+//       MultiplyNucompOpt<ZZ> mul_nucomp_opt_object{};
+//       mul_nucomp_opt_object.set_RelativeGenerator(quad_number1);
+//       quad_order.set_mul_nucomp_opt(mul_nucomp_opt_object);
+//
+//       ReducePlainRealOpt<ZZ> red_plain_real_opt_object{};
+//       red_plain_real_opt_object.set_RelativeGenerator(quad_number2);
+//       quad_order.set_red_best(red_plain_real_opt_object);
+//
+//       SquareNuduplOpt<ZZ> sqr_nudupl_opt_object{};
+//       sqr_nudupl_opt_object.set_RelativeGenerator(quad_number3);
+//       quad_order.set_sqr_best(sqr_nudupl_opt_object);
+
       L_function<ZZ> l_function;
       l_function.init(ZZ(discriminants.at(i)), 2);
 
@@ -57,7 +71,13 @@ TEST_CASE("ClassGroupReal<ZZ>: Does it work?", "[ClassGroupReal]") {
 
       // Computing h*
       double regulator = correct_regulators.at(i);
-      RR h_star_close = to_RR(regulator_lenstra_data.lower_bound_hR()) / to_RR(regulator);
+
+//       std::cout << "discriminant is " << discriminants.at(i) << std::endl;
+//       std::cout << "lower_bound_hR() is " << regulator_lenstra_data.lower_bound_hR() << std::endl;
+//       std::cout << "regulator is " << regulator << std::endl;
+//       std::cout << "to_RR(lower_bound_hR())) / to_RR(regulator) is " << to_RR(regulator_lenstra_data.lower_bound_hR()) / to_RR(regulator) << std::endl;
+
+      RR h_star_close = to_RR(to_RR(regulator_lenstra_data.lower_bound_hR())) / to_RR(regulator);
       ZZ h_star = CeilToZZ(h_star_close);
 
       // Setting up the ClassGroupBSGSReal object
@@ -141,15 +161,15 @@ TEST_CASE("ClassGroupReal<ZZ>: Does it work?", "[ClassGroupReal]") {
     int test_start = 0;
     int test_bound = 0;
 
-    std::vector<std::string> correct_testdata_class_groups;
-    std::vector<std::string> computed_class_groups;
+    std::string correct_testdata_class_group;
+    std::string computed_class_group_str;
     std::vector<bool> computed_correctly;
 
     auto start = std::chrono::high_resolution_clock::now();
     while(test_data >> discriminant >> regulator) {
       getline(test_data, correct_class_group);
       correct_class_group.erase(0,1);
-      correct_testdata_class_groups.push_back(correct_class_group);
+      correct_testdata_class_group = correct_class_group;
       if(test_bound % 10000 == 0) {
         std::cout << "Doing test cases " << test_bound << " - " << test_bound + 9999 << std::endl;
       }
@@ -159,6 +179,7 @@ TEST_CASE("ClassGroupReal<ZZ>: Does it work?", "[ClassGroupReal]") {
       QuadraticOrder<ZZ> quad_order{ZZ(discriminant)};
       QuadraticNumber<ZZ> quad_number1{quad_order};
       QuadraticNumber<ZZ> quad_number2{quad_order};
+      QuadraticNumber<ZZ> quad_number3{quad_order};
 
       MultiplyComp<ZZ> mul_comp_object{};
       mul_comp_object.set_RelativeGenerator(quad_number1);
@@ -167,6 +188,18 @@ TEST_CASE("ClassGroupReal<ZZ>: Does it work?", "[ClassGroupReal]") {
       ReducePlainReal<ZZ> red_plain_real_object{};
       red_plain_real_object.set_RelativeGenerator(quad_number2);
       quad_order.set_red_best(red_plain_real_object);
+
+//       MultiplyNucompOpt<ZZ> mul_nucomp_opt_object{};
+//       mul_nucomp_opt_object.set_RelativeGenerator(quad_number1);
+//       quad_order.set_mul_nucomp_opt(mul_nucomp_opt_object);
+//
+//       ReducePlainRealOpt<ZZ> red_plain_real_opt_object{};
+//       red_plain_real_opt_object.set_RelativeGenerator(quad_number2);
+//       quad_order.set_red_best(red_plain_real_opt_object);
+//
+//       SquareNuduplOpt<ZZ> sqr_nudupl_opt_object{};
+//       sqr_nudupl_opt_object.set_RelativeGenerator(quad_number3);
+//       quad_order.set_sqr_best(sqr_nudupl_opt_object);
 
       L_function<ZZ> l_function;
       l_function.init(ZZ(discriminant), 2);
@@ -195,15 +228,15 @@ TEST_CASE("ClassGroupReal<ZZ>: Does it work?", "[ClassGroupReal]") {
       std::sort(class_group_long.begin(), class_group_long.end());
       std::stringstream class_group_string;
       class_group_string << class_group_long;
-      computed_class_groups.push_back(class_group_string.str());
+      computed_class_group_str = class_group_string.str();
 
       // Checking for corect output
-      if (correct_testdata_class_groups.back() == computed_class_groups.back()) {
+      if (correct_testdata_class_group == computed_class_group_str) {
         computed_correctly.push_back(true);
       } else {
         std::cout << "ERROR AT CASE " << test_bound - 1 << std::endl;
-        std::cout << "Computed: "<< computed_class_groups.back() << std::endl;
-        std::cout << "Correct:  "<< correct_testdata_class_groups.back() << std::endl;
+        std::cout << "Computed: "<< computed_class_group_str << std::endl;
+        std::cout << "Correct:  "<< correct_testdata_class_group << std::endl;
         computed_correctly.push_back(false);
       }
     }

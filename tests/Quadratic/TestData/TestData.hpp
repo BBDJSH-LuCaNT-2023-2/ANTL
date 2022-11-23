@@ -1,7 +1,6 @@
 #ifndef TEST_DATA_H
 #define TEST_DATA_H
 
-#include <array>
 #include <vector>
 
 extern const std::vector<long> discriminants;

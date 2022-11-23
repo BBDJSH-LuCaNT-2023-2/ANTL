@@ -66,6 +66,18 @@ private:
   // transformation matrix
   mat_ZZ U_mat;
 
+  // A Toggle for resetting a PrimeSeq.
+  // This seems to be neccessary since sometimes assign_prime(G) can return not
+  // just a principal ideal but the identity itself; which on the next call of
+  // get_next_prime() (that is, get_next_prime(assign_prime(G))) can reset PS
+  // and cause an infinite loop. For the exact code being referred to, see the
+  // do-while loop immediately below CGBGRL: STEP 4.1 (around line 220 in this
+  // file)
+  bool reset_prime_seq;
+
+  // More PS shenanigans
+  PrimeSeq PS;
+
 public:
   ClassGroupBSGSReal(QuadraticOrder<T> *quadratic_order);
 
@@ -107,6 +119,8 @@ void ClassGroupBSGSReal<T>::cg_bsgs_real(const ZZ &hstar) {
   ZZ y, usqr, det, Bjj, temp, curr_index;
   ZZ s, u, r, q, Bj, hS;
   long i, j, k, upper, crank, numRpr, numQ, idx;
+
+  reset_prime_seq = true;
 
   QuadraticClassGroupElement<T> G{*quadratic_order}, A{*quadratic_order},
       B{*quadratic_order}, C{*quadratic_order}, D{*quadratic_order},
@@ -200,6 +214,15 @@ void ClassGroupBSGSReal<T>::cg_bsgs_real(const ZZ &hstar) {
   NTL::set(hS);
   G.assign_one();
 
+  if (DBG_CGBGRL) {
+    QuadraticInfElement<ZZ, double> test_elem{*quadratic_order};
+    test_elem.assign_one();
+    do {
+      std::cout << test_elem.get_qib() << ", " << test_elem.get_distance() << std::endl;
+      test_elem.baby_step();
+    } while (!test_elem.is_one());
+  }
+
   if (DBG_CGBGRL) {std::cout << "CGBGRL: STEP 4 - (hS < hstar) loop" << std::endl;}
   // while h < hstar, we only have a subgroup
   while (hS < hstar) {
@@ -208,11 +231,14 @@ void ClassGroupBSGSReal<T>::cg_bsgs_real(const ZZ &hstar) {
     do {
       get_next_prime(G);
       if (DBG_CGBGRL) {
-        std::cout << "G is " << G << std::endl;
+        std::cout << "CGBGRL: G is " << G << std::endl;
       }
       ++num_prime_ideals;
     } while (is_principal(G));
 
+    if (DBG_CGBGRL) {
+      std::cout << "CGBGRL: G  should not be principal. G is " << G << std::endl;
+    }
     fact_base[crank] = G;
     contributors[crank] = crank;
 
@@ -295,6 +321,7 @@ void ClassGroupBSGSReal<T>::cg_bsgs_real(const ZZ &hstar) {
     }
 
     if (DBG_CGBGRL) {std::cout << "CGBGRL: STEP 4.3 - while (::IsZero(Bjj))" << std::endl;}
+    if (DBG_CGBGRL) {std::cout << "CGBGRL: Bjj check: Bjj is " << Bjj << std::endl;}
     while (::IsZero(Bjj)) {
 
       if (DBG_CGBGRL)
@@ -449,6 +476,8 @@ void ClassGroupBSGSReal<T>::cg_bsgs_real(const ZZ &hstar) {
       if (DBG_CGBGRL) {std::cout << "Just after Got giant" << std::endl;}
     }
 
+    if (DBG_CGBGRL) {std::cout << "Bjj should not be one! Bjj is " << Bjj << std::endl;}
+
     if (!::IsOne(Bjj)) {
 
       hS *= Bjj;
@@ -577,15 +606,36 @@ void ClassGroupBSGSReal<T>::cg_bsgs_real(const ZZ &hstar) {
 
 template <class T>
 void ClassGroupBSGSReal<T>::get_next_prime(QuadraticClassGroupElement<T> &G) {
-  static PrimeSeq PS;
 
+  if (DBG_GNEXTP) {
+    std::cout << "GNEXTP: G is " << G << std::endl;
+  }
+
+  // The below block was swapped out with the if (reset_prime_seq) block
+  // See the declaration of reset_prime_seq above for a brief explanation
+  /*
   if (G.IsOne())
     PS.reset(0);
+  */
+
+  if (reset_prime_seq) {
+//     std::cout << "resetting PS!" << std::endl;
+    PS.reset(0);
+    reset_prime_seq = false;
+  }
 
   long p = PS.next();
 
+  if (DBG_GNEXTP) {
+    std::cout << "GNEXTP: P is " << p << std::endl;
+  }
+//
   while (!G.assign_prime(to_ZZ(p)))
     p = PS.next();
+
+  if (DBG_GNEXTP) {
+    std::cout << "GNEXTP: G is " << G << std::endl;
+  }
 }
 
 template <class T>
@@ -606,7 +656,7 @@ bool ClassGroupBSGSReal<T>::is_principal(
     std::cout << "ISPRIN: STEP 2" << std::endl;
   }
   std::unordered_set<QuadraticIdealBase<T>> baby_step_list = {};
-  baby_step_list_generator.baby_step();
+  baby_step_list_generator.assign_one();
 
   if (DBG_ISPRIN) {
     std::cout << "ISPRIN: STEP 3" << std::endl;
@@ -617,7 +667,23 @@ bool ClassGroupBSGSReal<T>::is_principal(
     baby_step_list_generator.baby_step();
   }
 
+  QuadraticClassGroupElement<T> giant_step{*quadratic_order};
+  giant_step.assign(baby_step_list_generator.get_qib());
+  if(baby_step_list.count(baby_step_list_generator.get_qib()) == 0) {
+  baby_step_list.insert(baby_step_list_generator.get_qib());
+  baby_step_list_generator.baby_step();
+  }
+
+  if(baby_step_list.count(baby_step_list_generator.get_qib()) == 0) {
+  baby_step_list.insert(baby_step_list_generator.get_qib());
+  }
+
+
   if (DBG_ISPRIN) {
+    std::cout << "ISPRIN: The baby step list is:" << std::endl;
+    for(auto baby_step_list_element : baby_step_list) {
+      std::cout << baby_step_list_element << std::endl;
+    }
     std::cout << "ISPRIN: STEP 4" << std::endl;
   }
 
@@ -633,16 +699,11 @@ bool ClassGroupBSGSReal<T>::is_principal(
       std::cout << "ISPRIN: STEP 6" << std::endl;
     }
 
-    QuadraticClassGroupElement<T> giant_step{*quadratic_order},
-        G_copy{*quadratic_order};
+    QuadraticClassGroupElement<T> G_copy{*quadratic_order};
     if (DBG_ISPRIN) {
       std::cout << "ISPRIN: STEP 7" << std::endl;
     }
     G_copy.assign(G);
-    if (DBG_ISPRIN) {
-      std::cout << "ISPRIN: STEP 8" << std::endl;
-    }
-    giant_step.assign(G);
 
     if (DBG_ISPRIN) {
       std::cout << "ISPRIN: STEP 9" << std::endl;

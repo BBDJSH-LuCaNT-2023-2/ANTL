@@ -316,8 +316,14 @@ template <> void RegulatorLenstraData<ZZ, double>::regulator_lenstra() {
       std::cout << "LENSTR: B is " << B << std::endl;
     }
 
-    // THE BELOW LINE SHOULD EVENTUALLY BE UNCOMMENTED
     B = CeilToZZ(E / SqrRoot(to_RR(K)));
+
+        if (DBG_LENSTR) {
+      std::cout << "LENSTR: After B = CeilToZZ(E / SqrRoot(to_RR(K)))"
+                << std::endl;
+      std::cout << "LENSTR: B is " << B << std::endl;
+    }
+
     regulator_bsgs(B);
     if(!IsZero(regulator)){
       set_case_type(" -- second regulator_bsgs -- ");
@@ -331,8 +337,12 @@ template <> void RegulatorLenstraData<ZZ, double>::regulator_lenstra() {
 
     ZZ Pmax;
     if (!IsZero(regulator)) {
-      hstar = (FloorToZZ(log(S) / log(RR(2)))) /
-              (FloorToZZ(log(regulator) / log(RR(2))));
+//       hstar = (FloorToZZ(log(S) / log(RR(2)))) /
+//               (FloorToZZ(log(regulator) / log(RR(2))));
+
+      hstar = FloorToZZ(to_RR(S / regulator));
+
+
       if (DBG_LENSTR) {
         std::cout << "Found R = " << regulator << std::endl;
         std::cout << "h* = " << hstar << std::endl;
@@ -367,8 +377,8 @@ template <> void RegulatorLenstraData<ZZ, double>::regulator_lenstra() {
   }
 
   if (DBG_LENSTR) {
-    std::cout << "LENSTR: Factoring out h* - END S is" << S << std::endl;
-    std::cout << "LENSTR: Factoring out h* - END regulator is" << regulator
+    std::cout << "LENSTR: Factoring out h* - END S is " << S << std::endl;
+    std::cout << "LENSTR: Factoring out h* - END regulator is " << regulator
               << std::endl;
   }
 }

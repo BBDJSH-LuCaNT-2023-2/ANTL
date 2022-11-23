@@ -6,9 +6,9 @@ AM_CC = @PTHREAD_CC@
 AM_CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/include
 
 if EXTRADEPS
-bin_PROGRAMS = quadinfelm
+bin_PROGRAMS = regulator classgroupBS classgroupBSGS
 else
-bin_PROGRAMS = quadinfelm
+bin_PROGRAMS = regulator classgroupBS classgroupBSGS
 endif
 
 #regulator classgroupBSGS classgroupBS interval tabulation harvest
@@ -100,7 +100,7 @@ endif
                      src/XGCD/xgcd_plain.cpp
 
 
-#regulator_SOURCES = tests/UnitTests.cpp                                     \
+regulator_SOURCES = tests/UnitTests.cpp                                     \
                     tests/Quadratic/Regulator/RegulatorLenstra_Test.cpp     \
                     tests/Quadratic/TestData/TestData.cpp                   \
                     src/common.cpp                                          \
@@ -117,10 +117,13 @@ endif
                     src/Quadratic/ClassGroup/ClassGroupBSGSReal.cpp         \
                     src/Quadratic/Multiply/MultiplyComp_ZZ.cpp              \
                     src/Quadratic/Multiply/MultiplyNucomp_ZZ.cpp            \
+                    src/Quadratic/Multiply/MultiplyNucomp_Opt_ZZ.cpp        \
                     src/Quadratic/Multiply/MultiplyPlain_ZZ.cpp             \
                     src/Quadratic/Regulator/RegulatorLenstra_ZZ.cpp         \
                     src/Quadratic/Reduce/ReducePlainReal_ZZ.cpp             \
+                    src/Quadratic/Reduce/ReducePlainReal_Opt_ZZ.cpp         \
                     src/Quadratic/Square/SquareNudupl_ZZ.cpp                \
+                    src/Quadratic/Square/SquareNudupl_Opt_ZZ.cpp            \
                     src/Quadratic/Square/SquarePlain_ZZ.cpp                 \
                     src/thresholds.cpp                                      \
                     src/XGCD/hxgcd.cpp                                      \
@@ -128,7 +131,7 @@ endif
                     src/XGCD/xgcd_iter.cpp                                  \
                     src/XGCD/xgcd_plain.cpp
 
-#classgroupBSGS_SOURCES = tests/UnitTests.cpp                                     \
+classgroupBSGS_SOURCES = tests/UnitTests.cpp                                     \
                     tests/Quadratic/ClassGroup/ClassGroupBSGSReal_Tests.cpp  \
                     tests/Quadratic/TestData/TestData.cpp                   \
                     src/common.cpp                                           \
@@ -145,19 +148,22 @@ endif
                     src/Quadratic/ClassGroup/ClassGroupBSGSReal.cpp          \
                     src/Quadratic/Multiply/MultiplyComp_ZZ.cpp               \
                     src/Quadratic/Multiply/MultiplyNucomp_ZZ.cpp             \
+                    src/Quadratic/Multiply/MultiplyNucomp_Opt_ZZ.cpp         \
                     src/Quadratic/Multiply/MultiplyPlain_ZZ.cpp              \
                     src/Quadratic/Reduce/ReducePlainReal_ZZ.cpp              \
+                    src/Quadratic/Reduce/ReducePlainReal_Opt_ZZ.cpp          \
                     src/Quadratic/Regulator/RegulatorLenstra_ZZ.cpp          \
                     src/Quadratic/Square/SquareNudupl_ZZ.cpp                 \
+                    src/Quadratic/Square/SquareNudupl_Opt_ZZ.cpp             \
                     src/Quadratic/Square/SquarePlain_ZZ.cpp                  \
-                    tests/Quadratic/TestData/TestData.cpp                    \
                     src/thresholds.cpp                                       \
                     src/XGCD/hxgcd.cpp                                       \
                     src/XGCD/xgcd.cpp                                        \
                     src/XGCD/xgcd_iter.cpp                                   \
                     src/XGCD/xgcd_plain.cpp
 
-#classgroupBS_SOURCES = tests/UnitTests.cpp                                 \
+classgroupBS_SOURCES = tests/UnitTests.cpp                                 \
+                    tests/Quadratic/TestData/TestData.cpp                    \
                     tests/Quadratic/ClassGroup/ClassGroupBSReal_Tests.cpp  \
                     src/common.cpp                                           \
                     src/LinearAlgebra/Smith.cpp                              \
@@ -173,19 +179,21 @@ endif
                     src/Quadratic/ClassGroup/ClassGroupBSGSReal.cpp          \
                     src/Quadratic/Multiply/MultiplyComp_ZZ.cpp               \
                     src/Quadratic/Multiply/MultiplyNucomp_ZZ.cpp             \
+                    src/Quadratic/Multiply/MultiplyNucomp_Opt_ZZ.cpp         \
                     src/Quadratic/Multiply/MultiplyPlain_ZZ.cpp              \
                     src/Quadratic/Reduce/ReducePlainReal_ZZ.cpp              \
+                    src/Quadratic/Reduce/ReducePlainReal_Opt_ZZ.cpp          \
                     src/Quadratic/Regulator/RegulatorLenstra_ZZ.cpp          \
                     src/Quadratic/Square/SquareNudupl_ZZ.cpp                 \
+                    src/Quadratic/Square/SquareNudupl_Opt_ZZ.cpp             \
                     src/Quadratic/Square/SquarePlain_ZZ.cpp                  \
-                    tests/Quadratic/TestData/TestData.cpp                    \
                     src/thresholds.cpp                                       \
                     src/XGCD/hxgcd.cpp                                       \
                     src/XGCD/xgcd.cpp                                        \
                     src/XGCD/xgcd_iter.cpp                                   \
                     src/XGCD/xgcd_plain.cpp
 
-quadinfelm_SOURCES = tests/UnitTests.cpp                                \
+#quadinfelm_SOURCES = tests/UnitTests.cpp                                \
                     tests/Quadratic/TestData/TestData.cpp               \
                     tests/Quadratic/QuadraticInfElement_ZZ_Tests.cpp    \
                     tests/Quadratic/Multiply/MultiplyPlain_ZZ_Tests.cpp \
