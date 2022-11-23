@@ -81,6 +81,8 @@ private:
 public:
   ClassGroupBSGSReal(QuadraticOrder<T> *quadratic_order);
 
+  ~ClassGroupBSGSReal();
+
   void cg_bsgs_real(const ZZ &hstar);
 
   void set_regulator(double &ext_regulator){regulator = ext_regulator;}
@@ -110,6 +112,12 @@ ClassGroupBSGSReal<T>::ClassGroupBSGSReal(QuadraticOrder<T> *quadratic_order_arg
 //   parallel = false;
 //   Rbsgs = false;        // true if R was computed using BSGS
 //   Rconditional = false; // true if correctness of R relies on ERH
+}
+
+template <class T>
+ClassGroupBSGSReal<T>::~ClassGroupBSGSReal() {
+  delete[] fact_base;
+  delete[] contributors;
 }
 
 template <class T>

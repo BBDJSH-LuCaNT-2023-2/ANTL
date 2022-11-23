@@ -22,7 +22,7 @@ TEST_CASE("ClassGroupReal<ZZ>: Does it work?", "[ClassGroupReal]") {
   extern const std::vector<double> correct_regulators;
   extern const std::vector<std::vector<long>> correct_class_groups;
 
-  int test_method = 0;
+  int test_method = 1;
 
   if(test_method == 0) {
     int correct_count = 0;
@@ -160,7 +160,6 @@ TEST_CASE("ClassGroupReal<ZZ>: Does it work?", "[ClassGroupReal]") {
 
     auto start = std::chrono::high_resolution_clock::now();
     while(test_data >> discriminant >> regulator) {
-      std::cout << "working on discriminant " << discriminant << std::endl;
       getline(test_data, correct_class_group);
       correct_class_group.erase(0,1);
       correct_testdata_class_groups.push_back(correct_class_group);
