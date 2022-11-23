@@ -45,25 +45,25 @@ TEST_CASE("RegulatorLenstra<ZZ>: Does it work?", "[RegulatorLenstra]") {
       QuadraticNumber<ZZ> quad_number2{quad_order};
       QuadraticNumber<ZZ> quad_number3{quad_order};
 
-      MultiplyComp<ZZ> mul_comp_object{};
-      mul_comp_object.set_RelativeGenerator(quad_number1);
-      quad_order.set_mul_comp(mul_comp_object);
-
-      ReducePlainReal<ZZ> red_plain_real_object{};
-      red_plain_real_object.set_RelativeGenerator(quad_number2);
-      quad_order.set_red_best(red_plain_real_object);
-
-//       MultiplyNucompOpt<ZZ> mul_nucomp_opt_object{};
-//       mul_nucomp_opt_object.set_RelativeGenerator(quad_number1);
-//       quad_order.set_mul_nucomp_opt(mul_nucomp_opt_object);
+//       MultiplyComp<ZZ> mul_comp_object{};
+//       mul_comp_object.set_RelativeGenerator(quad_number1);
+//       quad_order.set_mul_comp(mul_comp_object);
 //
-//       SquareNuduplOpt<ZZ> sqr_nudupl_opt_object{};
-//       sqr_nudupl_opt_object.set_RelativeGenerator(quad_number2);
-//       quad_order.set_sqr_best(sqr_nudupl_opt_object);
-//
-//       ReducePlainRealOpt<ZZ> red_plain_real_opt_object{};
-//       red_plain_real_opt_object.set_RelativeGenerator(quad_number3);
-//       quad_order.set_red_best(red_plain_real_opt_object);
+//       ReducePlainReal<ZZ> red_plain_real_object{};
+//       red_plain_real_object.set_RelativeGenerator(quad_number2);
+//       quad_order.set_red_best(red_plain_real_object);
+
+      MultiplyNucompOpt<ZZ> mul_nucomp_opt_object{};
+      mul_nucomp_opt_object.set_RelativeGenerator(quad_number1);
+      quad_order.set_mul_nucomp_opt(mul_nucomp_opt_object);
+
+      SquareNuduplOpt<ZZ> sqr_nudupl_opt_object{};
+      sqr_nudupl_opt_object.set_RelativeGenerator(quad_number2);
+      quad_order.set_sqr_best(sqr_nudupl_opt_object);
+
+      ReducePlainRealOpt<ZZ> red_plain_real_opt_object{};
+      red_plain_real_opt_object.set_RelativeGenerator(quad_number3);
+      quad_order.set_red_best(red_plain_real_opt_object);
 
       std::cout << "hello 0" << std::endl;
       L_function<ZZ> l_function;
@@ -164,25 +164,25 @@ TEST_CASE("RegulatorLenstra<ZZ>: Does it work?", "[RegulatorLenstra]") {
       QuadraticNumber<ZZ> quad_number2{quad_order};
       QuadraticNumber<ZZ> quad_number3{quad_order};
 
-      MultiplyComp<ZZ> mul_comp_object{};
-      mul_comp_object.set_RelativeGenerator(quad_number1);
-      quad_order.set_mul_comp(mul_comp_object);
-
-      ReducePlainReal<ZZ> red_plain_real_object{};
-      red_plain_real_object.set_RelativeGenerator(quad_number2);
-      quad_order.set_red_best(red_plain_real_object);
-
-//       MultiplyNucompOpt<ZZ> mul_nucomp_opt_object{};
-//       mul_nucomp_opt_object.set_RelativeGenerator(quad_number1);
-//       quad_order.set_mul_nucomp_opt(mul_nucomp_opt_object);
+//       MultiplyComp<ZZ> mul_comp_object{};
+//       mul_comp_object.set_RelativeGenerator(quad_number1);
+//       quad_order.set_mul_comp(mul_comp_object);
 //
-//       ReducePlainRealOpt<ZZ> red_plain_real_opt_object{};
-//       red_plain_real_opt_object.set_RelativeGenerator(quad_number2);
-//       quad_order.set_red_best(red_plain_real_opt_object);
-//
-//       SquareNuduplOpt<ZZ> sqr_nudupl_opt_object{};
-//       sqr_nudupl_opt_object.set_RelativeGenerator(quad_number3);
-//       quad_order.set_sqr_best(sqr_nudupl_opt_object);
+//       ReducePlainReal<ZZ> red_plain_real_object{};
+//       red_plain_real_object.set_RelativeGenerator(quad_number2);
+//       quad_order.set_red_best(red_plain_real_object);
+
+      MultiplyNucompOpt<ZZ> mul_nucomp_opt_object{};
+      mul_nucomp_opt_object.set_RelativeGenerator(quad_number1);
+      quad_order.set_mul_nucomp_opt(mul_nucomp_opt_object);
+
+      ReducePlainRealOpt<ZZ> red_plain_real_opt_object{};
+      red_plain_real_opt_object.set_RelativeGenerator(quad_number2);
+      quad_order.set_red_best(red_plain_real_opt_object);
+
+      SquareNuduplOpt<ZZ> sqr_nudupl_opt_object{};
+      sqr_nudupl_opt_object.set_RelativeGenerator(quad_number3);
+      quad_order.set_sqr_best(sqr_nudupl_opt_object);
 
 
       L_function<ZZ> l_function;

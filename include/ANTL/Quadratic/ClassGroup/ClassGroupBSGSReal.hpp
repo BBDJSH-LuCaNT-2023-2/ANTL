@@ -75,9 +75,6 @@ private:
   // file)
   bool reset_prime_seq;
 
-  // More PS shenanigans
-  PrimeSeq PS;
-
 public:
   ClassGroupBSGSReal(QuadraticOrder<T> *quadratic_order);
 
@@ -619,6 +616,7 @@ void ClassGroupBSGSReal<T>::get_next_prime(QuadraticClassGroupElement<T> &G) {
     std::cout << "GNEXTP: G is " << G << std::endl;
   }
 
+  static PrimeSeq PS;
   // The below block was swapped out with the if (reset_prime_seq) block
   // See the declaration of reset_prime_seq above for a brief explanation
   /*
