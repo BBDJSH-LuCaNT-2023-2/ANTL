@@ -15,10 +15,6 @@ void SquareNuduplOpt<ZZ>::init(const ZZ &delta_in, const ZZ &h_in, long g_in) {
 template <>
 void SquareNuduplOpt<ZZ>::square(QuadraticIdealBase<ZZ> &C,
                                  const QuadraticIdealBase<ZZ> &A) {
-
-  std::cout << "square: begin" << std::endl;
-  std::cout << "square: squaring " << A << std::endl;
-
   // temporary computation of delta and nc_bound
   Delta = C.get_QO()->get_discriminant();
   NC_BOUND = FloorToZZ(sqrt(sqrt(abs(to_RR(Delta)))));
@@ -26,7 +22,6 @@ void SquareNuduplOpt<ZZ>::square(QuadraticIdealBase<ZZ> &C,
   static ZZ a1, b1, c1, Ca, Cb, Cc;
   static ZZ S, v1, K, T;
   static ZZ R1, R2, C1, C2, M2, temp;
-  static ZZ precision;
 
   a1 = A.get_a();
   b1 = A.get_b();
@@ -34,7 +29,6 @@ void SquareNuduplOpt<ZZ>::square(QuadraticIdealBase<ZZ> &C,
 
   // solve S = v1 b1 + u1 a1 (only need v1)
   XGCD_LEFT(S, v1, b1, a1);
-  std::cout << "square: finish XGCD" << std::endl;
 
   // K = -v1 c1 (mod L)
   K = -(v1 * c1);
@@ -51,7 +45,6 @@ void SquareNuduplOpt<ZZ>::square(QuadraticIdealBase<ZZ> &C,
   // N = L = a1
   // check if NUCOMP steps are required
   if (a1 <= NC_BOUND) {
-    std::cout << "square: no nucomp" << std::endl;
 
     // compute with regular squaring formula (result will be reduced)
 
@@ -74,15 +67,12 @@ void SquareNuduplOpt<ZZ>::square(QuadraticIdealBase<ZZ> &C,
     C2 = 1;
     C1 = 0;
   } else {
-    std::cout << "square: nucomp" << std::endl;
     // use NUCOMP formulas
 
     // Execute partial reduction
     R2 = a1;
     R1 = K;
-    std::cout << "square: nucomp 0" << std::endl;
     XGCD_PARTIAL(R2, R1, C2, C1, NC_BOUND);
-    std::cout << "square: nucomp 1" << std::endl;
 
     // M1 = R1
 
@@ -106,18 +96,15 @@ void SquareNuduplOpt<ZZ>::square(QuadraticIdealBase<ZZ> &C,
     Cc = (Cb * Cb - Delta) / Ca;
     Cc >>= 2;
 
-    printf("Ca=%ld, Cb=%ld, Cc=%ld\n",to_long(Ca),to_long(Cb),to_long(Cc));
     // Set a, b, c (DO NOT ASSIGN/NORMALIZE)
     C.set_a(Ca);
     C.set_b(Cb);
     C.set_c(Cc);
-    std::cout << C << std::endl;
 
     // Partial update of the distance
     // arb_add(qie->distance, qie->distance, qie->distance, precision);
   }
 
-  std::cout << "square: onto reduce" << std::endl;
   // Reduce and get the coefficients of the relative generator
   C.reduce();
 
@@ -125,33 +112,14 @@ void SquareNuduplOpt<ZZ>::square(QuadraticIdealBase<ZZ> &C,
   ZZ rel_gen_a, rel_gen_b, rel_gen_d;
   RR relative_generator;
 
-  std::cout << "square: construct_relative_generator" << std::endl;
   construct_relative_generator(rel_gen_a, rel_gen_b, rel_gen_d, C, abs(C2),
                                abs(C1), S);
 
-  std::cout << "square: compute rel_gen" << std::endl;
   RelativeGenerator->set_abd(rel_gen_a, rel_gen_b, rel_gen_d);
   RelativeGenerator->invert();
   if (RelativeGenerator->conv_RR() < 0) {
     mul(*RelativeGenerator, *RelativeGenerator, ZZ(-1));
   }
-
-  /*
-    // (rel_gen_a + rel_gen_b*sqrt(Delta)) / rel_gen_d
-    arb_mul_si(relative_generator, qie->sqrt_Delta, rel_gen_b, precision);
-    arb_add_si(relative_generator, relative_generator, rel_gen_a, precision);
-    arb_div_si(relative_generator, relative_generator, rel_gen_d, precision);
-    arb_abs(relative_generator, relative_generator);
-    arb_log(relative_generator, relative_generator, precision);
-
-    // Update qie distance = 2*dist - log(rel_gen)
-    arb_sub(qie->distance, qie->distance, relative_generator, precision);
-
-    arb_clear(relative_generator);
-    */
-
-  std::cout << "square: finished ideal is " << C << std::endl;
-  std::cout << "square: finish" << std::endl;
 }
 
 //
@@ -165,7 +133,7 @@ void SquareNuduplOpt<ZZ>::construct_relative_generator(ZZ &rel_gen_a, ZZ &rel_ge
                                   QuadraticIdealBase<ZZ> &C, ZZ OB, ZZ BB,
                                   ZZ S) {
   static ZZ NB;
-  bool con_rel_gen_dbg = true;
+  bool con_rel_gen_dbg = false;
 
   if(con_rel_gen_dbg) {
     // printf("\n-->--> construct_relative_generator:\n");

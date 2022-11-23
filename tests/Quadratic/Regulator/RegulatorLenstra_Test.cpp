@@ -9,6 +9,7 @@
 
 #include <fstream>
 #include <chrono>
+#include <set>
 
 using namespace NTL;
 using namespace ANTL;
@@ -20,8 +21,6 @@ TEST_CASE("RegulatorLenstra<ZZ>: Does it work?", "[RegulatorLenstra]") {
   extern const std::vector<long> discriminants;
   extern const std::vector<double> correct_regulators;
 
-  QuadraticOrder<ZZ> quad_order1{ZZ(30061)};
-  QuadraticInfElement<ZZ, double> quad_inf_element1{quad_order1};
 
   int test_method = 1;
 
@@ -44,6 +43,7 @@ TEST_CASE("RegulatorLenstra<ZZ>: Does it work?", "[RegulatorLenstra]") {
       QuadraticOrder<ZZ> quad_order{ZZ(discriminants[i])};
       QuadraticNumber<ZZ> quad_number1{quad_order};
       QuadraticNumber<ZZ> quad_number2{quad_order};
+      QuadraticNumber<ZZ> quad_number3{quad_order};
 
       MultiplyComp<ZZ> mul_comp_object{};
       mul_comp_object.set_RelativeGenerator(quad_number1);
@@ -53,16 +53,32 @@ TEST_CASE("RegulatorLenstra<ZZ>: Does it work?", "[RegulatorLenstra]") {
       red_plain_real_object.set_RelativeGenerator(quad_number2);
       quad_order.set_red_best(red_plain_real_object);
 
+//       MultiplyNucompOpt<ZZ> mul_nucomp_opt_object{};
+//       mul_nucomp_opt_object.set_RelativeGenerator(quad_number1);
+//       quad_order.set_mul_nucomp_opt(mul_nucomp_opt_object);
+//
+//       SquareNuduplOpt<ZZ> sqr_nudupl_opt_object{};
+//       sqr_nudupl_opt_object.set_RelativeGenerator(quad_number2);
+//       quad_order.set_sqr_best(sqr_nudupl_opt_object);
+//
+//       ReducePlainRealOpt<ZZ> red_plain_real_opt_object{};
+//       red_plain_real_opt_object.set_RelativeGenerator(quad_number3);
+//       quad_order.set_red_best(red_plain_real_opt_object);
+
+      std::cout << "hello 0" << std::endl;
       L_function<ZZ> l_function;
       l_function.init(ZZ(discriminants[i]), 2);
 
+      std::cout << "hello 1" << std::endl;
       RegulatorLenstraData<ZZ, double> regulator_lenstra_data{&quad_order,
                                                               &l_function};
 
+      std::cout << "hello 2" << std::endl;
       ZZ bound = ZZ(0);
       regulator_lenstra_data.regulator_lenstra();
       //     regulator_lenstra_data.regulator_bsgs(bound);
 
+      std::cout << "hello 3" << std::endl;
       computed_regulators[i] = regulator_lenstra_data.get_regulator();
       case_types.at(i) = regulator_lenstra_data.get_case_type();
 
@@ -115,6 +131,8 @@ TEST_CASE("RegulatorLenstra<ZZ>: Does it work?", "[RegulatorLenstra]") {
 
   if(test_method == 1) {
 
+//     std::set<int> failed_tests = {19236, 45635, 48161, 51784, 51856, 58000, 62642, 69927, 73637, 75308, 80107, 82228, 89496, 90243, 91900, 92150, 101364, 117084, 120143, 120230, 122257, 128005, 129545, 153040, 153813, 162380, 163127, 170802, 173041, 175296, 176960, 186344, 189631, 195703, 196782, 208466, 210544, 211200, 227809, 228111, 247544, 249822, 253044, 260373, 260843, 261496, 269937, 278511, 289340, 293499, 294408, 297161};
+
     std::ifstream test_data;
     test_data.open("data.txt", std::ifstream::in);
 
@@ -144,6 +162,7 @@ TEST_CASE("RegulatorLenstra<ZZ>: Does it work?", "[RegulatorLenstra]") {
       QuadraticOrder<ZZ> quad_order{ZZ(discriminant)};
       QuadraticNumber<ZZ> quad_number1{quad_order};
       QuadraticNumber<ZZ> quad_number2{quad_order};
+      QuadraticNumber<ZZ> quad_number3{quad_order};
 
       MultiplyComp<ZZ> mul_comp_object{};
       mul_comp_object.set_RelativeGenerator(quad_number1);
@@ -153,6 +172,19 @@ TEST_CASE("RegulatorLenstra<ZZ>: Does it work?", "[RegulatorLenstra]") {
       red_plain_real_object.set_RelativeGenerator(quad_number2);
       quad_order.set_red_best(red_plain_real_object);
 
+//       MultiplyNucompOpt<ZZ> mul_nucomp_opt_object{};
+//       mul_nucomp_opt_object.set_RelativeGenerator(quad_number1);
+//       quad_order.set_mul_nucomp_opt(mul_nucomp_opt_object);
+//
+//       ReducePlainRealOpt<ZZ> red_plain_real_opt_object{};
+//       red_plain_real_opt_object.set_RelativeGenerator(quad_number2);
+//       quad_order.set_red_best(red_plain_real_opt_object);
+//
+//       SquareNuduplOpt<ZZ> sqr_nudupl_opt_object{};
+//       sqr_nudupl_opt_object.set_RelativeGenerator(quad_number3);
+//       quad_order.set_sqr_best(sqr_nudupl_opt_object);
+
+
       L_function<ZZ> l_function;
       l_function.init(ZZ(discriminant), 2);
 
@@ -160,8 +192,10 @@ TEST_CASE("RegulatorLenstra<ZZ>: Does it work?", "[RegulatorLenstra]") {
                                                               &l_function};
 
       ZZ bound = ZZ(0);
+
       regulator_lenstra_data.regulator_lenstra();
       //     regulator_lenstra_data.regulator_bsgs(bound);
+
 
       correct_testdata_regulators.push_back(regulator_lenstra_data.get_regulator());
       case_types.push_back(regulator_lenstra_data.get_case_type());
@@ -170,6 +204,7 @@ TEST_CASE("RegulatorLenstra<ZZ>: Does it work?", "[RegulatorLenstra]") {
         computed_correctly.push_back(true);
       } else {
         std::cout << "ERROR AT CASE " << test_bound - 1 << std::endl;
+        std::cout << "Computed was " << correct_testdata_regulators.back() << " but expected was " << regulator << std::endl;
         computed_correctly.push_back(false);
       }
     }

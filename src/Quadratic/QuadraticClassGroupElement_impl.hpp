@@ -135,6 +135,7 @@ QuadraticIdealBase<T>::set_current_order(newDelta,newh);
 
 template <class T>
 bool QuadraticClassGroupElement<T>::assign_prime(const T &p) {
+
   bool OK = QuadraticIdealBase<T>::assign_prime(p);
 
   if (OK) {

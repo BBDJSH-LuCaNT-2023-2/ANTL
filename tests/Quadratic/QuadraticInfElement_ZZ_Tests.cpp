@@ -325,7 +325,7 @@ TEST_CASE("QuadraticInfElement<ZZ, double>: adjust correctly adjusts the "
   REQUIRE(quad_inf_element1.get_qib().get_c() == -4);
   REQUIRE(ANTL::abs(quad_inf_element1.get_distance() - 7.85709282) < 0.00000001);
 }
-
+/*
 TEST_CASE("QuadraticInfElement<ZZ, double>: Testing Nudupl_Opt and ReducePlainReal_Opt",
           "[QuadraticInfElement]") {
 
@@ -364,6 +364,12 @@ TEST_CASE("QuadraticInfElement<ZZ, double>: Testing Nudupl_Opt and ReducePlainRe
     std::cout << quad_inf_element.get_qib() << ", " << quad_inf_element.get_distance() << std::endl;
     infrastructure.push_back(quad_inf_element);
     double regulator = quad_inf_element.get_distance();
+
+    while(quad_inf_element.get_distance() <= 2*regulator) {
+      std::cout << quad_inf_element.get_qib() << ", " << quad_inf_element.get_distance() << std::endl;
+      infrastructure.push_back(quad_inf_element);
+      quad_inf_element.baby_step();
+    }
 
     // repeatedly square a_2 (that is, rho(identity)) until past regulator
     // and ensure operational integrity
@@ -440,7 +446,7 @@ TEST_CASE("QuadraticInfElement<ZZ, double>: Testing Nudupl_Opt and ReducePlainRe
   std::cout << "NUDUPL_OPT cases tested: " << case_results.size() - 1 << std::endl;
   std::cout << failed_cases << "/" << discriminants.size() - 1 << " failed!" << std::endl;
   REQUIRE(final_result == true);
-}
+}*/
 
 TEST_CASE("QuadraticInfElement<ZZ, double>: Testing Nucomp_Opt and ReducePlainReal_Opt",
           "[QuadraticInfElement]") {
@@ -489,6 +495,12 @@ TEST_CASE("QuadraticInfElement<ZZ, double>: Testing Nucomp_Opt and ReducePlainRe
     infrastructure.push_back(quad_inf_element1);
     double regulator = quad_inf_element1.get_distance();
 
+    while(quad_inf_element1.get_distance() <= 2*regulator) {
+      std::cout << quad_inf_element1.get_qib() << ", " << quad_inf_element1.get_distance() << std::endl;
+      infrastructure.push_back(quad_inf_element1);
+      quad_inf_element1.baby_step();
+    }
+
     // repeatedly multiply by a_2 (that is, rho(identity)) until past regulator
     // and ensure operational integrity
     quad_inf_element1.assign_one();
@@ -496,6 +508,8 @@ TEST_CASE("QuadraticInfElement<ZZ, double>: Testing Nucomp_Opt and ReducePlainRe
 
     quad_inf_element2.assign_one();
     quad_inf_element2.giant_step(quad_inf_element1);
+
+    std::cout << "the newly computed inf element is " << quad_inf_element2.get_qib() << ", " << quad_inf_element2.get_distance() << std::endl;
 
     bool correct_behaviour = true;
 
@@ -571,4 +585,5 @@ TEST_CASE("QuadraticInfElement<ZZ, double>: Testing Nucomp_Opt and ReducePlainRe
   std::cout << failed_cases << "/" << discriminants.size() - 1 << " failed!" << std::endl;
   REQUIRE(final_result == true);
 }
+
 #endif

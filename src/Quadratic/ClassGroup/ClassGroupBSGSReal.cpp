@@ -582,6 +582,7 @@ void ClassGroupBSGSReal<T>::get_next_prime(QuadraticClassGroupElement<T> &G) {
   if (G.IsOne())
     PS.reset(0);
 
+  std::cout << "HELLOHELLOHELLO THIS IS NONSENSE AND SHOULD NOT APPEAR IN LOGS" << std::endl;
   long p = PS.next();
 
   while (!G.assign_prime(to_ZZ(p)))

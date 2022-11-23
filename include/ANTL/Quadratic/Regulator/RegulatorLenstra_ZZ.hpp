@@ -27,6 +27,23 @@ private:
   bool DBG_GENOPQ = false;
   bool DBG_FHSTAR = false;
 
+// public:
+//   void CHG_DBG_LENSTR(bool flag) {DBG_LENSTR = flag;}
+//   void CHG_DBG_EHRERR(bool flag) {DBG_EHRERR = flag;}
+//   void CHG_DBG_GOQCNM(bool flag) {DBG_GOQCNM = flag;}
+//   void CHG_DBG_BSGSGL(bool flag) {DBG_BSGSGL = flag;}
+//   void CHG_DBG_GETMU_(bool flag) {DBG_GETMU_ = flag;}
+//   void CHG_DBG_BSGSES(bool flag) {DBG_BSGSES = flag;}
+//   void CHG_DBG_IPLIST(bool flag) {DBG_IPLIST = flag;}
+//   void CHG_DBG_SHANKS(bool flag) {DBG_SHANKS = flag;}
+//   void CHG_DBG_APPRHR(bool flag) {DBG_APPRHR = flag;}
+//   void CHG_DBG_OPTIMK(bool flag) {DBG_OPTIMK = flag;}
+//   void CHG_DBG_LOBOHR(bool flag) {DBG_LOBOHR = flag;}
+//   void CHG_DBG_GETOPQ(bool flag) {DBG_GETOPQ = flag;}
+//   void CHG_DBG_GENOPQ(bool flag) {DBG_GENOPQ = flag;}
+//   void CHG_DBG_FHSTAR(bool flag) {DBG_FHSTAR = flag;}
+//
+// private:
   U regulator;
 
   ZZ hstar;
@@ -740,10 +757,12 @@ void RegulatorLenstraData<ZZ, U>::init_prinlist(const ZZ &N, long l, U &s,
   long lsize, P;
 
   // compute B and s
+  P = 3 + NumBits(SqrRoot(delta));
   s = to<U>((N + 2) * l);
 
   if (DBG_IPLIST) {
     std::cout << "IPLIST: s is " << s << std::endl;
+    std::cout << "IPLIST: prin_list.no_of_elements() is " << prin_list.no_of_elements() << std::endl;
   }
 
   // initialize hash table
@@ -765,9 +784,24 @@ void RegulatorLenstraData<ZZ, U>::init_prinlist(const ZZ &N, long l, U &s,
       prinlist_s = s;
     }
   } else {
+    if (DBG_IPLIST) {
+      std::cout << "IPLIST: before conv(lsize, N + P); " << std::endl;
+      std::cout << "IPLIST: N is " << N << std::endl;
+      std::cout << "IPLIST: P is " << P << std::endl;
+      std::cout << "IPLIST: lsize is " << lsize << std::endl;
+    }
     conv(lsize, N + P);
     lsize += 100;
+
+    if (DBG_IPLIST) {
+      std::cout << "IPLIST: before prin_list.initialize(lsize); " << std::endl;
+      std::cout << "IPLIST: lsize is " << lsize << std::endl;
+    }
     prin_list.initialize(lsize);
+
+    if (DBG_IPLIST) {
+      std::cout << "IPLIST: before G.assign_one(); " << std::endl;
+    }
     G.assign_one();
     if (DBG_IPLIST) {
       std::cout << "IPLIST: G.assign_one()" << std::endl;
@@ -815,7 +849,7 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_bsgs(ZZ &bound) {
   }
 
   if (DBG_SHANKS) {
-    std::cout << "K is " << K << std::endl;
+    std::cout << "SHANKS: K is " << K << std::endl;
   }
 
   l = bsgs_getl(K, N, entry_size, mu, false);
@@ -864,17 +898,19 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_bsgs(ZZ &bound) {
 
   if (IsZero(regulator)) {
     Rbsgs = false;
-    G.adjust(s);
+//     G.adjust(s);
+    G.inverse_rho();
+    G.inverse_rho();
     u = 2 * s;
 
-    A = G; /*
+    A = G;
      if (DBG_SHANKS){
        std::cout << "SHANKS: Begin giant_step" << std::endl;
        std::cout << "SHANKS: (" << G.get_qib().get_a() << ", "
                  << G.get_qib().get_b() << ", " << G.get_qib().get_c() << ") "
                  << G.get_distance() << std::endl;
      }
-
+/*
      G.giant_step(G);
 
      if (DBG_SHANKS)
@@ -913,21 +949,25 @@ template <class U> void RegulatorLenstraData<ZZ, U>::regulator_bsgs(ZZ &bound) {
   while (IsZero(regulator) && (bound == 0 || A.eval() <= bound)) {
     s += u;
 
-    if (DBG_SHANKS)
-      std::cout << "SHANKS: (" << G.get_qib().get_a() << ", "
+    if (DBG_SHANKS) {
+      std::cout << "SHANKS: Taking a giant_step" << std::endl;
+      std::cout << "SHANKS: G is (" << G.get_qib().get_a() << ", "
                 << G.get_qib().get_b() << ", " << G.get_qib().get_c() << ") "
                 << G.get_distance() << std::endl;
+    }
 
-    if (DBG_SHANKS)
-      std::cout << "SHANKS: (" << A.get_qib().get_a() << ", "
+    if (DBG_SHANKS) {
+      std::cout << "SHANKS: A is (" << A.get_qib().get_a() << ", "
                 << A.get_qib().get_b() << ", " << A.get_qib().get_c() << ") "
                 << A.get_distance() << std::endl;
+    }
     A.giant_step(G);
 
-    if (DBG_SHANKS)
-      std::cout << "SHANKS: (" << A.get_qib().get_a() << ", "
+    if (DBG_SHANKS) {
+      std::cout << "SHANKS: A.giant_step(G) is (" << A.get_qib().get_a() << ", "
                 << A.get_qib().get_b() << ", " << A.get_qib().get_c() << ") "
                 << A.get_distance() << std::endl;
+    }
 
     // mul(A, A, G); makeshift multiplication above
     // A.adjust(s);
