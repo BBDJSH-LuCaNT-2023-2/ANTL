@@ -9,7 +9,7 @@ QuadraticInfElement<T, S>::QuadraticInfElement(QuadraticOrder<T> &quad_o)
     : qib{quad_o} {
   qib.assign_one();
   Delta = quad_o.get_discriminant();
-  FloorRootDelta = FloorToZZ(sqrt(to_RR(Delta)));
+  FloorRootDelta = to<T>(FloorToZZ(sqrt(to_RR(Delta))));
   Distance = 0;
 }
 
@@ -48,7 +48,7 @@ template <class T, class S> void QuadraticInfElement<T, S>::baby_step() {
   //   // Updating the distance
   //   update_distance_add(Distance, Distance, relative_distance);
 
-  T a, b, c, rootD, precision;
+  T a, b, c, rootD;
   T q, r, a2, nb, na, temp, s;
   S relative_distance;
 
@@ -320,8 +320,8 @@ S QuadraticInfElement<T, S>::get_baby_steps(
   // below is the implementation for class T = ZZ
   // it is here in the generic implementation temporarily
   // eventually a QuadraticInfElement<ZZ, S> class definition will be required
-  ZZ old_a = qib.get_a(), old_b = qib.get_b(), old_c = qib.get_c();
-  ZZ q, r, new_c, new_a, new_b;
+  T old_a = qib.get_a(), old_b = qib.get_b(), old_c = qib.get_c();
+  T q, r, new_c, new_a, new_b;
   S relative_generator, relative_distance, regulator,
       initial_distance = Distance;
 
@@ -396,16 +396,16 @@ S QuadraticInfElement<T, S>::get_baby_steps(
   // it is here in the generic implementation temporarily
   // eventually a QuadraticInfElement<ZZ, S> class definition will be required
 
-  ZZ old_a = qib.get_a(), old_b = qib.get_b(), old_c = qib.get_c();
-  ZZ q, r, new_c, new_a, new_b;
+  T old_a = qib.get_a(), old_b = qib.get_b(), old_c = qib.get_c();
+  T q, r, new_c, new_a, new_b;
 
-  ZZ temp, a2, nb, na;
+  T temp, a2, nb, na;
 
   S relative_generator, relative_distance, regulator, new_d;
-  ZZ sl;
+  T sl;
   long s, currM;
 
-  ZZ bound = to_ZZ(10000000);
+  T bound(10000000);
 
   sl = FloorToZZ(Distance) + l;
   currM = 0;
