@@ -650,6 +650,7 @@ void RegulatorLenstraData<T, U>::combine_conj_BSGS(
 }
 
 template <class U> class RegulatorLenstraData<ZZ, U>;
+template <class U> class RegulatorLenstraData<long, U>;
 
 } // namespace ANTL
 #endif
