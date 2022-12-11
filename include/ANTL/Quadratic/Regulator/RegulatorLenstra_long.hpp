@@ -390,7 +390,7 @@ template <class U> void RegulatorLenstraData<long, U>::regulator_lenstra() {
         // combine_conj_BSGS(S, D_gap_check, F);
         S = AA.get_distance() -
             ((D_gap_check.get_distance() - D1.get_distance()) - F->get_d()) -
-            log(AA.get_qib().get_a());
+            log(ZZ(AA.get_qib().get_a()));
         break;
       }
 
