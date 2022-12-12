@@ -4,32 +4,24 @@
  * @remark Quadratic number function specializations (long base type).
  */
 
-#include <QuadraticNumber.hpp>
+#include <ANTL/Quadratic/QuadraticNumber.hpp>
 
-
-template <>
-void
-QuadraticNumber<long>::normalize()
-{
-	if(d < 0){
-	  a = -a;
-	  b = -b;
-	  d = -d;
-	}
-	ZZ g = GCD(GCD(a,b),d);
-	if (g != 1) {
-	  a /= g;
-	  b /= g;
-	  d /= g;
-	}
-      }
+template <> void QuadraticNumber<long>::normalize() {
+  if (d < 0) {
+    a = -a;
+    b = -b;
+    d = -d;
+  }
+  long g = GCD(GCD(a, b), d);
+  if (g != 1) {
+    a /= g;
+    b /= g;
+    d /= g;
+  }
 }
 
-
-
-template <>
-void
-QuadraticNumber<long>::isUnit()
-{
-  return ::abs(getNorm()) == 1; 
+template <> bool QuadraticNumber<long>::isUnit() const {
+  QQ<long> tempQ = QQ<long>();
+  abs(tempQ, getNorm());
+  return tempQ == 1;
 }

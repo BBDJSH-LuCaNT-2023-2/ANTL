@@ -407,7 +407,7 @@ S QuadraticInfElement<T, S>::get_baby_steps(
 
   T bound(10000000);
 
-  sl = FloorToZZ(Distance) + l;
+  sl = floor(Distance) + l;
   currM = 0;
 
   new_d = Distance;

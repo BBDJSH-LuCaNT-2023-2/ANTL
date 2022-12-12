@@ -196,14 +196,14 @@ void
         }
 
         // ((a + b rho) / d)^-1 = (ad - bd rho) / (a^2 - b^2 Delta)
-        ::mul(z.a,x.a,x.d);
+        z.a = x.a * x.d;
 
-        ::mul(z.b,x.b,x.d);
+        z.b = x.b * x.d;
 
-        ::sqr(z.d,x.a);
-        ::sqr(temp,x.b);
-        ::mul(temp,temp,x.QO->get_discriminant());
-        ::sub(z.d,z.d,temp);
+        z.d = x.a * x.a;
+        temp = x.b * x.b;
+        temp = temp * x.QO->get_discriminant();
+        z.d = z.d - temp;
 
         z.normalize ();
       }
@@ -236,15 +236,15 @@ void
             // z = ---------------------------------------------------------
             //                     x.d * y.d
 
-            ::mul(newA,x.a,y.d);
-            ::mul(temp,y.a,x.d);
-            ::add(newA,newA,temp);
+            newA = x.a * y.d;
+            temp = y.a * x.d;
+            newA = newA + temp;
 
-            ::mul(newB,x.b,y.d);
-            ::mul(temp,y.b,x.d);
-            ::add(newB,newB,temp);
+            newB = x.b * y.d;
+            temp = y.b * x.d;
+            newB = newB + temp;
 
-            ::mul(newD,x.d,y.d);
+            newD = x.d * y.d;
 
             z.a = newA;
             z.b = newB;
@@ -281,8 +281,8 @@ void
             // z = ---------------------------------------------------------
             //                x.d
 
-            ::mul(temp,x.d,n);
-            ::add(z.a,z.a,temp);
+            temp = x.d * n;
+            z.a = z.a + temp;
             z.b = x.b;
             z.d = x.d;
             z.normalize();
@@ -316,13 +316,13 @@ void
             // z = ---------------------------------------------------------
             //                     x.d * q.d
 
-            ::mul(newA,x.a,q.getDenominator());
-            ::mul(temp,q.getNumerator(),x.d);
-            ::add(newA,newA,temp);
+            newA = x.a * q.getDenominator();
+            temp = q.getNumerator() * x.d;
+            newA = newA + temp;
 
-            ::mul(newB,x.b,q.getDenominator());
+            newB = x.b * q.getDenominator();
 
-            ::mul(newD,x.d,q.getDenominator());
+            newD = x.d * q.getDenominator();
 
             z.a = newA;
             z.b = newB;
@@ -361,15 +361,15 @@ void
             // z = ---------------------------------------------------------
             //                     x.d * y.d
 
-            ::mul(newA,x.a,y.d);
-            ::mul(temp,y.a,x.d);
-            ::sub(newA,newA,temp);
+            newA = x.a * y.d;
+            temp = y.a * x.d;
+            newA = newA - temp;
 
-            ::mul(newB,x.b,y.d);
-            ::mul(temp,y.b,x.d);
-            ::sub(newB,newB,temp);
+            newB = x.b * y.d;
+            temp = y.b * x.d;
+            newB = newB - temp;
 
-            ::mul(newD,x.d,y.d);
+            newD = x.d * y.d;
 
             z.a = newA;
             z.b = newB;
@@ -407,8 +407,8 @@ void
             // z = ---------------------------------------------------------
             //                x.d
 
-            ::mul(temp,x.d,n);
-            ::sub(z.a,z.a,temp);
+            temp = x.d * n;
+            z.a = z.a - temp;
             z.b = x.b;
             z.d = x.d;
             z.normalize();
@@ -444,13 +444,13 @@ void
             // z = ---------------------------------------------------------
             //                     x.d * q.d
 
-            ::mul(newA,x.a,q.getDenominator());
-            ::mul(temp,q.getNumerator(),x.d);
-            ::sub(newA,newA,temp);
+            newA = x.a * q.getDenominator();
+            temp = q.getNumerator() * x.d;
+            newA = newA - temp;
 
-            ::mul(newB,x.b,q.getDenominator());
+            newB = x.b * q.getDenominator();
 
-            ::mul(newD,x.d,q.getDenominator());
+            newD = x.d * q.getDenominator();
 
             z.a = newA;
             z.b = newB;
@@ -480,16 +480,16 @@ void
         //     ---------------------------------------------------------------------
         //                              x.d y.d
 
-        mul(newA,x.get_a(),y.get_a());
-        mul(temp,x.get_b(),y.get_b());
-        mul(temp,temp,z.get_QO()->get_discriminant());
-        add(newA,newA,temp);
+        newA = x.get_a() * y.get_a();
+        temp = x.get_b() * y.get_b();
+        temp = temp * z.get_QO()->get_discriminant();
+        newA = newA + temp;
 
-        mul(newB,x.get_a(),y.get_b());
-        mul(temp,x.get_b(),y.get_a());
-        add(newB,newB,temp);
+        newB = x.get_a() * y.get_b();
+        temp = x.get_b() * y.get_a();
+        newB = newB + temp;
 
-        mul(newD,x.get_d(),y.get_d());
+        newD = x.get_d() * y.get_d();
 
         z.set_a(newA);
         z.set_b(newB);
@@ -512,8 +512,8 @@ void
           // TODO:  THROW AN EXCEPTION!!!
         }
 
-        ::mul(z.a,x.a,n);
-        ::mul(z.b,x.b,n);
+        z.a = x.a * n;
+        z.b = x.b * n;
         z.d = x.d;
         z.normalize();
       }
@@ -534,9 +534,9 @@ void
             // TODO:  THROW AN EXCEPTION!!!
           }
 
-        ::mul(z.a,x.a,q.getNumerator());
-        ::mul(z.b,x.b,q.getNumerator());
-        ::mul(z.d,z.d,q.getDenominator());
+        z.a = x.a * q.getNumerator();
+        z.b = x.b * q.getNumerator();
+        z.d = z.d * q.getDenominator();
         z.normalize();
       }
 
@@ -560,21 +560,21 @@ void
         //     ------------------------------------------------------------
         //                   x.d (y.a^2 - y.b^2 N(rho)
 
-        ::mul(newA,x.a,y.a);
-        ::mul(temp,x.b,y.b);
-        ::mul(temp,temp,z.QO->get_discriminant());
-        ::sub(newA,newA,temp);
-        ::mul(newA,newA,y.d);
+        newA = x.a * y.a;
+        temp = x.b * y.b;
+        temp = temp * z.QO->get_discriminant();
+        newA = newA - temp;
+        newA = newA * y.d;
 
-        ::mul(newB,x.b,y.a);
-        ::mul(temp,x.a,y.b);
-        ::sub(newB,newB,temp);
-        ::mul(newB,newB,y.d);
+        newB = x.b * y.a;
+        temp = x.a * y.b;
+        newB = newB - temp;
+        newB = newB * y.d;
 
-        ::sqr(newD,y.a);
-        ::sqr(temp,y.b);
-        ::mul(temp,temp,z.QO->get_discriminant());
-        ::mul(newD,temp,x.d);
+        newD = y.a * y.a;
+        temp = y.b * y.b;
+        temp = temp * z.QO->get_discriminant();
+        newD = temp * x.d;
 
         z.a = newA;
         z.b = newB;
@@ -596,7 +596,7 @@ template <class T> void div (QuadraticNumber<T> & z, const QuadraticNumber<T> & 
 
   z.a = x.a;
   z.b = x.b;
-  mul(z.d, x.d, n);
+  z.d =  x.d *  n;
 
   z.normalize();
 }
@@ -617,9 +617,9 @@ void
           // TODO:  THROW AN EXCEPTION!!!
         }
 
-        ::mul(z.a,x.a,q.getDenominator());
-        ::mul(z.b,x.b,q.getDenominator());
-        ::mul(z.d,x.d,q.getNumerator());
+        z.a = x.a * q.getDenominator();
+        z.b = x.b * q.getDenominator();
+        z.d = x.d * q.getNumerator();
         z.QO = x.QO;
         z.normalize();
       }
@@ -644,15 +644,15 @@ void
         //     ----------------------------------------------------------
         //                         x.d^2
 
-        ::sqr(newA,x.a);
-        ::sqr(temp,x.b);
-        ::mul(temp,temp,z.QO->get_discriminant());
-        ::add(newA,newA,temp);
+        newA = x.a * x.a;
+        temp = x.b * x.b;
+        temp = temp * z.QO->get_discriminant();
+        newA = newA + temp;
 
-        ::mul(newB,x.a,x.b);
-        ::add(newB,newB,newB);
+        newB = x.a * x.b;
+        newB = newB + newB;
 
-        ::sqr(newD,x.d);
+        newD = x.d * x.d;
 
         z.a = newA;
         z.b = newB;
@@ -676,8 +676,8 @@ void
           }
 
         QuadraticNumber<T> zz;
-        sqr(zz,x);
-        mul(z,zz,x);
+        zz = x * x;
+        z = zz * x;
       }
 
 
@@ -695,7 +695,7 @@ QuadraticNumber<T>
       operator + (const QuadraticNumber<T> & x, const QuadraticNumber<T> & y)
       {
         QuadraticNumber<T> c;
-        add (c, x, y);
+        c =  x +  y;
         return c;
       }
 
@@ -704,7 +704,7 @@ QuadraticNumber<T>
       operator + (const QuadraticNumber<T> & x, const T & n)
       {
         QuadraticNumber<T> c;
-        add (c, x, n);
+        c =  x +  n;
         return c;
       }
 
@@ -713,7 +713,7 @@ QuadraticNumber<T>
       operator + (const QuadraticNumber<T> & x, const QQ<T> & q)
       {
         QuadraticNumber<T> c;
-        add (c, x, q);
+        c =  x +  q;
         return c;
       }
 
@@ -722,7 +722,7 @@ QuadraticNumber<T>
       operator - (const QuadraticNumber<T> & x, const QuadraticNumber<T> & y)
       {
       QuadraticNumber<T> c;
-      sub (c, x, y);
+      c =  x -  y;
       return c;
       }
 
@@ -731,7 +731,7 @@ QuadraticNumber<T>
       operator - (const QuadraticNumber<T> & x, const T & n)
       {
       QuadraticNumber<T> c;
-      sub (c, x, n);
+      c =  x -  n;
       return c;
       }
 
@@ -740,7 +740,7 @@ QuadraticNumber<T>
       operator - (const QuadraticNumber<T> & x, const QQ<T> & q)
       {
       QuadraticNumber<T> c;
-      sub (c, x, q);
+      c =  x -  q;
       return c;
       }
 
@@ -749,7 +749,7 @@ QuadraticNumber<T>
       operator * (const QuadraticNumber<T> & x, const QuadraticNumber<T> & y)
       {
       QuadraticNumber<T> c;
-      mul (c, x, y);
+      c =  x *  y;
       return c;
       }
 
@@ -758,7 +758,7 @@ QuadraticNumber<T>
       operator * (const QuadraticNumber<T> & x, const T & n)
       {
       QuadraticNumber<T> c;
-      mul (c, x, n);
+      c =  x *  n;
       return c;
       }
 
@@ -767,7 +767,7 @@ QuadraticNumber<T>
       operator * (const QuadraticNumber<T> & x, const QQ<T> & q)
       {
         QuadraticNumber<T> c;
-        mul (c, x, q);
+        c =  x *  q;
         return c;
       }
 
@@ -776,7 +776,7 @@ QuadraticNumber<T>
       operator / (const QuadraticNumber<T> & x, const QuadraticNumber<T> & y)
       {
         QuadraticNumber<T> c;
-        div (c, x, y);
+        c =  x / y;
         return c;
       }
 
@@ -785,7 +785,7 @@ QuadraticNumber<T>
       operator / (const QuadraticNumber<T> & a, const T & n)
       {
         QuadraticNumber<T> c;
-        div (c, a, n);
+        c =  a / n;
         return c;
       }
 
@@ -794,7 +794,7 @@ QuadraticNumber<T>
       operator / (const QuadraticNumber<T> & x, const QQ<T> & q)
       {
         QuadraticNumber<T> c;
-        div (c, x, q);
+        c =  x / q;
         return c;
       }
 
@@ -802,7 +802,7 @@ QuadraticNumber<T>
 // const QuadraticNumber<T> &
 //       operator += (const QuadraticNumber<T> & x)
 //       {
-//         add (*this, *this, x);
+//         *this =  *this +  x;
 //         return *this;
 //       }
 //
@@ -810,7 +810,7 @@ QuadraticNumber<T>
 // const QuadraticNumber<T> &
 //       operator += (const T & n)
 //       {
-//       add (*this, *this, n);
+//       *this =  *this +  n;
 //       return *this;
 //       }
 //
@@ -818,7 +818,7 @@ QuadraticNumber<T>
 // const QuadraticNumber<T> &
 //       operator += (const QQ<T> & q)
 //       {
-//       add (*this, *this, q);
+//       *this =  *this +  q;
 //       return *this;
 //       }
 //
@@ -826,7 +826,7 @@ QuadraticNumber<T>
 // const QuadraticNumber<T> &
 //       operator -= (const QuadraticNumber<T> & x)
 //       {
-//       sub (*this, *this, x);
+//       *this =  *this -  x;
 //       return *this;
 //       }
 //
@@ -834,7 +834,7 @@ QuadraticNumber<T>
 // const QuadraticNumber<T> &
 //       operator -= (const T & n)
 //       {
-//       sub (*this, *this, n);
+//       *this =  *this -  n;
 //       return *this;
 //       }
 //
@@ -842,7 +842,7 @@ QuadraticNumber<T>
 // const QuadraticNumber<T> &
 //       operator -= (const QQ<T> & q)
 //       {
-//       sub (*this, *this, q);
+//       *this =  *this -  q;
 //       return *this;
 //       }
 //
@@ -850,7 +850,7 @@ QuadraticNumber<T>
 // const QuadraticNumber<T> &
 //       operator *= (const QuadraticNumber<T> & x)
 //       {
-//       mul (*this, *this, x);
+//       *this =  *this *  x;
 //       return *this;
 //       }
 //
@@ -858,7 +858,7 @@ QuadraticNumber<T>
 // const QuadraticNumber<T> &
 //       operator *= (const T & n)
 //       {
-//       mul (*this, *this, n);
+//       *this =  *this *  n;
 //       return *this;
 //       }
 //
@@ -866,7 +866,7 @@ QuadraticNumber<T>
 // const QuadraticNumber<T> &
 //       operator *= (const QQ<T> & q)
 //       {
-//       mul (*this, *this, q);
+//       *this =  *this *  q;
 //       return *this;
 //       }
 //
@@ -874,7 +874,7 @@ QuadraticNumber<T>
 // const QuadraticNumber<T> &
 //       operator /= (const QuadraticNumber<T> & x)
 //       {
-//       div (*this, *this, x);
+//       *this =  *this / x;
 //       return *this;
 //       }
 //
@@ -882,7 +882,7 @@ QuadraticNumber<T>
 // const QuadraticNumber<T> &
 //       operator /= (const T & n)
 //       {
-//       div (*this, *this, n);
+//       *this =  *this / n;
 //       return *this;
 //       }
 //
@@ -890,7 +890,7 @@ QuadraticNumber<T>
 // const QuadraticNumber<T> &
 //       operator /= (const QQ<T> & q)
 //       {
-//       div (*this, *this, q);
+//       *this =  *this / q;
 //       return *this;
 //       }
 
