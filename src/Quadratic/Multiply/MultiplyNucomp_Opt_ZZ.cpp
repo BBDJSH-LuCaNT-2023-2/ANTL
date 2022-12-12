@@ -52,8 +52,13 @@ void MultiplyNucompOpt<ZZ>::multiply(QuadraticIdealBase<ZZ> &C,
   XGCD_LEFT(SP, v1, a2, a1);
 
   // K = v1 (b1 - b2) / 2 (mod L)
+//   std::cout << "NUCOMP: Before K = (m * v1) mod a1" << std::endl;
+//   std::cout << "NUCOMP: m is " << m << std::endl;
+//   std::cout << "NUCOMP: v1 is " << v1 << std::endl;
+//   std::cout << "NUCOMP: a1 is " << a1 << std::endl;
   mul(K, m, v1);
   rem(K, K, a1);
+//   std::cout << "NUCOMP: K is " << K << std::endl;
 
   S = 1;
   if (!IsOne(SP)) {
@@ -63,6 +68,7 @@ void MultiplyNucompOpt<ZZ>::multiply(QuadraticIdealBase<ZZ> &C,
     mul(K, K, u2);
     mul(temp, v2, c2);
     sub(K, K, temp);
+//     std::cout << "NUCOMP: K is " << K << std::endl;
 
     if (!IsOne(S)) {
       div(a1, a1, S);
@@ -71,8 +77,12 @@ void MultiplyNucompOpt<ZZ>::multiply(QuadraticIdealBase<ZZ> &C,
     }
 
     rem(K, K, a1);
+//     std::cout << "NUCOMP: K is " << K << std::endl;
   }
 
+  if (K < 0) {
+    K += a1;
+  }
   // N = a2;  L = a1;
 
   // check if NUCOMP steps are required
@@ -90,12 +100,18 @@ void MultiplyNucompOpt<ZZ>::multiply(QuadraticIdealBase<ZZ> &C,
     add(Cb, Cb, b2);
 
     // C.c = (S c2 + K (b2 + T)) / L;
+//     std::cout << "NUCOMP: b2 is " << b2 << std::endl;
+//     std::cout << "NUCOMP: T is " << T << std::endl;
+//     std::cout << "NUCOMP: K is " << K << std::endl;
+//     std::cout << "NUCOMP: c2 is " << c2 << std::endl;
+//     std::cout << "NUCOMP: a1 is " << a1 << std::endl;
     add(Cc, b2, T);
     mul(Cc, Cc, K);
     add(Cc, Cc, c2);
     div(Cc, Cc, a1);
 
     // Set a, b, c (DO NOT ASSIGN/NORMALIZE)
+//     std::cout << "NUCOMP: Ca, Cb, Cc are " << Ca << ", " << Cb << ", " << Cc << std::endl;
     C.set_a(Ca);
     C.set_b(Cb);
     C.set_c(Cc);
@@ -108,7 +124,20 @@ void MultiplyNucompOpt<ZZ>::multiply(QuadraticIdealBase<ZZ> &C,
     // Execute partial reduction
     R2 = a1;
     R1 = K;
+
+//     std::cout << "NUCOMP: Before XGCD_PARTIAL" << std::endl;
+//     std::cout << "NUCOMP: R2 is " << R2 << std::endl;
+//     std::cout << "NUCOMP: R1 is " << R1 << std::endl;
+//     std::cout << "NUCOMP: C2 is " << C2 << std::endl;
+//     std::cout << "NUCOMP: C1 is " << C1 << std::endl;
+
     XGCD_PARTIAL(R2, R1, C2, C1, NC_BOUND);
+/*
+    std::cout << "NUCOMP: After XGCD_PARTIAL" << std::endl;
+    std::cout << "NUCOMP: R2 is " << R2 << std::endl;
+    std::cout << "NUCOMP: R1 is " << R1 << std::endl;
+    std::cout << "NUCOMP: C2 is " << C2 << std::endl;
+    std::cout << "NUCOMP: C1 is " << C1 << std::endl;*/
 
     // M1 = (N R1 + (b1 - b2) C1 / 2) / L  (T = N R1)
     mul(T, a2, R1);
@@ -121,6 +150,8 @@ void MultiplyNucompOpt<ZZ>::multiply(QuadraticIdealBase<ZZ> &C,
     mul(temp, c2, C1);
     sub(M2, M2, temp);
     div(M2, M2, a1);
+//     std::cout << "NUCOMP: M1 is " << M1 << std::endl;
+//     std::cout << "NUCOMP: M2 is " << M2 << std::endl;
 
     // C.a = (-1)^(i-1) (R1 M1 - C1 M2)
     mul(Ca, R1, M1);
@@ -143,6 +174,7 @@ void MultiplyNucompOpt<ZZ>::multiply(QuadraticIdealBase<ZZ> &C,
 
 
     // Set a, b, c (DO NOT ASSIGN/NORMALIZE)
+//     std::cout << "NUCOMP: Ca, Cb, Cc are " << Ca << ", " << Cb << ", " << Cc << std::endl;
     C.set_a(Ca);
     C.set_b(Cb);
     C.set_c(Cc);
@@ -152,7 +184,9 @@ void MultiplyNucompOpt<ZZ>::multiply(QuadraticIdealBase<ZZ> &C,
   }
 
   // Reduce and get the coefficients of the relative generator
+//   std::cout << "NUCOMP: Before C.reduce(), C is" << C << std::endl;
   C.reduce();
+//   std::cout << "NUCOMP: After C.reduce(), C is" << C << std::endl;
 
   // rrelative_generator
   ZZ rel_gen_a, rel_gen_b, rel_gen_d;

@@ -2,26 +2,26 @@
 #include <NTL/RR.h>
 
 template <>
-void SquareNuduplOpt<ZZ>::construct_relative_generator(ZZ &rel_gen_a, ZZ &rel_gen_b, ZZ &rel_gen_d,
-                                  QuadraticIdealBase<ZZ> &C, ZZ OB, ZZ BB,
-                                  ZZ S);
+void SquareNuduplOpt<long>::construct_relative_generator(long &rel_gen_a, long &rel_gen_b, long &rel_gen_d,
+                                  QuadraticIdealBase<long> &C, long OB, long BB,
+                                  long S);
 
 template <>
-void SquareNuduplOpt<ZZ>::init(const ZZ &delta_in, const ZZ &h_in, long g_in) {
+void SquareNuduplOpt<long>::init(const long &delta_in, const long &h_in, long g_in) {
   init(delta_in, h_in, 0);
   NC_BOUND = FloorToZZ(sqrt(sqrt(abs(to_RR(Delta)))));
 }
 
 template <>
-void SquareNuduplOpt<ZZ>::square(QuadraticIdealBase<ZZ> &C,
-                                 const QuadraticIdealBase<ZZ> &A) {
+void SquareNuduplOpt<long>::square(QuadraticIdealBase<long> &C,
+                                 const QuadraticIdealBase<long> &A) {
   // temporary computation of delta and nc_bound
   Delta = C.get_QO()->get_discriminant();
   NC_BOUND = FloorToZZ(sqrt(sqrt(abs(to_RR(Delta)))));
 
-  static ZZ a1, b1, c1, Ca, Cb, Cc;
-  static ZZ S, v1, K, T;
-  static ZZ R1, R2, C1, C2, M2, temp;
+  static long a1, b1, c1, Ca, Cb, Cc;
+  static long S, v1, K, T;
+  static long R1, R2, C1, C2, M2, temp;
 
   a1 = A.get_a();
   b1 = A.get_b();
@@ -109,7 +109,7 @@ void SquareNuduplOpt<ZZ>::square(QuadraticIdealBase<ZZ> &C,
   C.reduce();
 
   // rrelative_generator
-  ZZ rel_gen_a, rel_gen_b, rel_gen_d;
+  long rel_gen_a, rel_gen_b, rel_gen_d;
   RR relative_generator;
 
   construct_relative_generator(rel_gen_a, rel_gen_b, rel_gen_d, C, abs(C2),
@@ -118,7 +118,7 @@ void SquareNuduplOpt<ZZ>::square(QuadraticIdealBase<ZZ> &C,
   RelativeGenerator->set_abd(rel_gen_a, rel_gen_b, rel_gen_d);
   RelativeGenerator->invert();
   if (RelativeGenerator->conv_RR() < 0) {
-    mul(*RelativeGenerator, *RelativeGenerator, ZZ(-1));
+    mul(*RelativeGenerator, *RelativeGenerator, -1);
   }
 }
 
@@ -129,10 +129,10 @@ void SquareNuduplOpt<ZZ>::square(QuadraticIdealBase<ZZ> &C,
 // Pass OB=1 and BB=0
 //
 template <>
-void SquareNuduplOpt<ZZ>::construct_relative_generator(ZZ &rel_gen_a, ZZ &rel_gen_b, ZZ &rel_gen_d,
-                                  QuadraticIdealBase<ZZ> &C, ZZ OB, ZZ BB,
-                                  ZZ S) {
-  static ZZ NB;
+void SquareNuduplOpt<long>::construct_relative_generator(long &rel_gen_a, long &rel_gen_b, long &rel_gen_d,
+                                  QuadraticIdealBase<long> &C, long OB, long BB,
+                                  long S) {
+  static long NB;
   bool con_rel_gen_dbg = false;
 
   if(con_rel_gen_dbg) {
