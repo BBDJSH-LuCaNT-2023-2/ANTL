@@ -22,6 +22,7 @@ TEST_CASE("RegulatorLenstra<ZZ>: Does it work?", "[RegulatorLenstra][ZZ]") {
   extern const std::vector<long> discriminants;
   extern const std::vector<double> correct_regulators;
 
+  std::cout << "Testing RegulatorLenstra<ZZ>" << std::endl;
 
   int test_method = 1;
 
@@ -29,6 +30,7 @@ TEST_CASE("RegulatorLenstra<ZZ>: Does it work?", "[RegulatorLenstra][ZZ]") {
     int correct_count = 0;
     int test_start = 0;
     int test_bound = correct_regulators.size();
+//     int test_bound = 6225;
 
     double computed_regulators[test_bound];
     bool computed_correctly[test_bound];
@@ -255,12 +257,15 @@ TEST_CASE("RegulatorLenstra<long>: Does it work?", "[RegulatorLenstra][long]") {
   extern const std::vector<double> correct_regulators;
 
 
+  std::cout << "Testing RegulatorLenstra<long>" << std::endl;
+
   int test_method = 1;
 
   if(test_method == 0) {
     int correct_count = 0;
     int test_start = 0;
     int test_bound = correct_regulators.size();
+//     int test_bound = 6225;
 
     double computed_regulators[test_bound];
     bool computed_correctly[test_bound];
@@ -272,7 +277,7 @@ TEST_CASE("RegulatorLenstra<long>: Does it work?", "[RegulatorLenstra][long]") {
     for (int i = test_start; i < test_bound; i++) {
       std::cout << "Running Lenstra test " << i << " expected regulator is "
                 << correct_regulators[i] << std::endl;
-      std::cout << "Discriminat is " << discriminants[i] << std::endl;
+      std::cout << "Discriminant is " << discriminants[i] << std::endl;
       QuadraticOrder<long> quad_order{discriminants[i]};
       QuadraticNumber<long> quad_number1{quad_order};
       QuadraticNumber<long> quad_number2{quad_order};
