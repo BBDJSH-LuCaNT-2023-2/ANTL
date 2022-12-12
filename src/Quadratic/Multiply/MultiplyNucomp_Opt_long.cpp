@@ -2,28 +2,28 @@
 #include <NTL/RR.h>
 
 template <>
-void MultiplyNucompOpt<ZZ>::construct_relative_generator(
-    ZZ &rel_gen_a, ZZ &rel_gen_b, ZZ &rel_gen_d, QuadraticIdealBase<ZZ> &C,
-    ZZ OB, ZZ BB, ZZ S);
+void MultiplyNucompOpt<long>::construct_relative_generator(
+    long &rel_gen_a, long &rel_gen_b, long &rel_gen_d, QuadraticIdealBase<long> &C,
+    long OB, long BB, long S);
 
 template <>
-void MultiplyNucompOpt<ZZ>::init(const ZZ &delta_in, const ZZ &h_in,
+void MultiplyNucompOpt<long>::init(const long &delta_in, const long &h_in,
                                  long g_in) {
   init(delta_in, h_in, 0);
   NC_BOUND = FloorToZZ(sqrt(sqrt(abs(to_RR(Delta)))));
 }
 
 template <>
-void MultiplyNucompOpt<ZZ>::multiply(QuadraticIdealBase<ZZ> &C,
-                                     const QuadraticIdealBase<ZZ> &A,
-                                     const QuadraticIdealBase<ZZ> &B) {
+void MultiplyNucompOpt<long>::multiply(QuadraticIdealBase<long> &C,
+                                     const QuadraticIdealBase<long> &A,
+                                     const QuadraticIdealBase<long> &B) {
 
   Delta = C.get_QO()->get_discriminant();
   NC_BOUND = FloorToZZ(sqrt(sqrt(abs(to_RR(Delta)))));
 
-  static ZZ a1, a2, b1, b2, c2, Ca, Cb, Cc, ss, m;
-  static ZZ SP, S, v1, u2, v2, K, T, temp;
-  static ZZ R1, R2, C1, C2, M1, M2;
+  static long a1, a2, b1, b2, c2, Ca, Cb, Cc, ss, m;
+  static long SP, S, v1, u2, v2, K, T, temp;
+  static long R1, R2, C1, C2, M1, M2;
 
   // want a1 to be the smaller of the two a coefficients, because initial
   // computations are done mod a1
@@ -42,35 +42,31 @@ void MultiplyNucompOpt<ZZ>::multiply(QuadraticIdealBase<ZZ> &C,
   }
 
   // s = (b1 + b2)/2, m = (b1 - b2)/2
-  add(ss, b1, b2);
-  RightShift(ss, ss, 1);
+  ss = (b1 + b2) / 2;
 
-  sub(m, b1, b2);
-  RightShift(m, m, 1);
+  m = (b1 + b2) / 2;
 
   // solve SP = v1 a2 + u1 a1 (only need v1)
   XGCD_LEFT(SP, v1, a2, a1);
 
   // K = v1 (b1 - b2) / 2 (mod L)
-  mul(K, m, v1);
-  rem(K, K, a1);
+  K = (m * v1) % a1;
 
   S = 1;
   if (!IsOne(SP)) {
     XGCD(S, u2, v2, SP, ss);
 
     // K = u2 K - v2 c2 (mod L)
-    mul(K, K, u2);
-    mul(temp, v2, c2);
-    sub(K, K, temp);
+    K *= u2;
+    K -= v2*c2;
 
     if (!IsOne(S)) {
-      div(a1, a1, S);
-      div(a2, a2, S);
-      mul(c2, c2, S);
+      a1 /= S;
+      a2 /= S;
+      c2 /= S;
     }
 
-    rem(K, K, a1);
+    K %= a1;
   }
 
   // N = a2;  L = a1;
@@ -80,20 +76,16 @@ void MultiplyNucompOpt<ZZ>::multiply(QuadraticIdealBase<ZZ> &C,
     // compute with regular multiplication formula (result will be reduced)
 
     // T = NK
-    mul(T, a2, K);
+    T = a2 * K;
 
     // C.a = A.a B.a / d^2 = NL
-    mul(Ca, a2, a1);
+    Ca = a2 * a1;
 
     // C.b = b2 + 2 a2 K = b2 + 2 T
-    LeftShift(Cb, T, 1);
-    add(Cb, Cb, b2);
+    Cb = b2 + (2 * T);
 
     // C.c = (S c2 + K (b2 + T)) / L;
-    add(Cc, b2, T);
-    mul(Cc, Cc, K);
-    add(Cc, Cc, c2);
-    div(Cc, Cc, a1);
+    Cc = (c2 + (K * (b2 + T))) / a1;
 
     // Set a, b, c (DO NOT ASSIGN/NORMALIZE)
     C.set_a(Ca);
@@ -111,24 +103,19 @@ void MultiplyNucompOpt<ZZ>::multiply(QuadraticIdealBase<ZZ> &C,
     XGCD_PARTIAL(R2, R1, C2, C1, NC_BOUND);
 
     // M1 = (N R1 + (b1 - b2) C1 / 2) / L  (T = N R1)
-    mul(T, a2, R1);
-    mul(M1, m, C1);
-    add(M1, M1, T);
-    div(M1, M1, a1);
+    M1 = ((m * C1) + (a2 * R1)) / a1;
 
     // M2 = (R1(b1 + b2)/2 - c2 S C1) / L
-    mul(M2, ss, R1);
-    mul(temp, c2, C1);
-    sub(M2, M2, temp);
-    div(M2, M2, a1);
+    M2 = ((ss * R1) - (c2 * C1)) / a1;
 
     // C.a = (-1)^(i-1) (R1 M1 - C1 M2)
-    mul(Ca, R1, M1);
-    mul(temp, C1, M2);
-    if (C1 > 0)
-      sub(Ca, Ca, temp);
-    else
-      sub(Ca, temp, Ca);
+
+    if (C1 > 0) {
+      Ca = (R1 * M1) - (C1 * M2);
+    }
+    else {
+      Ca = (C1 * M2) - (R1 * M1);
+    }
 
     // C.b = 2 (N R1 - C.a C2) / C1 - b1
     Cb = (a2 * R1 + C2 * Ca) << 1;
@@ -136,10 +123,7 @@ void MultiplyNucompOpt<ZZ>::multiply(QuadraticIdealBase<ZZ> &C,
     Cb -= b2;
 
     // C.c = (C.b^2 - Delta) / 4 C.a
-    sqr(Cc, Cb);
-    sub(Cc, Cc, Delta);
-    div(Cc, Cc, Ca);
-    RightShift(Cc, Cc, 2);
+    Cc = (((Cb * Cb) - Delta) / Ca) / 4;
 
 
     // Set a, b, c (DO NOT ASSIGN/NORMALIZE)
@@ -154,8 +138,8 @@ void MultiplyNucompOpt<ZZ>::multiply(QuadraticIdealBase<ZZ> &C,
   // Reduce and get the coefficients of the relative generator
   C.reduce();
 
-  // rrelative_generator
-  ZZ rel_gen_a, rel_gen_b, rel_gen_d;
+  // relative_generator
+  long rel_gen_a, rel_gen_b, rel_gen_d;
   RR relative_generator;
 
   construct_relative_generator(rel_gen_a, rel_gen_b, rel_gen_d, C, abs(C2),
@@ -164,7 +148,7 @@ void MultiplyNucompOpt<ZZ>::multiply(QuadraticIdealBase<ZZ> &C,
   RelativeGenerator->set_abd(rel_gen_a, rel_gen_b, rel_gen_d);
   RelativeGenerator->invert();
   if (RelativeGenerator->conv_RR() < 0) {
-    mul(*RelativeGenerator, *RelativeGenerator, ZZ(-1));
+    mul(*RelativeGenerator, *RelativeGenerator, -1);
   }
 
 }
@@ -176,10 +160,10 @@ void MultiplyNucompOpt<ZZ>::multiply(QuadraticIdealBase<ZZ> &C,
 // Pass OB=1 and BB=0
 //
 template <>
-void MultiplyNucompOpt<ZZ>::construct_relative_generator(
-    ZZ &rel_gen_a, ZZ &rel_gen_b, ZZ &rel_gen_d, QuadraticIdealBase<ZZ> &C,
-    ZZ OB, ZZ BB, ZZ S) {
-  static ZZ NB;
+void MultiplyNucompOpt<long>::construct_relative_generator(
+    long &rel_gen_a, long &rel_gen_b, long &rel_gen_d, QuadraticIdealBase<long> &C,
+    long OB, long BB, long S) {
+  static long NB;
   bool con_rel_gen_dbg = false;
 
   if (con_rel_gen_dbg) {

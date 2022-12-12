@@ -46,9 +46,9 @@ public:
                 const QuadraticIdealBase<T> &B);
 
 private:
-  void construct_relative_generator(ZZ &rel_gen_a, ZZ &rel_gen_b, ZZ &rel_gen_d,
-                                    QuadraticIdealBase<ZZ> &C, ZZ OB, ZZ BB,
-                                    ZZ S);
+  void construct_relative_generator(T &rel_gen_a, T &rel_gen_b, T &rel_gen_d,
+                                    QuadraticIdealBase<T> &C, T OB, T BB,
+                                    T S);
 };
 
 //
