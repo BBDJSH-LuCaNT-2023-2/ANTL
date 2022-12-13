@@ -73,7 +73,7 @@ public:
   vector<ZZ> get_class_group(){return CL;}
 
 private:
-  T get_dist_mod(const T &Delta) { return CeilToZZ(log(to_RR(Delta))); }
+  ZZ get_dist_mod(const T &Delta) { return CeilToZZ(log(to_RR(to_ZZ(Delta)))); }
 
   void get_next_prime(QuadraticClassGroupElement<T> &G);
 };
@@ -404,6 +404,7 @@ template <class T> void ClassGroupBSReal<T>::cg_bs_real(const ZZ &hstar) {
       numRideals = curr;
 
     } // end while (!found)
+
 #ifdef DEBUGBS
     cout << "d" << flush;
 #endif
@@ -674,7 +675,7 @@ void ClassGroupBSReal<T>::get_next_prime(QuadraticClassGroupElement<T> &G) {
 
   long p = PS.next();
 
-  while (!G.assign_prime(to_ZZ(p)))
+  while (!G.assign_prime(to<T>(p)))
     p = PS.next();
 }
 
