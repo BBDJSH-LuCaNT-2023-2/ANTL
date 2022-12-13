@@ -147,7 +147,7 @@ TEST_CASE("RegulatorLenstra<ZZ>: Does it work?", "[RegulatorLenstra][ZZ]") {
     std::vector<double> computed_regulators;
     std::vector<bool> computed_correctly;
 
-    std::vector<std::string> case_types{size_t(test_bound), ""};
+//     std::vector<std::string> case_types{size_t(test_bound), ""};
 
     auto start = std::chrono::high_resolution_clock::now();
     while(test_data >> discriminant >> regulator) {
@@ -197,7 +197,7 @@ TEST_CASE("RegulatorLenstra<ZZ>: Does it work?", "[RegulatorLenstra][ZZ]") {
 
 
       correct_testdata_regulators.push_back(regulator_lenstra_data.get_regulator());
-      case_types.push_back(regulator_lenstra_data.get_case_type());
+//       case_types.push_back(regulator_lenstra_data.get_case_type());
 
       if (std::abs(correct_testdata_regulators.back() - regulator) < 0.000001) {
         computed_correctly.push_back(true);
@@ -378,7 +378,7 @@ TEST_CASE("RegulatorLenstra<long>: Does it work?", "[RegulatorLenstra][long]") {
     std::vector<double> computed_regulators;
     std::vector<bool> computed_correctly;
 
-    std::vector<std::string> case_types{size_t(test_bound), ""};
+//     std::vector<std::string> case_types{size_t(test_bound), ""};
 
     auto start = std::chrono::high_resolution_clock::now();
     while(test_data >> discriminant >> regulator) {
@@ -428,7 +428,7 @@ TEST_CASE("RegulatorLenstra<long>: Does it work?", "[RegulatorLenstra][long]") {
 
 
       correct_testdata_regulators.push_back(regulator_lenstra_data.get_regulator());
-      case_types.push_back(regulator_lenstra_data.get_case_type());
+//       case_types.push_back(regulator_lenstra_data.get_case_type());
 
       if (std::abs(correct_testdata_regulators.back() - regulator) < 0.000001) {
         computed_correctly.push_back(true);
