@@ -86,10 +86,11 @@ QuadraticClassGroupElement<T>::QuadraticClassGroupElement(
 
 template <class T>
 QuadraticClassGroupElement<T>::QuadraticClassGroupElement(
-    const QuadraticClassGroupElement<T> &A) {
+    const QuadraticClassGroupElement<T> &A){
   this->a = A.a;
   this->b = A.b;
   this->c = A.c;
+  this->QO = A.get_QO();
 }
 
 //
@@ -242,6 +243,7 @@ QuadraticClassGroupElement<T> conjugate(const QuadraticClassGroupElement<T> &C){
   conj_C.c = C.c;
 
   conj_C.reduce();
+
   return conj_C;
 }
 

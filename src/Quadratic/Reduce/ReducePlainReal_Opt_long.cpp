@@ -4,7 +4,6 @@
 // Task: Reduces the ideal
 
 template <> void ReducePlainRealOpt<long>::reduce(QuadraticIdealBase<long> &A) {
-
   static long q, r, temp, a2, nb, na, s;
   static long a, b, c, rootD;
   static long temp_num_q;
