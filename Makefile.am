@@ -6,9 +6,9 @@ AM_CC = @PTHREAD_CC@
 AM_CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/include
 
 if EXTRADEPS
-bin_PROGRAMS = regulator classgroupBSGS
+bin_PROGRAMS = regulator classgroupBSGS classgroupBS
 else
-bin_PROGRAMS = regulator classgroupBSGS
+bin_PROGRAMS = regulator classgroupBSGS classgroupBS
 endif
 
 #regulator classgroupBSGS classgroupBS interval tabulation harvest
@@ -196,7 +196,7 @@ classgroupBSGS_SOURCES = tests/UnitTests.cpp                                \
                     src/XGCD/xgcd_iter.cpp                                  \
                     src/XGCD/xgcd_plain.cpp
 
-# classgroupBS_SOURCES = tests/UnitTests.cpp                                 \
+classgroupBS_SOURCES = tests/UnitTests.cpp                                 \
                     tests/Quadratic/TestData/TestData.cpp                    \
                     tests/Quadratic/ClassGroup/ClassGroupBSReal_Tests.cpp  \
                     src/common.cpp                                          \

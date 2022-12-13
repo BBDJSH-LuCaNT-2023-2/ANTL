@@ -5,8 +5,9 @@
 #include "../../Quadratic/TestData/TestData.hpp"
 
 #include <ANTL/Quadratic/ClassGroup/ClassGroupBSReal.hpp>
-// #include "../../../src/Quadratic/ClassGroup/ClassGroupBSGSReal.cpp"
+
 #include <ANTL/Quadratic/Regulator/RegulatorLenstra_ZZ.hpp>
+#include <ANTL/Quadratic/Regulator/RegulatorLenstra_long.hpp>
 
 #include <fstream>
 #include <sstream>
@@ -340,11 +341,11 @@ TEST_CASE("ClassGroupReal<long>: Does it work?", "[ClassGroupReal][long]") {
       // Computing the class group
       class_group_bsgs_real1.cg_bs_real(h_star);
 
-      // Adding computed class group to reslults vector
-      vector<long> class_group_long = class_group_bsgs_real1.get_class_group();
+      // Adding computed class group to results vector
+      vector<ZZ> class_group_ZZ = class_group_bsgs_real1.get_class_group();
       vector<long> class_group_long = {};
 
-      for(auto num : class_group_long) {
+      for(auto num : class_group_ZZ) {
         class_group_long.push_back(to<long>(num));
       }
 
@@ -470,11 +471,11 @@ TEST_CASE("ClassGroupReal<long>: Does it work?", "[ClassGroupReal][long]") {
       // Computing the class group
       class_group_bsgs_real1.cg_bs_real(h_star);
 
-      // Adding computed class group to reslults vector
-      vector<long> class_group_long = class_group_bsgs_real1.get_class_group();
+      // Adding computed class group to results vector
+      vector<ZZ> class_group_ZZ = class_group_bsgs_real1.get_class_group();
       vector<long> class_group_long = {};
 
-      for(auto num : class_group_long) {
+      for(auto num : class_group_ZZ) {
         class_group_long.push_back(to<long>(num));
       }
 

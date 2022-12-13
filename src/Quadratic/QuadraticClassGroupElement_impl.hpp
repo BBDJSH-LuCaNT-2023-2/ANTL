@@ -216,6 +216,7 @@ void QuadraticClassGroupElement<T>::assign(
   this->a = B.a;
   this->b = B.b;
   this->c = B.c;
+  this->QO = B.get_QO();
 }
 
 
@@ -235,7 +236,7 @@ QuadraticClassGroupElement<T> &QuadraticClassGroupElement<T>::operator=(
 
 template <class T>
 QuadraticClassGroupElement<T> conjugate(const QuadraticClassGroupElement<T> &C){
-  //std::cout << "Conjugating!" << std::endl;
+//   std::cout << "Conjugating!" << std::endl;
   QuadraticClassGroupElement<T> conj_C(C);
 
   conj_C.a = C.a;
