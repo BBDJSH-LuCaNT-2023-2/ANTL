@@ -68,20 +68,16 @@ TEST_CASE("RegulatorLenstra<ZZ>: Does it work?", "[RegulatorLenstra][ZZ]") {
       red_plain_real_opt_object.set_RelativeGenerator(quad_number3);
       quad_order.set_red_best(red_plain_real_opt_object);
 
-      std::cout << "hello 0" << std::endl;
       L_function<ZZ> l_function;
       l_function.init(ZZ(discriminants[i]), 2);
 
-      std::cout << "hello 1" << std::endl;
       RegulatorLenstraData<ZZ, double> regulator_lenstra_data{&quad_order,
                                                               &l_function};
 
-      std::cout << "hello 2" << std::endl;
       ZZ bound = ZZ(0);
       regulator_lenstra_data.regulator_lenstra();
       //     regulator_lenstra_data.regulator_bsgs(bound);
 
-      std::cout << "hello 3" << std::endl;
       computed_regulators[i] = regulator_lenstra_data.get_regulator();
       case_types.at(i) = regulator_lenstra_data.get_case_type();
 
@@ -303,20 +299,16 @@ TEST_CASE("RegulatorLenstra<long>: Does it work?", "[RegulatorLenstra][long]") {
       red_plain_real_opt_object.set_RelativeGenerator(quad_number3);
       quad_order.set_red_best(red_plain_real_opt_object);
 
-      std::cout << "hello 0" << std::endl;
       L_function<long> l_function;
       l_function.init(long(discriminants[i]), 2);
 
-      std::cout << "hello 1" << std::endl;
       RegulatorLenstraData<long, double> regulator_lenstra_data{&quad_order,
                                                               &l_function};
 
-      std::cout << "hello 2" << std::endl;
       long bound = 0;
       regulator_lenstra_data.regulator_lenstra();
       //     regulator_lenstra_data.regulator_bsgs(bound);
 
-      std::cout << "hello 3" << std::endl;
       computed_regulators[i] = regulator_lenstra_data.get_regulator();
       case_types.at(i) = regulator_lenstra_data.get_case_type();
 
