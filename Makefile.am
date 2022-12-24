@@ -1,8 +1,8 @@
 AUTOMAKE_OPTIONS = subdir-objects
 
-AM_LIBS = @PTHREAD_LIBS@ @LIBS@
-AM_CXXFLAGS = @CXXFLAGS@ @PTHREAD_CFLAGS@
-AM_CC = @PTHREAD_CC@
+AM_LIBS = @PTHREAD_LIBS@ @LIBS@ -L/home/austin.docherty/ntl/lib -lntl -lpthread
+AM_CXXFLAGS = @CXXFLAGS@ -I/home/austin.docherty/ntl/include -L/home/austin.docherty/ntl/lib -lntl -lpthread
+AM_CC =
 AM_CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/include
 
 if EXTRADEPS
