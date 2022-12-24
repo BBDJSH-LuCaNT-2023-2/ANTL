@@ -6,10 +6,13 @@ AM_CC =
 AM_CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/include
 
 if EXTRADEPS
-bin_PROGRAMS = regulator classgroupBSGS classgroupBS
+bin_PROGRAMS = arc regulator classgroupBSGS classgroupBS
 else
-bin_PROGRAMS = regulator classgroupBSGS classgroupBS
+bin_PROGRAMS = arc regulator classgroupBSGS classgroupBS
 endif
+
+arc_SOURCES = tests/UnitTests.cpp \
+              tests/ARC_test.cpp
 
 #regulator classgroupBSGS classgroupBS interval tabulation harvest
 
