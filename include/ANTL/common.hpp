@@ -28,8 +28,8 @@
 #include <NTL/lzz_pEXFactoring.h>
 #include <NTL/lzz_pXFactoring.h>
 
-#include <boost/math/bindings/rr.hpp>
-using boost::math::ntl::atan;
+// #include <boost/math/bindings/rr.hpp>
+// using boost::math::ntl::atan;
 
 // We use the NTL namespace everywhere. Rather than have a using directive in
 // every file, we just put it here, for convenience and clarity.
@@ -148,7 +148,7 @@ inline ZZ FloorToZZ(const double& a) { return ZZ(std::floor(a)); }
 
 inline void log(double &z, const double a) { z = std::log(a); }
 
-inline void atan_val(RR &z, const RR &a) { z = atan(a).value(); }
+// inline void atan_val(RR &z, const RR &a) { z = atan(a).value(); }
 inline void atan_val(double &z, const double &a) { z = atan(a); }
 } // namespace NTL
 

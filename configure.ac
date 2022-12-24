@@ -13,10 +13,10 @@ AC_PROG_CC
 AC_PROG_LN_S
 
 # this macro figures out how to build with pthreads
-AX_PTHREAD(, )
+#AX_PTHREAD(, )
 
 # this macro figures out how to build with pthreads
-AX_MPI(, )
+#AX_MPI(, )
 
 # this macro figures out how to build with coverage
 # AX_CODE_COVERAGE

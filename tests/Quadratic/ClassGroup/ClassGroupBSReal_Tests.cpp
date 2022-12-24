@@ -11,6 +11,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <iomanip>
 
 using namespace NTL;
 using namespace ANTL;

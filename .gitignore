@@ -39,6 +39,7 @@
 # build artifacts
 /build/*
 !/build/README
+!/build/data.txt
 
 #
 # Autotools rules
