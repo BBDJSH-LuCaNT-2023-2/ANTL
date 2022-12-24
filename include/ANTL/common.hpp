@@ -149,7 +149,7 @@ inline ZZ FloorToZZ(const double& a) { return ZZ(std::floor(a)); }
 
 inline void log(double &z, const double a) { z = std::log(a); }
 
-inline void atan_val(RR &z, const RR &a) { z = atan(a).value(); }
+// inline void atan_val(RR &z, const RR &a) { z = atan(a).value(); }
 inline void atan_val(double &z, const double &a) { z = atan(a); }
 } // namespace NTL
 

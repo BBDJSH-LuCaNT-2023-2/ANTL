@@ -9,6 +9,7 @@
 #include <ANTL/Quadratic/Regulator/RegulatorLenstra_long.hpp>
 
 #include <fstream>
+#include <iomanip>
 #include <chrono>
 #include <set>
 

@@ -15,6 +15,7 @@
 #include <iostream>
 #include <streambuf>
 #include <string>
+#include <vector>
 #include <NTL/ZZ.h>
 #include <NTL/RR.h>
 
