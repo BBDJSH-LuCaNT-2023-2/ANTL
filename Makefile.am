@@ -1,9 +1,12 @@
 AUTOMAKE_OPTIONS = subdir-objects
 
-AM_LIBS = @PTHREAD_LIBS@ @LIBS@ -L/home/austin.docherty/ntl/lib -lntl -lpthread
-AM_CXXFLAGS = @CXXFLAGS@ -I/home/austin.docherty/ntl/include -L/home/austin.docherty/ntl/lib -lntl -lpthread
+AM_LIBS = @PTHREAD_LIBS@ @LIBS@ -L/home/austin.docherty/ntl/lib
+AM_CXXFLAGS = @CXXFLAGS@ -I/home/austin.docherty/ntl/include -L/home/austin.docherty/ntl/lib
 AM_CC =
 AM_CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/include
+
+#extra libraries when building with non-standard lib locations
+interval_LDADD = -lntl -lpthread
 
 if EXTRADEPS
 bin_PROGRAMS = arc regulator classgroupBSGS classgroupBS
