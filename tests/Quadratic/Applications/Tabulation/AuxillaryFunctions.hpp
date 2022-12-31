@@ -3,6 +3,7 @@
 
 #define INT_SIZE_QUADRATIC 10000000
 
+#include <algorithm>
 #include <iostream>
 #include <list>
 #include <thread>
