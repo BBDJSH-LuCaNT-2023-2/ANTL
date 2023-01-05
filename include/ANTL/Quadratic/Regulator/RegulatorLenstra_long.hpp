@@ -161,6 +161,7 @@ template <class U> std::string RegulatorLenstraData<long, U>::get_case_type() {
 // of Shanks and improvements of Lenstra.
 
 template <class U> void RegulatorLenstraData<long, U>::regulator_lenstra() {
+  std::cout << "reg_len<long> is using reg_len<long>.hpp" << std::endl;
 
   //
   // initialize hash table

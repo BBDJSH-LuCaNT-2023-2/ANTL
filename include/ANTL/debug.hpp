@@ -241,7 +241,16 @@ namespace ANTL
 			      const std::vector<T> & vector)
   {
     std::string output = "[";
-    for (size_t i = 0; i < vector.size() - 1; ++i) output += to_string(vector[i]) + ", ";
+
+    if(vector.size() == 0) {
+      output += "]";
+      os << output;
+      return os;
+    }
+
+    for (size_t i = 0; i < vector.size() - 1; ++i) {
+      output += to_string(vector[i]) + ", ";
+    }
     output += to_string(vector[vector.size() - 1]);
     output += "]";
 

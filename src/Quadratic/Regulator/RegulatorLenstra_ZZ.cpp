@@ -56,12 +56,26 @@ template <> void RegulatorLenstraData<ZZ, double>::regulator_lenstra() {
   }
 
   if (IsZero(S)) {
+    if (DBG_LENSTR) {
+      std::cout << "S was indeed found to be zero!" << std::endl;
+    }
     //
     // compute approximation of hR
     //
 
     nuclose(AA, FloorToZZ(E));
+
+    if (DBG_LENSTR) {
+      std::cout << "LENSTR: After nuclose(AA, FloorToZZ(E));" << std::endl;
+      std::cout << "LENSTR: AA is " << AA.get_qib() << " " << AA.get_distance() << std::endl;
+    }
+
     AA.adjust(E);
+
+    if (DBG_LENSTR) {
+      std::cout << "LENSTR: After AA.adjust(E)" << std::endl;
+      std::cout << "LENSTR: AA is " << AA.get_qib() << " " << AA.get_distance() << std::endl;
+    }
 
     if (AA.is_one()) {
       S = AA.get_distance();

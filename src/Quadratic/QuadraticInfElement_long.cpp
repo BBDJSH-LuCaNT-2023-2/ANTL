@@ -78,7 +78,6 @@ public:
   }
 
   void adjust(const ZZ &a) {
-
     S bound = to<S>(a);
 
     if (Distance > max) {

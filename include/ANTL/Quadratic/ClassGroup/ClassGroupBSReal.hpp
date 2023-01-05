@@ -12,13 +12,13 @@
 #include <ANTL/Quadratic/QuadraticClassGroupElement.hpp>
 #include <ANTL/Quadratic/QuadraticInfElement.hpp>
 
-template <> struct std::hash<QuadraticIdealBase<ZZ>> {
-  std::size_t operator()(QuadraticIdealBase<ZZ> const &qib) const noexcept {
-    std::size_t h1 = std::hash<int>{}(to<int>(qib.get_a()));
-    std::size_t h2 = std::hash<int>{}(to<int>(qib.get_b()));
-    return h1 ^ (h2 << 1); // or use boost::hash_combine
-  }
-};
+// template <> struct std::hash<QuadraticIdealBase<ZZ>> {
+//   std::size_t operator()(QuadraticIdealBase<ZZ> const &qib) const noexcept {
+//     std::size_t h1 = std::hash<int>{}(to<int>(qib.get_a()));
+//     std::size_t h2 = std::hash<int>{}(to<int>(qib.get_b()));
+//     return h1 ^ (h2 << 1); // or use boost::hash_combine
+//   }
+// };
 
 NTL_CLIENT;
 using namespace ANTL;
