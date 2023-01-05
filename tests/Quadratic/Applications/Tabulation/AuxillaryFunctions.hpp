@@ -12,35 +12,25 @@
 #include <vector>
 
 #include <ANTL/Quadratic/ClassGroup/ClassGroupBSGSReal.hpp>
+#include "../../../../src/Quadratic/ClassGroup/ClassGroupBSGSReal.cpp"
+
+#include <ANTL/Quadratic/ClassGroup/ClassGroupBSReal.hpp>
+
 #include <ANTL/Quadratic/Regulator/RegulatorLenstra_ZZ.hpp>
+#include <ANTL/Quadratic/Regulator/RegulatorLenstra_long.hpp>
 
 #include <ANTL/Quadratic/QuadraticClassGroupElement.hpp>
 
 using namespace NTL;
 using namespace ANTL;
 
-pair<double, vector<long>> get_regulator_and_class_group(QuadraticOrder<ZZ> &quad_order) {
-
-  QuadraticNumber<ZZ> quad_number1{quad_order};
-  QuadraticNumber<ZZ> quad_number2{quad_order};
-
-  MultiplyComp<ZZ> mul_comp_object{};
-  mul_comp_object.set_RelativeGenerator(quad_number1);
-  quad_order.set_mul_comp(mul_comp_object);
-
-  ReducePlainReal<ZZ> red_plain_real_object{};
-  red_plain_real_object.set_RelativeGenerator(quad_number2);
-  quad_order.set_red_best(red_plain_real_object);
-
-  L_function<ZZ> l_function;
-  l_function.init(quad_order.get_discriminant(), 2);
-
-  RegulatorLenstraData<ZZ, double> regulator_lenstra_data{&quad_order,
+pair<double, ZZ> get_regulator_and_hstar(QuadraticOrder<long> &quad_order, L_function<long> &l_function) {
+  // Setting up the RegulatorLenstraData object
+  RegulatorLenstraData<long, double> regulator_lenstra_data{&quad_order,
                                                           &l_function};
 
-  //   ZZ bound = ZZ(0);
+  // Computing the regulator
   regulator_lenstra_data.regulator_lenstra();
-  //    regulator_lenstra_data.regulator_bsgs(bound);
 
   double regulator = regulator_lenstra_data.get_regulator();
 
@@ -48,8 +38,12 @@ pair<double, vector<long>> get_regulator_and_class_group(QuadraticOrder<ZZ> &qua
   RR h_star_close = to_RR(regulator_lenstra_data.lower_bound_hR()) / to_RR(regulator);
   ZZ h_star = CeilToZZ(h_star_close);
 
+  return {regulator, h_star};
+}
+
+vector<long> get_class_group_BSGS(QuadraticOrder<long> &quad_order, double regulator, ZZ h_star) {
   // Setting up the ClassGroupBSGSReal object
-  ClassGroupBSGSReal<ZZ> class_group_bsgs_real1{&quad_order};
+  ClassGroupBSGSReal<long> class_group_bsgs_real1{&quad_order};
   class_group_bsgs_real1.set_regulator(regulator);
 
   // Computing the class group
@@ -65,7 +59,28 @@ pair<double, vector<long>> get_regulator_and_class_group(QuadraticOrder<ZZ> &qua
 
   std::sort(class_group_long.begin(), class_group_long.end());
 
-  return {regulator, class_group_long};
+  return class_group_long;
+}
+
+vector<long> get_class_group_BS(QuadraticOrder<long> &quad_order, double regulator, ZZ h_star) {
+  // Setting up the ClassGroupBSGSReal object
+  ClassGroupBSReal<long> class_group_bs_real1{&quad_order};
+  class_group_bs_real1.set_regulator(regulator);
+
+  // Computing the class group
+  class_group_bs_real1.cg_bs_real(h_star);
+
+  // Adding computed class group to reslults vector
+  vector<ZZ> class_group_ZZ = class_group_bs_real1.get_class_group();
+  vector<long> class_group_long = {};
+
+  for(auto num : class_group_ZZ) {
+    class_group_long.push_back(to<long>(num));
+  }
+
+  std::sort(class_group_long.begin(), class_group_long.end());
+
+  return class_group_long;
 }
 
 void get_DList_real_custom(long ubound, std::list<long> &discriminants);

@@ -24,25 +24,30 @@
 #include "AuxillaryFunctions.hpp"
 #include "timer.hpp"
 
-
 #include <ANTL/Quadratic/QuadraticOrder.hpp>
 
 NTL_CLIENT
 using namespace ANTL;
+using namespace std::chrono;
 
 int main(int argc, char **argv) {
+  auto start_overall_time = high_resolution_clock::now();
+  auto finish_overall_time = high_resolution_clock::now();
+  duration<long int, std::ratio<1, 1000000>> dur_overall_time;
+
   ZZ Dlist[LIST_SIZE_QUADRATIC], L, H, D, pmax;
   vec_ZZ Cl;
-//   QuadraticOrder<ZZ> QO;
-//   QuadraticOrder<long> QOl;
-//   QuadraticOrder<long long> QOll;
+  //   QuadraticOrder<ZZ> QO;
+  //   QuadraticOrder<long> QOl;
+  //   QuadraticOrder<long long> QOll;
   long long Dll;
   long n, i, Dl;
-  timer t;
-  int vb, tp, table, uncond, method, prec;
+  //   timer t;
+  int vb, tp, table, uncond, alg, prec;
 
   if (argc != 9) {
-    cerr << "Usage:  qcl_interval L H type table uncond vb alg prec" << std::endl;
+    cerr << "Usage:  qcl_interval L H type table uncond vb alg prec"
+         << std::endl;
     cerr << "  L - lower bound for |D|" << std::endl;
     cerr << "  H - upper bound for |D|" << std::endl;
     cerr << "  type = 0 (imag), 1 (real)" << std::endl;
@@ -50,7 +55,8 @@ int main(int argc, char **argv) {
     cerr << "  uncond - 0 (conditional on ERH), 1 (unconditional)" << std::endl;
     cerr << "  vb - verbosity" << std::endl;
     cerr << "  alg - 0 (bsgs), 1 (bs)" << std::endl;
-    cerr << "  prec - 0 (automatic), 1 (long), 2 (long long), >2 (ZZ)" << std::endl;
+    cerr << "  prec - 0 (automatic), 1 (long), 2 (long long), >2 (ZZ)"
+         << std::endl;
     exit(1);
   }
 
@@ -61,209 +67,137 @@ int main(int argc, char **argv) {
   table = atoi(argv[4]);
   uncond = atoi(argv[5]);
   vb = atoi(argv[6]);
-  method = atoi(argv[7]);
+  alg = atoi(argv[7]);
   prec = atoi(argv[8]);
 
-  std::cout << "Computing class groups for interval " << L << " <= |D| <= " << H
-       << std::endl;
-  if (tp == 0)
-    std::cout << "Imaginary fields" << std::endl;
-  else
-    std::cout << "Real fields" << std::endl;
-  if (table)
-    std::cout << "Using L(s,X) tables" << std::endl;
-  if (uncond)
-    std::cout << "Using unconditional L(1,X) approximations" << std::endl;
-  if (method == 0)
-    std::cout << "Using BSGS" << std::endl;
-  else
-    std::cout << "Using BS" << std::endl;
+  if (vb > 0) {
+    std::cout << "Computing class groups for interval " << L << " <= |D| <= " << H
+              << std::endl;
+    if (tp == 0)
+      std::cout << "Imaginary fields" << std::endl;
+    else
+      std::cout << "Real fields" << std::endl;
+    if (table)
+      std::cout << "Using L(s,X) tables" << std::endl;
+    if (uncond)
+      std::cout << "Using unconditional L(1,X) approximations" << std::endl;
+    if (alg == 0) {
+      std::cout << "Using BSGS" << std::endl;
+    }
+    else
+      std::cout << "Using BS" << std::endl;
+  }
 
   // set quadratic order verbosity level
-//   QuadraticOrder<ZZ>::verbose(vb);
-//   QuadraticOrder<long>::verbose(vb);
-//   QuadraticOrder<long long>::verbose(vb);
+  //   QuadraticOrder<ZZ>::verbose(vb);
+  //   QuadraticOrder<long>::verbose(vb);
+  //   QuadraticOrder<long long>::verbose(vb);
 
   // initialize unconditional Lfunction approximations if uncond is set
-//   if (uncond) {
-//     QOl.set_unconditional();
-//     QOll.set_unconditional();
-//     QO.set_unconditional();
-//   }
+  //   if (uncond) {
+  //     QOl.set_unconditional();
+  //     QOll.set_unconditional();
+  //     QO.set_unconditional();
+  //   }
 
   // time computation from this point on
-  t.start_timer();
+  //   t.start_timer();
 
   // generate list of fundamental D with L <= |D| <= H
   if (tp == 0) {
-//     get_Dlist_imag(L, H, Dlist, n, 1); // initialize prime list
-//     get_Dlist_imag(L, H, Dlist, n);
+    //     get_Dlist_imag(L, H, Dlist, n, 1); // initialize prime list
+    //     get_Dlist_imag(L, H, Dlist, n);
   } else {
     get_Dlist_real(L, H, Dlist, n, 1); // initialize prime list
-//     get_Dlist_real(L, H, Dlist, n);
+                                       //     get_Dlist_real(L, H, Dlist, n);
     get_Dlist_real(L, H, Dlist, n, 0);
   }
-  std::cout << "\n# fields = " << n << std::endl;
-
-/*
-  if (prec == 1 || (prec == 0 && H < NTL_SP_BOUND)) {
-    // use longs
-    std::cout << "Using long" << std::endl;
-
-    // initialize table-driven L-function approximations if table is set
-    conv(Dl, H);
-//     if (table)
-//       QOl.use_Lfunction_tables(Dl);
-//     else
-//       QOl.set_Lfunction_global(Dl);
-
-    // compute class groups
-    for (i = 0; i < n; ++i) {
-      conv(Dl, Dlist[i]);
-      QOl.assign(Dl);
-      std::cout << "D = " << Dl << flush;
-      if (method == 0)
-        Cl = QOl.class_group(CLASS_GROUP_BSGS);
-      else
-        Cl = QOl.class_group(CLASS_GROUP_BS);
-
-      std::cout << ", # primes = " << QOl.get_nump() << flush; // prime ideals
-      std::cout << ", pmax = " << QOl.get_pmax() << flush;
-      if (tp > 0)
-        std::cout << ", R = " << QOl.regulator().get_log() << flush;
-      std::cout << ", h = " << QOl.class_number() << flush;
-      std::cout << ", Cl = " << Cl << std::endl;
-    }
-  } else if (prec == 2 || (prec == 0 && to<long long>(H) <=
-                                            to<long long>(NTL_SP_BOUND) *
-                                                to<long long>(NTL_SP_BOUND))) {
-    // use long longs
-    std::cout << "Using long long" << std::endl;
-
-    // initialize table-driven L-function approximations if table is set
-    Dll = to<long long>(H);
-    if (table)
-      QOll.use_Lfunction_tables(Dll);
-    else
-      QOll.set_Lfunction_global(Dll);
-
-    // compute class groups
-    for (i = 0; i < n; ++i) {
-      Dll = to<long long>(Dlist[i]);
-      QOll.assign(Dll);
-      std::cout << "D = " << Dll << flush;
-      if (method == 0)
-        Cl = QOll.class_group(CLASS_GROUP_BSGS);
-      else
-        Cl = QOll.class_group(CLASS_GROUP_BS);
-
-      std::cout << ", # primes = " << QOll.get_nump() << flush;
-      std::cout << ", pmax = " << QOll.get_pmax() << flush;
-      if (tp > 0)
-        std::cout << ", R = " << QOll.regulator().get_log() << flush;
-      std::cout << ", h = " << QOll.class_number() << flush;
-      std::cout << ", Cl = " << Cl << std::endl;
-    }
-  } else {
-*/
-    // use ZZ
-    std::cout << "Using ZZ" << std::endl;
-
-    // initialize table-driven L-function approximations if table is set
-//     if (table)
-//       QO.use_Lfunction_tables(H);
-//     else
-//       QO.set_Lfunction_global(H);
-
-    // compute class groups
-    /*
-    FILE *out = fopen("sample2.dat","wb");
-    long long llL, llH;
-    llL = to<long long>(L);
-    llH = to<long long>(H);
-
-    fwrite(&llL,sizeof(long long), 1, out);
-    fwrite(&llH,sizeof(long long), 1, out);
-    fwrite(&n,sizeof(long),1,out);
-    */
-
-    std::cout << L << " " << H << " " << n << std::endl;
-
-    ZZ oldD;
-    oldD = L;
-
-    for (i = 0; i < n; ++i) {
-      D = Dlist[i];
-//       QO.assign(D);
-      QuadraticOrder<ZZ> QO{ZZ(D)};
-      std::cout << "Current discriminant is " << D << std::endl;
-
-      // std::cout << "D = " << D << flush;
-
-//       if (method == 0)
-//         Cl = QO.class_group(CLASS_GROUP_BSGS);
-//       else
-//         Cl = QO.class_group(CLASS_GROUP_BS);
-      pair<double, vector<long>> regulator_and_class_group = get_regulator_and_class_group(QO);
-      double regulator = regulator_and_class_group.first;
-      vector<long> class_group = regulator_and_class_group.second;
-      /*
-                        unsigned char diff = (unsigned char) to<long>(abs(D) -
-         oldD); if ((abs(D) - oldD) >= 256)  std::cout << "ERROR:  D = " << D << ",
-         oldD = " << oldD << ", diff = " << abs(D) - oldD << std::endl;
-                        fwrite(&diff,sizeof(unsigned char),1,out);
-
-                        unsigned char np = (unsigned char) QO.get_nump();
-                        fwrite(&np,sizeof(unsigned char),1,out);
-
-                        short mp = (short) to<long>(QO.get_pmax());
-                        fwrite(&mp,sizeof(short),1,out);
-
-                        unsigned char rank = (unsigned char) QO.get_rank();
-                        fwrite(&rank,sizeof(unsigned char),1,out);
-
-                        for (long j=0; j<(long) rank; ++j) {
-                          long ediv = to<long>(Cl[j]);
-                          fwrite(&ediv,sizeof(long),1,out);
-                        }
-
-                        quad_float dR =
-         to<quad_float>(QO.regulator().get_log());
-                        fwrite(&dR,sizeof(quad_float),1,out);
-
-                        oldD = abs(D);
-      */
-
-//       long rank = QO.get_rank();
-//       std::cout << (abs(D) - oldD) << " " << flush;
-//       std::cout << QO.get_nump() << " " << flush;
-//       std::cout << QO.get_pmax() << " " << flush;
-//       std::cout << rank << flush;
-//       for (long j = 0; j < rank; ++j)
-//         std::cout << " " << Cl[j] << flush;
-      std::cout << " " << class_group << flush;
-      std::cout << " " << regulator << flush;
-      std::cout << std::endl;
-      oldD = abs(D);
-
-      /*
-                std::cout << ", # primes = " << QO.get_nump() << flush;
-                std::cout << ", pmax = " << QO.get_pmax() << flush;
-                if (tp > 0)
-                  std::cout << ", R = " << to<quad_float>(QO.regulator().get_log())
-         << flush; std::cout << ", h = " << QO.class_number() << flush; std::cout << ", Cl
-         = " << Cl << std::endl;
-      */
-    }
-    // fclose(out);
-//  }
-
-  // stop timing and output total elapsed CPU time
-  t.stop_timer();
-
-  if (vb) {
-    std::cout << "\nTotal time:  " << flush;
-    MyTime(t.user_time());
-    std::cout << std::endl;
+  if (vb > 0) {
+    std::cout << "\n# fields = " << n << std::endl;
   }
+
+  auto start_trial_time = high_resolution_clock::now();
+  auto finish_trial_time = high_resolution_clock::now();
+
+  duration<long int, std::ratio<1, 1000000>> dur_regulator_trial;
+  duration<long int, std::ratio<1, 1000000>> dur_class_group_trial;
+
+  duration<long int, std::ratio<1, 1000000>> total_dur_regulator_trial;
+  duration<long int, std::ratio<1, 1000000>> total_dur_class_group_trial;
+
+  for (i = 0; i < n; ++i) {
+    D = Dlist[i];
+    //       QO.assign(D);
+    QuadraticOrder<long> QO{to_long(D)};
+    std::cout << D << flush;
+
+    // ===TEMPORARY INITIALIZATION===
+    // TODO all of this initialization should be done from within QuadraticOrder
+    // using new
+    QuadraticNumber<long> quad_number1{QO};
+    QuadraticNumber<long> quad_number2{QO};
+    QuadraticNumber<long> quad_number3{QO};
+
+    MultiplyNucompOpt<long> mul_nucomp_opt_object{};
+    mul_nucomp_opt_object.set_RelativeGenerator(quad_number1);
+    QO.set_mul_nucomp_opt(mul_nucomp_opt_object);
+
+    SquareNuduplOpt<long> sqr_nudupl_opt_object{};
+    sqr_nudupl_opt_object.set_RelativeGenerator(quad_number2);
+    QO.set_sqr_best(sqr_nudupl_opt_object);
+
+    ReducePlainRealOpt<long> red_plain_real_opt_object{};
+    red_plain_real_opt_object.set_RelativeGenerator(quad_number3);
+    QO.set_red_best(red_plain_real_opt_object);
+
+    L_function<long> l_function;
+    l_function.init(to_long(D), 2);
+    // ===TEMPORARY INITIALIZATION===
+
+    start_trial_time = high_resolution_clock::now();
+    pair<double, ZZ> regulator_and_hstar = get_regulator_and_hstar(QO, l_function);
+    finish_trial_time = high_resolution_clock::now();
+
+    dur_regulator_trial = duration_cast<microseconds>(finish_trial_time - start_trial_time);
+
+    double regulator = regulator_and_hstar.first;
+    ZZ h_star = regulator_and_hstar.second;
+
+    vector<long> class_group;
+    if(alg == 0) {
+      // Computing and timing a single class group BSGS computation
+      start_trial_time = high_resolution_clock::now();
+      class_group = get_class_group_BSGS(QO, regulator, h_star);
+      finish_trial_time = high_resolution_clock::now();
+
+      dur_class_group_trial = duration_cast<microseconds>(finish_trial_time - start_trial_time);
+    }
+    else if(alg == 1) {
+      // Computing and timing a single class group BS computation
+      start_trial_time = high_resolution_clock::now();
+      class_group = get_class_group_BSGS(QO, regulator, h_star);
+      finish_trial_time = high_resolution_clock::now();
+
+      dur_class_group_trial = duration_cast<microseconds>(finish_trial_time - start_trial_time);
+    }
+
+    //Formatting the class group first
+    class_group.erase(std::remove(class_group.begin(), class_group.end(), 1), class_group.end());
+
+    //Computing new durations totals
+    total_dur_regulator_trial += dur_regulator_trial;
+    total_dur_class_group_trial += dur_class_group_trial;
+
+    //Outputting to stream
+    std::cout << " " << floor(regulator*1000) << flush;
+    std::cout << " " << class_group << std::endl;
+  }
+
+  finish_overall_time = high_resolution_clock::now();
+  dur_overall_time = duration_cast<microseconds>(finish_overall_time - start_overall_time);
+
+  std::cout << total_dur_regulator_trial.count() / 1000 << " ";
+  std::cout << total_dur_class_group_trial.count() / 1000 << " ";
+  std::cout << dur_overall_time.count() / 1000 << " ";
+
 }

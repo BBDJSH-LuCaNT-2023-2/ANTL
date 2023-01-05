@@ -49,7 +49,7 @@ public:
     DivRem(q, r, b + FloorRootDelta, 2 * a);
 
     R = -a;
-    P = FloorRootDelta - r;
+//     P = FloorRootDelta - r;
     Q = q * ((b - P) / 2) - c;
 
     qib.assign(Q, P, R);
@@ -78,7 +78,6 @@ public:
   }
 
   void adjust(const ZZ &a) {
-
     S bound = to<S>(a);
 
     if (Distance > max) {

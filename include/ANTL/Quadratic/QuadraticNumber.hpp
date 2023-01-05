@@ -1401,8 +1401,10 @@ void sqr<GF2EX>(QuadraticNumber<GF2EX> &z, const QuadraticNumber<GF2EX> &x);
 template <> QQ<GF2EX> &QuadraticNumber<GF2EX>::getTrace() const;
 
 template <> bool QuadraticNumber<ZZ>::isUnit() const;
-
 template <> bool QuadraticNumber<long>::isUnit() const;
+
+template <> void QuadraticNumber<ZZ>::normalize();
+template <> void QuadraticNumber<long>::normalize();
 } // namespace ANTL
 
 // Unspecialized template definitions.

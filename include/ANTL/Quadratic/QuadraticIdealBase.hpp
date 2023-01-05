@@ -174,6 +174,22 @@ void conjugate(QuadraticIdealBase<GF2EX> &C,
 
 } // namespace ANTL
 
+template <> struct std::hash<QuadraticIdealBase<ZZ>> {
+  std::size_t operator()(QuadraticIdealBase<ZZ> const &qib) const noexcept {
+    std::size_t h1 = std::hash<int>{}(to<int>(qib.get_a()));
+    std::size_t h2 = std::hash<int>{}(to<int>(qib.get_b()));
+    return h1 ^ (h2 << 1); // or use boost::hash_combine
+  }
+};
+
+template <> struct std::hash<QuadraticIdealBase<long>> {
+  std::size_t operator()(QuadraticIdealBase<long> const &qib) const noexcept {
+    std::size_t h1 = std::hash<long>{}(qib.get_a());
+    std::size_t h2 = std::hash<long>{}(qib.get_b());
+    return h1 ^ (h2 << 1); // or use boost::hash_combine
+  }
+};
+
 // Unspecialized template definitions.
 #include "../src/Quadratic/QuadraticIdealBase_impl.hpp"
 

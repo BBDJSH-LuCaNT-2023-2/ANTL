@@ -127,15 +127,14 @@ void QuadraticInfElement<T, S>::giant_step(
 //   }
 
   relative_distance_1 = qif_1.get_distance();
-
   update_distance_add(Distance, Distance, relative_distance_1);
   update_distance_add(Distance, Distance, relative_distance_2);
+
 }
 
 // START: TEMPORARY SECTION FOR REGULATORLENSTRADATA METHODS
 template <class T, class S>
 void QuadraticInfElement<T, S>::adjust(const ZZ &a) {
-
   S bound = to<S>(a);
 
   if (Distance > bound) {
@@ -155,7 +154,6 @@ void QuadraticInfElement<T, S>::adjust(const ZZ &a) {
 
 template <class T, class S>
 void QuadraticInfElement<T, S>::adjust(const S &bound) {
-
   S current_difference, previous_difference;
   current_difference = bound - Distance;
   //   std::cout << "ADJUST taraget distance is " << bound << std::endl;
@@ -556,7 +554,6 @@ void nuclose(QuadraticInfElement<T, S> &C, const ZZ &n) {
     if (IsOdd(j))
       ++s;
     C.adjust(s);
-
     j >>= 1;
   }
 }
