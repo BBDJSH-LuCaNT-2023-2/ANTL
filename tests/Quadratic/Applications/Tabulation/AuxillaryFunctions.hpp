@@ -478,15 +478,12 @@ void get_Dlist_real(const ZZ &L, const ZZ &H, ZZ *Dlist, long &n, int init) {
 
   if (init) {
     // initialize static list of small odd primes <= sqrt(H)
-    std::cout << "begin: get_Dlist_real init" << std::endl;
     PrimeSeq sP;
     long bound = to<long>(SqrRoot(H)) + 100;
     numP = 0;
 
-    std::cout << "get_Dlist_real init: 1" << std::endl;
     sP.reset(3);
     p = sP.next();
-    std::cout << "get_Dlist_real init: 2" << std::endl;
     while (p <= bound) {
       prime_list[numP] = p;
       ++numP;
@@ -498,12 +495,8 @@ void get_Dlist_real(const ZZ &L, const ZZ &H, ZZ *Dlist, long &n, int init) {
         exit(1);
       }
     }
-    std::cout << "get_Dlist_real init: 3" << std::endl;
     prime_list[numP] = p;
-    std::cout << "get_Dlist_real init: 4" << std::endl;
     ++numP;
-
-    std::cout << "end: get_Dlist_real init" << std::endl;
     return;
   }
 
