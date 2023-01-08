@@ -19,7 +19,7 @@
  */
 
 // #define LIST_SIZE_QUADRATIC 33554432
-#define LIST_SIZE_QUADRATIC 1000000
+#define LIST_SIZE_QUADRATIC 100000000
 
 #include "AuxillaryFunctions.hpp"
 #include "timer.hpp"
@@ -31,11 +31,11 @@ using namespace ANTL;
 using namespace std::chrono;
 
 int main(int argc, char **argv) {
-  auto start_overall_time = high_resolution_clock::now();
-  auto finish_overall_time = high_resolution_clock::now();
-  duration<long int, std::ratio<1, 1000000>> dur_overall_time;
 
-  ZZ Dlist[LIST_SIZE_QUADRATIC], L, H, D, pmax;
+  ZZ* Dlist = new ZZ[LIST_SIZE_QUADRATIC];
+//   ZZ Dlist[LIST_SIZE_QUADRATIC];
+//   std::vector<ZZ> Dlist; Dlist.resize(LIST_SIZE_QUADRATIC);
+  ZZ L, H, D, pmax;
   vec_ZZ Cl;
   //   QuadraticOrder<ZZ> QO;
   //   QuadraticOrder<long> QOl;
@@ -116,18 +116,26 @@ int main(int argc, char **argv) {
     std::cout << "\n# fields = " << n << std::endl;
   }
 
+  auto start_overall_time = high_resolution_clock::now();
+  auto finish_overall_time = high_resolution_clock::now();
+  duration<long int, std::ratio<1, 1000000>> dur_overall_time(0);
+
   auto start_trial_time = high_resolution_clock::now();
   auto finish_trial_time = high_resolution_clock::now();
 
-  duration<long int, std::ratio<1, 1000000>> dur_regulator_trial;
-  duration<long int, std::ratio<1, 1000000>> dur_class_group_trial;
+  duration<long int, std::ratio<1, 1000000>> dur_regulator_trial(0);
+  duration<long int, std::ratio<1, 1000000>> dur_class_group_trial(0);
 
-  duration<long int, std::ratio<1, 1000000>> total_dur_regulator_trial;
-  duration<long int, std::ratio<1, 1000000>> total_dur_class_group_trial;
+  duration<long int, std::ratio<1, 1000000>> total_dur_regulator_trial(0);
+  duration<long int, std::ratio<1, 1000000>> total_dur_class_group_trial(0);
 
+//   std::cout << std::fixed;
   for (i = 0; i < n; ++i) {
     D = Dlist[i];
     //       QO.assign(D);
+
+    std::cerr << "Computing case " << i << " of " << n << ": D = " << D << std::endl;
+
     QuadraticOrder<long> QO{to_long(D)};
     std::cout << D << flush;
 
@@ -189,15 +197,15 @@ int main(int argc, char **argv) {
     total_dur_class_group_trial += dur_class_group_trial;
 
     //Outputting to stream
-    std::cout << " " << floor(regulator*1000) << flush;
+    std::cout << " " << long(floor(regulator*1000)) << flush;
     std::cout << " " << class_group << std::endl;
   }
 
   finish_overall_time = high_resolution_clock::now();
   dur_overall_time = duration_cast<microseconds>(finish_overall_time - start_overall_time);
 
-  std::cout << total_dur_regulator_trial.count() / 1000 << " ";
-  std::cout << total_dur_class_group_trial.count() / 1000 << " ";
-  std::cout << dur_overall_time.count() / 1000 << " ";
+  std::cout << "Time spent computing regulator: " << total_dur_regulator_trial.count() / 1000 << std::endl;
+  std::cout << "Time spent computing class grp: " << total_dur_class_group_trial.count() / 1000 << std::endl;
+  std::cout << "Time spent computing overall  : " << dur_overall_time.count() / 1000 << std::endl;
 
 }

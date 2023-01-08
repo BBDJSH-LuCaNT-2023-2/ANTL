@@ -492,7 +492,7 @@ void conjugate(QuadraticInfElement<T, S> &qie_a,
   update_distance_add(qie_a.Distance, qie_a.get_distance(),
                       qie_b.get_distance());
   update_distance_negate(qie_a.Distance, qie_a.Distance);
-  update_distance_subtract(qie_a.Distance, qie_a.Distance,
+  update_distance_add(qie_a.Distance, qie_a.Distance,
                            log(to<S>(qie_a.qib.get_a())));
 
   qie_a.qib.normalize();
@@ -508,7 +508,7 @@ QuadraticInfElement<T, S> QuadraticInfElement<T, S>::conjugate() {
 
   update_distance_add(qie_conj.Distance, Distance, qie_conj.Distance);
   update_distance_negate(qie_conj.Distance, qie_conj.Distance);
-  update_distance_subtract(qie_conj.Distance, qie_conj.Distance,
+  update_distance_add(qie_conj.Distance, qie_conj.Distance,
                            log(to<S>(qie_conj.qib.get_a())));
 
   qie_conj.qib.normalize();
