@@ -1,6 +1,8 @@
 #include <ANTL/Quadratic/Multiply/MultiplyNucomp_Opt.hpp>
 #include <NTL/RR.h>
 
+void temp_invert_and_normalize(long &rel_gen_a, long &rel_gen_b, long &rel_gen_d, long &delta);
+
 template <>
 void MultiplyNucompOpt<long>::construct_relative_generator(
     long &rel_gen_a, long &rel_gen_b, long &rel_gen_d, QuadraticIdealBase<long> &C,
@@ -180,8 +182,9 @@ void MultiplyNucompOpt<long>::multiply(QuadraticIdealBase<long> &C,
   construct_relative_generator(rel_gen_a, rel_gen_b, rel_gen_d, C, abs(C2),
                                abs(C1), S);
 
+  temp_invert_and_normalize(rel_gen_a, rel_gen_b, rel_gen_d, Delta);
+
   RelativeGenerator->set_abd(rel_gen_a, rel_gen_b, rel_gen_d);
-  RelativeGenerator->invert();
   if (RelativeGenerator->conv_RR() < 0) {
     mul(*RelativeGenerator, *RelativeGenerator, -1);
   }
@@ -235,6 +238,45 @@ void MultiplyNucompOpt<long>::construct_relative_generator(
               << ", relgen_d=" << rel_gen_d << std::endl;
     std::cout << "-->--> done construct_relative_generator\n\n" << std::endl;
   }
+}
+
+void temp_invert_and_normalize(long &rel_gen_a, long &rel_gen_b, long &rel_gen_d, long &delta) {
+
+  ZZ a, b, d, newA, newB, newD, temp;
+
+  a = rel_gen_a;
+  b = rel_gen_b;
+  d = rel_gen_d;
+
+  // ((a + b rho) / d)^-1 = (ad - bd rho) / (a^2 - b^2 Delta)
+  newA = a * d;
+
+  newB = b * d;
+
+  newD =  a * a;
+  temp =  b * b;
+  temp = temp * delta;
+  newD = newD - temp;
+
+  a = newA;
+  b = -newB;
+  d = newD;
+
+  if (d < 0) {
+    NTL::negate(a, a);
+    NTL::negate(b, b);
+    NTL::negate(d, d);
+  }
+  ZZ g = GCD(GCD(a, b), d);
+  if (g != 1) {
+    div(a, a, g);
+    div(b, b, g);
+    div(d, d, g);
+  }
+
+  rel_gen_a = to_long(a);
+  rel_gen_b = to_long(b);
+  rel_gen_d = to_long(d);
 }
 
 // Debug Tools

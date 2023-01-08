@@ -307,7 +307,6 @@ void get_Dlist_real(const ZZ &L, const ZZ &H, std::vector<ZZ> &Dlist, long &n, i
     exit(1);
   }
 
-  std::cout << "hello 2" << std::endl;
   // initialize sieve
   LL0 = L;
   if (IsZero(LL0))
@@ -319,22 +318,17 @@ void get_Dlist_real(const ZZ &L, const ZZ &H, std::vector<ZZ> &Dlist, long &n, i
   while (rem(LL1, 4) != 1)
     ++LL1;
 
-  std::cout << "hello 2.1" << std::endl;
   conv(off0, 1 + ((H - LL0) >> 2));
   end0 = &(*sieve0.begin()) + off0;
   conv(off1, 1 + ((H - LL1) >> 2));
   end1 = &(*sieve1.begin()) + off1;
 
-
-  std::cout << "hello 2.2" << std::endl;
 //   memset(sieve0, '\0', (off0) * sizeof(unsigned char));
   for(long i = 0; i < sieve0.size(); i++) {
     sieve0.at(i) = '\0' ;
   }
-  std::cout << "hello 2.3" << std::endl;
 
 //   memset(sieve1, '\0', (off1) * sizeof(unsigned char));
-  std::cout << "hello 2.4" << std::endl;
   for(long i = 0; i < sieve0.size(); i++) {
     sieve1.at(i) = '\0' ;
   }

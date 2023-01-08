@@ -1376,7 +1376,7 @@ void RegulatorLenstraData<ZZ, U>::find_hstar(ZZ &hstar, const U &S,
       std::cout << "FHSTAR: Finding power of current prime" << std::endl;
     }
     while (target_qie.is_one() &&
-           abs(target_qie.get_distance() - target_distance) < 0.0000001) {
+           abs(target_qie.get_distance() - target_distance) < 0.0001) {
       if (DBG_FHSTAR) {
         std::cout << "FHSTAR: power is " << power << std::endl;
       }
