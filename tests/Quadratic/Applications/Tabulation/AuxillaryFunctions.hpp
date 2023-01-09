@@ -57,7 +57,7 @@ vector<long> get_class_group_BSGS(QuadraticOrder<long> &quad_order, double regul
     class_group_long.push_back(to<long>(num));
   }
 
-  std::sort(class_group_long.begin(), class_group_long.end());
+  std::sort(class_group_long.rbegin(), class_group_long.rend());
 
   return class_group_long;
 }
@@ -78,7 +78,7 @@ vector<long> get_class_group_BS(QuadraticOrder<long> &quad_order, double regulat
     class_group_long.push_back(to<long>(num));
   }
 
-  std::sort(class_group_long.begin(), class_group_long.end());
+  std::sort(class_group_long.rbegin(), class_group_long.rend());
 
   return class_group_long;
 }

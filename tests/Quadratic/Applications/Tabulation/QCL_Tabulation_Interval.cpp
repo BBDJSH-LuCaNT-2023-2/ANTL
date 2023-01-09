@@ -84,8 +84,9 @@ int main(int argc, char **argv) {
     if (alg == 0) {
       std::cout << "Using BSGS" << std::endl;
     }
-    else
+    else {
       std::cout << "Using BS" << std::endl;
+    }
   }
 
   // set quadratic order verbosity level
@@ -183,7 +184,7 @@ int main(int argc, char **argv) {
     else if(alg == 1) {
       // Computing and timing a single class group BS computation
       start_trial_time = high_resolution_clock::now();
-      class_group = get_class_group_BSGS(QO, regulator, h_star);
+      class_group = get_class_group_BS(QO, regulator, h_star);
       finish_trial_time = high_resolution_clock::now();
 
       dur_class_group_trial = duration_cast<microseconds>(finish_trial_time - start_trial_time);
