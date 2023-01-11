@@ -498,7 +498,7 @@ template <class U> void RegulatorLenstraData<long, U>::regulator_lenstra() {
       }
     } else {
       Pmax = 1 + CeilToZZ(to_RR(S) / to_RR(B));
-      //       Pmax = FloorToZZ(sqrt(S));
+//             Pmax = FloorToZZ(sqrt(S));
       if (DBG_LENSTR) {
         std::cout << "LENSTR: Pmax is " << Pmax << std::endl;
       }
@@ -1379,7 +1379,7 @@ void RegulatorLenstraData<long, U>::find_hstar(ZZ &hstar, const U &S,
       std::cout << "FHSTAR: Finding power of current prime" << std::endl;
     }
     while (target_qie.is_one() &&
-           abs(target_qie.get_distance() - target_distance) < 0.0001) {
+           abs(target_qie.get_distance() - target_distance) < 0.01) {
       if (DBG_FHSTAR) {
         std::cout << "FHSTAR: power is " << power << std::endl;
       }
