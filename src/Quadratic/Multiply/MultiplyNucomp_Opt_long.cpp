@@ -1,7 +1,7 @@
 #include <ANTL/Quadratic/Multiply/MultiplyNucomp_Opt.hpp>
 #include <NTL/RR.h>
 
-void temp_invert_and_normalize(long &rel_gen_a, long &rel_gen_b, long &rel_gen_d, long &delta);
+void temp_invert_and_normalize_nucomp(long &rel_gen_a, long &rel_gen_b, long &rel_gen_d, long &delta);
 
 template <>
 void MultiplyNucompOpt<long>::construct_relative_generator(
@@ -182,7 +182,7 @@ void MultiplyNucompOpt<long>::multiply(QuadraticIdealBase<long> &C,
   construct_relative_generator(rel_gen_a, rel_gen_b, rel_gen_d, C, abs(C2),
                                abs(C1), S);
 
-  temp_invert_and_normalize(rel_gen_a, rel_gen_b, rel_gen_d, Delta);
+  temp_invert_and_normalize_nucomp(rel_gen_a, rel_gen_b, rel_gen_d, Delta);
 
   RelativeGenerator->set_abd(rel_gen_a, rel_gen_b, rel_gen_d);
   if (RelativeGenerator->conv_RR() < 0) {
@@ -240,7 +240,7 @@ void MultiplyNucompOpt<long>::construct_relative_generator(
   }
 }
 
-void temp_invert_and_normalize(long &rel_gen_a, long &rel_gen_b, long &rel_gen_d, long &delta) {
+void temp_invert_and_normalize_nucomp(long &rel_gen_a, long &rel_gen_b, long &rel_gen_d, long &delta) {
 
   ZZ a, b, d, newA, newB, newD, temp;
 
