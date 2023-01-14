@@ -58,24 +58,25 @@ public:
         to<S>((inv(abs((to_RR(P) - sqrt(to_RR(Delta))) / to_RR(2 * Q)))));
   }
 
-  void giant_step(QuadraticInfElement<long, S> &quad_ib) {
-
-    if (quad_ib == *this) {
-      sqr(qib, qib);
-    }
-
-    else {
-      mul(qib, qib, quad_ib.get_qib());
-    }
-
-    Distance += quad_ib.get_distance();
-
-    // the correcting factor below needs to go in each case above
-/*
-    Distance +=
-        log(qib.get_QO()->get_mul_nucomp()->get_RelativeGenerator()->conv_RR());
-*/
-  }
+  //NOTE: Currently usinf impl giant_step
+//   void giant_step(QuadraticInfElement<long, S> &quad_ib) {
+//
+//     if (quad_ib == *this) {
+//       sqr(qib, qib);
+//     }
+//
+//     else {
+//       mul(qib, qib, quad_ib.get_qib());
+//     }
+//
+//     Distance += quad_ib.get_distance();
+//
+//     // the correcting factor below needs to go in each case above
+// /*
+//     Distance +=
+//         log(qib.get_QO()->get_mul_nucomp()->get_RelativeGenerator()->conv_RR());
+// */
+//   }
 
   void adjust(const ZZ &a) {
     S bound = to<S>(a);

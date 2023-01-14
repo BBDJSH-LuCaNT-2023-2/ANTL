@@ -70,7 +70,7 @@ int main(int argc, char **argv) {
   alg = atoi(argv[7]);
   prec = atoi(argv[8]);
 
-  if (vb > 0) {
+  if (vb > 1) {
     std::cout << "Computing class groups for interval " << L << " <= |D| <= " << H
               << std::endl;
     if (tp == 0)
@@ -113,7 +113,7 @@ int main(int argc, char **argv) {
                                        //     get_Dlist_real(L, H, Dlist, n);
     get_Dlist_real(L, H, Dlist, n, 0);
   }
-  if (vb > 0) {
+  if (vb > 1) {
     std::cout << "\n# fields = " << n << std::endl;
   }
 
@@ -134,8 +134,9 @@ int main(int argc, char **argv) {
   for (i = 0; i < n; ++i) {
     D = Dlist[i];
     //       QO.assign(D);
-
-    std::cerr << "Computing case " << i << " of " << n << ": D = " << D << std::endl;
+    if (vb > 0) {
+      std::cerr << "Computing case " << i << " of " << n << ": D = " << D << std::endl;
+    }
 
     QuadraticOrder<long> QO{to_long(D)};
     std::cout << D << flush;
