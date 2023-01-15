@@ -25,6 +25,7 @@ protected:
   ZZ NC_BOUND; // termination bound for NUCOMP = floor(|D|^1/4)
 
 public:
+  SquareNuduplOpt(QuadraticOrder<T> &inQO);
   ~SquareNuduplOpt(){};
 
   void init(const T &delta_in, const T &h_in, long g_in = 0) {
@@ -68,7 +69,7 @@ void SquareNuduplOpt<GF2EX>::square(QuadraticIdealBase<GF2EX> &C,
 
 // Unspecialized template definitions.
 
-// TODO: impl file
-// #include "../src/Quadratic/Square/SquareNuduplOpt_impl.hpp"
+// impl file
+#include "../../../../src/Quadratic/Square/SquareNudupl_Opt_impl.hpp"
 
 #endif // guard

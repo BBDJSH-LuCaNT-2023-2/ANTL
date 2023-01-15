@@ -53,7 +53,7 @@ TEST_CASE("ClassGroupReal<ZZ>: Does it work?", "[ClassGroupReal][ZZ]") {
 //       red_plain_real_object.set_RelativeGenerator(quad_number2);
 //       quad_order.set_red_best(red_plain_real_object);
 
-      MultiplyNucompOpt<ZZ> mul_nucomp_opt_object{};
+      MultiplyNucompOpt<ZZ> mul_nucomp_opt_object{quad_order};
       mul_nucomp_opt_object.set_RelativeGenerator(quad_number1);
       quad_order.set_mul_nucomp_opt(mul_nucomp_opt_object);
 
@@ -61,7 +61,7 @@ TEST_CASE("ClassGroupReal<ZZ>: Does it work?", "[ClassGroupReal][ZZ]") {
       red_plain_real_opt_object.set_RelativeGenerator(quad_number2);
       quad_order.set_red_best(red_plain_real_opt_object);
 
-      SquareNuduplOpt<ZZ> sqr_nudupl_opt_object{};
+      SquareNuduplOpt<ZZ> sqr_nudupl_opt_object{quad_order};
       sqr_nudupl_opt_object.set_RelativeGenerator(quad_number3);
       quad_order.set_sqr_best(sqr_nudupl_opt_object);
 
@@ -184,7 +184,7 @@ TEST_CASE("ClassGroupReal<ZZ>: Does it work?", "[ClassGroupReal][ZZ]") {
 //       red_plain_real_object.set_RelativeGenerator(quad_number2);
 //       quad_order.set_red_best(red_plain_real_object);
 
-      MultiplyNucompOpt<ZZ> mul_nucomp_opt_object{};
+      MultiplyNucompOpt<ZZ> mul_nucomp_opt_object{quad_order};
       mul_nucomp_opt_object.set_RelativeGenerator(quad_number1);
       quad_order.set_mul_nucomp_opt(mul_nucomp_opt_object);
 
@@ -192,7 +192,7 @@ TEST_CASE("ClassGroupReal<ZZ>: Does it work?", "[ClassGroupReal][ZZ]") {
       red_plain_real_opt_object.set_RelativeGenerator(quad_number2);
       quad_order.set_red_best(red_plain_real_opt_object);
 
-      SquareNuduplOpt<ZZ> sqr_nudupl_opt_object{};
+      SquareNuduplOpt<ZZ> sqr_nudupl_opt_object{quad_order};
       sqr_nudupl_opt_object.set_RelativeGenerator(quad_number3);
       quad_order.set_sqr_best(sqr_nudupl_opt_object);
 
@@ -313,7 +313,7 @@ TEST_CASE("ClassGroupReal<long>: Does it work?", "[ClassGroupReal][long]") {
 //       red_plain_real_object.set_RelativeGenerator(quad_number2);
 //       quad_order.set_red_best(red_plain_real_object);
 
-      MultiplyNucompOpt<long> mul_nucomp_opt_object{};
+      MultiplyNucompOpt<long> mul_nucomp_opt_object{quad_order};
       mul_nucomp_opt_object.set_RelativeGenerator(quad_number1);
       quad_order.set_mul_nucomp_opt(mul_nucomp_opt_object);
 
@@ -321,7 +321,7 @@ TEST_CASE("ClassGroupReal<long>: Does it work?", "[ClassGroupReal][long]") {
       red_plain_real_opt_object.set_RelativeGenerator(quad_number2);
       quad_order.set_red_best(red_plain_real_opt_object);
 
-      SquareNuduplOpt<long> sqr_nudupl_opt_object{};
+      SquareNuduplOpt<long> sqr_nudupl_opt_object{quad_order};
       sqr_nudupl_opt_object.set_RelativeGenerator(quad_number3);
       quad_order.set_sqr_best(sqr_nudupl_opt_object);
 
@@ -444,7 +444,7 @@ TEST_CASE("ClassGroupReal<long>: Does it work?", "[ClassGroupReal][long]") {
 //       red_plain_real_object.set_RelativeGenerator(quad_number2);
 //       quad_order.set_red_best(red_plain_real_object);
 
-      MultiplyNucompOpt<long> mul_nucomp_opt_object{};
+      MultiplyNucompOpt<long> mul_nucomp_opt_object{quad_order};
       mul_nucomp_opt_object.set_RelativeGenerator(quad_number1);
       quad_order.set_mul_nucomp_opt(mul_nucomp_opt_object);
 
@@ -452,7 +452,7 @@ TEST_CASE("ClassGroupReal<long>: Does it work?", "[ClassGroupReal][long]") {
       red_plain_real_opt_object.set_RelativeGenerator(quad_number2);
       quad_order.set_red_best(red_plain_real_opt_object);
 
-      SquareNuduplOpt<long> sqr_nudupl_opt_object{};
+      SquareNuduplOpt<long> sqr_nudupl_opt_object{quad_order};
       sqr_nudupl_opt_object.set_RelativeGenerator(quad_number3);
       quad_order.set_sqr_best(sqr_nudupl_opt_object);
 

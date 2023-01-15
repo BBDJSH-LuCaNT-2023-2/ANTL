@@ -18,8 +18,8 @@ template <>
 void SquareNuduplOpt<long>::square(QuadraticIdealBase<long> &C,
                                  const QuadraticIdealBase<long> &A) {
   // temporary computation of delta and nc_bound
-  Delta = C.get_QO()->get_discriminant();
-  NC_BOUND = FloorToZZ(sqrt(sqrt(abs(to_RR(Delta)))));
+//   Delta = C.get_QO()->get_discriminant();
+//   NC_BOUND = FloorToZZ(sqrt(sqrt(abs(to_RR(Delta)))));
 
   static long a1, b1, c1, Ca, Cb, Cc;
   static long S, v1, K, T;
