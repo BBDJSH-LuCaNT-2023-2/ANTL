@@ -480,7 +480,7 @@ TEST_CASE("RegulatorLenstra<long>: Does it work?", "[RegulatorLenstra][long]") {
   }
 }
 
-TEST_CASE("RegulatorLenstra<long>: Special Cases", "[RegulatorLenstra][long][SpecialCase]") {
+TEST_CASE("RegulatorLenstra<long>: Special Cases", "[RegulatorLenstra][SpecialCase]") {
 
   std::cout << "Testing RegulatorLenstra<long>" << std::endl;
 

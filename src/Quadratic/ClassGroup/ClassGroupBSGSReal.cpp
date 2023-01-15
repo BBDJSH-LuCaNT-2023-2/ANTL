@@ -27,6 +27,10 @@ ClassGroupBSGSReal<T>::ClassGroupBSGSReal(
   quadratic_order = quadratic_order_arg;
   delta = quadratic_order->get_discriminant();
 
+  sqrt_regulator = sqrt(regulator);
+  baby_step_list = {};
+  QuadraticClassGroupElement<T> is_principal_giant_step{*quadratic_order};
+
   //   parallel = false;
   //   Rbsgs = false;        // true if R was computed using BSGS
   //   Rconditional = false; // true if correctness of R relies on ERH
@@ -47,6 +51,8 @@ template <class T> void ClassGroupBSGSReal<T>::cg_bsgs_real(const ZZ &hstar) {
   long i, j, k, upper, crank, numRpr, numQ, idx;
 
   reset_prime_seq = true;
+
+  is_principal_init();
 
   QuadraticClassGroupElement<T> G{*quadratic_order}, A{*quadratic_order},
       B{*quadratic_order}, C{*quadratic_order}, D{*quadratic_order},
@@ -648,36 +654,20 @@ void ClassGroupBSGSReal<T>::get_next_prime(QuadraticClassGroupElement<T> &G) {
 }
 
 template <class T>
-bool ClassGroupBSGSReal<T>::is_principal(
-    const QuadraticClassGroupElement<T> &G) {
+void ClassGroupBSGSReal<T>::is_principal_init() {
 
-  if (DBG_ISPRIN) {
-    std::cout << "ISPRIN: STEP 0" << std::endl;
-  }
-  double sqrt_regulator = sqrt(regulator);
-
-  if (DBG_ISPRIN) {
-    std::cout << "ISPRIN: STEP 1" << std::endl;
-  }
   QuadraticInfElement<T, double> baby_step_list_generator{*quadratic_order};
 
-  if (DBG_ISPRIN) {
-    std::cout << "ISPRIN: STEP 2" << std::endl;
-  }
   std::unordered_set<QuadraticIdealBase<T>> baby_step_list = {};
   baby_step_list_generator.assign_one();
 
-  if (DBG_ISPRIN) {
-    std::cout << "ISPRIN: STEP 3" << std::endl;
-  }
   while (baby_step_list_generator.get_distance() < sqrt_regulator &&
          baby_step_list.count(baby_step_list_generator.get_qib()) == 0) {
     baby_step_list.insert(baby_step_list_generator.get_qib());
     baby_step_list_generator.baby_step();
   }
 
-  QuadraticClassGroupElement<T> giant_step{*quadratic_order};
-  giant_step.assign(baby_step_list_generator.get_qib());
+  is_principal_giant_step.assign(baby_step_list_generator.get_qib());
   if (baby_step_list.count(baby_step_list_generator.get_qib()) == 0) {
     baby_step_list.insert(baby_step_list_generator.get_qib());
     baby_step_list_generator.baby_step();
@@ -695,39 +685,24 @@ bool ClassGroupBSGSReal<T>::is_principal(
     std::cout << "ISPRIN: STEP 4" << std::endl;
   }
 
+}
+template <class T>
+bool ClassGroupBSGSReal<T>::is_principal(
+    const QuadraticClassGroupElement<T> &G) {
   if (baby_step_list.count(G) != 0) {
-    if (DBG_ISPRIN) {
-      std::cout << "ISPRIN: STEP 5" << std::endl;
-    }
     return true;
   }
 
   else {
-    if (DBG_ISPRIN) {
-      std::cout << "ISPRIN: STEP 6" << std::endl;
-    }
-
     QuadraticClassGroupElement<T> G_copy{*quadratic_order};
-    if (DBG_ISPRIN) {
-      std::cout << "ISPRIN: STEP 7" << std::endl;
-    }
+
     G_copy.assign(G);
 
-    if (DBG_ISPRIN) {
-      std::cout << "ISPRIN: STEP 9" << std::endl;
-    }
     for (int i = 0; i <= CeilToZZ(to_RR(sqrt_regulator)); i++) {
-      if (DBG_ISPRIN) {
-        std::cout << "ISPRIN: STEP 10" << std::endl;
-      }
-      mul(G_copy, G_copy, giant_step);
-      if (DBG_ISPRIN) {
-        std::cout << "ISPRIN: STEP 11" << std::endl;
-      }
+
+      mul(G_copy, G_copy, is_principal_giant_step);
+
       if (baby_step_list.count(G) != 0) {
-        if (DBG_ISPRIN) {
-          std::cout << "ISPRIN: STEP 12" << std::endl;
-        }
         return true;
       }
     }
