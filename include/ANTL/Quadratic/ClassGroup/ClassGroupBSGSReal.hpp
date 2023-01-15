@@ -41,6 +41,11 @@ private:
 
   T delta;
 
+  // is_principal variables
+  double sqrt_regulator;
+  std::unordered_set<QuadraticIdealBase<T>> baby_step_list;
+  QuadraticClassGroupElement<T> is_principal_giant_step;
+
   // factor base for computing CL
   QuadraticClassGroupElement<T> *fact_base;
 
@@ -85,6 +90,8 @@ private:
   ZZ get_dist_mod(const T &Delta) { return CeilToZZ(log(to_RR(to_ZZ(Delta)))); }
 
   void get_next_prime(QuadraticClassGroupElement<T> &G);
+
+  void is_principal_init();
 
   bool is_principal(const QuadraticClassGroupElement<T> &G);
 

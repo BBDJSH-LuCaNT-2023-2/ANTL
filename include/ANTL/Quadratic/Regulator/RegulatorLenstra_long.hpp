@@ -1327,25 +1327,8 @@ void RegulatorLenstraData<long, U>::find_hstar(ZZ &hstar, const U &S,
   }
 
   // Generate a list of primes
-  std::list<int> primes;
-  std::vector<bool> is_a_prime(to<long>(Pmax) + 1, true);
-
-  is_a_prime[0] = false;
-  is_a_prime[1] = false;
-
-  for(long current_prime = 2; current_prime*current_prime <= Pmax; current_prime++) {
-    if(is_a_prime[current_prime]){
-      for(long not_a_prime = current_prime*current_prime; not_a_prime <= Pmax; not_a_prime += current_prime) {
-        is_a_prime.at(not_a_prime) = 0;
-      }
-    }
-  }
-
-  for(long i = 0; i < Pmax + 1; i++){
-    if (is_a_prime[i]) {
-     primes.push_back(i);
-    }
-  }
+  PrimeSeq prime_seq;
+  long prime = prime_seq.next();
 
   // Preparation for
   QuadraticInfElement<long, U> target_qie{*quadratic_order};
@@ -1355,7 +1338,7 @@ void RegulatorLenstraData<long, U>::find_hstar(ZZ &hstar, const U &S,
   if (DBG_FHSTAR) {
     std::cout << "FHSTAR: Testing each prime" << std::endl;
   }
-  for (auto prime : primes) {
+  while (prime <= Pmax) {
     if (DBG_FHSTAR) {
       std::cout << "FHSTAR: prime is " << prime << std::endl;
     }
@@ -1406,6 +1389,7 @@ void RegulatorLenstraData<long, U>::find_hstar(ZZ &hstar, const U &S,
     if (DBG_FHSTAR) {
       std::cout << "FHSTAR: hstar is " << hstar << std::endl;
     }
+    prime = prime_seq.next();
   }
 
   // Using hstar, computer the regulator
