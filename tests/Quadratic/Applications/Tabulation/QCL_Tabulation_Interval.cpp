@@ -148,11 +148,11 @@ int main(int argc, char **argv) {
     QuadraticNumber<long> quad_number2{QO};
     QuadraticNumber<long> quad_number3{QO};
 
-    MultiplyNucompOpt<long> mul_nucomp_opt_object{};
+    MultiplyNucompOpt<long> mul_nucomp_opt_object{QO};
     mul_nucomp_opt_object.set_RelativeGenerator(quad_number1);
     QO.set_mul_nucomp_opt(mul_nucomp_opt_object);
 
-    SquareNuduplOpt<long> sqr_nudupl_opt_object{};
+    SquareNuduplOpt<long> sqr_nudupl_opt_object{QO};
     sqr_nudupl_opt_object.set_RelativeGenerator(quad_number2);
     QO.set_sqr_best(sqr_nudupl_opt_object);
 

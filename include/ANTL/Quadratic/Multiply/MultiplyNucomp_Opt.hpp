@@ -25,6 +25,9 @@ protected:
   ZZ NC_BOUND; // termination bound for NUCOMP = floor(|D|^1/4)
 
 public:
+
+  MultiplyNucompOpt(QuadraticOrder<T> &inQO);
+
   ~MultiplyNucompOpt(){};
 
   void init(const T &delta_in, const T &h_in, long g_in = 0) {
@@ -79,6 +82,6 @@ void MultiplyNucompOpt<GF2EX>::multiply(QuadraticIdealBase<GF2EX> &C,
 } // namespace ANTL
 
 // Unspecialized template definitions.
-// #include "../src/Quadratic/Multiply/MultiplyNucomp_Opt_impl.hpp"
+#include "../../../../src/Quadratic/Multiply/MultiplyNucomp_Opt_impl.hpp"
 
 #endif // guard
