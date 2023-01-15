@@ -24,6 +24,8 @@
 #include "AuxillaryFunctions.hpp"
 #include "timer.hpp"
 
+#include <string>
+
 #include <ANTL/Quadratic/QuadraticOrder.hpp>
 
 NTL_CLIENT
@@ -206,8 +208,50 @@ int main(int argc, char **argv) {
   finish_overall_time = high_resolution_clock::now();
   dur_overall_time = duration_cast<microseconds>(finish_overall_time - start_overall_time);
 
-  std::cout << "Time spent computing regulator: " << total_dur_regulator_trial.count() / 1000 << std::endl;
-  std::cout << "Time spent computing class grp: " << total_dur_class_group_trial.count() / 1000 << std::endl;
-  std::cout << "Time spent computing overall  : " << dur_overall_time.count() / 1000 << std::endl;
+  // Converting duration to Mins_Secs
+  long reg_mins, clg_mins, tot_mins;
+  double reg_secs, clg_secs, tot_secs;
+  std::string reg_str, clg_str, tot_str;
+
+  reg_mins = total_dur_regulator_trial.count() / 60000000;
+  clg_mins = total_dur_class_group_trial.count() / 60000000;
+  tot_mins = dur_overall_time.count() / 60000000;
+
+  reg_secs = double(double(total_dur_regulator_trial.count()) / double(1000000)) - double(reg_mins*60);
+  clg_secs = double(double(total_dur_class_group_trial.count()) / double(1000000)) - double(clg_mins*60);
+  tot_secs = double(double(dur_overall_time.count()) / double(1000000)) - double(tot_mins*60);
+
+  reg_str = to_string(reg_mins);
+  clg_str = to_string(clg_mins);
+  tot_str = to_string(tot_mins);
+
+  reg_str += "m" + to_string(long(floor(reg_secs))) + ".";
+  clg_str += "m" + to_string(long(floor(clg_secs))) + ".";
+  tot_str += "m" + to_string(long(floor(tot_secs))) + ".";
+
+  std::string reg_temp, clg_temp, tot_temp;
+
+  reg_temp = to_string(long(floor((reg_secs - floor(reg_secs))*1000))) + "s";
+  clg_temp = to_string(long(floor((clg_secs - floor(clg_secs))*1000))) + "s";
+  tot_temp = to_string(long(floor((tot_secs - floor(tot_secs))*1000))) + "s";
+
+  reg_temp.insert(reg_temp.begin(), 4 - reg_temp.size(), '0');
+  clg_temp.insert(clg_temp.begin(), 4 - clg_temp.size(), '0');
+  tot_temp.insert(tot_temp.begin(), 4 - tot_temp.size(), '0');
+
+  reg_str += reg_temp;
+  clg_str += clg_temp;
+  tot_str += tot_temp;
+
+//   std::cout << "Time spent computing regulator: " << total_dur_regulator_trial.count() / 1000 << std::endl;
+//   std::cout << "Time spent computing class grp: " << total_dur_class_group_trial.count() / 1000 << std::endl;
+//   std::cout << "Time spent computing overall  : " << dur_overall_time.count() / 1000 << std::endl;
+//
+//   std::cout << std::endl;
+
+  std::cout << "Time spent computing regulator: " << reg_str << std::endl;
+  std::cout << "Time spent computing class grp: " << clg_str << std::endl;
+  std::cout << "Time spent computing overall  : " << tot_str << std::endl;
+
 
 }
