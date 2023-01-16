@@ -15,7 +15,7 @@ AC_PROG_LN_S
 # this macro figures out how to build with pthreads
 #AX_PTHREAD(, )
 
-# this macro figures out how to build with pthreads
+# this macro figures out how to build with mpi
 #AX_MPI(, )
 
 # this macro figures out how to build with coverage

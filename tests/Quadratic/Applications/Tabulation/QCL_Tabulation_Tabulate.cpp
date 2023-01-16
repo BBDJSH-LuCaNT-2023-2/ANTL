@@ -58,6 +58,7 @@ using namespace ANTL;
   int main(int argc, char **argv) {
     int myrank;
 
+//     long x;
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &myrank);
 
@@ -141,7 +142,6 @@ using namespace ANTL;
           infile >> total_t1;
           for (i = 0; i < savenf; ++i) {
             infile >> finished[L + i];
-            std::cout << "heres your problem" << std::endl;
           }
         } else {
           clear(total_n);
@@ -298,6 +298,7 @@ using namespace ANTL;
       long n, i, j, idx, max_idx, Dl, oldDl, t1, rank;
       long long D, oldD;
       char fname[50], hname[50], zipper[100], check[100], mkdir[100];
+      long alg = 1;
       timer t;
       ofstream outfile;
       MPI_Status rc;
@@ -402,28 +403,52 @@ using namespace ANTL;
           std::cout << "Dlist[i] is " << Dlist[i] << std::endl;
           conv(Dl, Dlist[i]);
 //           QO.assign(Dl);
-          QuadraticOrder<ZZ> QO{ZZ(Dl)};
-//           Cl = QO.class_group(CLASS_GROUP_BSGS);
-//           rank = QO.get_rank();
-//           outfile << (labs(Dl) - oldDl) << " " << flush;
-          outfile << Dl << " " << 0 << " " << 0 << " " << flush;
-//           outfile << QO.get_nump() << " " << flush;
-//           outfile << QO.get_pmax() << " " << flush;
-          double regulator;
-          pair<double, vector<long>> regulator_and_class_group = get_regulator_and_class_group(QO);
-          if (type == 1) {
-            // outfile << QO.regulator().get_log() << " " << flush;
-            regulator = regulator_and_class_group.first;
-            outfile << regulator << " " << flush;
+          QuadraticOrder<long> QO{Dl};
+          std::cout << Dl << flush;
+
+          // ===TEMPORARY INITIALIZATION===
+          // TODO all of this initialization should be done from within QuadraticOrder
+          // using new
+          QuadraticNumber<long> quad_number1{QO};
+          QuadraticNumber<long> quad_number2{QO};
+          QuadraticNumber<long> quad_number3{QO};
+
+          MultiplyNucompOpt<long> mul_nucomp_opt_object{QO};
+          mul_nucomp_opt_object.set_RelativeGenerator(quad_number1);
+          QO.set_mul_nucomp_opt(mul_nucomp_opt_object);
+
+          SquareNuduplOpt<long> sqr_nudupl_opt_object{QO};
+          sqr_nudupl_opt_object.set_RelativeGenerator(quad_number2);
+          QO.set_sqr_best(sqr_nudupl_opt_object);
+
+          ReducePlainRealOpt<long> red_plain_real_opt_object{};
+          red_plain_real_opt_object.set_RelativeGenerator(quad_number3);
+          QO.set_red_best(red_plain_real_opt_object);
+
+          L_function<long> l_function;
+          l_function.init(to_long(Dl), 2);
+
+          pair<double, ZZ> regulator_and_hstar = get_regulator_and_hstar(QO, l_function);
+
+          double regulator = regulator_and_hstar.first;
+          ZZ h_star = regulator_and_hstar.second;
+
+          vector<long> class_group;
+          if(alg == 0) {
+            // Computing and timing a single class group BSGS computation
+            class_group = get_class_group_BSGS(QO, regulator, h_star);
           }
-          vector<long> Cl = regulator_and_class_group.second;
-//           outfile << rank << flush;
-          outfile << Cl.size() << " " << flush;
-          for (j = 0; j < rank; ++j)
-            outfile << " " << Cl[j] << flush;
-//           outfile << Cl << flush;
-          outfile << endl;
-//           oldDl = labs(Dl);
+          else if(alg == 1) {
+            // Computing and timing a single class group BS computation
+            class_group = get_class_group_BS(QO, regulator, h_star);
+          }
+
+          //Formatting the class group first
+          class_group.erase(std::remove(class_group.begin(), class_group.end(), 1), class_group.end());
+
+          //Outputting to stream
+          std::cout << " " << regulator*1000 << flush;
+          std::cout << " " << class_group << std::endl;
         }
 
         t.stop_timer();
