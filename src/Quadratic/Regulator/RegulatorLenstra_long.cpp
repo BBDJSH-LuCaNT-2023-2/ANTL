@@ -125,16 +125,17 @@ template <> void RegulatorLenstraData<long, double>::regulator_lenstra() {
         std::cout << "LENSTR: G.adjust(s) " << std::endl;
         std::cout << "LENSTR: s is " << s << std::endl;
       }
-      u = 2 * s;
+//       u = 2 * s;
+      u = s;
       if (DBG_LENSTR) {
         std::cout << "LENSTR: u is " << u << std::endl;
       }
-      G.giant_step(G);
+//       G.giant_step(G);
       if (DBG_LENSTR) {
         std::cout << "LENSTR: G.giant_step(G) " << std::endl;
       }
       // sqr(G, G); makeshift square above
-      G.adjust(u);
+//       G.adjust(u);
       if (DBG_LENSTR) {
         std::cout << "LENSTR: G.adjust(s) " << std::endl;
       }
@@ -262,7 +263,7 @@ template <> void RegulatorLenstraData<long, double>::regulator_lenstra() {
 
       // mul(C, C, G); makeshift multiplication below
       C.giant_step(G);
-      C.adjust(s);
+//       C.adjust(s);
 
       // mul(D, D, GG); makeshift multiplication below
       D.giant_step(G);
@@ -328,6 +329,11 @@ template <> void RegulatorLenstraData<long, double>::regulator_lenstra() {
 
     // THE BELOW LINE SHOULD EVENTUALLY BE UNCOMMENTED
     B = CeilToZZ(E / SqrRoot(to_RR(K)));
+    if (DBG_LENSTR) {
+      std::cout << "LENSTR: After optimize_K(B, FloorToZZ(S), N, l)"
+                << std::endl;
+      std::cout << "LENSTR: B is " << B << std::endl;
+    }
     regulator_bsgs(B);
     if(!IsZero(regulator)){
       set_case_type(" -- second regulator_bsgs -- ");
