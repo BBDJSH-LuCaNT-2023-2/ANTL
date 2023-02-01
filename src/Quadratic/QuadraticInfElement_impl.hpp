@@ -366,13 +366,27 @@ S QuadraticInfElement<T, S>::get_baby_steps(
     old_b = new_b;
     old_c = new_c;
 
-    if (qib == A.get_qib()) {
+    if (qib.IsOne()) {
       return Distance;
     }
 
     prin_list.hash(hash_real());
 
   } while (-0.000000001 <= to<double>(B) - Distance);
+
+  this->baby_step();
+  if(qib.IsOne()) {
+    regulator = Distance;
+    return regulator;
+  }
+  prin_list.hash(hash_real());
+
+  this->baby_step();
+  if(qib.IsOne()) {
+    regulator = Distance;
+    return regulator;
+  }
+  prin_list.hash(hash_real());
 
   regulator = 0;
   return regulator;

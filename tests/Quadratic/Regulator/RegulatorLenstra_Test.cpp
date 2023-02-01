@@ -263,7 +263,7 @@ TEST_CASE("RegulatorLenstra<long>: Does it work?", "[RegulatorLenstra][long]") {
     int correct_count = 0;
     int test_start = 0;
     int test_bound = correct_regulators.size();
-//     int test_bound = 270;
+//     int test_bound = 6109;
 
     double computed_regulators[test_bound];
     bool computed_correctly[test_bound];
