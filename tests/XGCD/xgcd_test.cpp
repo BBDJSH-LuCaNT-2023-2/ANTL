@@ -357,4 +357,23 @@ TEMPLATE_TEST_CASE("XGCD_BINARY_L2R_LEFT", "[XGCD][XGCD_LEFT][XGCD_BINARY_L2R]",
 
 TEMPLATE_TEST_CASE("XGCD_BINARY_L2R_PARTIAL", "[XGCD][XGCD_PARTIAL][XGCD_BINARY_L2R]", int64_t){
     //TODO: Add partial tests
+    TestType z, R1, R2, C1, C2;
+    TestType bound;
+    SECTION("Basic Test"){
+        //a=5850, b=3596
+        //r2=R_{-1}=b
+        //r1=R_0 = a-floor(a/b)b
+        TestType a = 5850;
+        TestType b = 3596;
+        R2 = b;
+        R1 = (int64_t)a-floor(a/b)*b;
+        cout << "R1 precompute: " << R1 << endl;
+        bound=50;
+        XGCD_PARTIAL_BINARY_L2R(z,R2,R1, C2,C1,bound);
+        cout << "Z: " << z << " R2 " << R2 << " R1 " << R1 << " C2 " << C2 << " C1 " << C1 << endl;
+        REQUIRE(R1>=R2);
+        REQUIRE(R1<=bound);
+        REQUIRE(bound < R2);   
+    }
+
 }
