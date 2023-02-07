@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "catch.hpp"
+#include "tests/catch.hpp"
 
 // qvm matrix headers
 #include <boost/qvm/mat.hpp>
@@ -47,6 +47,7 @@ void set_rand_nbit_value(const int n, int64_t & x){
 */
 
 TEST_CASE("XGCD_PLAIN int64_t Benchmarks", "[XGCD][XGCD_PLAIN][Benchmark][int64_t]"){
+
     #define RAND_MAX pow(2,64);
     srand(time(NULL));
     int64_t g,x,y,a,b;
