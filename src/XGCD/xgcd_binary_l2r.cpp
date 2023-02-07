@@ -109,26 +109,24 @@ void XGCD_BINARY_L2R_LEFT(int64_t & G, int64_t & X, const int64_t & A, const int
 }
 
 template<>
-void XGCD_PARTIAL_BINARY_L2R(long & Z, long & R2, long & R1, long & C2, long & C1, const long bound){
-  assert(R2);
-  assert(R1);
-  assert(C2);
-  assert(C1);
+void XGCD_PARTIAL_BINARY_L2R(int64_t & Z, int64_t & R2, int64_t & R1, int64_t & C2, int64_t & C1, const int64_t bound){
   assert(bound >= 0);
   int64_t r2 = R2;
   int64_t r1 = R1; 
   int64_t c2 = 0;
   int64_t c1 = -1;
-  uint64_t s2 = r2 >> 63;
-  uint64_t s1 = r1 >> 63;
+  int64_t s2 = r2 >> 63;
+  int64_t s1 = r1 >> 63;
   uint64_t cm = s2 ^ s1;
+  Z = 0;
   r2 = ANTL::negate_using_mask(s2, r2);
   r1 = ANTL::negate_using_mask(s1, r1);
   assert(r2 >= r1);
 
   // Swap u with v if u3 < v3.
-  Z ^= ANTL::cond_swap3_s64(c2, (int64_t &)s2, r2, c1, (int64_t &)s1, r1);
+  Z ^= ANTL::cond_swap3_s64(c2, s2, r2, c1, s1, r1);
   while (r1 != 0 && r1 > bound) {
+    cout <<"Partial iteration: " << r1 << " " << r2 << endl;
     int k = ANTL::msb_u64(r2) - ANTL::msb_u64(r1);
 
     // Subtract 2^k times r1 from r2, make sure r2 >= r1 >= 0
