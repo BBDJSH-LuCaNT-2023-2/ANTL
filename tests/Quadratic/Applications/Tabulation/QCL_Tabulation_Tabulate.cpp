@@ -153,21 +153,12 @@ using namespace ANTL;
       saveH = H;
       savenf = numfinished;
 
-      std::cout << "continue to collect stats and start new jobs until all are finished" << std::endl;
       // continue to collect stats and start new jobs until all are finished
       done = true;
       for (i = L; i < H && done; ++i) {
-        std::cout << "DEBUGGING 0" << std::endl;
-        if(!finished[i]) {
-        std::cout << "DEBUGGING 0.1" << std::endl;
-        }
         done = finished[i];
-        if(!done) {
-        std::cout << "DEBUGGING 0.2" << std::endl;
-        }
       }
       while (!done) {
-        std::cout << "DEBUGGING 1" << std::endl;
         // start first jobs on all machines
         idx = L;
         while (idx < H && finished[idx])
@@ -177,7 +168,6 @@ using namespace ANTL;
         for (i = 1; i <= machines && idx < H; ++i) {
           // get next interval to compute (idx < 0 indicates termination)
           MPI_Send(&idx, 1, MPI_LONG, i, INTERVAL_DATA, MPI_COMM_WORLD);
-          std::cout << "sent another job " << std::endl;
           ++jobs;
 
           ++idx;
@@ -188,15 +178,11 @@ using namespace ANTL;
 
         while (idx < H) {
           // receive computational data, start new job if necessary
-          std::cout << "1" << std::endl;
-
           MPI_Recv(buffer, sizeof(char)*BUFLEN, MPI_PACKED, MPI_ANY_SOURCE, TIME_DATA,
                    MPI_COMM_WORLD, &rc);
-          std::cout << "1.5" << std::endl;
           --jobs;
 
           position = 0;
-          std::cout << "2" << std::endl;
           MPI_Unpack(buffer, BUFLEN, &position, &i, 1, MPI_LONG,
                      MPI_COMM_WORLD);
           MPI_Unpack(buffer, BUFLEN, &position, &n, 1, MPI_LONG,
@@ -204,7 +190,6 @@ using namespace ANTL;
           MPI_Unpack(buffer, BUFLEN, &position, &t1, 1, MPI_LONG,
                      MPI_COMM_WORLD);
 
-          std::cout << "3" << std::endl;
           cout << "Interval " << i << " - " << n << " fields, time " << flush;
           MyTime(t1);
           cout << endl;
@@ -222,7 +207,6 @@ using namespace ANTL;
           outfile << endl;
           outfile.close();
 
-          std::cout << "4" << std::endl;
           // send next interval to compute
           while (idx < H && finished[idx])
             ++idx;
@@ -291,7 +275,6 @@ using namespace ANTL;
       MyTime(total_t1 / total_n);
       cout << endl << endl;
     } else {
-      std::cout << "this is not the main process!!" << std::endl;
       ZZ Dlist[LIST_SIZE_QUADRATIC], L, H, maxH, IS;
 //       QuadraticOrder<ZZ> QO;
 //       vec_ZZ Cl;
@@ -320,7 +303,7 @@ using namespace ANTL;
       conv(IS, argv[4]);
       maxH = to<ZZ>(atol(argv[3])) * IS;
 
-      cout << "Proc " << myrank << " (" << hname << "):  Initializing prrime list" << endl;
+      cout << "Proc " << myrank << " (" << hname << "):  Initializing prime list" << endl;
       // initialize prime list for discriminant generation
       if (type == 0) {
 //         get_Dlist_imag(maxH, maxH, Dlist, n, 1);
@@ -332,17 +315,13 @@ using namespace ANTL;
       // initialize L(1,X) tables and prime list for discriminant generation
 //       QO.use_Lfunction_tables(to<long>(maxH));
 
-      cout << "Proc " << myrank << " (" << hname << "): check directory" << endl;
+//       cout << "Proc " << myrank << " (" << hname << "): check directory" << endl;
       // check directory
       struct stat buf;
       sprintf(check, "%s/%s", argv[5], argv[6]);
-      cout << "Proc " << myrank << " (" << hname << "): check directory 1" << endl;
       if (stat(check, &buf)) {
-        cout << "Proc " << myrank << " (" << hname << "): check directory 2" << endl;
         sprintf(mkdir, "mkdir %s/%s", argv[5], argv[6]);
-        cout << "Proc " << myrank << " (" << hname << "): check directory 3" << endl;
         system(mkdir);
-        cout << "Proc " << myrank << " (" << hname << "): check directory 4" << endl;
       }
 
       cout << "Proc " << myrank << " (" << hname << "): main loop - process interval idx until idx < 0 received" << endl;
