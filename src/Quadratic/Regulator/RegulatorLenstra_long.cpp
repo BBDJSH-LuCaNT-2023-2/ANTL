@@ -121,6 +121,26 @@ template <> void RegulatorLenstraData<long, double>::regulator_lenstra() {
 
     if (IsZero(regulator)) {
       G.adjust(s);
+
+      if (DBG_LENSTR) {
+          std::cout << "LENSTR: G is " << G.get_qib() << " " << G.get_distance();
+      }
+
+      if(!G.is_one()) {
+        G.inverse_rho();
+        if(!G.is_one()) {
+          G.inverse_rho();
+        }
+      }
+
+      if(G.is_one()) {
+        G.baby_step();
+      }
+
+      if (DBG_LENSTR) {
+          std::cout << "LENSTR: G is " << G.get_qib() << " " << G.get_distance();
+      }
+
       if (DBG_LENSTR) {
         std::cout << "LENSTR: G.adjust(s) " << std::endl;
         std::cout << "LENSTR: s is " << s << std::endl;
