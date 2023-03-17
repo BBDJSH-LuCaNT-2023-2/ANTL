@@ -109,6 +109,8 @@ namespace ANTL
   template < class T >
   long Character<T>::quadratic(const T & n)
   {
+    std::cout << "<T>::quadratic: M is " << M << std::endl;
+    std::cout << "<T>::quadratic: n is " << n << std::endl;
     return Kronecker(M,n);
   }
 

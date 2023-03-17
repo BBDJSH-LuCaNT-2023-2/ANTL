@@ -63,8 +63,8 @@ using namespace ANTL;
     MPI_Comm_rank(MPI_COMM_WORLD, &myrank);
 
     if (myrank == 0) {
-      ZZ total_n, total_t1, IS;
-      long type, L, H, i, idx, n, t1, jobs, saveH, savenf;
+      ZZ total_n, total_t1, total_tr, total_tc, IS;
+      long type, L, H, i, idx, n, t1, tr, tc, jobs, saveH, savenf;
       bool done;
       char fname[50], hname[50], prefix[100]; //,mkdir[50],check[50];
       ifstream infile;
@@ -134,18 +134,24 @@ using namespace ANTL;
       if (infile.fail()) {
         clear(total_n);
         clear(total_t1);
+        clear(total_tr);
+        clear(total_tc);
       } else {
         infile >> savenf;
         infile >> saveH;
         if (H >= saveH) {
           infile >> total_n;
           infile >> total_t1;
+          infile >> total_tr;
+          infile >> total_tc;
           for (i = 0; i < savenf; ++i) {
             infile >> finished[L + i];
           }
         } else {
           clear(total_n);
           clear(total_t1);
+          clear(total_tr);
+          clear(total_tc);
         }
         infile.close();
       }
@@ -189,19 +195,27 @@ using namespace ANTL;
                      MPI_COMM_WORLD);
           MPI_Unpack(buffer, BUFLEN, &position, &t1, 1, MPI_LONG,
                      MPI_COMM_WORLD);
+          MPI_Unpack(buffer, BUFLEN, &position, &tr, 1, MPI_LONG,
+                     MPI_COMM_WORLD);
+          MPI_Unpack(buffer, BUFLEN, &position, &tc, 1, MPI_LONG,
+                     MPI_COMM_WORLD);
 
-          cout << "Interval " << i << " - " << n << " fields, time " << flush;
-          MyTime(t1);
-          cout << endl;
+          cout << "Interval " << i << " - " << n << " fields, Total Time: " << flush;
+          MyTime(t1*10000);
+          cout << " (Regulator: " << flush; MyTime(tr);
+          cout << " Class Group: " << flush; MyTime(tc);
+          cout << ")" << endl;
 
           total_n += n;
           total_t1 += t1;
+          total_tr += tr;
+          total_tc += tc;
 
           // update checkpoint file
           finished[i] = true;
           outfile.open(fname);
           outfile << savenf << " " << saveH << " ";
-          outfile << total_n << " " << total_t1 << " ";
+          outfile << total_n << " " << total_t1 << " " << total_tr << " " << total_tc << " ";
           for (i = L; i < H; ++i)
             outfile << finished[i] << " ";
           outfile << endl;
@@ -232,19 +246,27 @@ using namespace ANTL;
                      MPI_COMM_WORLD);
           MPI_Unpack(buffer, BUFLEN, &position, &t1, 1, MPI_LONG,
                      MPI_COMM_WORLD);
+          MPI_Unpack(buffer, BUFLEN, &position, &tr, 1, MPI_LONG,
+                     MPI_COMM_WORLD);
+          MPI_Unpack(buffer, BUFLEN, &position, &tc, 1, MPI_LONG,
+                     MPI_COMM_WORLD);
 
-          cout << "Interval " << i << " - " << n << " fields, time " << flush;
-          MyTime(t1);
+          cout << "Interval " << i << " - " << n << " fields, Total Time: " << flush;
+          MyTime(t1*10000);
+          cout << " (Regulator Time: " << flush; MyTime(tr);
+          cout << " Class Group Time: " << flush; MyTime(tc);
           cout << endl;
 
           total_n += n;
           total_t1 += t1;
+          total_tr += tr;
+          total_tc += tc;
 
           // update checkpoint file
           finished[i] = true;
           outfile.open(fname);
           outfile << savenf << " " << saveH << " ";
-          outfile << total_n << " " << total_t1 << " ";
+          outfile << total_n << " " << total_t1 << " " << total_tr << " " << total_tc << " ";
           for (i = L; i < H; ++i)
             outfile << finished[i] << " ";
           outfile << endl;
@@ -266,10 +288,22 @@ using namespace ANTL;
       cout << "\n\nSummary:" << endl;
       cout << "Total Fields:  " << total_n << endl;
       cout << "Total time:  " << flush;
-      MyTime(total_t1);
+      MyTime(total_t1*10000);
+      cout << endl;
+      cout << "Total regulator time:  " << flush;
+      MyTime(total_tr);
+      cout << endl;
+      cout << "Total classgroup time:  " << flush;
+      MyTime(total_tc);
       cout << endl;
       cout << "Real time:  " << flush;
-      MyTime(total_t1 / machines);
+      MyTime((total_t1*10000) / machines);
+      cout << endl;
+      cout << "Real regulator time:  " << flush;
+      MyTime(total_tr / machines);
+      cout << endl;
+      cout << "Real class group time:  " << flush;
+      MyTime(total_tc / machines);
       cout << endl;
       cout << "Avg per field:  " << flush;
       MyTime(total_t1 / total_n);
@@ -278,7 +312,7 @@ using namespace ANTL;
       ZZ Dlist[LIST_SIZE_QUADRATIC], L, H, maxH, IS;
 //       QuadraticOrder<ZZ> QO;
 //       vec_ZZ Cl;
-      long n, i, j, idx, max_idx, Dl, oldDl, t1, rank;
+      long n, i, j, idx, max_idx, Dl, oldDl, t1, tr = 0, tc = 0, rank;
       long long D, oldD;
       char fname[50], hname[50], zipper[100], check[100], mkdir[100];
       long alg = 1;
@@ -349,6 +383,8 @@ using namespace ANTL;
         outfile.open(fname);
 
         t.start_timer();
+        tr = 0;
+        tc = 0;
 
         // compute Cl for all fundamental discriminants D with L <= |D| <= H
         // File format:
@@ -379,11 +415,11 @@ using namespace ANTL;
 
         oldDl = to<long>(L);
         for (i = 0; i < n; ++i) {
-          std::cout << "Dlist[i] is " << Dlist[i] << std::endl;
+//           std::cout << "Dlist[i] is " << Dlist[i] << std::endl;
           conv(Dl, Dlist[i]);
 //           QO.assign(Dl);
           QuadraticOrder<long> QO{Dl};
-          std::cout << Dl << flush;
+          outfile << Dl << flush;
 
           // ===TEMPORARY INITIALIZATION===
           // TODO all of this initialization should be done from within QuadraticOrder
@@ -407,33 +443,40 @@ using namespace ANTL;
           L_function<long> l_function;
           l_function.init(to_long(Dl), 2);
 
-          pair<double, ZZ> regulator_and_hstar = get_regulator_and_hstar(QO, l_function);
+          tuple<double, ZZ, long> regulator_and_hstar_tuple = get_regulator_and_hstar(QO, l_function);
 
-          double regulator = regulator_and_hstar.first;
-          ZZ h_star = regulator_and_hstar.second;
+          double regulator = std::get<0>(regulator_and_hstar_tuple);
+          ZZ h_star = std::get<1>(regulator_and_hstar_tuple);
+          tr += std::get<2>(regulator_and_hstar_tuple);
 
           vector<long> class_group;
           if(alg == 0) {
             // Computing and timing a single class group BSGS computation
-            class_group = get_class_group_BSGS(QO, regulator, h_star);
+            std::pair<vector<long>, long> class_group_pair = get_class_group_BSGS(QO, regulator, h_star);
+            class_group = std::get<0>(class_group_pair);
+            tc += std::get<1>(class_group_pair);
           }
           else if(alg == 1) {
             // Computing and timing a single class group BS computation
-            class_group = get_class_group_BS(QO, regulator, h_star);
+            std::pair<vector<long>, long> class_group_pair = get_class_group_BS(QO, regulator, h_star);
+            class_group = std::get<0>(class_group_pair);
+            tc += std::get<1>(class_group_pair);
           }
 
           //Formatting the class group first
           class_group.erase(std::remove(class_group.begin(), class_group.end(), 1), class_group.end());
 
           //Outputting to stream
-          std::cout << " " << regulator*1000 << flush;
-          std::cout << " " << class_group << std::endl;
+//           std::cout << " " << regulator*1000 << flush;
+          outfile << std::fixed;
+          outfile << " " << regulator << flush;
+          outfile << " " << class_group << std::endl;
         }
 
         t.stop_timer();
         t1 = t.user_time();
 
-        outfile << t1 << endl;
+//         outfile << t1 << endl;
         outfile.close();
 
         // gzip the output file
@@ -448,6 +491,8 @@ using namespace ANTL;
         MPI_Pack(&idx, 1, MPI_LONG, buffer, BUFLEN, &position, MPI_COMM_WORLD);
         MPI_Pack(&n, 1, MPI_LONG, buffer, BUFLEN, &position, MPI_COMM_WORLD);
         MPI_Pack(&t1, 1, MPI_LONG, buffer, BUFLEN, &position, MPI_COMM_WORLD);
+        MPI_Pack(&tr, 1, MPI_LONG, buffer, BUFLEN, &position, MPI_COMM_WORLD);
+        MPI_Pack(&tc, 1, MPI_LONG, buffer, BUFLEN, &position, MPI_COMM_WORLD);
         MPI_Send(buffer, BUFLEN, MPI_PACKED, 0, TIME_DATA, MPI_COMM_WORLD);
 
         // get next interval to compute (idx < 0 indicates termination)

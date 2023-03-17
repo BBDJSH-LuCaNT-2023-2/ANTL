@@ -594,58 +594,57 @@ namespace ANTL
 
 
 
-  /*
-   * Function: template <class TYPE> approximateL1_impl
-   * Description: This function calculates the value of L1 using eric bach's method
-   *              of truncated euler terms. It used doubles for internal calculations
-   *              Generic template version by Rennie deGraaf - computes using the precision of
-   *              floating-point type TYPE.  This function is a friend of the L_function class.
-   * Inputs:      L_function<long>& lfunc - the L-function to compute
-   *              long terms - The number of terms to use in the summation.
-   * Outputs: RR - The result of the calculation
-   */
-  template <class TYPE> RR approximateL1_impl(L_function<long>& lfunc, long terms)
-  {
-    long Q, Q2, P, kron;
-    TYPE C, E, wt;
-    long i;
+/*
+* Function: template <class TYPE> approximateL1_impl
+* Description: This function calculates the value of L1 using eric bach's method
+*              of truncated euler terms. It used doubles for internal calculations
+*              Generic template version by Rennie deGraaf - computes using the precision of
+*              floating-point type TYPE.  This function is a friend of the L_function class.
+* Inputs:      L_function<long>& lfunc - the L-function to compute
+*              long terms - The number of terms to use in the summation.
+* Outputs: RR - The result of the calculation
+*/
+template <class TYPE> RR approximateL1_impl(L_function<long> &lfunc, long terms) {
+  long Q, Q2, P, kron;
+  TYPE C, E, wt;
+  long i;
 
-    Q = terms;
+  Q = terms;
 
-    // compute weight
-    Q2 = Q << 1;			// Q2 = Q*2;
-    clear(C);
-    for (i = Q; i <= Q2 - 1; ++i)
-      C += to<TYPE>(i) * log(to<TYPE>(i));
+  // compute weight
+  Q2 = Q << 1; // Q2 = Q*2;
+  clear(C);
+  for (i = Q; i <= Q2 - 1; ++i)
+    C += to<TYPE>(i) * log(to<TYPE>(i));
 
-    // compute partial product  p < Q
-    clear(E);
-    lfunc.primes.reset(2);
-    P = lfunc.primes.next();		// primes start at 2
-    while (P < Q)
-      {
-        kron = lfunc.Chi.quadratic(P);
-        E += log(to<TYPE>(P) / to<TYPE>(P - kron));
-        P = lfunc.primes.next ();
-      }
-
-    // computed weighted partial products for Q < p < 2Q
-    set(wt);
-    for (i = Q; i <= P; ++i)
-      wt -= to<TYPE>(i) * log(to<TYPE>(i)) / C;
-
-    while (P < Q2)
-      {
-        kron = lfunc.Chi.quadratic(P);
-        E += wt * log(to<TYPE>(P) / to<TYPE>(P - kron));
-        P = lfunc.primes.next();
-        wt -= (to<TYPE>(P - 1) * log(to<TYPE>(P - 1)) + to<TYPE>(P) * log(to<TYPE>(P))) / C;
-      }
-
-    lfunc.nterms_used[L1_REF] = Q;
-
-    return (exp(to_RR (E)));
+  // compute partial product  p < Q
+  clear(E);
+  lfunc.primes.reset(2);
+  P = lfunc.primes.next(); // primes start at 2
+  while (P < Q) {
+    kron = lfunc.Chi.quadratic(P);
+    E += log(to<TYPE>(P) / to<TYPE>(P - kron));
+    P = lfunc.primes.next();
   }
+
+  // computed weighted partial products for Q < p < 2Q
+  set(wt);
+  for (i = Q; i <= P; ++i)
+    wt -= to<TYPE>(i) * log(to<TYPE>(i)) / C;
+
+  while (P < Q2) {
+    kron = lfunc.Chi.quadratic(P);
+    E += wt * log(to<TYPE>(P) / to<TYPE>(P - kron));
+    P = lfunc.primes.next();
+    wt -= (to<TYPE>(P - 1) * log(to<TYPE>(P - 1)) +
+           to<TYPE>(P) * log(to<TYPE>(P))) /
+          C;
+  }
+
+  lfunc.nterms_used[L1_REF] = Q;
+
+  return (exp(to_RR(E)));
+}
 
 
 
@@ -675,22 +674,18 @@ namespace ANTL
 
     if (mode == QUADRATIC_MODE) {
       long prec = calculate_precision (Delta);
-      if (prec <= 53)
-	{
-	  L1_result = approximateL1_impl<double>(*this, Q);
-	}
-      else if (prec <= 104)
-	{
-	  L1_result = approximateL1_impl<quad_float>(*this, Q);
-	}
-      else
-	{
-	  RR::SetPrecision (prec);
-	  L1_result = approximateL1_impl<RR>(*this, Q);
-	}
+      if (prec <= 53) {
+        L1_result = approximateL1_impl<double>(*this, Q);
+      }
+      else if (prec <= 104) {
+        L1_result = approximateL1_impl<quad_float>(*this, Q);
+      }
+      else {
+        RR::SetPrecision (prec);
+        L1_result = approximateL1_impl<RR>(*this, Q);
+      }
     }
-    else if (mode == QUARTIC_MODE)
-      {
+    else if (mode == QUARTIC_MODE) {
         long prec = calculate_precision(Delta);
         RR::SetPrecision(NumBits(Delta) << 1);
         RR::SetOutputPrecision(NumBits(Delta) << 1);
@@ -709,7 +704,7 @@ namespace ANTL
 	    //            RR::SetPrecision (prec);
             L1_result = approximateL1Bach_Quartic_impl<RR>(*this, n);
 	  }
-      }
+    }
 
     return L1_result;
   }

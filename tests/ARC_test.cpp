@@ -1,25 +1,38 @@
 #ifndef ARC_TEST
 #define ARC_TEST
 
-#include "catch.hpp"
+#define FILE_INDEX 0
+#define PROCESS 1
+#define NO_PROCESS 2
+#define FILE_DONE 3
+#define SLAVE_DONE 4
 
-#include <NTL/ZZ.h>
+// #define LIST_SIZE_QUADRATIC 33554432
+#define LIST_SIZE_QUADRATIC 10000
 
+#include "Quadratic/Applications/Tabulation/iq-data.hpp"
+#include "Quadratic/Applications/Tabulation/iq-stats.hpp"
+#include <ANTL/Quadratic/QuadraticOrder.hpp>
+#include <dirent.h>
 #include <fstream>
-#include <iomanip>
-#include <chrono>
-#include <set>
+#include <list>
+#include <unistd.h>
+
+#include "Quadratic/Applications/Tabulation/AuxillaryFunctions.hpp"
 
 using namespace NTL;
 
 bool DBG_LENSTRA_TEST = true;
 
-TEST_CASE("ARC_TEST: Does it work?", "[ARC]") {
 
-  NTL::ZZ a = ZZ(123);
-  std::cout << a << std::endl;
+int main (int argc, char ** argv) {
 
-  REQUIRE(true);
+  std::cout << sizeof(long long) << std::endl;
+  std::cout << sizeof(NTL::ZZ) << std::endl;
+
+  iq_data combined_data;
+
+  return 0;
 }
 
 #endif

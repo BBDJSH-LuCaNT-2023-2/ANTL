@@ -5,6 +5,7 @@
  */
 
 #include <NTL/ZZ.h>
+#include <iomanip>
 #include "timer.hpp"
 
 namespace ANTL
@@ -202,19 +203,13 @@ namespace ANTL
   //
 
   void
-  MyTime(long t)
+  MyTime(long tt)
   {
-    MyTime(to<ZZ>(t));
-  }
-
-  void
-  MyTime(const ZZ & tt)
-  {
-    ZZ d,h,m,s,ms,t;
+    long d=0,h=0,m=0,s=0,ms=0,t;
 
     t = tt;
-    ms = t % 100;
-    t /= 100;
+    ms = t % 1000;
+    t /= 1000000;
     s = t % 60;
     t /= 60;
     m = t % 60;
@@ -222,32 +217,72 @@ namespace ANTL
     h = t % 24;
     d = t / 24;
 
-    if (d > 0) {
-      cout << d << " day, ";
-      cout << h << " hour, ";
-      cout << m << " min, ";
-      cout << s << " sec, ";
-      cout << ms << " csec";
-    }
-    else if (h > 0) {
-      cout << h << " hour, ";
-      cout << m << " min, ";
-      cout << s << " sec, ";
-      cout << ms << " csec";
-    }
-    else if (m > 0) {
-      cout << m << " min, ";
-      cout << s << " sec, ";
-      cout << ms << " csec";
-    }
-    else if (s > 0) {
-      cout << s << " sec, ";
-      cout << ms << " csec";
-    }
-    else
-      cout << ms << " csec";
+    cout << setfill('0') << setw(2) << d << "-" << setw(2) << h << ":" << setw(2) << m << ":" << setw(2) << s;
 
     return;
   }
+
+    void
+  MyTime(const ZZ & tt)
+  {
+    ZZ d,h,m,s,ms,t;
+
+    t = tt;
+    ms = t % 1000;
+    t /= 1000000;
+    s = t % 60;
+    t /= 60;
+    m = t % 60;
+    t /= 60;
+    h = t % 24;
+    d = t / 24;
+
+    cout << setfill('0') << setw(2) << d << "-" << setw(2) << h << ":" << setw(2) << m << ":" << setw(2) << s;
+
+    return;
+  }
+
+//   void
+//   MyTime(const ZZ & tt)
+//   {
+//     ZZ d,h,m,s,ms,t;
+//
+//     t = tt;
+//     ms = t % 100;
+//     t /= 100;
+//     s = t % 60;
+//     t /= 60;
+//     m = t % 60;
+//     t /= 60;
+//     h = t % 24;
+//     d = t / 24;
+//
+//     if (d > 0) {
+//       cout << d << " day, ";
+//       cout << h << " hour, ";
+//       cout << m << " min, ";
+//       cout << s << " sec, ";
+//       cout << ms << " csec";
+//     }
+//     else if (h > 0) {
+//       cout << h << " hour, ";
+//       cout << m << " min, ";
+//       cout << s << " sec, ";
+//       cout << ms << " csec";
+//     }
+//     else if (m > 0) {
+//       cout << m << " min, ";
+//       cout << s << " sec, ";
+//       cout << ms << " csec";
+//     }
+//     else if (s > 0) {
+//       cout << s << " sec, ";
+//       cout << ms << " csec";
+//     }
+//     else
+//       cout << ms << " csec";
+//
+//     return;
+//   }
 
 } // ANTL

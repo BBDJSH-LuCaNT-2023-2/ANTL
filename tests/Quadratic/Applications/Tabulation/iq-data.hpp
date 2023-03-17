@@ -9,55 +9,60 @@
 #ifndef IQ_DATA_H 
 #define IQ_DATA_H 
 
+// original global definitions for a local machine, may cause stack overflows
 
-// #define MAXP 40
-// #define MAXH 30
-// #define LASTPRIME 173
-// #define MAXE1 20
-// #define MAXE2 10
-// #define MAXE3 5
-// #define MAXE4 2
-// #define MAXE5 2
-// #define MAXE6 2
-//
-// #define MAXPHUGE 120
-// #define MAXPLARGE 80
-// #define LASTPLARGE 409
-// #define MAXPSMALL 5
-//
-// #define MAXP1 10
-// #define MAXP2 40
-// #define MAXP3 20
-// #define MAXP4 5
-//
-// #define NUMH 10
+// [MAXP1][MAXP2][MAXP3][MAXP4] = Array of size 40 000
+// [MAXPLARGE][MAXE1][MAXE2][MAXE3][MAXE4][MAXE5][MAXE6] = array of size 640 000
 
-//global definitions for a local machine
-#define MAXP 5
-#define MAXH 5
-#define LASTPRIME 5
-#define MAXE1 5
-#define MAXE2 5
+#define MAXP 40
+#define MAXH 30
+#define LASTPRIME 173
+#define MAXE1 20
+#define MAXE2 10
 #define MAXE3 5
 #define MAXE4 2
 #define MAXE5 2
 #define MAXE6 2
 
-#define MAXPHUGE 5
-// #define MAXPLARGE 80
-#define MAXPLARGE 5
-#define LASTPLARGE 5
+#define MAXPHUGE 120
+#define MAXPLARGE 80
+#define LASTPLARGE 409
 #define MAXPSMALL 5
 
-#define MAXP1 5
-#define MAXP2 5
-#define MAXP3 5
+#define MAXP1 10
+#define MAXP2 40
+#define MAXP3 20
 #define MAXP4 5
 
 #define NUMH 10
 
+// global definitions for a local machine
+// #define MAXP 5
+// #define MAXH 5
+// #define LASTPRIME 5
+// #define MAXE1 5
+// #define MAXE2 5
+// #define MAXE3 5
+// #define MAXE4 2
+// #define MAXE5 2
+// #define MAXE6 2
+//
+// #define MAXPHUGE 5
+// // #define MAXPLARGE 80
+// #define MAXPLARGE 5
+// #define LASTPLARGE 5
+// #define MAXPSMALL 5
+//
+// #define MAXP1 5
+// #define MAXP2 5
+// #define MAXP3 5
+// #define MAXP4 5
+//
+// #define NUMH 10
+
 
 #include <ANTL/Quadratic/QuadraticOrder.hpp>
+#include <boost/multi_array.hpp>
 #include <iostream>
 #include <sstream>
 #include <stdio.h>
@@ -66,7 +71,6 @@
 
 NTL_CLIENT
 using namespace ANTL;
-
 
 class iq_data {
 public:
@@ -121,22 +125,35 @@ public:
 
   // *** 2. Divisibility by odd primes ***
 
+//   boost::multi_array<long long, 2> pdivs0;
+//   boost::multi_array<long long, 2> pdivs1;
+
   long long pdivs0[MAXP][MAXPSMALL];
   long long pdivs1[MAXP][MAXPSMALL];
 
   // *** 3b. p-rank probablilities ***
 
+  // prank data
+//   boost::multi_array<long long, 7> prank0;
+//   boost::multi_array<long long, 7> prank1;
   long long prank0[MAXPLARGE][MAXE1][MAXE2][MAXE3][MAXE4][MAXE5][MAXE6];	// prank data
   long long prank1[MAXPLARGE][MAXE1][MAXE2][MAXE3][MAXE4][MAXE5][MAXE6];	// prank data
 
   // *** 4. First occurrences of p-sylow groups ***
 
+//   boost::multi_array<ZZ, 7> first_prank0;
+//   boost::multi_array<ZZ, 7> first_prank1;
   ZZ first_prank0[MAXPLARGE][MAXE1][MAXE2][MAXE3][MAXE4][MAXE5][MAXE6];	// prank data
   ZZ first_prank1[MAXPLARGE][MAXE1][MAXE2][MAXE3][MAXE4][MAXE5][MAXE6];	// prank data
+
+//   boost::multi_array<long long, 4> two_noncyc0;
+//   boost::multi_array<long long, 4> two_noncyc1;
 
   long long two_noncyc0[MAXP1][MAXP2][MAXP3][MAXP4];	// multiply noncyclic data
   long long two_noncyc1[MAXP1][MAXP2][MAXP3][MAXP4];	// multiply noncyclic data
 
+//   boost::multi_array<ZZ, 4> first_two_noncyc0;
+//   boost::multi_array<ZZ, 4> first_two_noncyc1;
   ZZ first_two_noncyc0[MAXP1][MAXP2][MAXP3][MAXP4];	// multiply noncyclic data
   ZZ first_two_noncyc1[MAXP1][MAXP2][MAXP3][MAXP4];	// multiply noncyclic data
 
@@ -179,6 +196,10 @@ public:
 
   void read_file(char *name, char *pfix);
   void write_file(char *name, char *pfix);
+
+  void write_file_readable(char *name, char *pfix);
+//   void write_zz_readable(ZZ &a, FILE *fp);
+//   void write_rr_readable(RR &a, FILE *fp);
 
   void combine(iq_data & newdata);
 
