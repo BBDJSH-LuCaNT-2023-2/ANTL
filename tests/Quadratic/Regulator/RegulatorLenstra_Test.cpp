@@ -480,14 +480,16 @@ TEST_CASE("RegulatorLenstra<long>: Does it work?", "[RegulatorLenstra][long]") {
   }
 }
 
-TEST_CASE("RegulatorLenstra<long>: Special Cases", "[RegulatorLenstra][SpecialCase]") {
+TEST_CASE("RegulatorLenstra<long>: Special Case 1", "[RegulatorLenstra][SpecialCase1]") {
 
   std::cout << "Testing RegulatorLenstra<long>" << std::endl;
 
-  std::vector<long> special_cases = {1099510580049, 1099510582181, 1099511566961};
-  std::vector<double> special_regulators = {10995105580049, 10995105582181, 82745668};
+  std::vector<long> special_cases = {21311620233, 21951681929, 35513779417};
+  // Correct regulators = 39982.0156149371, 4165.25192337069, 5093.08351595829
+  std::vector<double> special_regulators = {39982015, 4165251, 5093083};
 
   int test_start = 0;
+//   int test_bound = 1;
   int test_bound = special_cases.size();
 
   ZZ computed_hstars[test_bound];
@@ -523,7 +525,7 @@ TEST_CASE("RegulatorLenstra<long>: Special Cases", "[RegulatorLenstra][SpecialCa
     quad_order.set_red_best(red_plain_real_opt_object);
 
     L_function<long> l_function;
-    l_function.init(long(100000), 2);
+    l_function.init(special_cases[i], 2);
     RegulatorLenstraData<long, double> regulator_lenstra_data{&quad_order,
                                                             &l_function};
 
@@ -533,9 +535,8 @@ TEST_CASE("RegulatorLenstra<long>: Special Cases", "[RegulatorLenstra][SpecialCa
 
     double regulator = regulator_lenstra_data.get_regulator();
     std::cout << std::setprecision(10) << std::fixed;
-    std::cout << special_cases[i] << " " << regulator << " " << nextdown(regulator) << " " << 1000*regulator << " " << FloorToZZ(1000*regulator) << std::endl;
+    std::cout << special_cases[i] << " " << regulator << " " << FloorToZZ(1000*regulator) << std::endl;
   }
     REQUIRE(true);
 }
-
 #endif

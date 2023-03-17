@@ -167,19 +167,19 @@ int main(int argc, char **argv) {
     // ===TEMPORARY INITIALIZATION===
 
     start_trial_time = high_resolution_clock::now();
-    pair<double, ZZ> regulator_and_hstar = get_regulator_and_hstar(QO, l_function);
+    tuple<double, ZZ, long> regulator_and_hstar = get_regulator_and_hstar(QO, l_function);
     finish_trial_time = high_resolution_clock::now();
 
     dur_regulator_trial = duration_cast<microseconds>(finish_trial_time - start_trial_time);
 
-    double regulator = regulator_and_hstar.first;
-    ZZ h_star = regulator_and_hstar.second;
+    double regulator = std::get<0>(regulator_and_hstar);
+    ZZ h_star = std::get<1>(regulator_and_hstar);
 
-    vector<long> class_group;
+    pair<vector<long>, long> class_group_and_time;
     if(alg == 0) {
       // Computing and timing a single class group BSGS computation
       start_trial_time = high_resolution_clock::now();
-      class_group = get_class_group_BSGS(QO, regulator, h_star);
+      class_group_and_time = get_class_group_BSGS(QO, regulator, h_star);
       finish_trial_time = high_resolution_clock::now();
 
       dur_class_group_trial = duration_cast<microseconds>(finish_trial_time - start_trial_time);
@@ -187,13 +187,14 @@ int main(int argc, char **argv) {
     else if(alg == 1) {
       // Computing and timing a single class group BS computation
       start_trial_time = high_resolution_clock::now();
-      class_group = get_class_group_BS(QO, regulator, h_star);
+      class_group_and_time = get_class_group_BS(QO, regulator, h_star);
       finish_trial_time = high_resolution_clock::now();
 
       dur_class_group_trial = duration_cast<microseconds>(finish_trial_time - start_trial_time);
     }
 
     //Formatting the class group first
+    vector<long> class_group = std::get<0>(class_group_and_time);
     class_group.erase(std::remove(class_group.begin(), class_group.end(), 1), class_group.end());
 
     //Computing new durations totals

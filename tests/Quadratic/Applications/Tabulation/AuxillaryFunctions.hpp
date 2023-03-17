@@ -4,6 +4,7 @@
 #define INT_SIZE_QUADRATIC 10000000
 
 #include <algorithm>
+#include <chrono>
 #include <iostream>
 #include <list>
 #include <thread>
@@ -24,13 +25,15 @@
 using namespace NTL;
 using namespace ANTL;
 
-pair<double, ZZ> get_regulator_and_hstar(QuadraticOrder<long> &quad_order, L_function<long> &l_function) {
+std::tuple<double, ZZ, long> get_regulator_and_hstar(QuadraticOrder<long> &quad_order, L_function<long> &l_function) {
   // Setting up the RegulatorLenstraData object
   RegulatorLenstraData<long, double> regulator_lenstra_data{&quad_order,
                                                           &l_function};
 
-  // Computing the regulator
+  // Computing the regulator, and timing thereof
+  auto start_trial_time = std::chrono::high_resolution_clock::now();
   regulator_lenstra_data.regulator_lenstra();
+  auto finish_trial_time = std::chrono::high_resolution_clock::now();
 
   double regulator = regulator_lenstra_data.get_regulator();
 
@@ -38,16 +41,23 @@ pair<double, ZZ> get_regulator_and_hstar(QuadraticOrder<long> &quad_order, L_fun
   RR h_star_close = to_RR(regulator_lenstra_data.lower_bound_hR()) / to_RR(regulator);
   ZZ h_star = CeilToZZ(h_star_close);
 
-  return {regulator, h_star};
+  // Computing duration of trial
+  std::chrono::duration<long int, std::ratio<1, 1000000>> dur_regulator_trial = std::chrono::duration_cast<std::chrono::microseconds>(finish_trial_time - start_trial_time);
+
+  long reg_mins = dur_regulator_trial.count();
+  return {regulator, h_star, reg_mins};
 }
 
-vector<long> get_class_group_BSGS(QuadraticOrder<long> &quad_order, double regulator, ZZ h_star) {
+std::pair<vector<long>, long> get_class_group_BSGS(QuadraticOrder<long> &quad_order, double regulator, ZZ h_star) {
   // Setting up the ClassGroupBSGSReal object
   ClassGroupBSGSReal<long> class_group_bsgs_real1{&quad_order};
   class_group_bsgs_real1.set_regulator(regulator);
 
+
   // Computing the class group
+  auto start_trial_time = std::chrono::high_resolution_clock::now();
   class_group_bsgs_real1.cg_bsgs_real(h_star);
+  auto finish_trial_time = std::chrono::high_resolution_clock::now();
 
   // Adding computed class group to reslults vector
   vector<ZZ> class_group_ZZ = class_group_bsgs_real1.get_class_group();
@@ -59,16 +69,23 @@ vector<long> get_class_group_BSGS(QuadraticOrder<long> &quad_order, double regul
 
   std::sort(class_group_long.rbegin(), class_group_long.rend());
 
-  return class_group_long;
+  // Computing duration of trial
+  std::chrono::duration<long int, std::ratio<1, 1000000>> dur_class_group_trial = std::chrono::duration_cast<std::chrono::microseconds>(finish_trial_time - start_trial_time);
+
+  long clg_mins = dur_class_group_trial.count();
+
+  return {class_group_long, clg_mins};
 }
 
-vector<long> get_class_group_BS(QuadraticOrder<long> &quad_order, double regulator, ZZ h_star) {
+std::pair<vector<long>, long> get_class_group_BS(QuadraticOrder<long> &quad_order, double regulator, ZZ h_star) {
   // Setting up the ClassGroupBSGSReal object
   ClassGroupBSReal<long> class_group_bs_real1{&quad_order};
   class_group_bs_real1.set_regulator(regulator);
 
   // Computing the class group
+  auto start_trial_time = std::chrono::high_resolution_clock::now();
   class_group_bs_real1.cg_bs_real(h_star);
+  auto finish_trial_time = std::chrono::high_resolution_clock::now();
 
   // Adding computed class group to reslults vector
   vector<ZZ> class_group_ZZ = class_group_bs_real1.get_class_group();
@@ -80,7 +97,12 @@ vector<long> get_class_group_BS(QuadraticOrder<long> &quad_order, double regulat
 
   std::sort(class_group_long.rbegin(), class_group_long.rend());
 
-  return class_group_long;
+  // Computing duration of trial
+  std::chrono::duration<long int, std::ratio<1, 1000000>> dur_class_group_trial = std::chrono::duration_cast<std::chrono::microseconds>(finish_trial_time - start_trial_time);
+
+  long clg_mins = dur_class_group_trial.count();
+
+  return {class_group_long, clg_mins};
 }
 
 void get_DList_real_custom(long ubound, std::list<long> &discriminants);

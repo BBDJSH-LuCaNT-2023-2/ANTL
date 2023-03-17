@@ -49,7 +49,7 @@ void close_output_files();
 int main(int argc, char **argv) {
 
   std::cout << "HARVST: HELOOOOOOOOOO" << std::endl;
-  bool DBG_HARVST = true;
+  bool DBG_HARVST = false;
   if(DBG_HARVST) {std::cout << "HARVST: BEGIN" << std::endl;};
   // parameters
   int myrank;
@@ -70,13 +70,16 @@ int main(int argc, char **argv) {
     int done, machines, i, j, k, index;
     long L, H, bound, current, total;
     ZZ IS, total_time;
-    char hname[50], fname[50], back[50];
+    char hname[50], fname[50], back[50], mkdir_cmd[50];
     char iprefix[50], oprefix[50];
     ifstream infile;
     ofstream outfile;
     MPI_Status status;
+    std::cout << "bonjour hon hon hon" << std::endl;
     iq_data combined_data;
     iq_data new_data;
+    std::cout << "you not gonna see me here" << std::endl;
+
     ZZ threshold, gthreshold, inc, ginc;
     ZZ compL, compH;
     timer t1;
@@ -89,7 +92,7 @@ int main(int argc, char **argv) {
 //     long Dl, oldDl, rank, n;
 //     long long D, oldD;
     long n;
-    ZZ Dl, oldDl, rank;
+    long Dl, oldDl, rank;
     ZZ D, oldD;
     char zipper[50], syscall[50];
 
@@ -126,7 +129,9 @@ int main(int argc, char **argv) {
     cout << "Using " << machines << " processes" << endl;
 
     // create interval thresholds
-    inc = 10000000;
+//     inc = 10000000;
+//     ginc = 10000000;
+    inc  = 10000000;
     ginc = 10000000;
     threshold = inc;
     gthreshold = ginc;
@@ -165,6 +170,12 @@ int main(int argc, char **argv) {
 
       infile.close();
     }
+
+    sprintf(mkdir_cmd, "mkdir %s", oprefix);
+
+    system("mkdir latex_data");
+    system(mkdir_cmd);
+    system("mkdir temp");
 
     if (current > 0) {
       // create combined output file
@@ -251,7 +262,7 @@ int main(int argc, char **argv) {
         cout << "Computing interval from " << compL << " to " << compH << endl;
 
         // create file
-        sprintf(fname, "%s/iq-data.%d", iprefix, i);
+        sprintf(fname, "%s/rq-data.%d", iprefix, i);
         outfile.open(fname);
 
         t1.start_timer();
@@ -276,14 +287,46 @@ int main(int argc, char **argv) {
         oldD = to<ZZ>(compL);
         for (j = 0; j < n; ++j) {
           D = to<ZZ>(Dlist[j]);
-          std::cout << "Current discriminant is " << D << std::endl;
+          conv(Dl, Dlist[i]);
+          std::cout << "Current discriminant is " << Dl << std::endl;
 
+
+          QuadraticOrder<long> QO{Dl};
 //           QO.assign(D);
-          QuadraticOrder<ZZ> QO{ZZ(D)};
+          // ===TEMPORARY INITIALIZATION===
+          // TODO all of this initialization should be done from within QuadraticOrder
+          // using new
+          QuadraticNumber<long> quad_number1{QO};
+          QuadraticNumber<long> quad_number2{QO};
+          QuadraticNumber<long> quad_number3{QO};
+
+          MultiplyNucompOpt<long> mul_nucomp_opt_object{QO};
+          mul_nucomp_opt_object.set_RelativeGenerator(quad_number1);
+          QO.set_mul_nucomp_opt(mul_nucomp_opt_object);
+
+          SquareNuduplOpt<long> sqr_nudupl_opt_object{QO};
+          sqr_nudupl_opt_object.set_RelativeGenerator(quad_number2);
+          QO.set_sqr_best(sqr_nudupl_opt_object);
+
+          ReducePlainRealOpt<long> red_plain_real_opt_object{};
+          red_plain_real_opt_object.set_RelativeGenerator(quad_number3);
+          QO.set_red_best(red_plain_real_opt_object);
+
+          L_function<long> l_function;
+          l_function.init(to_long(Dl), 2);
+
 //           Cl = QO.class_group(CLASS_GROUP_BSGS);
-          pair<double, vector<long>> regulator_and_class_group = get_regulator_and_class_group(QO);
-          double regulator = regulator_and_class_group.first;
-          vector<long> class_group = regulator_and_class_group.second;
+          tuple<double, ZZ, long> regulator_and_hstar = get_regulator_and_hstar(QO, l_function);
+
+          double regulator = std::get<0>(regulator_and_hstar);
+          ZZ h_star = std::get<1>(regulator_and_hstar);
+
+          pair<vector<long>, long> class_group_and_time;
+          // Computing and timing a single class group BS computation
+          class_group_and_time = get_class_group_BS(QO, regulator, h_star);
+
+          vector<long> class_group = std::get<0>(class_group_and_time);
+          class_group.erase(std::remove(class_group.begin(), class_group.end(), 1), class_group.end());
 
 //           rank = QO.get_rank();
           rank = class_group.size();
@@ -306,21 +349,21 @@ int main(int argc, char **argv) {
         t1.stop_timer();
         outfile << t1.user_time() << endl;
         outfile.close();
-        std::cout << "TEST 1" << std::endl;
+//         std::cout << "TEST 1" << std::endl;
         // zip file
-        sprintf(zipper, "gzip %s/iq-data.%d", iprefix, i);
+        sprintf(zipper, "gzip %s/rq-data.%d", iprefix, i);
         system(zipper);
-        std::cout << "TEST 2" << std::endl;
+//         std::cout << "TEST 2" << std::endl;
         // process interval
-        sprintf(fname, "%s/iq-data.%d.gz", iprefix, i);
+        sprintf(fname, "%s/rq-data.%d.gz", iprefix, i);
         process_file(i, fname, iprefix, oprefix);
-        std::cout << "TEST 3" << std::endl;
+//         std::cout << "TEST 3" << std::endl;
 
         // mark file as being done
         finished[i] = 2;
         total++;
 
-        std::cout << "TEST 4" << std::endl;
+//         std::cout << "TEST 4" << std::endl;
         // update checkpoint file
         outfile.clear();
         sprintf(fname, "stats-check-%ld-%s", L, argv[3]);
@@ -340,14 +383,17 @@ int main(int argc, char **argv) {
       }
 
       // unzip the interval data
+//       std::cout << "TEST 5: unzip the interval data" << std::endl;
       sprintf(syscall, "gunzip %s/data%d.dat.gz", oprefix, i);
       system(syscall);
 
       // read the interval data
+//       std::cout << "TEST 5: read the interval data" << std::endl;
       sprintf(fname, "/data%d.dat", i);
       new_data.read_file(fname, oprefix);
 
       // zip the interval data back up
+//       std::cout << "TEST 5: zip the interval data back up" << std::endl;
       sprintf(syscall, "gzip %s/data%d.dat", oprefix, i);
       system(syscall);
 
@@ -374,6 +420,7 @@ int main(int argc, char **argv) {
       }
 
       // output the graph threshold data
+      if(DBG_HARVST) {std::cout << "MASTER: Before output_graph_interval" << std::endl;}
       if (combined_data.maxD > gthreshold - 100) {
         if (output_graph_interval(combined_data, gthreshold) == 1) {
           cerr << "Could not output interval " << gthreshold << "-"
@@ -382,13 +429,14 @@ int main(int argc, char **argv) {
         }
         gthreshold += ginc;
       }
+      if(DBG_HARVST) {std::cout << "MASTER: Before output_graph_interval" << std::endl;}
 
       current++;
-      std::cout << "GOT TO HERE" << std::endl;
     }
 
     // write the total combined file
     combined_data.write_file("/current.dat", oprefix);
+    combined_data.write_file_readable("/current_readable.dat", oprefix);
 
     // back up the combined file
     sprintf(back, "/back%ld.dat", current);
@@ -446,7 +494,7 @@ int main(int argc, char **argv) {
 
     if(DBG_HARVST) {std::cout << "SLAVE: FIND OUT HOST FILES" << std::endl;};
     // find out what files exist on the host
-    sprintf(fsub, "iq-data.");
+    sprintf(fsub, "rq-data.");
     sprintf(dname, iprefix);
     if (!(dp = opendir(dname))) {
       cout << myrank << " Can't open directory: " << dname << endl;
@@ -483,8 +531,8 @@ int main(int argc, char **argv) {
               strcat(buffer, "/");
               strcat(buffer, fname);
 
-              cout << "Process " << myrank
-                   << " computing statistics on interval " << index << endl;
+              if(DBG_HARVST) {cout << "Process " << myrank
+                   << " computing statistics on interval " << index << endl;}
               if (process_file(index, buffer, dname, oprefix)) {
                 cerr << "Error processing file" << endl;
                 // exit(1);
@@ -527,7 +575,7 @@ int main(int argc, char **argv) {
 // *** function to process a class number data file ***
 // ****************************************************
 int process_file(int index, char *fname, char *iprefix, char *oprefix) {
-  std::cout << "process_file: begin!" << std::endl;
+//   std::cout << "process_file: begin!" << std::endl;
   // parameters
   ifstream infile;
   ofstream tempfile, errorfile;
@@ -560,10 +608,10 @@ int process_file(int index, char *fname, char *iprefix, char *oprefix) {
   // unzip file
   sprintf(zipper, "gunzip %s", fname);
   if (system(zipper) != 0)
-    perror("Could not unzip iq file");
+    perror("Could not unzip rq file");
 
   // find unzipped file
-  sprintf(unzipped, "%s/iq-data.%d", iprefix, index);
+  sprintf(unzipped, "%s/rq-data.%d", iprefix, index);
 
   // open file
   infile.open(unzipped);
@@ -581,7 +629,7 @@ int process_file(int index, char *fname, char *iprefix, char *oprefix) {
   }
 
   // initializations
-  std::cout << "process_file: initializations" << std::endl;
+//   std::cout << "process_file: initializations" << std::endl;
   numsmallh = 0;
   sp.reset(3);
   for (i = 0; i < MAXPLARGE; i++) {
@@ -590,31 +638,44 @@ int process_file(int index, char *fname, char *iprefix, char *oprefix) {
   }
 
   // read header values from file
-  std::cout << "process_file: read header values" << std::endl;
+//   std::cout << "process_file: read header values" << std::endl;
   infile >> L;
   infile >> H;
   infile >> n;
-  std::cout << "are header values" << L << H << n << std::endl;
+  std::cout << "process_file: header values are " << L << " " << H << " " << n << std::endl;
 
   // read data from file
-  std::cout << "process_file: read data from file" << std::endl;
+//   std::cout << "process_file: read data from file" << std::endl;
   D = L;
   for (i = 0; i < n; i++) {
-    std::cout << "iterating!" << std::endl;
+//     std::cout << "iterating!" << std::endl;
     // calculate new discriminant D
-    std::cout << "calculate new discriminant D" << std::endl;
+//     std::cout << "calculate new discriminant D" << std::endl;
+
+    /*
+    // TODO: make using offsets optional
     infile >> offset;
+    std::cout << "offset is " << offset << std::endl;
     D += offset;
     data.maxD = D;
-    std::cout << "new discriminant D is " << D << std::endl;
+    // make using offsets optional
+    */
+
+    infile >> D;
+    data.maxD = D;
+//     std::cout << "process_file: new discriminant D is " << D << std::endl;
 
     // get number of prime generators
-    std::cout << "get number of prime generators" << std::endl;
-    infile >> num_p;
+    // TODO: Feature not currently supported by QCL_Tabulate
+//     std::cout << "get number of prime generators" << std::endl;
+//     infile >> num_p;
+    num_p = 0;
 
     // get max prime
-    std::cout << "get max prime" << std::endl;
-    infile >> max_p;
+    // TODO: Feature not currently supported by QCL_Tabulate
+//     std::cout << "get max prime" << std::endl;
+//     infile >> max_p;
+    max_p = 0;
     if (max_p > data.maxp) {
       data.maxp = max_p;
       data.maxpD = D;
@@ -625,21 +686,54 @@ int process_file(int index, char *fname, char *iprefix, char *oprefix) {
     // get regulator
     double regulator;
     infile >> regulator;
-    std::cout << "regulator is " << regulator << std::endl;
+//     std::cout << "process_file: regulator is " << regulator << std::endl;
 
-    // get rank of field and CL
-    std::cout << "get rank of field and CL" << std::endl;
-    infile >> rank;
-    std::cout << "rank is " << rank << std::endl;
-    long Cl[rank];
-    h = 1;
-    for (j = 0; j < rank; j++) {
-      infile >> Cl[j];
-      h *= Cl[j];
+    // get CL and determine rank.
+//     std::cout << "process_file: get rank of field and CL" << std::endl;
+
+    std::string cls_grp_str = "";
+    getline(infile, cls_grp_str);
+
+    //BELOW should go into a parsing function
+    std::vector<long> Cl = {};
+    rank = 0;
+
+    // class_group_str looks like " [1, 2, 4]"
+    cls_grp_str.erase(cls_grp_str.begin());
+    cls_grp_str.erase(cls_grp_str.begin());
+    cls_grp_str.erase(--cls_grp_str.end());
+
+    // class_group_str looks like "", or "1", or "1, 2, 34, 123"
+    if(cls_grp_str.size() == 0) {
+      Cl.push_back(1);
+      rank = 1;
     }
+    else {
+      std::string::size_type pos_1 = 0;
+      std::string::size_type pos_2 = cls_grp_str.find_first_of(',');
+
+      while(pos_2 != std::string::npos) {
+        Cl.push_back(stol(cls_grp_str.substr(pos_1, pos_2-pos_1)));
+        pos_1 = pos_2 + 2;
+        pos_2 = cls_grp_str.find_first_of(',', pos_2 + 1);
+      }
+      Cl.push_back(stol(cls_grp_str.substr(pos_1, cls_grp_str.size() - pos_1)));
+      rank = Cl.size();
+    }
+    //ABOVE should go into a parsing function
+
+//     std::cout << "rank is " << rank << std::endl;
+//     std::cout << "class group is ";
+
+    h = 1;
+    for(auto element : Cl) {
+      h *= element;
+    }
+//     std::cout << std::endl;
+//     std::cout << "h is " << h << std::endl;
 
     // find small h
-    std::cout << "find small h" << std::endl;
+//     std::cout << "process_file: find small h" << std::endl;
     pair<long, ZZ> maxsmall;
     if (smallh.size() < 10) {
       pair<long, ZZ> newpair(h, D);
@@ -654,28 +748,34 @@ int process_file(int index, char *fname, char *iprefix, char *oprefix) {
         smallh.sort();
       }
     }
+//     std::cout << "h is " << h << std::endl;
+
 
     // calculate hodd
-    std::cout << "calculate hodd" << std::endl;
+//     std::cout << "calculate hodd" << std::endl;
     hodd = h;
-    while (!hodd & 1)
-      hodd <<= 1;
+
+    // while hodd has a is even, divide by 2
+    while (hodd % 2 == 1) {
+      hodd >>= 1;
+    }
 
     // calculate odd part of CL
-    std::cout << "calculate odd part of CL" << std::endl;
+//         std::cout << "calculate odd part of CL" << std::endl;
     long oddCl[rank];
     for (j = 0; j < rank; j++) {
       oddCl[j] = Cl[j];
-      if ((oddCl[j] & 1) == 0)
+      while (oddCl[j] % 2 == 0) {
         oddCl[j] >>= 1;
+      }
     }
 
     // calculate L(1,X)
-    std::cout << "calculate L(1,X)" << std::endl;
+    //     std::cout << "calculate L(1,X)" << std::endl;
     L1X = to<RR>(h) * ComputePi_RR() / sqrt(to<RR>(D));
 
     // compute max ideal stats
-    std::cout << "compute max ideal stats" << std::endl;
+//     std::cout << "compute max ideal stats" << std::endl;
     if (D > 4) {
       temp = log(D);
       maxrat = to<RR>(max_p) / temp;
@@ -685,7 +785,7 @@ int process_file(int index, char *fname, char *iprefix, char *oprefix) {
         data.maxlogratD = D;
       }
       temp *= temp;
-      maxrat = to<RR>(max_p) / temp;
+//       maxrat = to<RR>(max_p) / temp;
       data.sumloglograt += maxrat;
       if (maxrat > data.maxloglograt) {
         data.maxloglograt = to<double>(maxrat);
@@ -701,10 +801,10 @@ int process_file(int index, char *fname, char *iprefix, char *oprefix) {
       D4 = 0;
 
     // look for max p splits
-    std::cout << "look for max p splits" << std::endl;
+//     std::cout << "look for max p splits" << std::endl;
     if (max_p > LASTPLARGE || num_p > MAXPLARGE) {
-      cout << "Prime Ideal: D = " << D << " max p = " << max_p
-           << " num p = " << num_p << endl;
+//       cout << "Prime Ideal: D = " << D << " max p = " << max_p
+//            << " num p = " << num_p << endl;
     } else {
 
       if (D4) {
@@ -728,32 +828,49 @@ int process_file(int index, char *fname, char *iprefix, char *oprefix) {
     }
 
     // compute prank data
-    std::cout << "compute prank data" << std::endl;
+//     std::cout << "compute prank data" << std::endl;
     numnoncyc = 0;
     for (j = 0; j < MAXPLARGE; j++)
       multp[j] = 0;
 
     sp.reset(2);
-    long second = oddCl[1];
+
+//     long second = oddCl[1];
+
+    // Alternative to long second = oddCl[1], in case rank = 1
+    long second = 0;
+    if (rank > 1) {
+      second = oddCl[1];
+    }
+
     int donep = 0;
-    if (rank == 1 || oddCl[1] == 1)
+//     if (rank == 1 || oddCl[1] == 1) {
+//       donep = 1;
+//     }
+
+    // Alternative test to the if (rank == 1 || oddCl[1] == 1) block, in case rank == 1
+    if (rank == 1) {
       donep = 1;
+    }
+    else if (oddCl[1] == 1) {
+    donep = 1;
+    }
 
     j = 0;
     while (!donep || j < MAXP) {
-      std::cout << "im trapped here" << std::endl;
+//       std::cout << "Iterating while(!donep || j < MAXP)" << std::endl;
       p = sp.next();
       prank = p_rank(oddCl, rank, p);
 
       if (prank > 6) {
-        cout << "P-rank: D = " << D << " " << p << "-rank = " << prank << endl;
+//         cout << "P-rank: D = " << D << " " << p << "-rank = " << prank << endl;
       }
 
       if (prank > 1) {
 
         if (j >= MAXPLARGE) {
-          cout << "P-rank: D = " << D << " " << p << "-rank = " << prank
-               << endl;
+//           cout << "P-rank: D = " << D << " " << p << "-rank = " << prank
+//                << endl;
         } else {
 
           // save prank
@@ -784,10 +901,10 @@ int process_file(int index, char *fname, char *iprefix, char *oprefix) {
 
           if (e1 >= MAXE1 || e2 >= MAXE2 || e3 >= MAXE3 || e4 >= MAXE4 ||
               e5 >= MAXE5 || e6 >= MAXE6) {
-            cout << "P-rank: D = " << D << ": " << p << "-rank = " << prank
-                 << endl;
-            cout << "Exponents = " << e1 << ' ' << e2 << ' ' << e3 << ' ' << e4
-                 << ' ' << e5 << ' ' << e6 << endl;
+//             cout << "P-rank: D = " << D << ": " << p << "-rank = " << prank
+//                  << endl;
+//             cout << "Exponents = " << e1 << ' ' << e2 << ' ' << e3 << ' ' << e4
+//                  << ' ' << e5 << ' ' << e6 << endl;
           } else {
 
             // save prank data
@@ -839,11 +956,11 @@ int process_file(int index, char *fname, char *iprefix, char *oprefix) {
     }
 
     // doubly and trebly noncyclic
-    std::cout << "doubly and trebly noncyclic" << std::endl;
+//     std::cout << "doubly and trebly noncyclic" << std::endl;
     if (numnoncyc > 1) {
 
       if (numnoncyc > 6) {
-        cout << "Multiply Non-cyclic: D = " << D << " noncyclic > 6" << endl;
+//         cout << "Multiply Non-cyclic: D = " << D << " noncyclic > 6" << endl;
       }
 
       ex[0] = ex[1] = ex[2] = ex[3] = ex[4] = ex[5] = 0;
@@ -878,7 +995,7 @@ int process_file(int index, char *fname, char *iprefix, char *oprefix) {
     }
 
     // check if oddCL is noncyclic
-    std::cout << "check if oddCL is noncyclic" << std::endl;
+//     std::cout << "check if oddCL is noncyclic" << std::endl;
     if (numnoncyc > 0 && multp[0] != 0) {
       if (D4)
         data.noncyc0++;
@@ -1022,11 +1139,11 @@ int process_file(int index, char *fname, char *iprefix, char *oprefix) {
     }
   }
 
-  std::cout << "process_file: closing temp file!" << std::endl;
+//   std::cout << "process_file: closing temp file!" << std::endl;
   tempfile.close();
 
   // update smallh
-  std::cout << "process_file: update smallh" << std::endl;
+//   std::cout << "process_file: update smallh" << std::endl;
   pair<long, ZZ> newpair;
   long element, tempelement;
   ZZ elementD, tempD;
@@ -1050,32 +1167,44 @@ int process_file(int index, char *fname, char *iprefix, char *oprefix) {
     }
   }
 
-  std::cout << "process_file: stop timer" << std::endl;
-  time.stop_timer();
-  data.ttime = time.user_time();
-  cout << "Time for interval " << index << ": ";
-  MyTime(time.user_time());
-  cout << endl;
+//   std::cout << "process_file: stop timer" << std::endl;
+
+//   time.stop_timer();
+//   data.ttime = time.user_time();
+//   cout << "Time for interval " << index << ": ";
+//   MyTime(time.user_time());
+//   cout << endl;
 
   // close file
-  std::cout << "process_file: close file" << std::endl;
+//   std::cout << "process_file: close file" << std::endl;
   infile.close();
 
   // write the computed interval data to an output file
-  std::cout << "process_file: write the computed interval data to an output file" << std::endl;
+//   std::cout << "process_file: write the computed interval data to an output file" << std::endl;
   char name[50];
   sprintf(name, "/data%d.dat", index);
   data.write_file(name, oprefix);
+
+  // temporary readable file
+//   std::cout << "process_file: write the computed interval data to a readable output file" << std::endl;
+  char name_readable[55];
+  sprintf(name_readable, "/data%d_readable.dat", index);
+  data.write_file_readable(name_readable, oprefix);
 
   sprintf(syscall, "gzip %s/data%d.dat", oprefix, index);
   if (system(syscall) != 0)
     perror("Could not zip data file");
 
+  // zipping temporary readable file
+  sprintf(syscall, "gzip %s/data%d_readable.dat", oprefix, index);
+  if (system(syscall) != 0)
+    perror("Could not zip data file");
+
   sprintf(zipper, "gzip %s", unzipped);
   if (system(zipper) != 0)
-    perror("Could not zip iq file");
+    perror("Could not zip rq file");
 
-  std::cout << "process_file: finish!" << std::endl;
+//   std::cout << "process_file: finish!" << std::endl;
   return 0;
 }
 
@@ -3802,6 +3931,7 @@ int output_interval(iq_data data, ZZ thresh) {
     exit(1);
   }
   // file of maximum odd parts of class numbers
+//   std::cout << "OUTPUT_INTERVAL: maxhoddfile" << std::endl;
   strcpy(fname, fprefix);
   strcat(fname, maxhoddfile);
   if ((fp0 = fopen(fname, "a")) == NULL) {
@@ -3824,6 +3954,7 @@ int output_interval(iq_data data, ZZ thresh) {
   fclose(fp0);
 
   // file of noncyclic odd part of class group
+//   std::cout << "OUTPUT_INTERVAL: " << std::endl;
   strcpy(fname, fprefix);
   strcat(fname, ncycfile);
   if ((fp = fopen(fname, "a")) == NULL) {
@@ -3831,6 +3962,7 @@ int output_interval(iq_data data, ZZ thresh) {
     exit(1);
   }
   // file of noncyclic odd part of class group
+//   std::cout << "OUTPUT_INTERVAL: " << std::endl;
   strcpy(fname, fprefix);
   strcat(fname, ncyc0file);
   if ((fp0 = fopen(fname, "a")) == NULL) {
@@ -3838,6 +3970,7 @@ int output_interval(iq_data data, ZZ thresh) {
     exit(1);
   }
   // file of noncyclic odd part of class group
+//   std::cout << "OUTPUT_INTERVAL: " << std::endl;
   strcpy(fname, fprefix);
   strcat(fname, ncyc1file);
   if ((fp1 = fopen(fname, "a")) == NULL) {
@@ -4053,8 +4186,10 @@ int output_interval(iq_data data, ZZ thresh) {
   // *******************************
   // *** 5. number of generators ***
   // *******************************
+//   std::cout << "OUTPUT_INTERVAL: 5. number of generators" << std::endl;
 
   // file of maximum prime ideal required
+//   std::cout << "OUTPUT_INTERVAL: file of maximum prime ideal required" << std::endl;
   strcpy(fname, fprefix);
   strcat(fname, maxpfile);
   if ((fp = fopen(fname, "a")) == NULL) {
@@ -4062,6 +4197,7 @@ int output_interval(iq_data data, ZZ thresh) {
     exit(1);
   }
   // max log (and log log) ratios file
+//   std::cout << "OUTPUT_INTERVAL: max log (and log log) ratios file" << std::endl;
   strcpy(fname, fprefix);
   strcat(fname, maxratfile);
   if ((fp0 = fopen(fname, "a")) == NULL) {
@@ -4069,6 +4205,7 @@ int output_interval(iq_data data, ZZ thresh) {
     exit(1);
   }
   // print out statistics
+//   std::cout << "OUTPUT_INTERVAL: print out statistics" << std::endl;
   fprintf(fp, "%lld & %ld & %lld & %ld & %lld \\\\ \\hline\n",
           to<long long>(thresh), to<long>(data.maxp), to<long long>(data.maxpD),
           to<long>(data.localmaxp), to<long long>(data.localmaxpD));
@@ -4084,6 +4221,7 @@ int output_interval(iq_data data, ZZ thresh) {
   fclose(fp0);
 
   // qabc
+//   std::cout << "OUTPUT_INTERVAL: qabc" << std::endl;
   strcpy(fname, fprefix);
   strcat(fname, smallhfile);
   if ((fp = fopen(fname, "a")) == NULL) {
@@ -4097,6 +4235,8 @@ int output_interval(iq_data data, ZZ thresh) {
   }
   fprintf(fp, "\n");
   fclose(fp);
+
+//   std::cout << "OUTPUT_INTERVAL: all done!" << std::endl;
 
   return 0;
 }
@@ -4118,6 +4258,7 @@ int output_graph_interval(iq_data data, ZZ gthresh) {
   ZZ minD, maxD;
 
   // file of min LLI
+//   std::cout << "Output_Graph_Interval: file of min LLI" << std::endl;
   strcpy(fname, fprefix);
   strcat(fname, localLLIgraph);
   if ((fp = fopen(fname, "a")) == NULL) {
@@ -4126,6 +4267,7 @@ int output_graph_interval(iq_data data, ZZ gthresh) {
   }
 
   // print out statistics
+//   std::cout << "Output_Graph_Interval: print out statistics" << std::endl;
   minLLI = data.minLLI0;
   minD = data.minLLI0D;
   if (data.minLLI1 < minLLI) {
@@ -4148,6 +4290,7 @@ int output_graph_interval(iq_data data, ZZ gthresh) {
   }
 
   // print out statistics
+//   std::cout << "Output_Graph_Interval: print out statistics" << std::endl;
   maxULI = data.maxULI0;
   maxD = data.maxULI0D;
   if (data.maxULI1 > maxULI) {
@@ -4164,8 +4307,10 @@ int output_graph_interval(iq_data data, ZZ gthresh) {
   // ***********************************
   // *** 2. divisors of h statistics ***
   // ***********************************
+//   std::cout << "Output_Graph_Interval: 2. divisors of h statistics" << std::endl;
 
   // divisors of h for p = 3
+//   std::cout << "Output_Graph_Interval: divisors of h for p = 3" << std::endl;
   strcpy(fname, fprefix);
   strcat(fname, pdivs3graph);
   if ((fp3 = fopen(fname, "a")) == NULL) {
@@ -4173,6 +4318,7 @@ int output_graph_interval(iq_data data, ZZ gthresh) {
     exit(1);
   }
   // divisors of h for p = 5
+//   std::cout << "Output_Graph_Interval: divisors of h for p = 5" << std::endl;
   strcpy(fname, fprefix);
   strcat(fname, pdivs5graph);
   if ((fp5 = fopen(fname, "a")) == NULL) {
@@ -4180,6 +4326,7 @@ int output_graph_interval(iq_data data, ZZ gthresh) {
     exit(1);
   }
   // divisors of h for p = 7
+//   std::cout << "Output_Graph_Interval: divisors of h for p = 7" << std::endl;
   strcpy(fname, fprefix);
   strcat(fname, pdivs7graph);
   if ((fp7 = fopen(fname, "a")) == NULL) {
@@ -4188,6 +4335,7 @@ int output_graph_interval(iq_data data, ZZ gthresh) {
   }
 
   // calculate pr(p|h)
+//   std::cout << "Output_Graph_Interval: calculate pr(p|h)" << std::endl;
   sp.reset(3);
   p = sp.next();
   for (i = 0; i < MAXP; i++) {
@@ -4197,6 +4345,7 @@ int output_graph_interval(iq_data data, ZZ gthresh) {
   }
 
   // print points to graph
+//   std::cout << "Output_Graph_Interval: print points to graph" << std::endl;
   fprintf(fp3, "%lld\t%.5f\n", to<long long>(gthresh),
           to<double>(to<RR>(data.pdivs0[1][0] + data.pdivs1[1][0]) /
                      (to<RR>(data.total0 + data.total1) * prob[0])));
@@ -4215,8 +4364,10 @@ int output_graph_interval(iq_data data, ZZ gthresh) {
   // **********************************************
   // *** 3a. noncyclic odd parts of class group ***
   // **********************************************
+//   std::cout << "Output_Graph_Interval: 3a. noncyclic odd parts of class group" << std::endl;
 
   // noncyclic points
+//   std::cout << "Output_Graph_Interval: noncyclic points" << std::endl;
   strcpy(fname, fprefix);
   strcat(fname, ncycgraph);
   if ((fp = fopen(fname, "a")) == NULL) {
@@ -4225,6 +4376,7 @@ int output_graph_interval(iq_data data, ZZ gthresh) {
   }
 
   // print points to graph
+//   std::cout << "Output_Graph_Interval: print points to graph" << std::endl;
   fprintf(fp, "%lld\t%.5f\n", to<long long>(gthresh),
           to<double>((1 - (to<RR>(data.noncyc0 + data.noncyc1) /
                            to<RR>(data.total0 + data.total1))) /
@@ -4236,10 +4388,13 @@ int output_graph_interval(iq_data data, ZZ gthresh) {
   // ***********************
   // *** 3b. p-rank data ***
   // ***********************
+//   std::cout << "Output_Graph_Interval: 3b. p-rank data" << std::endl;
 
   // check for ranks 2, 3
+//   std::cout << "Output_Graph_Interval: check for ranks 2, 3" << std::endl;
   for (i = 2; i <= 4; i++) {
 
+//     std::cout << "Output_Graph_Interval: weird if statements - i = " << i << std::endl;
     if (i == 2) {
       // p = 2, r = 2
       strcpy(fname, fprefix);
@@ -4314,17 +4469,22 @@ int output_graph_interval(iq_data data, ZZ gthresh) {
       }
     }
 
+//     std::cout << "Output_Graph_Interval: phew got past the weird if statements" << std::endl;
     sp.reset(2);
     for (j = 0; j < 4; j++) {
       p = sp.next();
 
       // calculate ratios
+//       std::cout << "Output_Graph_Interval: calculate ratios" << std::endl;
       ratio[j] = nu(p);
       ratio[j] /= pow(to<double>(p), i * i);
       value = nu(p, i);
       ratio[j] /= (value * value);
 
+//       std::cout << "Output_Graph_Interval: ratio[" << j << "] is " << ratio[j] << std::endl;
+
       // find exponents
+//       std::cout << "Output_Graph_Interval: find exponents" << std::endl;
       pr0 = pr1 = 0;
       if (i == 2) {
         s3 = s4 = s5 = s6 = 0;
@@ -4363,25 +4523,36 @@ int output_graph_interval(iq_data data, ZZ gthresh) {
                 }
 
       // print points to graph
-      if (j == 0)
+//       std::cout << "Output_Graph_Interval: print points to graph" << std::endl;
+      if (j == 0) {
+//         std::cout << "Output_Graph_Interval: j == 0" << std::endl;
         fprintf(fp, "%lld\t%.5f\n", to<long long>(gthresh),
                 to<double>(to<RR>(pr0 + pr1) /
                            (to<RR>(data.total0 + data.total1) * ratio[0])));
+      }
+
       if (i < 4) {
-        if (j == 1)
+        if (j == 1) {
+//           std::cout << "Output_Graph_Interval: j == 1" << std::endl;
           fprintf(fp3, "%lld\t%.5f\n", to<long long>(gthresh),
                   to<double>(to<RR>(pr0 + pr1) /
                              (to<RR>(data.total0 + data.total1) * ratio[1])));
-        else if (j == 2)
+        }
+        else if (j == 2) {
+//           std::cout << "Output_Graph_Interval: j == 2" << std::endl;
           fprintf(fp5, "%lld\t%.5f\n", to<long long>(gthresh),
                   to<double>(to<RR>(pr0 + pr1) /
                              (to<RR>(data.total0 + data.total1) * ratio[2])));
-        else
+        }
+        else if (j == 3) {
+//           std::cout << "Output_Graph_Interval: else" << std::endl;
           fprintf(fp7, "%lld\t%.5f\n", to<long long>(gthresh),
                   to<double>(to<RR>(pr0 + pr1) /
                              (to<RR>(data.total0 + data.total1) * ratio[3])));
+        }
       }
     }
+
     fclose(fp);
     if (i < 4) {
       fclose(fp3);

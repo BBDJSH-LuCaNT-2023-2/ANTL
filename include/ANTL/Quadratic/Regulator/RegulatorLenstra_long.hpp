@@ -546,12 +546,16 @@ template <class U> ZZ RegulatorLenstraData<long, U>::estimate_hR_error() {
   ZZ err;
   RR Aval, Fval, temp;
 
-  if (DBG_EHRERR)
-    std::cout << "EHRERR: l_function->terms_used(1) is "
-              << l_function->terms_used(1) << std::endl;
 
   long n = get_optimal_Q_cnum();
   RR FI = l_function->approximateL1(n);
+
+  if (DBG_EHRERR) {
+    std::cout << "EHRERR: l_function->terms_used(1) is " << l_function->terms_used(1) << std::endl;
+    std::cout << "EHRERR: n is " << n << std::endl;
+    std::cout << "EHRERR: FI is " << FI << std::endl;
+
+  }
 
   if (l_function->terms_used(1) == 0) {
     if (DBG_EHRERR)
@@ -559,18 +563,13 @@ template <class U> ZZ RegulatorLenstraData<long, U>::estimate_hR_error() {
     return ZZ::zero();
   }
 
-  if (DBG_EHRERR)
-    std::cout << "EHRERR: n is " << n << std::endl;
-  if (DBG_EHRERR)
-    std::cout << "EHRERR: FI is " << FI << std::endl;
-
   Aval = l_function->calculate_L1_error(delta, l_function->terms_used(1));
   Fval = exp(Aval) - 1;
 
-  if (DBG_EHRERR)
+  if (DBG_EHRERR) {
     std::cout << "EHRERR: Aval is " << Aval << std::endl;
-  if (DBG_EHRERR)
     std::cout << "EHRERR: Fval is " << Fval << std::endl;
+  }
 
   temp = 1 - exp(-Aval);
   if (temp > Fval)
@@ -588,14 +587,16 @@ template <class U> ZZ RegulatorLenstraData<long, U>::estimate_hR_error() {
     Fval *= FI * SqrRoot(to_RR(delta)) / 2;
   }
 
-  if (DBG_EHRERR)
+  if (DBG_EHRERR) {
     std::cout << "EHRERR: Fval is " << Fval << std::endl;
+  }
 
   err = CeilToZZ(Fval * log(to_RR(2))) >> 1;
 
   if (DBG_LENSTR || DBG_EHRERR) {
     std::cout << "EHRERR: FINISH" << std::endl;
   }
+
   return err;
 }
 
@@ -1362,7 +1363,7 @@ void RegulatorLenstraData<long, U>::find_hstar(ZZ &hstar, const U &S,
       std::cout << "FHSTAR: Finding power of current prime" << std::endl;
     }
     while (target_qie.is_one() &&
-           abs(target_qie.get_distance() - target_distance) < 0.01) {
+           abs(target_qie.get_distance() - target_distance) < 0.1) {
       if (DBG_FHSTAR) {
         std::cout << "FHSTAR: power is " << power << std::endl;
       }
