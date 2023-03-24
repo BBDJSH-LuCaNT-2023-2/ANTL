@@ -27,6 +27,17 @@ private:
   bool DBG_GENOPQ = false;
   bool DBG_FHSTAR = false;
 
+private:
+  // TIMING CONSTANTS
+  long estimate_hR_usecs = 0;
+  long compute_h_star_R_usecs = 0;
+  long check_h_star_R_usecs = 0;
+  long factor_h_star_R_usecs = 0;
+
+public:
+  // GETTERS FOR TIMING CONSTANTS
+  vector<long> get_timings() {return {estimate_hR_usecs, compute_h_star_R_usecs, check_h_star_R_usecs, factor_h_star_R_usecs};}
+
 // public:
 //   void CHG_DBG_LENSTR(bool flag) {DBG_LENSTR = flag;}
 //   void CHG_DBG_EHRERR(bool flag) {DBG_EHRERR = flag;}
@@ -43,7 +54,7 @@ private:
 //   void CHG_DBG_GENOPQ(bool flag) {DBG_GENOPQ = flag;}
 //   void CHG_DBG_FHSTAR(bool flag) {DBG_FHSTAR = flag;}
 //
-// private:
+private:
   U regulator;
 
   ZZ hstar;
@@ -161,7 +172,7 @@ template <class U> std::string RegulatorLenstraData<long, U>::get_case_type() {
 // of Shanks and improvements of Lenstra.
 
 template <class U> void RegulatorLenstraData<long, U>::regulator_lenstra() {
-  std::cout << "reg_len<long> is using reg_len<long>.hpp" << std::endl;
+  std::cout << "reg_len<long> is using reg_len<long, U>.hpp" << std::endl;
 
   //
   // initialize hash table
@@ -1362,8 +1373,7 @@ void RegulatorLenstraData<long, U>::find_hstar(ZZ &hstar, const U &S,
     if (DBG_FHSTAR) {
       std::cout << "FHSTAR: Finding power of current prime" << std::endl;
     }
-    while (target_qie.is_one() &&
-           abs(target_qie.get_distance() - target_distance) < 0.1) {
+    while (target_qie.is_one() && target_qie.get_distance() > 1) {
       if (DBG_FHSTAR) {
         std::cout << "FHSTAR: power is " << power << std::endl;
       }

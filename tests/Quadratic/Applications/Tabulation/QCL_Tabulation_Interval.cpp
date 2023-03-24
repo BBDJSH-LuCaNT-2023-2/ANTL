@@ -45,6 +45,7 @@ int main(int argc, char **argv) {
   long long Dll;
   long n, i, Dl;
   //   timer t;
+  vector<long> timings = {0, 0, 0, 0, 0};
   int vb, tp, table, uncond, alg, prec;
 
   if (argc != 9) {
@@ -126,10 +127,8 @@ int main(int argc, char **argv) {
   auto start_trial_time = high_resolution_clock::now();
   auto finish_trial_time = high_resolution_clock::now();
 
-  duration<long int, std::ratio<1, 1000000>> dur_regulator_trial(0);
   duration<long int, std::ratio<1, 1000000>> dur_class_group_trial(0);
 
-  duration<long int, std::ratio<1, 1000000>> total_dur_regulator_trial(0);
   duration<long int, std::ratio<1, 1000000>> total_dur_class_group_trial(0);
 
 //   std::cout << std::fixed;
@@ -166,14 +165,16 @@ int main(int argc, char **argv) {
     l_function.init(to_long(D), 2);
     // ===TEMPORARY INITIALIZATION===
 
-    start_trial_time = high_resolution_clock::now();
-    tuple<double, ZZ, long> regulator_and_hstar = get_regulator_and_hstar(QO, l_function);
-    finish_trial_time = high_resolution_clock::now();
-
-    dur_regulator_trial = duration_cast<microseconds>(finish_trial_time - start_trial_time);
+    tuple<double, ZZ, vector<long>> regulator_and_hstar = get_regulator_and_hstar(QO, l_function);
 
     double regulator = std::get<0>(regulator_and_hstar);
     ZZ h_star = std::get<1>(regulator_and_hstar);
+
+    //Get and update timings
+    vector<long> trial_timings = std::get<2>(regulator_and_hstar);
+    for(int i = 0; i < 5; i++) {
+      timings[i] += trial_timings[i];
+    }
 
     pair<vector<long>, long> class_group_and_time;
     if(alg == 0) {
@@ -198,7 +199,6 @@ int main(int argc, char **argv) {
     class_group.erase(std::remove(class_group.begin(), class_group.end(), 1), class_group.end());
 
     //Computing new durations totals
-    total_dur_regulator_trial += dur_regulator_trial;
     total_dur_class_group_trial += dur_class_group_trial;
 
     //Outputting to stream
@@ -214,19 +214,19 @@ int main(int argc, char **argv) {
   double reg_secs, clg_secs, tot_secs;
   std::string reg_str, clg_str, tot_str;
 
-  reg_mins = total_dur_regulator_trial.count() / 60000000;
+//   reg_mins = total_dur_regulator_trial.count() / 60000000;
   clg_mins = total_dur_class_group_trial.count() / 60000000;
   tot_mins = dur_overall_time.count() / 60000000;
 
-  reg_secs = double(double(total_dur_regulator_trial.count()) / double(1000000)) - double(reg_mins*60);
+//   reg_secs = double(double(total_dur_regulator_trial.count()) / double(1000000)) - double(reg_mins*60);
   clg_secs = double(double(total_dur_class_group_trial.count()) / double(1000000)) - double(clg_mins*60);
   tot_secs = double(double(dur_overall_time.count()) / double(1000000)) - double(tot_mins*60);
 
-  reg_str = to_string(reg_mins);
+//   reg_str = to_string(reg_mins);
   clg_str = to_string(clg_mins);
   tot_str = to_string(tot_mins);
 
-  reg_str += "m" + to_string(long(floor(reg_secs))) + ".";
+//   reg_str += "m" + to_string(long(floor(reg_secs))) + ".";
   clg_str += "m" + to_string(long(floor(clg_secs))) + ".";
   tot_str += "m" + to_string(long(floor(tot_secs))) + ".";
 
@@ -250,7 +250,11 @@ int main(int argc, char **argv) {
 //
 //   std::cout << std::endl;
 
-  std::cout << "Time spent computing regulator: " << reg_str << std::endl;
+  std::cout << "Time spent computing regulator: "; MyTime(timings[4]); std::cout << std::endl;
+  std::cout << "  Time spent estimating hR   : "; MyTime(timings[0]); std::cout << std::endl;
+  std::cout << "  Time spent computing (h^*)R: "; MyTime(timings[1]); std::cout << std::endl;
+  std::cout << "  Time spent checking (h^*)R : "; MyTime(timings[2]); std::cout << std::endl;
+  std::cout << "  Time spent factoring (h^*)R: "; MyTime(timings[3]); std::cout << std::endl;
   std::cout << "Time spent computing class grp: " << clg_str << std::endl;
   std::cout << "Time spent computing overall  : " << tot_str << std::endl;
 

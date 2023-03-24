@@ -11,6 +11,8 @@
 #include <cmath>
 #include <gmp.h>
 
+#include <chrono>
+
 #include <NTL/GF2EX.h>
 #include <NTL/RR.h>
 #include <NTL/ZZ.h>

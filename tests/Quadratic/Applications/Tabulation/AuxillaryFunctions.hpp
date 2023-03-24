@@ -25,7 +25,7 @@
 using namespace NTL;
 using namespace ANTL;
 
-std::tuple<double, ZZ, long> get_regulator_and_hstar(QuadraticOrder<long> &quad_order, L_function<long> &l_function) {
+std::tuple<double, ZZ, vector<long>> get_regulator_and_hstar(QuadraticOrder<long> &quad_order, L_function<long> &l_function) {
   // Setting up the RegulatorLenstraData object
   RegulatorLenstraData<long, double> regulator_lenstra_data{&quad_order,
                                                           &l_function};
@@ -45,7 +45,12 @@ std::tuple<double, ZZ, long> get_regulator_and_hstar(QuadraticOrder<long> &quad_
   std::chrono::duration<long int, std::ratio<1, 1000000>> dur_regulator_trial = std::chrono::duration_cast<std::chrono::microseconds>(finish_trial_time - start_trial_time);
 
   long reg_mins = dur_regulator_trial.count();
-  return {regulator, h_star, reg_mins};
+
+  // Get timing data
+  vector<long> timings = regulator_lenstra_data.get_timings();
+  timings.push_back(reg_mins);
+
+  return {regulator, h_star, timings};
 }
 
 std::pair<vector<long>, long> get_class_group_BSGS(QuadraticOrder<long> &quad_order, double regulator, ZZ h_star) {
