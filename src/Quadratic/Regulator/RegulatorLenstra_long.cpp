@@ -1,6 +1,10 @@
 #include <ANTL/Quadratic/Regulator/RegulatorLenstra_long.hpp>
 
 template <> void RegulatorLenstraData<long, double>::regulator_lenstra() {
+  if (DBG_LENSTR) {
+    std::cout << "reg_len<long> is using reg_len<long, double>.hpp" << std::endl;
+  }
+
   //
   // initialize hash table
   //
@@ -15,7 +19,21 @@ template <> void RegulatorLenstraData<long, double>::regulator_lenstra() {
   clear(S);
   clear(regulator);
 
+#ifdef TIMING
+  // Start timing for subprocess 1 - Estimating hR
+  auto start_t = std::chrono::high_resolution_clock::now();
+#endif
+
   double E = approximate_hR();
+
+#ifdef TIMING
+  auto finish_t = std::chrono::high_resolution_clock::now();
+  std::chrono::duration<long int, std::ratio<1, 1000000>> estimate_hR_dur = std::chrono::duration_cast<std::chrono::microseconds>(finish_t - start_t);
+  estimate_hR_usecs = estimate_hR_dur.count();
+
+  // Start timing for subprocess 2 - Computing (h^*)R, an integer multiple of the regulator
+  start_t = std::chrono::high_resolution_clock::now();
+#endif
 
   K = estimate_hR_error() >> 1;
 
@@ -296,6 +314,15 @@ template <> void RegulatorLenstraData<long, double>::regulator_lenstra() {
     std::cout << "LENSTR: S is " << S << std::endl;
   }
 
+#ifdef TIMING
+  finish_t = std::chrono::high_resolution_clock::now();
+  std::chrono::duration<long int, std::ratio<1, 1000000>> compute_h_star_R_dur = std::chrono::duration_cast<std::chrono::microseconds>(finish_t - start_t);
+  compute_h_star_R_usecs = compute_h_star_R_dur.count();
+
+  // Start timing for subprocess 3 - Check R < E/sqrt(L)
+  start_t = std::chrono::high_resolution_clock::now();
+#endif
+
   //
   // factor out h*
   //
@@ -365,6 +392,15 @@ template <> void RegulatorLenstraData<long, double>::regulator_lenstra() {
       std::cout << "LENSTR: S is " << S << std::endl;
     }
 
+#ifdef TIMING
+    finish_t = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<long int, std::ratio<1, 1000000>> check_h_star_R_dur = std::chrono::duration_cast<std::chrono::microseconds>(finish_t - start_t);
+    check_h_star_R_usecs = check_h_star_R_dur.count();
+
+    // Start timing for subprocess 4 - Factoring (h^*)R - Determining h^*
+    start_t = std::chrono::high_resolution_clock::now();
+#endif
+
     ZZ Pmax;
     if (!IsZero(regulator)) {
       hstar = (FloorToZZ(log(S) / log(RR(2)))) /
@@ -389,6 +425,12 @@ template <> void RegulatorLenstraData<long, double>::regulator_lenstra() {
                 << std::endl;
       std::cout << "LENSTR: Factoring out h* - nuclose start" << std::endl;
     }
+
+#ifdef TIMING
+    finish_t = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<long int, std::ratio<1, 1000000>> factor_h_star_R_dur = std::chrono::duration_cast<std::chrono::microseconds>(finish_t - start_t);
+    factor_h_star_R_usecs = factor_h_star_R_dur.count();
+#endif
 
     nuclose(C, FloorToZZ(regulator));
     C.adjust(regulator);

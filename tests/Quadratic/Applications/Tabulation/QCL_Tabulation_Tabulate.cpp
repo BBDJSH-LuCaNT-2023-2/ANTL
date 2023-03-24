@@ -312,7 +312,8 @@ using namespace ANTL;
       ZZ Dlist[LIST_SIZE_QUADRATIC], L, H, maxH, IS;
 //       QuadraticOrder<ZZ> QO;
 //       vec_ZZ Cl;
-      long n, i, j, idx, max_idx, Dl, oldDl, t1, tr = 0, tc = 0, rank;
+      long n, i, j, idx, max_idx, Dl, oldDl, t1, tc = 0, rank;
+      vector<long> tr;
       long long D, oldD;
       char fname[50], hname[50], zipper[100], check[100], mkdir[100];
       long alg = 1;
@@ -383,7 +384,7 @@ using namespace ANTL;
         outfile.open(fname);
 
         t.start_timer();
-        tr = 0;
+        tr = {0, 0, 0, 0, 0};
         tc = 0;
 
         // compute Cl for all fundamental discriminants D with L <= |D| <= H
@@ -443,11 +444,13 @@ using namespace ANTL;
           L_function<long> l_function;
           l_function.init(to_long(Dl), 2);
 
-          tuple<double, ZZ, long> regulator_and_hstar_tuple = get_regulator_and_hstar(QO, l_function);
+          tuple<double, ZZ, vector<long>> regulator_and_hstar_tuple = get_regulator_and_hstar(QO, l_function);
 
           double regulator = std::get<0>(regulator_and_hstar_tuple);
           ZZ h_star = std::get<1>(regulator_and_hstar_tuple);
-          tr += std::get<2>(regulator_and_hstar_tuple);
+          for(int i = 0; i < 5; i++) {
+            tr[i] += std::get<2>(regulator_and_hstar_tuple)[i];
+          }
 
           vector<long> class_group;
           if(alg == 0) {
@@ -491,7 +494,7 @@ using namespace ANTL;
         MPI_Pack(&idx, 1, MPI_LONG, buffer, BUFLEN, &position, MPI_COMM_WORLD);
         MPI_Pack(&n, 1, MPI_LONG, buffer, BUFLEN, &position, MPI_COMM_WORLD);
         MPI_Pack(&t1, 1, MPI_LONG, buffer, BUFLEN, &position, MPI_COMM_WORLD);
-        MPI_Pack(&tr, 1, MPI_LONG, buffer, BUFLEN, &position, MPI_COMM_WORLD);
+        MPI_Pack(&tr[0], 1, MPI_LONG, buffer, BUFLEN, &position, MPI_COMM_WORLD);
         MPI_Pack(&tc, 1, MPI_LONG, buffer, BUFLEN, &position, MPI_COMM_WORLD);
         MPI_Send(buffer, BUFLEN, MPI_PACKED, 0, TIME_DATA, MPI_COMM_WORLD);
 

@@ -484,9 +484,9 @@ TEST_CASE("RegulatorLenstra<long>: Special Case 1", "[RegulatorLenstra][SpecialC
 
   std::cout << "Testing RegulatorLenstra<long>" << std::endl;
 
-  std::vector<long> special_cases = {21311620233, 21951681929, 35513779417};
-  // Correct regulators = 39982.0156149371, 4165.25192337069, 5093.08351595829
-  std::vector<double> special_regulators = {39982015, 4165251, 5093083};
+  std::vector<long> special_cases = {80344469409, 83833990689, 88318924233, 91578259169};
+  // Correct regulators = 23748.083, 11984.567, 8877.815
+  std::vector<double> special_regulators = {23748083, 11984567, 8877815, 9129630};
 
   int test_start = 0;
 //   int test_bound = 1;
