@@ -84,13 +84,16 @@ int main(int argc, char **argv) {
       std::cout << "Using L(s,X) tables" << std::endl;
     if (uncond)
       std::cout << "Using unconditional L(1,X) approximations" << std::endl;
-    if (alg == 0) {
+    if (alg == 1) {
       std::cout << "Using BSGS" << std::endl;
     }
-    else {
+    else if (alg == 2){
       std::cout << "Using BS" << std::endl;
     }
   }
+
+  L_function<long> l_function;
+  l_function.create_L1_tables(to_long(H + 1), ANTL::log (ANTL::sqrt (double (2))));
 
   // set quadratic order verbosity level
   //   QuadraticOrder<ZZ>::verbose(vb);
@@ -161,7 +164,6 @@ int main(int argc, char **argv) {
     red_plain_real_opt_object.set_RelativeGenerator(quad_number3);
     QO.set_red_best(red_plain_real_opt_object);
 
-    L_function<long> l_function;
     l_function.init(to_long(D), 2);
     // ===TEMPORARY INITIALIZATION===
 
@@ -177,7 +179,7 @@ int main(int argc, char **argv) {
     }
 
     pair<vector<long>, long> class_group_and_time;
-    if(alg == 0) {
+    if(alg == 1) {
       // Computing and timing a single class group BSGS computation
       start_trial_time = high_resolution_clock::now();
       class_group_and_time = get_class_group_BSGS(QO, regulator, h_star);
@@ -185,7 +187,7 @@ int main(int argc, char **argv) {
 
       dur_class_group_trial = duration_cast<microseconds>(finish_trial_time - start_trial_time);
     }
-    else if(alg == 1) {
+    else if(alg == 2) {
       // Computing and timing a single class group BS computation
       start_trial_time = high_resolution_clock::now();
       class_group_and_time = get_class_group_BS(QO, regulator, h_star);
@@ -194,16 +196,20 @@ int main(int argc, char **argv) {
       dur_class_group_trial = duration_cast<microseconds>(finish_trial_time - start_trial_time);
     }
 
-    //Formatting the class group first
-    vector<long> class_group = std::get<0>(class_group_and_time);
-    class_group.erase(std::remove(class_group.begin(), class_group.end(), 1), class_group.end());
-
-    //Computing new durations totals
-    total_dur_class_group_trial += dur_class_group_trial;
-
-    //Outputting to stream
     std::cout << " " << long(floor(regulator*1000)) << flush;
-    std::cout << " " << class_group << std::endl;
+
+    if(alg > 0) {
+      //Formatting the class group first
+      vector<long> class_group = std::get<0>(class_group_and_time);
+      class_group.erase(std::remove(class_group.begin(), class_group.end(), 1), class_group.end());
+
+      //Computing new durations totals
+      total_dur_class_group_trial += dur_class_group_trial;
+
+      std::cout << " " << class_group << std::flush;
+    }
+
+    std::cout << std::endl;
   }
 
   finish_overall_time = high_resolution_clock::now();
@@ -214,35 +220,37 @@ int main(int argc, char **argv) {
   double reg_secs, clg_secs, tot_secs;
   std::string reg_str, clg_str, tot_str;
 
-//   reg_mins = total_dur_regulator_trial.count() / 60000000;
-  clg_mins = total_dur_class_group_trial.count() / 60000000;
-  tot_mins = dur_overall_time.count() / 60000000;
+  if (alg > 0) {
+  //   reg_mins = total_dur_regulator_trial.count() / 60000000;
+    clg_mins = total_dur_class_group_trial.count() / 60000000;
+    tot_mins = dur_overall_time.count() / 60000000;
 
-//   reg_secs = double(double(total_dur_regulator_trial.count()) / double(1000000)) - double(reg_mins*60);
-  clg_secs = double(double(total_dur_class_group_trial.count()) / double(1000000)) - double(clg_mins*60);
-  tot_secs = double(double(dur_overall_time.count()) / double(1000000)) - double(tot_mins*60);
+  //   reg_secs = double(double(total_dur_regulator_trial.count()) / double(1000000)) - double(reg_mins*60);
+    clg_secs = double(double(total_dur_class_group_trial.count()) / double(1000000)) - double(clg_mins*60);
+    tot_secs = double(double(dur_overall_time.count()) / double(1000000)) - double(tot_mins*60);
 
-//   reg_str = to_string(reg_mins);
-  clg_str = to_string(clg_mins);
-  tot_str = to_string(tot_mins);
+  //   reg_str = to_string(reg_mins);
+    clg_str = to_string(clg_mins);
+    tot_str = to_string(tot_mins);
 
-//   reg_str += "m" + to_string(long(floor(reg_secs))) + ".";
-  clg_str += "m" + to_string(long(floor(clg_secs))) + ".";
-  tot_str += "m" + to_string(long(floor(tot_secs))) + ".";
+  //   reg_str += "m" + to_string(long(floor(reg_secs))) + ".";
+    clg_str += "m" + to_string(long(floor(clg_secs))) + ".";
+    tot_str += "m" + to_string(long(floor(tot_secs))) + ".";
 
-  std::string reg_temp, clg_temp, tot_temp;
+    std::string reg_temp, clg_temp, tot_temp;
 
-  reg_temp = to_string(long(floor((reg_secs - floor(reg_secs))*1000))) + "s";
-  clg_temp = to_string(long(floor((clg_secs - floor(clg_secs))*1000))) + "s";
-  tot_temp = to_string(long(floor((tot_secs - floor(tot_secs))*1000))) + "s";
+    reg_temp = to_string(long(floor((reg_secs - floor(reg_secs))*1000))) + "s";
+    clg_temp = to_string(long(floor((clg_secs - floor(clg_secs))*1000))) + "s";
+    tot_temp = to_string(long(floor((tot_secs - floor(tot_secs))*1000))) + "s";
 
-  reg_temp.insert(reg_temp.begin(), 4 - reg_temp.size(), '0');
-  clg_temp.insert(clg_temp.begin(), 4 - clg_temp.size(), '0');
-  tot_temp.insert(tot_temp.begin(), 4 - tot_temp.size(), '0');
+    reg_temp.insert(reg_temp.begin(), 4 - reg_temp.size(), '0');
+    clg_temp.insert(clg_temp.begin(), 4 - clg_temp.size(), '0');
+    tot_temp.insert(tot_temp.begin(), 4 - tot_temp.size(), '0');
 
-  reg_str += reg_temp;
-  clg_str += clg_temp;
-  tot_str += tot_temp;
+    reg_str += reg_temp;
+    clg_str += clg_temp;
+    tot_str += tot_temp;
+  }
 
 //   std::cout << "Time spent computing regulator: " << total_dur_regulator_trial.count() / 1000 << std::endl;
 //   std::cout << "Time spent computing class grp: " << total_dur_class_group_trial.count() / 1000 << std::endl;
@@ -255,8 +263,10 @@ int main(int argc, char **argv) {
   std::cout << "  Time spent computing (h^*)R: "; MyTime(timings[1]); std::cout << std::endl;
   std::cout << "  Time spent checking (h^*)R : "; MyTime(timings[2]); std::cout << std::endl;
   std::cout << "  Time spent factoring (h^*)R: "; MyTime(timings[3]); std::cout << std::endl;
-  std::cout << "Time spent computing class grp: " << clg_str << std::endl;
-  std::cout << "Time spent computing overall  : " << tot_str << std::endl;
+  if(alg > 0) {
+    std::cout << "Time spent computing class grp: " << clg_str << std::endl;
+    std::cout << "Time spent computing overall  : " << tot_str << std::endl;
+  }
 
 
 }

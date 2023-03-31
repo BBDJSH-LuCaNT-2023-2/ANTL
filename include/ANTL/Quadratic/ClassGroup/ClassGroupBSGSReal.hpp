@@ -82,7 +82,10 @@ public:
 
   void cg_bsgs_real(const ZZ &hstar);
 
-  void set_regulator(double &ext_regulator){regulator = ext_regulator;}
+  void set_regulator(double &ext_regulator){
+    regulator = ext_regulator;
+    sqrt_regulator = sqrt(regulator);
+  }
 
   vector<ZZ> get_class_group(){return CL;}
 
