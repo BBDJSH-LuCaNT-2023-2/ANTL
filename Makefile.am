@@ -1,7 +1,7 @@
 AUTOMAKE_OPTIONS = subdir-objects
 
 AM_LIBS = @PTHREAD_LIBS@ @LIBS@ -L/home/austin.docherty/ntl/lib
-AM_CXXFLAGS = @CXXFLAGS@ -I/home/austin.docherty/ntl/include -L/home/austin.docherty/ntl/lib -DTIMING
+AM_CXXFLAGS = @CXXFLAGS@ -I/home/austin.docherty/ntl/include -L/home/austin.docherty/ntl/lib -DTIMING -pg
 AM_CC =
 AM_CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/include
 

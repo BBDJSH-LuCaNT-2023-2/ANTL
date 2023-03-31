@@ -67,6 +67,8 @@ private:
 
   bool parallel;
 
+  bool use_tables;
+
   const long OQvals_cnum[20] = {2269,   5741,   10427,  16183,  22901,
                                 30631,  39209,  48731,  59063,  70237,
                                 82223,  95009,  108571, 122921, 137983,
@@ -109,6 +111,8 @@ public:
   void set_case_type(std::string found_case_type);
 
   std::string get_case_type();
+
+  void set_use_table();
 
   U approximate_hR();
 
@@ -154,6 +158,7 @@ RegulatorLenstraData<long, U>::RegulatorLenstraData(
   l_function = l_function_arg;
 
   parallel = false;
+  use_tables = false;
   Rbsgs = false;        // true if R was computed using BSGS
   Rconditional = false; // true if correctness of R relies on ERH
 }
@@ -165,6 +170,10 @@ void RegulatorLenstraData<long, U>::set_case_type(std::string found_case_type) {
 
 template <class U> std::string RegulatorLenstraData<long, U>::get_case_type() {
   return case_type;
+}
+
+template <class U> void RegulatorLenstraData<long, U>::set_use_table() {
+  use_tables = true;
 }
 
 // RegulatorLenstraData<long, U>::regulator_lenstra
@@ -1068,9 +1077,16 @@ template <class U> U RegulatorLenstraData<long, U>::approximate_hR() {
     std::cout << "APPRHR: STARTING" << std::endl;
   }
   RR hR, FI;
+  long n;
 
-  long n = get_optimal_Q_cnum();
-  FI = l_function->approximateL1(n);
+  if(use_tables){
+    FI = l_function->approximateL1_table();
+  }
+  else {
+//     std::cout << "haha we're still using non-table method" << std::endl;
+    n = get_optimal_Q_cnum();
+    FI = l_function->approximateL1(n);
+  }
 
   if (DBG_APPRHR) {
     std::cout << "APPRHR: get_optimal_Q_cnum() returned " << n << std::endl;
@@ -1174,7 +1190,6 @@ template <class U> RR RegulatorLenstraData<long, U>::lower_bound_hR() {
   // quadratic_order
   bool unconditional = false;
   int info = 0;
-  bool use_tables = false;
   // FINISH: Temporary variables needed (previously declared in ANTL-Import's
   // quadratic_order
 

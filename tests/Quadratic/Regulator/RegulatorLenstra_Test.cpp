@@ -307,6 +307,9 @@ TEST_CASE("RegulatorLenstra<long>: Does it work?", "[RegulatorLenstra][long]") {
       RegulatorLenstraData<long, double> regulator_lenstra_data{&quad_order,
                                                               &l_function};
 
+      regulator_lenstra_data.set_use_table();
+
+
       long bound = 0;
       regulator_lenstra_data.regulator_lenstra();
       //     regulator_lenstra_data.regulator_bsgs(bound);
@@ -372,6 +375,9 @@ TEST_CASE("RegulatorLenstra<long>: Does it work?", "[RegulatorLenstra][long]") {
     double regulator;
     std::string class_group;
 
+    L_function<long> l_function;
+    l_function.create_L1_tables(1000001, ANTL::log (ANTL::sqrt (double (2))));
+
     int correct_count = 0;
     int test_start = 0;
     int test_bound = 0;
@@ -417,11 +423,11 @@ TEST_CASE("RegulatorLenstra<long>: Does it work?", "[RegulatorLenstra][long]") {
       quad_order.set_sqr_best(sqr_nudupl_opt_object);
 
 
-      L_function<long> l_function;
       l_function.init(long(discriminant), 2);
 
       RegulatorLenstraData<long, double> regulator_lenstra_data{&quad_order,
                                                               &l_function};
+      regulator_lenstra_data.set_use_table();
 
       long bound = 0;
 

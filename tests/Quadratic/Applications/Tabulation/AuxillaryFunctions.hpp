@@ -29,6 +29,7 @@ std::tuple<double, ZZ, vector<long>> get_regulator_and_hstar(QuadraticOrder<long
   // Setting up the RegulatorLenstraData object
   RegulatorLenstraData<long, double> regulator_lenstra_data{&quad_order,
                                                           &l_function};
+  regulator_lenstra_data.set_use_table();
 
   // Computing the regulator, and timing thereof
   auto start_trial_time = std::chrono::high_resolution_clock::now();

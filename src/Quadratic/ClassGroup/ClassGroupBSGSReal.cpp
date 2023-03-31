@@ -193,11 +193,19 @@ template <class T> void ClassGroupBSGSReal<T>::cg_bsgs_real(const ZZ &hstar) {
                 << std::endl;
     }
     do {
+      if (DBG_CGBGRL) {
+        std::cout << "CGBGRL: After is_principal(G) " << G << std::endl;
+        std::cout << "CGBGRL: Before get_next_prime " << G << std::endl;
+      }
       get_next_prime(G);
       if (DBG_CGBGRL) {
+        std::cout << "CGBGRL: Before get_next_prime " << G << std::endl;
         std::cout << "CGBGRL: G is " << G << std::endl;
       }
       ++num_prime_ideals;
+      if (DBG_CGBGRL) {
+        std::cout << "CGBGRL: Before is_principal(G) " << G << std::endl;
+      }
     } while (is_principal(G));
 
     if (DBG_CGBGRL) {
