@@ -19,6 +19,7 @@ QuadraticOrder<ZZ>::QuadraticOrder(const ZZ & D)
 
   if (m4 == 0 || m4 == 1) {
     ZZ rD = SqrRoot (abs (D));
+    floor_root_delta = rD;
     if (rD * rD != abs (D)) {
       // assign new values
       Delta = D;

@@ -128,19 +128,13 @@ template <> bool QuadraticIdealBase<long>::assign_prime (const long & p) {
 // Note: Not defined for positive definite forms.
 // Task: tests if the ideal is normal.
 template <> bool QuadraticIdealBase<long>::is_normal() {
-  long delta, rootD;
-
-  delta = b*b - 4*a*c;
 
   if(delta > 0) {
-    // rootD = floor(sqrt(delta)) - [Recall  ANTL::SqrRoot(long a) = long floor(sqrt(a))]
-    rootD = SqrRoot(abs(delta));
-
-    if(abs(a) > rootD)
+    if(abs(a) > floor_root_delta)
       return (-1*(abs(a)) < b && b <= abs(a));
 
     else
-      return (rootD - 2*abs(a) < b && b <= rootD);
+      return (floor_root_delta - 2*abs(a) < b && b <= floor_root_delta);
   }
 }
 
@@ -148,23 +142,16 @@ template <> bool QuadraticIdealBase<long>::is_normal() {
 //
 // Task: tests if the ideal is reduced.
 template <> bool QuadraticIdealBase<long>::is_reduced () {
-  long delta;
-
-  delta = b*b - 4*a*c;
-
   if(delta > 0) {
     long lbound, ubound, rootD;
 
-    // rootD = floor(sqrt(delta)) - [Recall  ANTL::SqrRoot(long a) = long floor(sqrt(a))]
-    rootD = SqrRoot(abs(delta));
-
     // lbound = abs(rootD - 2*abs(a))
-    lbound = abs(rootD - 2*abs(a));
+    lbound = abs(floor_root_delta - 2*abs(a));
 
     // We assume the form is irrational, so there ought to be no case where delta is square
-    ubound = rootD;
+    ubound = floor_root_delta;
 
-    return (lbound < b && b <= rootD);
+    return (lbound < b && b <= floor_root_delta);
   }
 
   // TODO: The case when delta < 0 remains untested!
@@ -179,35 +166,32 @@ template <> bool QuadraticIdealBase<long>::is_reduced () {
 }
 
 template <> void QuadraticIdealBase<long>::normalize() {
-  static long a2, delta, rootDelta, s;
+static long a2, q, r, temp, nb;
 
-  delta = b*b - 4*a*c;
+  a2 = a << 1;
+  if (a <= floor_root_delta) {
+    temp = floor_root_delta - a2;
+    if (!(temp < b && b <= floor_root_delta)) {
+      temp = floor_root_delta - b;
+      DivRem(q, r, temp, a2);
 
-  rootDelta = SqrRoot(delta);
+      nb = floor_root_delta - r;
 
-  if(a <= rootDelta) {
-    a2 = 2*abs(a);
-
-    // Computing s, the normalizing integer,  per [BV07, pg. 108]
-    s = sign(a)*((rootDelta - b)/a2);
-
-    //c = a*s^2 + b*s + c
-    c = a*s*s + b*s + c;
-
-    //b = b + 2sa
-    b = b + 2*s*a;
+      c += q * ((b + nb) >> 1);
+      b = nb;
+    }
   }
-
   else {
-    a2 = 2*abs(a);
+    if (!(b > -a && b <= a)) {
+      DivRem(q, r, b, a2);
 
-    // Computing s, the normalizing integer,  per [BV07, pg. 108]
-    s = sign(a)*((abs(a) - b)/a2);
+      if (r > a) {
+        r -= a2;
+        ++q;
+      }
 
-    //c = a*s^2 + b*s + c
-    c = a*s*s + b*s + c;
-
-    //b = b + 2sa
-    b = b + 2*s*a;
+      c -= q * ((b + r) >> 1);
+      b = r;
+    }
   }
 }

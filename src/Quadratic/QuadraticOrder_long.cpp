@@ -14,6 +14,7 @@ QuadraticOrder<long>::QuadraticOrder(const long & D)
   long m4 = D & 3;
   if (m4 == 0 || m4 == 1) {
     long rD = SqrRoot (labs (D));
+    floor_root_delta = rD;
       if (rD * rD != labs (D)) {
         // assign new values
         Delta = D;

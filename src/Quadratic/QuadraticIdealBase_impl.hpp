@@ -17,6 +17,8 @@ template <class T> QuadraticIdealBase<T>::QuadraticIdealBase (QuadraticOrder<T> 
   NTL::clear(c);
   NTL::clear(num_q);
   QO = &inQO;
+  delta = QO->get_discriminant();
+  floor_root_delta = to<T>(SqrRoot(delta));
 }
 
 // destructor
@@ -114,6 +116,16 @@ template <class T> bool QuadraticIdealBase<T>::assign_prime (const T & p) {
 //
 // Task: set to a copy of B.
 template <class T> void QuadraticIdealBase<T>::assign (const T & na, const T & nb, const T & nc) {
+  a = na;
+  b = nb;
+  c = nc;
+//   normalize();
+}
+
+// QuadraticIdealBase<T>::assign_and_normalize(T,T,T)
+//
+// Task: set to a copy of B.
+template <class T> void QuadraticIdealBase<T>::assign_and_normalize (const T & na, const T & nb, const T & nc) {
   a = na;
   b = nb;
   c = nc;
