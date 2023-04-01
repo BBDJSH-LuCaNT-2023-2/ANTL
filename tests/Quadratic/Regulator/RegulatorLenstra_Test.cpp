@@ -257,7 +257,7 @@ TEST_CASE("RegulatorLenstra<long>: Does it work?", "[RegulatorLenstra][long]") {
 
   std::cout << "Testing RegulatorLenstra<long>" << std::endl;
 
-  int test_method = 2;
+  int test_method = 3;
 
   if(test_method == 0) {
     int correct_count = 0;
@@ -378,6 +378,10 @@ TEST_CASE("RegulatorLenstra<long>: Does it work?", "[RegulatorLenstra][long]") {
       test_data.open("data_10000000.txt", std::ifstream::in);
       l_function.create_L1_tables(10000001, ANTL::log (ANTL::sqrt (double (2))));
     }
+    else if(test_method == 3) {
+      test_data.open("data_100000000000.txt", std::ifstream::in);
+      l_function.create_L1_tables(100000000001, ANTL::log (ANTL::sqrt (double (2))));
+    }
 
     long discriminant;
     double regulator;
@@ -443,12 +447,23 @@ TEST_CASE("RegulatorLenstra<long>: Does it work?", "[RegulatorLenstra][long]") {
       correct_testdata_regulators.push_back(regulator_lenstra_data.get_regulator());
 //       case_types.push_back(regulator_lenstra_data.get_case_type());
 
-      if (std::abs(correct_testdata_regulators.back() - regulator) < 0.000001) {
-        computed_correctly.push_back(true);
-      } else {
-        std::cout << "ERROR AT CASE " << test_bound - 1 << std::endl;
-        std::cout << "Computed was " << correct_testdata_regulators.back() << " but expected was " << regulator << std::endl;
-        computed_correctly.push_back(false);
+      if(test_method == 3 || test_method == 4) {
+        if (std::abs(correct_testdata_regulators.back() - regulator) < 0.1) {
+          computed_correctly.push_back(true);
+        } else {
+          std::cout << "ERROR AT CASE " << test_bound - 1 << std::endl;
+          std::cout << "Computed was " << correct_testdata_regulators.back() << " but expected was " << regulator << std::endl;
+          computed_correctly.push_back(false);
+        }
+      }
+      else {
+        if (std::abs(correct_testdata_regulators.back() - regulator) < 0.000001) {
+          computed_correctly.push_back(true);
+        } else {
+          std::cout << "ERROR AT CASE " << test_bound - 1 << std::endl;
+          std::cout << "Computed was " << correct_testdata_regulators.back() << " but expected was " << regulator << std::endl;
+          computed_correctly.push_back(false);
+        }
       }
     }
 

@@ -10,7 +10,7 @@
 
 #include <cmath>
 #include <gmp.h>
-
+#include <numeric>
 #include <chrono>
 
 #include <NTL/GF2EX.h>
