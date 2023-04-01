@@ -53,7 +53,7 @@ public:
     Q = q * ((b - P) / 2) - c;
 
     qib.assign(Q, P, R);
-    qib.normalize();
+//     qib.normalize();
     Distance +=
         to<S>((inv(abs((to_RR(P) - sqrt(to_RR(Delta))) / to_RR(2 * Q)))));
   }

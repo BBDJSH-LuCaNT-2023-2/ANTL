@@ -158,6 +158,7 @@ private:
   // throughout codebase
   T hx; // definition of the order:  y^2 + h(x) y = Delta
   T Delta;
+  T floor_root_delta;
   long g; // genus (if an order in a function field)
 
   // true if only unconditional methods are to be used for computations

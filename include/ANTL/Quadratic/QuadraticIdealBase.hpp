@@ -70,6 +70,9 @@ protected:
   T c;
   QuadraticOrder<T> *QO;
 
+  T delta;
+  T floor_root_delta;
+
   T qlist[100];
   T num_q;
 
@@ -85,6 +88,8 @@ public:
   void assign(const QuadraticIdealBase<T> &B);
   void assign(const T &na, const T &nb, const T &nc);
   template <class S> void assign(const HashEntryInt<T, S> &B);
+
+  void assign_and_normalize(const T &na, const T &nb, const T &nc);
 
   QuadraticIdealBase<T> &operator=(const QuadraticIdealBase<T> &A);
 
