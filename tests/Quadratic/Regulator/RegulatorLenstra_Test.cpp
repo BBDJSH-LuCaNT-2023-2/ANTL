@@ -257,7 +257,7 @@ TEST_CASE("RegulatorLenstra<long>: Does it work?", "[RegulatorLenstra][long]") {
 
   std::cout << "Testing RegulatorLenstra<long>" << std::endl;
 
-  int test_method = 1;
+  int test_method = 2;
 
   if(test_method == 0) {
     int correct_count = 0;
@@ -364,19 +364,24 @@ TEST_CASE("RegulatorLenstra<long>: Does it work?", "[RegulatorLenstra][long]") {
     REQUIRE(test_bool == true);
   }
 
-  if(test_method == 1) {
+  if(test_method > 0) {
 
 //     std::set<int> failed_tests = {19236, 45635, 48161, 51784, 51856, 58000, 62642, 69927, 73637, 75308, 80107, 82228, 89496, 90243, 91900, 92150, 101364, 117084, 120143, 120230, 122257, 128005, 129545, 153040, 153813, 162380, 163127, 170802, 173041, 175296, 176960, 186344, 189631, 195703, 196782, 208466, 210544, 211200, 227809, 228111, 247544, 249822, 253044, 260373, 260843, 261496, 269937, 278511, 289340, 293499, 294408, 297161};
 
     std::ifstream test_data;
-    test_data.open("data.txt", std::ifstream::in);
+    L_function<long> l_function;
+    if(test_method == 1) {
+      test_data.open("data_1000000.txt", std::ifstream::in);
+      l_function.create_L1_tables(1000001, ANTL::log (ANTL::sqrt (double (2))));
+    }
+    else if(test_method == 2) {
+      test_data.open("data_10000000.txt", std::ifstream::in);
+      l_function.create_L1_tables(10000001, ANTL::log (ANTL::sqrt (double (2))));
+    }
 
     long discriminant;
     double regulator;
     std::string class_group;
-
-    L_function<long> l_function;
-    l_function.create_L1_tables(1000001, ANTL::log (ANTL::sqrt (double (2))));
 
     int correct_count = 0;
     int test_start = 0;
