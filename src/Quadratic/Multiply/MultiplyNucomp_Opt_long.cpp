@@ -242,7 +242,43 @@ void MultiplyNucompOpt<long>::construct_relative_generator(
 
 void temp_invert_and_normalize_nucomp(long &rel_gen_a, long &rel_gen_b, long &rel_gen_d, long &delta) {
 
-  ZZ a, b, d, newA, newB, newD, temp;
+//   ZZ a, b, d, newA, newB, newD, temp;
+//
+//   a = rel_gen_a;
+//   b = rel_gen_b;
+//   d = rel_gen_d;
+//
+//   // ((a + b rho) / d)^-1 = (ad - bd rho) / (a^2 - b^2 Delta)
+//   newA = a * d;
+//
+//   newB = b * d;
+//
+//   newD =  a * a;
+//   temp =  b * b;
+//   temp = temp * delta;
+//   newD = newD - temp;
+//
+//   a = newA;
+//   b = -newB;
+//   d = newD;
+//
+//   if (d < 0) {
+//     NTL::negate(a, a);
+//     NTL::negate(b, b);
+//     NTL::negate(d, d);
+//   }
+//   ZZ g = GCD(GCD(a, b), d);
+//   if (g != 1) {
+//     div(a, a, g);
+//     div(b, b, g);
+//     div(d, d, g);
+//   }
+//
+//   rel_gen_a = to_long(a);
+//   rel_gen_b = to_long(b);
+//   rel_gen_d = to_long(d);
+
+  __int128 a, b, d, newA, newB, newD, temp;
 
   a = rel_gen_a;
   b = rel_gen_b;
@@ -263,20 +299,21 @@ void temp_invert_and_normalize_nucomp(long &rel_gen_a, long &rel_gen_b, long &re
   d = newD;
 
   if (d < 0) {
-    NTL::negate(a, a);
-    NTL::negate(b, b);
-    NTL::negate(d, d);
+    a *= -1;
+    b *= -1;
+    d *= -1;
   }
-  ZZ g = GCD(GCD(a, b), d);
+//   __int128 g = GCD(GCD(a, b), d);
+  __int128 g = std::gcd(std::gcd(a, b), d);
   if (g != 1) {
-    div(a, a, g);
-    div(b, b, g);
-    div(d, d, g);
+    a /= g;
+    b /= g;
+    d /= g;
   }
 
-  rel_gen_a = to_long(a);
-  rel_gen_b = to_long(b);
-  rel_gen_d = to_long(d);
+  rel_gen_a = (long) a;
+  rel_gen_b = (long) b;
+  rel_gen_d = (long) d;
 }
 
 // Debug Tools
