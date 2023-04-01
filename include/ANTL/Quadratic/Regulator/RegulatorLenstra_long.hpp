@@ -564,11 +564,17 @@ template <class U> ZZ RegulatorLenstraData<long, U>::estimate_hR_error() {
     std::cout << "EHRERR: START" << std::endl;
   }
   ZZ err;
-  RR Aval, Fval, temp;
+  long n;
+  RR Aval, Fval, temp, FI;
 
 
-  long n = get_optimal_Q_cnum();
-  RR FI = l_function->approximateL1(n);
+  if(use_tables){
+    FI = l_function->approximateL1_table();
+  }
+  else {
+    n = get_optimal_Q_cnum();
+    FI = l_function->approximateL1(n);
+  }
 
   if (DBG_EHRERR) {
     std::cout << "EHRERR: l_function->terms_used(1) is " << l_function->terms_used(1) << std::endl;
