@@ -1365,7 +1365,7 @@ void RegulatorLenstraData<long, U>::find_hstar(ZZ &hstar, const U &S,
 
   // Preparation for
   QuadraticInfElement<long, U> target_qie{*quadratic_order};
-  U target_distance;
+  U target_distance, S_temp = S;
 
   // Compute the power of each prime in the factorization of hstar
   if (DBG_FHSTAR) {
@@ -1376,7 +1376,7 @@ void RegulatorLenstraData<long, U>::find_hstar(ZZ &hstar, const U &S,
       std::cout << "FHSTAR: prime is " << prime << std::endl;
     }
     int power = 1;
-    target_distance = S / to<U>(prime);
+    target_distance = S_temp / to<U>(prime);
     nuclose(target_qie, FloorToZZ(target_distance));
     target_qie.adjust(target_distance);
 
@@ -1417,7 +1417,11 @@ void RegulatorLenstraData<long, U>::find_hstar(ZZ &hstar, const U &S,
       std::cout << "FHSTAR: prime was " << prime << std::endl;
       std::cout << "FHSTAR: power was " << power - 1 << std::endl;
     }
-    hstar *= FloorToZZ(pow(double(prime), double(power - 1)));
+    double temp_factor = pow(double(prime), double(power - 1));
+    hstar *= FloorToZZ(temp_factor);
+    if(power > 1) {
+      S_temp /= temp_factor;
+    }
     if (DBG_FHSTAR) {
       std::cout << "FHSTAR: hstar is " << hstar << std::endl;
     }
