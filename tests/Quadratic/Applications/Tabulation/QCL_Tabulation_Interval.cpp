@@ -57,7 +57,7 @@ int main(int argc, char **argv) {
     cerr << "  table - 0 (do not use L(s,X) tables), 1 (use them)" << std::endl;
     cerr << "  uncond - 0 (conditional on ERH), 1 (unconditional)" << std::endl;
     cerr << "  vb - verbosity" << std::endl;
-    cerr << "  alg - 0 (bsgs), 1 (bs)" << std::endl;
+    cerr << "  alg - 0 (regulator only), 1 (bsgs), 2 (bs)" << std::endl;
     cerr << "  prec - 0 (automatic), 1 (long), 2 (long long), >2 (ZZ)"
          << std::endl;
     exit(1);
