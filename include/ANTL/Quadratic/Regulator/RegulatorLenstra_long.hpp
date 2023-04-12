@@ -2,6 +2,7 @@
 #define REGULATOR_LENSTRA_DATA_LONG_H
 
 #include <list>
+#include <iomanip>
 #include <ANTL/Quadratic/Regulator/RegulatorLenstra.hpp>
 
 using namespace NTL;
@@ -1346,101 +1347,253 @@ template <class U> long RegulatorLenstraData<long, U>::generate_optimal_Q() {
 template <class U>
 void RegulatorLenstraData<long, U>::find_hstar(ZZ &hstar, const U &S,
                                              const ZZ &Pmax) {
-  if (DBG_LENSTR || DBG_FHSTAR) {
-    std::cout << "FHSTAR: STARTING" << std::endl;
-  }
+//   std::cout << setprecision(10);
+//   //Testing
+//   QuadraticInfElement<long, U> test{*quadratic_order};
+//   test.assign_one();
+//   do {
+//     std::cout << test.get_qib() << " " << test.get_distance() << "\n";
+//     test.baby_step();
+//   } while(test.get_distance() < 130);
+//   std::cout << test.get_qib() << " " << test.get_distance() << std::endl;
+//   std::cout << "==========================================" << std::endl;
 
-  set(hstar);
+  U R = S;
 
-  if (DBG_FHSTAR) {
-    std::cout << "FHSTAR: hstar = " << hstar << std::endl;
-    std::cout << "FHSTAR: to_RR(S) = " << to_RR(S) << std::endl;
-    std::cout << "FHSTAR: S = " << S << std::endl;
-    std::cout << "FHSTAR: Pmax = " << Pmax << std::endl;
-  }
-
-  // Generate a list of primes
+//   std::cout << "FHSTAR: S is " << S << std::endl;
+//   std::cout << "FHSTAR: Pmax is " << Pmax << std::endl;
+//   std::cout << "FHSTAR: prin_list is \n" << prin_list << std::endl;
+  // 1. Initialize prime sequence
   PrimeSeq prime_seq;
-  long prime = prime_seq.next();
-
-  // Preparation for
-  QuadraticInfElement<long, U> target_qie{*quadratic_order};
-  U target_distance, S_temp = S;
-
-  // Compute the power of each prime in the factorization of hstar
-  if (DBG_FHSTAR) {
-    std::cout << "FHSTAR: Testing each prime" << std::endl;
+  long primes[to_long(Pmax)];
+  long prime_index = 0;
+  primes[prime_index] = to_long(prime_seq.next());
+  while(primes[prime_index] < Pmax) {
+    ++prime_index;
+    primes[prime_index] = to_long(prime_seq.next());
   }
-  while (prime <= Pmax) {
-    if (DBG_FHSTAR) {
-      std::cout << "FHSTAR: prime is " << prime << std::endl;
-    }
-    int power = 1;
-    target_distance = S_temp / to<U>(prime);
-    nuclose(target_qie, FloorToZZ(target_distance));
-    target_qie.adjust(target_distance);
 
-    if (DBG_FHSTAR) {
-      std::cout << "FHSTAR: target_distance was " << target_distance
-                << std::endl;
-      std::cout << "FHSTAR: target_qie was " << target_qie.get_qib()
-                << std::endl;
-      std::cout << "FHSTAR: target_qie distance was "
-                << target_qie.get_distance() << std::endl;
-    }
+  // 2. Compute a list I containing the reduced ideals a_t_i, and threshold distance
+  QuadraticInfElement<long, U> a_t_0{*quadratic_order}, a_t_i{*quadratic_order}, a_dif{*quadratic_order};
+  a_t_0.assign(prin_list.last_entry());
+  a_t_0.inverse_rho();
+//   a_t_0.assign(prin_list[prin_list.get_curr_size() - 2]);
 
-    // Increase prime power until corresponding distance is no longer a multiple
-    // of the regulator
-    if (DBG_FHSTAR) {
-      std::cout << "FHSTAR: Finding power of current prime" << std::endl;
-    }
-    while (target_qie.is_one() && target_qie.get_distance() > 1) {
-      if (DBG_FHSTAR) {
-        std::cout << "FHSTAR: power is " << power << std::endl;
+  U ideals_a_t_i_threshold = R / 2.0;
+
+  std::vector<QuadraticInfElement<long, U>> ideals_a_t_i;
+
+  a_t_i = a_t_0;
+  do {
+    ideals_a_t_i.push_back(a_t_i);
+    a_t_i.giant_step(a_t_i);
+  } while(a_t_i.get_distance() < ideals_a_t_i_threshold);
+  ideals_a_t_i.push_back(a_t_i);
+
+  // 3. Set initial values
+  long h_star_temp = 1;
+  long p = primes[prime_index];
+
+  QuadraticInfElement<long, U> a_e{*quadratic_order}, a_m{*quadratic_order}, a_s{*quadratic_order};
+  a_m.assign_one();
+
+  U p_float, r, R_over_p, temp_sum;
+  long q, a_t_i_index;
+  HashEntryReal<long, U> *hash_a_t_k;
+
+  // 4. Looping and finding a_e
+  while(true) {
+    p_float = to<U>(p);
+    R_over_p = (R / p_float);
+    r = R_over_p - a_m.get_distance();
+
+//     std::cout << "FHSTAR: a_t_0.get_distance() is now " << a_t_0.get_distance() << std::endl;
+//     std::cout << "FHSTAR: r is now " << r << std::endl;
+
+    q = to_long(FloorToZZ(r / a_t_0.get_distance()));
+//     std::cout << "FHSTAR: r / a_t_0.get_distance() is now                " << r / a_t_0.get_distance() << std::endl;
+//     std::cout << "FHSTAR: FloorToZZ(r / a_t_0.get_distance()) + 1 is now " << FloorToZZ(r / a_t_0.get_distance()) + 1 << std::endl;
+//     std::cout << "FHSTAR: q is now " << q << std::endl;
+
+    // Use binary representation of q to compute a_s
+    a_t_i_index = 0;
+    a_s.assign_one();
+    while(q > 0) {
+      if(q % 2 == 1) {
+        a_s.giant_step(ideals_a_t_i[a_t_i_index]);
       }
-      power++;
-      target_distance = target_distance / to<U>(prime);
-      nuclose(target_qie, FloorToZZ(target_distance));
-      target_qie.adjust(target_distance);
+      ++a_t_i_index;
+      q /= 2;
+    }
+//     std::cout << "FHSTAR: a_s distance is    " << a_s.get_qib() << " " << a_s.get_distance() << std::endl;
+//     diff = r - a_s.get_distance();
+// //
+//     if(diff > 1) {
+//       nuclose(a_dif, FloorToZZ(to_long(diff)));
+//       a_s.giant_step(a_dif);
+// //       a_s.adjust(r);
+// //       a_s.baby_step();
+//     }
 
-      if (DBG_FHSTAR) {
-        std::cout << "FHSTAR: target_distance was " << target_distance
-                  << std::endl;
-        std::cout << "FHSTAR: target_qie was " << target_qie.get_qib()
-                  << std::endl;
-        std::cout << "FHSTAR: target_qie distance was "
-                  << target_qie.get_distance() << std::endl;
+    //Computing a_e = a_m * a_s
+//     std::cout << "FHSTAR: a_s distance is    " << a_s.get_qib() << " " << a_s.get_distance() << std::endl;
+//     std::cout << "FHSTAR: a_m distance is    " << a_m.get_qib() << " " << a_m.get_distance() << std::endl;
+
+    a_s.giant_step(a_m);
+    a_e = a_s;
+//     std::cout << "FHSTAR: a_e distance is    " << a_e.get_qib() << " " << a_e.get_distance() << std::endl;
+//     std::cout << "FHSTAR: target distance is " << R_over_p << std::endl;
+
+    // a_e now ought to be close to being within the desired bounds
+    // this if/else will ensure that is case the case
+    if(a_e.get_distance() < R_over_p) {
+      a_e.adjust(R_over_p);
+      a_e.baby_step();
+    }
+    else {
+      temp_sum = R_over_p + a_t_0.get_distance();
+      if(a_e.get_distance() > temp_sum + 1) {
+        a_e.adjust(temp_sum);
       }
     }
-    if (DBG_FHSTAR) {
-      std::cout << "FHSTAR: hstar was " << hstar << std::endl;
-      std::cout << "FHSTAR: prime was " << prime << std::endl;
-      std::cout << "FHSTAR: power was " << power - 1 << std::endl;
+//     std::cout << "FHSTAR: a_e distance is    " << a_e.get_qib() << " " << a_e.get_distance() << std::endl;
+
+//     5. If a_e is in prinlist
+//     std::cout << "FHSTAR: a_e.hash_real() is " << a_e.hash_real() << std::endl;
+    hash_a_t_k = prin_list.search(a_e.hash_real());
+    if(hash_a_t_k) {
+//       std::cout << "FHSTAR: Found in the prin_list, hash distance is " << hash_a_t_k->get_d() << std::endl;
+//       std::cout << "FHSTAR: a_e.get_distance() - ((R_over_p) + hash_a_t_k->get_d()) " << a_e.get_distance() - ((R_over_p) + hash_a_t_k->get_d()) << std::endl;
+      if(abs(a_e.get_distance() - ((R_over_p) + hash_a_t_k->get_d())) < 1) {
+//         std::cout << "FHSTAR: ...and distances matched! " << R_over_p << std::endl;
+        h_star_temp *= p;
+        R /= p_float;
+        a_m.assign_one();
+        continue;
+      }
     }
-    double temp_factor = pow(double(prime), double(power - 1));
-    hstar *= FloorToZZ(temp_factor);
-    if(power > 1) {
-      S_temp /= temp_factor;
+
+    // 6. If a_e is not in prinlist
+//     p = get_preceding_prime(p);
+    --prime_index;
+    if(prime_index < 0) {
+      break;
     }
-    if (DBG_FHSTAR) {
-      std::cout << "FHSTAR: hstar is " << hstar << std::endl;
-    }
-    prime = prime_seq.next();
+    p = primes[prime_index];
+//     std::cout << "FHSTAR: p is now " << p << std::endl;
+    a_m = a_e;
   }
 
-  // Using hstar, computer the regulator
-  target_distance = S / to<U>(hstar);
-  nuclose(target_qie, FloorToZZ(target_distance));
-  target_qie.adjust(target_distance);
-  regulator = target_qie.get_distance();
-
-  if (DBG_FHSTAR) {
-    std::cout << "FHSTAR: hstar = " << hstar << std::endl;
-    std::cout << "FHSTAR: R = " << regulator << std::endl;
-  }
-  if (DBG_LENSTR || DBG_FHSTAR) {
-    std::cout << "FHSTAR: FINISHED" << std::endl;
-  }
+  hstar = h_star_temp;
+  regulator = R;
 }
+
+// //
+// // quadratic_order<T>::find_hstar
+// //
+// // Task:
+// //      finds the regulator unconditionally given a multiple.  If S is the
+// //      multiply, requires S^1/3 operations.
+// //
+//
+// template <class U>
+// void RegulatorLenstraData<long, U>::find_hstar(ZZ &hstar, const U &S,
+//                                              const ZZ &Pmax) {
+//   if (DBG_LENSTR || DBG_FHSTAR) {
+//     std::cout << "FHSTAR: STARTING" << std::endl;
+//   }
+//
+//   set(hstar);
+//
+//   if (DBG_FHSTAR) {
+//     std::cout << "FHSTAR: hstar = " << hstar << std::endl;
+//     std::cout << "FHSTAR: to_RR(S) = " << to_RR(S) << std::endl;
+//     std::cout << "FHSTAR: S = " << S << std::endl;
+//     std::cout << "FHSTAR: Pmax = " << Pmax << std::endl;
+//   }
+//
+//   // Generate a list of primes
+//   PrimeSeq prime_seq;
+//   long prime = prime_seq.next();
+//
+//   // Preparation for
+//   QuadraticInfElement<long, U> target_qie{*quadratic_order};
+//   U target_distance, S_temp = S;
+//
+//   // Compute the power of each prime in the factorization of hstar
+//   if (DBG_FHSTAR) {
+//     std::cout << "FHSTAR: Testing each prime" << std::endl;
+//   }
+//   while (prime <= Pmax) {
+//     if (DBG_FHSTAR) {
+//       std::cout << "FHSTAR: prime is " << prime << std::endl;
+//     }
+//     int power = 1;
+//     target_distance = S_temp / to<U>(prime);
+//     nuclose(target_qie, FloorToZZ(target_distance));
+//     target_qie.adjust(target_distance);
+//
+//     if (DBG_FHSTAR) {
+//       std::cout << "FHSTAR: target_distance was " << target_distance
+//                 << std::endl;
+//       std::cout << "FHSTAR: target_qie was " << target_qie.get_qib()
+//                 << std::endl;
+//       std::cout << "FHSTAR: target_qie distance was "
+//                 << target_qie.get_distance() << std::endl;
+//     }
+//
+//     // Increase prime power until corresponding distance is no longer a multiple
+//     // of the regulator
+//     if (DBG_FHSTAR) {
+//       std::cout << "FHSTAR: Finding power of current prime" << std::endl;
+//     }
+//     while (target_qie.is_one() && target_qie.get_distance() > 1) {
+//       if (DBG_FHSTAR) {
+//         std::cout << "FHSTAR: power is " << power << std::endl;
+//       }
+//       power++;
+//       target_distance = target_distance / to<U>(prime);
+//       nuclose(target_qie, FloorToZZ(target_distance));
+//       target_qie.adjust(target_distance);
+//
+//       if (DBG_FHSTAR) {
+//         std::cout << "FHSTAR: target_distance was " << target_distance
+//                   << std::endl;
+//         std::cout << "FHSTAR: target_qie was " << target_qie.get_qib()
+//                   << std::endl;
+//         std::cout << "FHSTAR: target_qie distance was "
+//                   << target_qie.get_distance() << std::endl;
+//       }
+//     }
+//     if (DBG_FHSTAR) {
+//       std::cout << "FHSTAR: hstar was " << hstar << std::endl;
+//       std::cout << "FHSTAR: prime was " << prime << std::endl;
+//       std::cout << "FHSTAR: power was " << power - 1 << std::endl;
+//     }
+//     double temp_factor = pow(double(prime), double(power - 1));
+//     hstar *= FloorToZZ(temp_factor);
+//     if(power > 1) {
+//       S_temp /= temp_factor;
+//     }
+//     if (DBG_FHSTAR) {
+//       std::cout << "FHSTAR: hstar is " << hstar << std::endl;
+//     }
+//     prime = prime_seq.next();
+//   }
+//
+//   // Using hstar, computer the regulator
+//   target_distance = S / to<U>(hstar);
+//   nuclose(target_qie, FloorToZZ(target_distance));
+//   target_qie.adjust(target_distance);
+//   regulator = target_qie.get_distance();
+//
+//   if (DBG_FHSTAR) {
+//     std::cout << "FHSTAR: hstar = " << hstar << std::endl;
+//     std::cout << "FHSTAR: R = " << regulator << std::endl;
+//   }
+//   if (DBG_LENSTR || DBG_FHSTAR) {
+//     std::cout << "FHSTAR: FINISHED" << std::endl;
+//   }
+// }
 
 #endif

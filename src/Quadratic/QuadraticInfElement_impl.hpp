@@ -149,6 +149,9 @@ void QuadraticInfElement<T, S>::adjust(const ZZ &a) {
     }
     inverse_rho();
   }
+  if(abs(Distance) < 0.1) {
+    Distance = 0;
+  }
   return;
 }
 
@@ -168,7 +171,6 @@ void QuadraticInfElement<T, S>::adjust(const S &bound) {
     if (abs(previous_difference) < abs(current_difference)) {
       baby_step();
     }
-    return;
   }
 
   else {
@@ -190,6 +192,9 @@ void QuadraticInfElement<T, S>::adjust(const S &bound) {
     //     std::cout << qib << " with distance" << Distance << std::endl;
   }
 
+  if(abs(Distance) < 0.1) {
+    Distance = 0;
+  }
   return;
 }
 /*
@@ -557,17 +562,23 @@ void nuclose(QuadraticInfElement<T, S> &C, const ZZ &n) {
   }
 
   s = 1;
+//   std::cout << "Before C.adjust(s) (s is " << s << ") C is " << C.get_qib() << " " << C.get_distance() << std::endl;
   C.adjust(s);
+//   std::cout << "After C.adjust(s) (s is " << s << ")  C is " << C.get_qib() << " " << C.get_distance() << std::endl;
 
   for (i = 1; i <= k; ++i) {
     s <<= 1;
+//     std::cout << "Before C.giant_step(C)      C is " << C.get_qib() << " " << C.get_distance() << std::endl;
     C.giant_step(C);
+//     std::cout << "After C.giant_step(C)       C is " << C.get_qib() << " " << C.get_distance() << std::endl;
 
     // sqr(C, C); makeshift square above
 
     if (IsOdd(j))
       ++s;
+//     std::cout << "Before C.adjust(s) (s is " << s << ") C is " << C.get_qib() << " " << C.get_distance() << std::endl;
     C.adjust(s);
+//     std::cout << "After C.adjust(s) (s is " << s << ")  C is " << C.get_qib() << " " << C.get_distance() << std::endl;
     j >>= 1;
   }
 }
