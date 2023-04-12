@@ -455,7 +455,7 @@ TEST_CASE("RegulatorLenstra<long>: Does it work?", "[RegulatorLenstra][long]") {
         if (std::abs(correct_testdata_regulators.back() - regulator) < 0.1) {
           computed_correctly.push_back(true);
         } else {
-          std::cout << "ERROR AT CASE " << test_bound - 1 << std::endl;
+          std::cout << "ERROR AT CASE " << test_bound - 1 << "(D = " << discriminant << ")" << std::endl;
           std::cout << "Computed was " << correct_testdata_regulators.back() << " but expected was " << regulator << std::endl;
           computed_correctly.push_back(false);
         }
@@ -464,7 +464,7 @@ TEST_CASE("RegulatorLenstra<long>: Does it work?", "[RegulatorLenstra][long]") {
         if (std::abs(correct_testdata_regulators.back() - regulator) < 1) {
           computed_correctly.push_back(true);
         } else {
-          std::cout << "ERROR AT CASE " << test_bound - 1 << std::endl;
+          std::cout << "ERROR AT CASE " << test_bound - 1 << "(D = " << discriminant << ")" << std::endl;
           std::cout << "Computed was " << correct_testdata_regulators.back() << " but expected was " << regulator << std::endl;
           computed_correctly.push_back(false);
         }
@@ -473,7 +473,7 @@ TEST_CASE("RegulatorLenstra<long>: Does it work?", "[RegulatorLenstra][long]") {
         if (std::abs(correct_testdata_regulators.back() - regulator) < 0.000001) {
           computed_correctly.push_back(true);
         } else {
-          std::cout << "ERROR AT CASE " << test_bound - 1 << std::endl;
+          std::cout << "ERROR AT CASE " << test_bound - 1 << "(D = " << discriminant << ")" << std::endl;
           std::cout << "Computed was " << correct_testdata_regulators.back() << " but expected was " << regulator << std::endl;
           computed_correctly.push_back(false);
         }
@@ -523,9 +523,16 @@ TEST_CASE("RegulatorLenstra<long>: Special Case 1", "[RegulatorLenstra][SpecialC
 
   std::cout << "Testing RegulatorLenstra<long>" << std::endl;
 
-  std::vector<long> special_cases = {80344469409, 83833990689, 88318924233, 91578259169};
-  // Correct regulators = 23748.083, 11984.567, 8877.815
-  std::vector<double> special_regulators = {23748083, 11984567, 8877815, 9129630};
+//   std::vector<long> special_cases = {999990000049, 83057, 100000616828, 999990979565};
+//   std::vector<double> special_regulators = {227505, 102.412, 4917.4, 57624};
+
+  std::vector<long> special_cases = {999990979565};
+  std::vector<double> special_regulators = {57624};
+
+  L_function<long> l_function;
+//   l_function.create_L1_tables(1000001, ANTL::log (ANTL::sqrt (double (2))));
+//   l_function.create_L1_tables(100000000001, ANTL::log (ANTL::sqrt (double (2))));
+  l_function.create_L1_tables(1000000000001, ANTL::log (ANTL::sqrt (double (2))));
 
   int test_start = 0;
 //   int test_bound = 1;
@@ -563,10 +570,12 @@ TEST_CASE("RegulatorLenstra<long>: Special Case 1", "[RegulatorLenstra][SpecialC
     red_plain_real_opt_object.set_RelativeGenerator(quad_number3);
     quad_order.set_red_best(red_plain_real_opt_object);
 
-    L_function<long> l_function;
+
     l_function.init(special_cases[i], 2);
     RegulatorLenstraData<long, double> regulator_lenstra_data{&quad_order,
                                                             &l_function};
+
+    regulator_lenstra_data.set_use_table();
 
     long bound = 0;
     regulator_lenstra_data.regulator_lenstra();
@@ -574,7 +583,7 @@ TEST_CASE("RegulatorLenstra<long>: Special Case 1", "[RegulatorLenstra][SpecialC
 
     double regulator = regulator_lenstra_data.get_regulator();
     std::cout << std::setprecision(10) << std::fixed;
-    std::cout << special_cases[i] << " " << regulator << " " << FloorToZZ(1000*regulator) << std::endl;
+    std::cout << special_cases[i] << " " << regulator << " " << special_regulators[i] << std::endl;
   }
     REQUIRE(true);
 }
