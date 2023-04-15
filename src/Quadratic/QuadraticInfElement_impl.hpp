@@ -118,18 +118,9 @@ void QuadraticInfElement<T, S>::giant_step(
                               ->template to_log<S>();
   }
 
-//   else {
-//     mul(qib, qib, qif_1.get_qib());
-//     relative_distance_2 = qib.get_QO()
-//                               ->get_mul_comp()
-//                               ->get_RelativeGenerator()
-//                               ->template to_log<S>();
-//   }
-
   relative_distance_1 = qif_1.get_distance();
   update_distance_add(Distance, Distance, relative_distance_1);
-  update_distance_add(Distance, Distance, relative_distance_2);
-
+  update_distance_subtract(Distance, Distance, relative_distance_2);
 }
 
 // START: TEMPORARY SECTION FOR REGULATORLENSTRADATA METHODS
@@ -562,23 +553,15 @@ void nuclose(QuadraticInfElement<T, S> &C, const ZZ &n) {
   }
 
   s = 1;
-//   std::cout << "Before C.adjust(s) (s is " << s << ") C is " << C.get_qib() << " " << C.get_distance() << std::endl;
   C.adjust(s);
-//   std::cout << "After C.adjust(s) (s is " << s << ")  C is " << C.get_qib() << " " << C.get_distance() << std::endl;
 
   for (i = 1; i <= k; ++i) {
     s <<= 1;
-//     std::cout << "Before C.giant_step(C)      C is " << C.get_qib() << " " << C.get_distance() << std::endl;
     C.giant_step(C);
-//     std::cout << "After C.giant_step(C)       C is " << C.get_qib() << " " << C.get_distance() << std::endl;
-
-    // sqr(C, C); makeshift square above
 
     if (IsOdd(j))
       ++s;
-//     std::cout << "Before C.adjust(s) (s is " << s << ") C is " << C.get_qib() << " " << C.get_distance() << std::endl;
     C.adjust(s);
-//     std::cout << "After C.adjust(s) (s is " << s << ")  C is " << C.get_qib() << " " << C.get_distance() << std::endl;
     j >>= 1;
   }
 }

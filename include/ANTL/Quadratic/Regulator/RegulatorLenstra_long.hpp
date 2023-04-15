@@ -1347,22 +1347,8 @@ template <class U> long RegulatorLenstraData<long, U>::generate_optimal_Q() {
 template <class U>
 void RegulatorLenstraData<long, U>::find_hstar(ZZ &hstar, const U &S,
                                              const ZZ &Pmax) {
-//   std::cout << setprecision(10);
-//   //Testing
-//   QuadraticInfElement<long, U> test{*quadratic_order};
-//   test.assign_one();
-//   do {
-//     std::cout << test.get_qib() << " " << test.get_distance() << "\n";
-//     test.baby_step();
-//   } while(test.get_distance() < 130);
-//   std::cout << test.get_qib() << " " << test.get_distance() << std::endl;
-//   std::cout << "==========================================" << std::endl;
-
   U R = S;
 
-//   std::cout << "FHSTAR: S is " << S << std::endl;
-//   std::cout << "FHSTAR: Pmax is " << Pmax << std::endl;
-//   std::cout << "FHSTAR: prin_list is \n" << prin_list << std::endl;
   // 1. Initialize prime sequence
   PrimeSeq prime_seq;
   long primes[to_long(Pmax)];
@@ -1376,8 +1362,8 @@ void RegulatorLenstraData<long, U>::find_hstar(ZZ &hstar, const U &S,
   // 2. Compute a list I containing the reduced ideals a_t_i, and threshold distance
   QuadraticInfElement<long, U> a_t_0{*quadratic_order}, a_t_i{*quadratic_order}, a_dif{*quadratic_order};
   a_t_0.assign(prin_list.last_entry());
+  U last_entry_distance = a_t_0.get_distance();
   a_t_0.inverse_rho();
-//   a_t_0.assign(prin_list[prin_list.get_curr_size() - 2]);
 
   U ideals_a_t_i_threshold = R / 2.0;
 
@@ -1407,13 +1393,7 @@ void RegulatorLenstraData<long, U>::find_hstar(ZZ &hstar, const U &S,
     R_over_p = (R / p_float);
     r = R_over_p - a_m.get_distance();
 
-//     std::cout << "FHSTAR: a_t_0.get_distance() is now " << a_t_0.get_distance() << std::endl;
-//     std::cout << "FHSTAR: r is now " << r << std::endl;
-
     q = to_long(FloorToZZ(r / a_t_0.get_distance()));
-//     std::cout << "FHSTAR: r / a_t_0.get_distance() is now                " << r / a_t_0.get_distance() << std::endl;
-//     std::cout << "FHSTAR: FloorToZZ(r / a_t_0.get_distance()) + 1 is now " << FloorToZZ(r / a_t_0.get_distance()) + 1 << std::endl;
-//     std::cout << "FHSTAR: q is now " << q << std::endl;
 
     // Use binary representation of q to compute a_s
     a_t_i_index = 0;
@@ -1425,47 +1405,24 @@ void RegulatorLenstraData<long, U>::find_hstar(ZZ &hstar, const U &S,
       ++a_t_i_index;
       q /= 2;
     }
-//     std::cout << "FHSTAR: a_s distance is    " << a_s.get_qib() << " " << a_s.get_distance() << std::endl;
-//     diff = r - a_s.get_distance();
-// //
-//     if(diff > 1) {
-//       nuclose(a_dif, FloorToZZ(to_long(diff)));
-//       a_s.giant_step(a_dif);
-// //       a_s.adjust(r);
-// //       a_s.baby_step();
-//     }
 
-    //Computing a_e = a_m * a_s
-//     std::cout << "FHSTAR: a_s distance is    " << a_s.get_qib() << " " << a_s.get_distance() << std::endl;
-//     std::cout << "FHSTAR: a_m distance is    " << a_m.get_qib() << " " << a_m.get_distance() << std::endl;
-
+    // Computing a_e = a_m * a_s
     a_s.giant_step(a_m);
     a_e = a_s;
-//     std::cout << "FHSTAR: a_e distance is    " << a_e.get_qib() << " " << a_e.get_distance() << std::endl;
-//     std::cout << "FHSTAR: target distance is " << R_over_p << std::endl;
 
-    // a_e now ought to be close to being within the desired bounds
-    // this if/else will ensure that is case the case
-    if(a_e.get_distance() < R_over_p) {
-      a_e.adjust(R_over_p);
-      a_e.baby_step();
+    // Ensuring a_e is within desired bounds
+    while(a_e.get_distance() - R_over_p < 0.01) {
+      a_e.giant_step(a_t_0);
     }
-    else {
-      temp_sum = R_over_p + a_t_0.get_distance();
-      if(a_e.get_distance() > temp_sum + 1) {
+    temp_sum = R_over_p + last_entry_distance;
+    if(a_e.get_distance() > temp_sum + 0.1) {
         a_e.adjust(temp_sum);
-      }
     }
-//     std::cout << "FHSTAR: a_e distance is    " << a_e.get_qib() << " " << a_e.get_distance() << std::endl;
 
-//     5. If a_e is in prinlist
-//     std::cout << "FHSTAR: a_e.hash_real() is " << a_e.hash_real() << std::endl;
+    // 5. If a_e is in prinlist
     hash_a_t_k = prin_list.search(a_e.hash_real());
     if(hash_a_t_k) {
-//       std::cout << "FHSTAR: Found in the prin_list, hash distance is " << hash_a_t_k->get_d() << std::endl;
-//       std::cout << "FHSTAR: a_e.get_distance() - ((R_over_p) + hash_a_t_k->get_d()) " << a_e.get_distance() - ((R_over_p) + hash_a_t_k->get_d()) << std::endl;
       if(abs(a_e.get_distance() - ((R_over_p) + hash_a_t_k->get_d())) < 1) {
-//         std::cout << "FHSTAR: ...and distances matched! " << R_over_p << std::endl;
         h_star_temp *= p;
         R /= p_float;
         a_m.assign_one();
@@ -1474,13 +1431,11 @@ void RegulatorLenstraData<long, U>::find_hstar(ZZ &hstar, const U &S,
     }
 
     // 6. If a_e is not in prinlist
-//     p = get_preceding_prime(p);
     --prime_index;
     if(prime_index < 0) {
       break;
     }
     p = primes[prime_index];
-//     std::cout << "FHSTAR: p is now " << p << std::endl;
     a_m = a_e;
   }
 
