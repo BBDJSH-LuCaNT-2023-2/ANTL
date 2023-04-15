@@ -412,8 +412,6 @@ TEST_CASE("RegulatorLenstra<long>: Does it work?", "[RegulatorLenstra][long]") {
 
       QuadraticOrder<long> quad_order{long(discriminant)};
       QuadraticNumber<long> quad_number1{quad_order};
-      QuadraticNumber<long> quad_number2{quad_order};
-      QuadraticNumber<long> quad_number3{quad_order};
 
 //       MultiplyComp<long> mul_comp_object{};
 //       mul_comp_object.set_RelativeGenerator(quad_number1);
@@ -428,11 +426,11 @@ TEST_CASE("RegulatorLenstra<long>: Does it work?", "[RegulatorLenstra][long]") {
       quad_order.set_mul_nucomp_opt(mul_nucomp_opt_object);
 
       ReducePlainRealOpt<long> red_plain_real_opt_object{};
-      red_plain_real_opt_object.set_RelativeGenerator(quad_number2);
+      red_plain_real_opt_object.set_RelativeGenerator(quad_number1);
       quad_order.set_red_best(red_plain_real_opt_object);
 
       SquareNuduplOpt<long> sqr_nudupl_opt_object{quad_order};
-      sqr_nudupl_opt_object.set_RelativeGenerator(quad_number3);
+      sqr_nudupl_opt_object.set_RelativeGenerator(quad_number1);
       quad_order.set_sqr_best(sqr_nudupl_opt_object);
 
 
@@ -452,7 +450,7 @@ TEST_CASE("RegulatorLenstra<long>: Does it work?", "[RegulatorLenstra][long]") {
 //       case_types.push_back(regulator_lenstra_data.get_case_type());
 
       if(test_method == 3) {
-        if (std::abs(correct_testdata_regulators.back() - regulator) < 0.1) {
+        if (std::abs(correct_testdata_regulators.back() - regulator) < 0.001) {
           computed_correctly.push_back(true);
         } else {
           std::cout << "ERROR AT CASE " << test_bound - 1 << "(D = " << discriminant << ")" << std::endl;
@@ -461,7 +459,7 @@ TEST_CASE("RegulatorLenstra<long>: Does it work?", "[RegulatorLenstra][long]") {
         }
       }
       else if(test_method == 4) {
-        if (std::abs(correct_testdata_regulators.back() - regulator) < 1) {
+        if (std::abs(correct_testdata_regulators.back() - regulator) < 0.001) {
           computed_correctly.push_back(true);
         } else {
           std::cout << "ERROR AT CASE " << test_bound - 1 << "(D = " << discriminant << ")" << std::endl;
@@ -523,16 +521,16 @@ TEST_CASE("RegulatorLenstra<long>: Special Case 1", "[RegulatorLenstra][SpecialC
 
   std::cout << "Testing RegulatorLenstra<long>" << std::endl;
 
-//   std::vector<long> special_cases = {999990000049, 83057, 100000616828, 999990979565};
-//   std::vector<double> special_regulators = {227505, 102.412, 4917.4, 57624};
+//   std::vector<long> special_cases = {999990000049, 83057, 100000616828, 999990979565, 100000135208, 108376};
+//   std::vector<double> special_regulators = {227505, 102.412, 4917.4, 57624, 4443.48, 95.8903};
 
-  std::vector<long> special_cases = {999990979565};
-  std::vector<double> special_regulators = {57624};
+  std::vector<long> special_cases = {108376};
+  std::vector<double> special_regulators = {95.8903};
 
   L_function<long> l_function;
-//   l_function.create_L1_tables(1000001, ANTL::log (ANTL::sqrt (double (2))));
+  l_function.create_L1_tables(1000001, ANTL::log (ANTL::sqrt (double (2))));
 //   l_function.create_L1_tables(100000000001, ANTL::log (ANTL::sqrt (double (2))));
-  l_function.create_L1_tables(1000000000001, ANTL::log (ANTL::sqrt (double (2))));
+//   l_function.create_L1_tables(1000000000001, ANTL::log (ANTL::sqrt (double (2))));
 
   int test_start = 0;
 //   int test_bound = 1;

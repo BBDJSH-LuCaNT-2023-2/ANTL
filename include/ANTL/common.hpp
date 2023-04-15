@@ -10,6 +10,7 @@
 
 #include <cmath>
 #include <gmp.h>
+#include <mpfr.h>
 #include <numeric>
 #include <chrono>
 

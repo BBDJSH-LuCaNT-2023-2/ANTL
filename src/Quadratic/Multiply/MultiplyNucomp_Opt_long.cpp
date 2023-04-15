@@ -182,13 +182,7 @@ void MultiplyNucompOpt<long>::multiply(QuadraticIdealBase<long> &C,
   construct_relative_generator(rel_gen_a, rel_gen_b, rel_gen_d, C, abs(C2),
                                abs(C1), S);
 
-  temp_invert_and_normalize_nucomp(rel_gen_a, rel_gen_b, rel_gen_d, Delta);
-
   RelativeGenerator->set_abd(rel_gen_a, rel_gen_b, rel_gen_d);
-  if (RelativeGenerator->conv_RR() < 0) {
-    mul(*RelativeGenerator, *RelativeGenerator, -1);
-  }
-
 }
 
 //
