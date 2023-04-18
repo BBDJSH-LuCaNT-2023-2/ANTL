@@ -12,6 +12,8 @@
 #include <ANTL/Quadratic/QuadraticClassGroupElement.hpp>
 #include <ANTL/Quadratic/QuadraticInfElement.hpp>
 
+#include "SequencedUnorderedMap/SequencedUnorderedMap.hpp"
+
 // template <> struct std::hash<QuadraticIdealBase<ZZ>> {
 //   std::size_t operator()(QuadraticIdealBase<ZZ> const &qib) const noexcept {
 //     std::size_t h1 = std::hash<int>{}(to<int>(qib.get_a()));
@@ -109,7 +111,7 @@ template <class T> void ClassGroupBSReal<T>::cg_bs_real(const ZZ &hstar) {
   reset_prime_seq = true;
 
   QuadraticClassGroupElement<T> giantElement{*quadratic_order}, babyElement{*quadratic_order}, RHO{*quadratic_order};
-  QuadraticClassGroupElement<T> g{*quadratic_order}, gjx{*quadratic_order}, ginv{*quadratic_order}, h1{*quadratic_order}, h2{*quadratic_order}, a{*quadratic_order}, b{*quadratic_order}, c{*quadratic_order};
+  QuadraticClassGroupElement<T> g{*quadratic_order}, gjx{*quadratic_order}, ginv{*quadratic_order}, h1{*quadratic_order}, h2{*quadratic_order}, a{*quadratic_order}, a_test{*quadratic_order}, b{*quadratic_order}, c{*quadratic_order};
 
   mat_ZZ B, tempB, SNF;
   vec_ZZ v, w, Bj, H1Vec, H2Vec;
@@ -122,8 +124,9 @@ template <class T> void ClassGroupBSReal<T>::cg_bs_real(const ZZ &hstar) {
 
   sizeH1 = sizeH2 = sizeAuxBabySet = numRideals = 0;
 
-  HashEntryInt<T, ZZ> *node;
-  IndexedHashTable<HashEntryInt<T, ZZ>> ibabySet, igiantSet;
+  HashEntryInt<T, ZZ> *node, *node_test;
+//   IndexedHashTable<HashEntryInt<T, ZZ>> ibabySet, igiantSet;
+  SequencedUnorderedMap<T> ibabySet, igiantSet;
 
   long *I1, *I2;
   if (DBG_CGBSRL) {std::cout << "CGBSRL: STEP 1 - Initialize variables" << std::endl;}
@@ -163,8 +166,8 @@ template <class T> void ClassGroupBSReal<T>::cg_bs_real(const ZZ &hstar) {
     conv(upper, temp);
 
     if (DBG_CGBSRL) {std::cout << "CGBSRL: STEP 3.2" << std::endl;}
-    ibabySet.initialize(upper << 1);
-    igiantSet.initialize(upper << 1);
+//     ibabySet.initialize(upper << 1);
+//     igiantSet.initialize(upper << 1);
 
     if (DBG_CGBSRL) {std::cout << "CGBSRL: STEP 3.3" << std::endl;}
     a.assign_one();
@@ -200,6 +203,7 @@ template <class T> void ClassGroupBSReal<T>::cg_bs_real(const ZZ &hstar) {
 
     do {
       ibabySet.hash(RHO.hash_int(ZZ::zero()));
+//       ibabySet_test.hash(RHO.hash_int(ZZ::zero()));
 //       RHOdist.rho();
       RHOdist.baby_step();
       RHO.assign(RHOdist.get_qib());
@@ -247,8 +251,10 @@ template <class T> void ClassGroupBSReal<T>::cg_bs_real(const ZZ &hstar) {
         vIndex = igiantSet[i].get_d();
 
         // test for all RHO equivalent to b
-        if (F.is_one())
+        if (F.is_one()) {
           node = ibabySet.search(b.hash_int(ZZ::zero()));
+//           node_test = ibabySet_test.search(b.hash_int(ZZ::zero()));
+        }
         else {
           // use baby-step giant-step for equivalence testing
           // baby steps are all in ibabySet
@@ -260,6 +266,7 @@ template <class T> void ClassGroupBSReal<T>::cg_bs_real(const ZZ &hstar) {
               endl; #endif*/
             RHO.assign(RHOdist.get_qib());
             node = ibabySet.search(RHO.hash_int(ZZ::zero()));
+//             node_test = ibabySet_test.search(RHO.hash_int(ZZ::zero()));
 
             if (node)
               break;
@@ -373,6 +380,7 @@ template <class T> void ClassGroupBSReal<T>::cg_bs_real(const ZZ &hstar) {
         cout << "3" << flush;
 #endif
         a.assign(ibabySet[Rideals[i]]);
+//         a_test.assign(ibabySet_test.at(Rideals[i]));
 //         nucomp_real(b, a, babyElement);
         mul(b, a, babyElement);
 
@@ -384,6 +392,7 @@ template <class T> void ClassGroupBSReal<T>::cg_bs_real(const ZZ &hstar) {
         RHOdist.assign(b);
         do {
           ibabySet.hash(RHO.hash_int(to_ZZ(curr)));
+//           ibabySet_test.hash(RHO.hash_int(to_ZZ(curr)));
           RHOdist.baby_step();
           RHO.assign(RHOdist.get_qib());
 
@@ -417,6 +426,7 @@ template <class T> void ClassGroupBSReal<T>::cg_bs_real(const ZZ &hstar) {
         hashNum = ibabySet.no_of_elements() - 1;
         for (i = hashNum; i >= Rideals[sizeH1]; i--) {
           ibabySet.remove_from(i);
+//           ibabySet_test.remove_from(i);
         }
       }
 
