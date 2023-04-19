@@ -289,8 +289,10 @@ T *HashTable<T>::search(const T &G)
     tptr = ptr->item;
     //    cout << "tptr = " << tptr << endl;
     //    cout << "(*tptr).number = " << (*tptr).number << endl;
-    if (G == (*tptr))
+    if (G == (*tptr)) {
+//       std::cout << "found G == *tptr!" << std::endl;
       target = tptr;
+    }
     else
       ptr = ptr->next;
   }
@@ -372,7 +374,7 @@ template <class T> void HashTable<T>::print(std::ostream &out) const {
         out << " : " << (*tptr);
         ptr = ptr->next;
       }
-      out << "\n";
+      out << "\n" << std::endl;
     }
   }
 }

@@ -14,10 +14,17 @@ template <> struct std::hash<ANTL::HashEntryInt<long, ZZ>> {
   std::size_t operator()(ANTL::HashEntryInt<long, ZZ> const &hash_entry_int) const noexcept {
     std::size_t h1 = std::hash<long>{}(hash_entry_int.get_a());
     std::size_t h2 = std::hash<long>{}(hash_entry_int.get_b());
-    return h1 ^ (h2 << 1); // or use boost::hash_combine
+    return h1; // or use boost::hash_combine
   }
 };
 
+template <> struct std::hash<ANTL::HashEntryInt<ZZ, ZZ>> {
+  std::size_t operator()(ANTL::HashEntryInt<ZZ, ZZ> const &hash_entry_int) const noexcept {
+    std::size_t h1 = std::hash<long>{}(to_long(hash_entry_int.get_a()));
+    std::size_t h2 = std::hash<long>{}(to_long(hash_entry_int.get_b()));
+    return h1 ^ (h2 << 1); // or use boost::hash_combine
+  }
+};
 
 template <class T> class SequencedUnorderedMap {
 private:
@@ -34,6 +41,7 @@ public:
   ANTL::HashEntryInt<T, ZZ> * search(ANTL::HashEntryInt<T, ZZ> hash_entry_int);
   long no_of_elements();
   void remove_from(int i);
+  void print(std::ostream &out) const;
 };
 
 template <class T> SequencedUnorderedMap<T>::SequencedUnorderedMap() {}
@@ -69,9 +77,11 @@ template <class T> ANTL::HashEntryInt<T, ZZ> SequencedUnorderedMap<T>::operator[
 
 template <class T> ANTL::HashEntryInt<T, ZZ> * SequencedUnorderedMap<T>::search(ANTL::HashEntryInt<T, ZZ> hash_entry_int) {
   if(map.find(hash_entry_int) == map.end()) {
+//     std::cout << "return (ANTL::HashEntryInt<T, ZZ> *)NULL;" << std::endl;
     return (ANTL::HashEntryInt<T, ZZ> *)NULL;
   }
   else {
+//     std::cout << "&map.at(hash_entry_int).front();" << std::endl;
     return &map.at(hash_entry_int).front();
   }
 }
@@ -94,6 +104,21 @@ template <class T> void SequencedUnorderedMap<T>::remove_from(int i) {
   }
 
   sequence.erase(itr);
+}
+
+template <class T> void SequencedUnorderedMap<T>::print(std::ostream &out) const {
+  //print out map
+  out << "sequence is:\n";
+
+  for(auto element : sequence) {
+   out << element;
+  }
+
+  out << "map is:\n";
+  for(auto element : map) {
+    out << element.first << " and " << element.second.front();
+  }
+  out << std::endl;
 }
 
 #endif

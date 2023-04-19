@@ -538,4 +538,172 @@ TEST_CASE("ClassGroupReal<long>: Does it work?", "[ClassGroupReal][long]") {
 
 }
 
+TEST_CASE("ClassGroupReal<long>: New Test", "[ClassGroupReal][long][new]") {
+
+  std::cout << "Testing RegulatorLenstra<long>" << std::endl;
+
+  int test_method = 4;
+
+  std::ifstream test_data;
+  L_function<long> l_function;
+
+  //test_method 1 currently out of use
+  //class groups in data_1000000.txt run lowest to highest which is backwards
+//   if(test_method == 1) {
+//     test_data.open("data_1000000.txt", std::ifstream::in);
+//     l_function.create_L1_tables(1000001, ANTL::log (ANTL::sqrt (double (2))));
+//   }
+  if(test_method == 2) {
+    test_data.open("data_10000000.txt", std::ifstream::in);
+    l_function.create_L1_tables(10000001, ANTL::log (ANTL::sqrt (double (2))));
+  }
+  else if(test_method == 3) {
+    test_data.open("data_100000000000.txt", std::ifstream::in);
+    l_function.create_L1_tables(100000000001, ANTL::log (ANTL::sqrt (double (2))));
+  }
+  else if(test_method == 4) {
+    test_data.open("data_1000000000000.txt", std::ifstream::in);
+    l_function.create_L1_tables(1000000000001, ANTL::log (ANTL::sqrt (double (2))));
+  }
+
+  long discriminant;
+  double regulator;
+  std::string class_group;
+
+  int correct_count = 0;
+  int test_start = 0;
+  int test_bound = 0;
+
+  std::vector<double> correct_testdata_regulators;
+  std::vector<double> computed_regulators;
+  std::vector<bool> computed_correctly;
+  std::string computed_class_group;
+
+//     std::vector<std::string> case_types{size_t(test_bound), ""};
+
+  auto start = std::chrono::high_resolution_clock::now();
+  while(test_data >> discriminant >> regulator) {
+    getline(test_data, class_group);
+    class_group = class_group.substr(1, class_group.size()-1);
+    correct_testdata_regulators.push_back(regulator);
+
+//     if(discriminant != 229) continue;
+    if(test_bound % 10000 == 0) {
+      std::cout << "Doing test cases " << test_bound << " - " << test_bound + 9999 << std::endl;
+    }
+    test_bound++;
+
+    QuadraticOrder<long> quad_order{long(discriminant)};
+    QuadraticNumber<long> quad_number1{quad_order};
+
+    MultiplyNucompOpt<long> mul_nucomp_opt_object{quad_order};
+    mul_nucomp_opt_object.set_RelativeGenerator(quad_number1);
+    quad_order.set_mul_nucomp_opt(mul_nucomp_opt_object);
+
+    ReducePlainRealOpt<long> red_plain_real_opt_object{};
+    red_plain_real_opt_object.set_RelativeGenerator(quad_number1);
+    quad_order.set_red_best(red_plain_real_opt_object);
+
+    SquareNuduplOpt<long> sqr_nudupl_opt_object{quad_order};
+    sqr_nudupl_opt_object.set_RelativeGenerator(quad_number1);
+    quad_order.set_sqr_best(sqr_nudupl_opt_object);
+
+
+    l_function.init(long(discriminant), 2);
+
+    RegulatorLenstraData<long, double> regulator_lenstra_data{&quad_order,
+                                                            &l_function};
+    regulator_lenstra_data.set_use_table();
+
+    long bound = 0;
+
+    regulator_lenstra_data.regulator_lenstra();
+    //     regulator_lenstra_data.regulator_bsgs(bound);
+
+
+    correct_testdata_regulators.push_back(regulator_lenstra_data.get_regulator());
+    double computed_regulator = regulator_lenstra_data.get_regulator();
+//       case_types.push_back(regulator_lenstra_data.get_case_type());
+
+          // Computing h*
+      RR h_star_close = to_RR(regulator_lenstra_data.lower_bound_hR()) / to_RR(computed_regulator);
+      ZZ h_star = CeilToZZ(h_star_close);
+
+      // Setting up the ClassGroupBSGSReal object
+      ClassGroupBSReal<long> class_group_bsgs_real1{&quad_order};
+      class_group_bsgs_real1.set_regulator(computed_regulator);
+
+      // Computing the class group
+      class_group_bsgs_real1.cg_bs_real(h_star);
+
+      // Adding computed class group to results vector
+      vector<ZZ> class_group_ZZ = class_group_bsgs_real1.get_class_group();
+      vector<long> class_group_long = {};
+
+      for(auto num : class_group_ZZ) {
+        class_group_long.push_back(to<long>(num));
+      }
+
+      std::sort(class_group_long.begin(), class_group_long.end());
+      std::reverse(class_group_long.begin(), class_group_long.end());
+      std::stringstream class_group_string;
+      class_group_string << class_group_long;
+      string computed_class_group;
+      if(class_group_string.str() == "[1]") {
+        computed_class_group = "[]";
+      }
+      else {
+        computed_class_group = class_group_string.str();
+      }
+//       computed_class_group.push_back(class_group_string.str());
+
+      // Checking for corect output
+      if (class_group == computed_class_group) {
+        computed_correctly.push_back(true);
+      } else {
+        std::cout << "ERROR AT CASE " << test_bound - 1 << " (D = " << discriminant << ")";
+        std::cout << " Computed: "<< computed_class_group;
+        std::cout << " Correct: "<< class_group << std::endl;
+        computed_correctly.push_back(false);
+      }
+  }
+
+  auto stop = std::chrono::high_resolution_clock::now();
+  auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+
+  bool test_bool = true;
+
+//     if (DBG_LENSTRA_TEST) {
+//       std::cout << "CASE" << std::setw(8) << "RESULT" << std::setw(9) << "CORRECT"
+//                 << std::setw(10) << "COMPUTED" << std::setw(8)  << "DELTA"
+//                 << std::setw(11) << "CASE TYPE" << std::endl;
+//       std::cout << std::setw(57) << std::setfill('=') << "" << std::endl;
+//     }
+
+  //     for(auto i : test_cases) {
+  for (int i = test_start; i < test_bound; i++) {
+//       if (DBG_LENSTRA_TEST) {
+//         std::cout << std::setfill('0') << std::setw(3) << i << std::setfill(' ')
+//                   << std::setw(6) << computed_correctly[i] << std::setw(11)
+//                   << correct_regulators[i] << std::setw(10)
+//                   << computed_regulators[i] << std::setw(8) << discriminants[i]
+//                   << std::setw(35) << std::endl;
+//
+      if (computed_correctly[i]) {
+        correct_count++;
+      }
+//       }
+
+    test_bool = test_bool && computed_correctly[i];
+  }
+
+  if (DBG_CGBSGSR_TEST) {
+    std::cout << correct_count << "/" << test_bound - test_start
+              << " tests passed!" << std::endl;
+    std::cout << "Time taken: " << duration.count() <<  " ms" << endl;
+  }
+
+  REQUIRE(test_bool == true);
+}
+
 #endif

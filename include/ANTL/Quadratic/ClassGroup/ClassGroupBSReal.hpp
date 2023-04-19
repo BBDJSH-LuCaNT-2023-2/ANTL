@@ -33,6 +33,7 @@ template <class T> class ClassGroupBSReal {
 private:
   // DBG_CONSTANTS
   bool DBG_CGBSRL = false;
+  bool DBG_CGBSRL_SUM = false;
 
   QuadraticOrder<T> *quadratic_order;
 
@@ -238,6 +239,10 @@ template <class T> void ClassGroupBSReal<T>::cg_bs_real(const ZZ &hstar) {
     while (!found) {
       // for all (g,v) in giantSet
       hashNum = igiantSet.no_of_elements();
+      if (DBG_CGBSRL_SUM) {
+            std::cout << "hashNum is " << hashNum << std::endl;
+      }
+
 #ifdef DEBUGBS
       cout << "2a" << flush;
 #endif
@@ -246,13 +251,26 @@ template <class T> void ClassGroupBSReal<T>::cg_bs_real(const ZZ &hstar) {
         cout << "2b" << flush;
 #endif
         a.assign(igiantSet[i]);
+        if (DBG_CGBSRL_SUM) {
+          std::cout << "a is " << a << std::endl;
+        }
 //         nucomp_real(b, giantElement, a);
         mul(b, giantElement, a);
         vIndex = igiantSet[i].get_d();
+        if (DBG_CGBSRL_SUM) {
+          std::cout << "vIndex is " << vIndex << std::endl;
+        }
 
         // test for all RHO equivalent to b
         if (F.is_one()) {
+          if (DBG_CGBSRL_SUM) {
+            ibabySet.print(std::cout);
+            std::cout << "looking for" << b.hash_int(ZZ::zero());
+          }
           node = ibabySet.search(b.hash_int(ZZ::zero()));
+          if (DBG_CGBSRL_SUM) {
+            std::cout << "node is " << node << std::endl;
+          }
 //           node_test = ibabySet_test.search(b.hash_int(ZZ::zero()));
         }
         else {
@@ -266,6 +284,9 @@ template <class T> void ClassGroupBSReal<T>::cg_bs_real(const ZZ &hstar) {
               endl; #endif*/
             RHO.assign(RHOdist.get_qib());
             node = ibabySet.search(RHO.hash_int(ZZ::zero()));
+            if (DBG_CGBSRL_SUM) {
+              std::cout << "node is " << node << std::endl;
+            }
 //             node_test = ibabySet_test.search(RHO.hash_int(ZZ::zero()));
 
             if (node)
@@ -380,12 +401,18 @@ template <class T> void ClassGroupBSReal<T>::cg_bs_real(const ZZ &hstar) {
         cout << "3" << flush;
 #endif
         a.assign(ibabySet[Rideals[i]]);
+        if (DBG_CGBSRL_SUM) {
+          std::cout << "a is " << a << std::endl;
+        }
 //         a_test.assign(ibabySet_test.at(Rideals[i]));
 //         nucomp_real(b, a, babyElement);
         mul(b, a, babyElement);
 
         if (curr == Rideals.MaxLength())
           Rideals.SetLength(Rideals.MaxLength() << 1);
+        if(DBG_CGBSRL_SUM) {
+          std::cout << "ibabySet.no_of_elements() is " << ibabySet.no_of_elements() <<std::endl;
+        }
         Rideals[to<long>(curr)] = ibabySet.no_of_elements();
 
         RHO.assign(b);
@@ -424,6 +451,9 @@ template <class T> void ClassGroupBSReal<T>::cg_bs_real(const ZZ &hstar) {
       // delete all elements of ibabySet until only H1 remains
       if (sizeH1 < numRideals) {
         hashNum = ibabySet.no_of_elements() - 1;
+        if(DBG_CGBSRL_SUM) {
+          std::cout << "hashNum is " << hashNum <<std::endl;
+        }
         for (i = hashNum; i >= Rideals[sizeH1]; i--) {
           ibabySet.remove_from(i);
 //           ibabySet_test.remove_from(i);
@@ -432,6 +462,9 @@ template <class T> void ClassGroupBSReal<T>::cg_bs_real(const ZZ &hstar) {
 
       // delete all elements of igiantSet until only H2 remains
       hashNum = igiantSet.no_of_elements();
+      if(DBG_CGBSRL_SUM) {
+        std::cout << "hashNum is " << hashNum << std::endl;
+      }
       if (sizeH2 < hashNum) {
         for (i = hashNum - 1; i >= sizeH2; i--) {
           igiantSet.remove_from(i);
@@ -481,6 +514,9 @@ template <class T> void ClassGroupBSReal<T>::cg_bs_real(const ZZ &hstar) {
 
             if (curr == Rideals.MaxLength())
               Rideals.SetLength(Rideals.MaxLength() << 1);
+            if(DBG_CGBSRL_SUM) {
+              std::cout << "ibabySet.no_of_elements() is " << ibabySet.no_of_elements() << std::endl;
+            }
             Rideals[to<long>(curr)] = ibabySet.no_of_elements();
 
             RHO.assign(b);
@@ -568,6 +604,9 @@ template <class T> void ClassGroupBSReal<T>::cg_bs_real(const ZZ &hstar) {
 
           if (curr == Rideals.MaxLength())
             Rideals.SetLength(Rideals.MaxLength() << 1);
+          if(DBG_CGBSRL_SUM) {
+              std::cout << "ibabySet.no_of_elements() is " << ibabySet.no_of_elements() << std::endl;
+          }
           Rideals[to<long>(curr)] = ibabySet.no_of_elements();
 
           RHO.assign(b);
@@ -599,6 +638,9 @@ template <class T> void ClassGroupBSReal<T>::cg_bs_real(const ZZ &hstar) {
         mul(gjx, gjx, c);
         for (i = 0; i < sizeH2; i++) {
           h2.assign(igiantSet[i]);
+          if(DBG_CGBSRL_SUM) {
+            std::cout << "h2 is " << h2 << std::endl;
+          }
 //           nucomp_real(b, h2, gjx);
           mul(b, h2, gjx);
           igiantSet.hash(b.hash_int(to_ZZ(curr)));
