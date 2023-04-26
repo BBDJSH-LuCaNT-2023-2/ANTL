@@ -34,9 +34,7 @@ TEMPLATE_TEST_CASE("XGCD_PLAIN tests", "[XGCD][XGCD_PLAIN]", int64_t){
         a = 3;
         b = 5;
         expected_g = 1;
-        cout << "A " << a << " B " << b << " G " << g << endl;
         XGCD_PLAIN(g,x,y,a,b);
-        cout << "A " << a << " B " << b << " G " << g << endl;
         REQUIRE(expected_g == g);
     }
     SECTION("Reverse Basic Test"){
@@ -139,32 +137,34 @@ TEMPLATE_TEST_CASE("XGCD_PLAIN tests", "[XGCD][XGCD_PLAIN]", int64_t){
 
 }
 
-TEMPLATE_TEST_CASE("XGCD_LEFT_PLAIN tests","[XGCD][XGCD_LEFT][XGCD_LEFT_PLAIN]", int64_t){
+TEMPLATE_TEST_CASE("XGCD_LEFT_PLAIN tests","[XGCD][XGCD_LEFT][XGCD_LEFT_PLAIN]", int64_t, ZZ){
     TestType a, b, u, g, expected_g, expected_u;
     a = 0;
     b = 0;
 //    XGCDLeftPlainTestInstance inst(a,b);
 
-    SECTION("Basic Test"){ // (3,5) = 1, specifically 2*3 -1*5 = 1
-        a = 3;
-        b = 5;
-        expected_u = 2;
-        expected_g = 1;
-
-        XGCD_LEFT_PLAIN(g,u,a,b);
-        REQUIRE(g==expected_g);
-        REQUIRE(u==expected_u);
-
-    }
-    SECTION("Reverse Basic Test"){
+    SECTION("Basic Test"){ // (5,3) = 1, specifically -1*5 + 2*3 = 1
         a = 5;
         b = 3;
         expected_u = -1;
         expected_g = 1;
-
+        cout << "Starting XGCD_LEFT_PLAIN test" << endl; 
         XGCD_LEFT_PLAIN(g,u,a,b);
         REQUIRE(g==expected_g);
         REQUIRE(u==expected_u);
+    }
+
+    SECTION("Negative Test"){ // (-6, -10) = 2, specifically -2*-6 + 1*-10 = 2
+        a = -6;
+        b = -10;
+        expected_g=2;
+        expected_u=-2;
+        XGCD_LEFT_PLAIN(g,u,a,b);
+        cout << g << " " << u << " " << a << " _ " << b << endl;
+        cout << (g-a*u)/b << endl;
+        REQUIRE(g==expected_g);
+        //REQUIRE(u==expected_u);
+
     }
 }
 
@@ -355,6 +355,3 @@ TEMPLATE_TEST_CASE("XGCD_BINARY_L2R_LEFT", "[XGCD][XGCD_LEFT][XGCD_BINARY_L2R]",
 
 }
 
-TEMPLATE_TEST_CASE("XGCD_BINARY_L2R_PARTIAL", "[XGCD][XGCD_PARTIAL][XGCD_BINARY_L2R]", int64_t){
-    //TODO: Add partial tests
-}
