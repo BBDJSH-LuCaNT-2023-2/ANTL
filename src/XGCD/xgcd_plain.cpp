@@ -122,11 +122,6 @@ void XGCD_PLAIN(int64_t & G, int64_t & X, int64_t & Y, const int64_t & A, const 
 
 }
 
-template<>
-void XGCD_PLAIN(ZZ & G, ZZ & X, ZZ & Y, const ZZ & A, const ZZ & B){
-  //first, convert the ZZs into mpz_ts to work with max's built functions
-  
-}
 //
 // XGCD_LEFT_PLAIN
 //
@@ -265,7 +260,42 @@ void XGCD_LEFT_PLAIN(int64_t & G, int64_t & X, const int64_t & A, const int64_t 
   G = ma;
 }
 
+template<>
+void XGCD_LEFT_PLAIN(ZZ & G, ZZ & X, const ZZ & A, const ZZ & B){
+  //A must be >= B
+  mpz_t a,b,g,x;
+  assert(A>=B);
+  mpz_init_set_ui(a,0);
+  mpz_init_set_ui(b,0);
 
+  //ZZ_limbs_get only returns a readonly pointer
+  //must convert to mpz_ts and get writable pointers
+  ANTL::ZZToMpz(A,a);
+  ANTL::ZZToMpz(B,b);
+  mpz_init_set(g,a);
+  mpz_init_set(x,a);
+
+  mp_size_t a_size, b_size, g_size, x_size;
+  a_size = A.size();
+  b_size = B.size();
+  mp_limb_t *g_limbs, *a_limbs, *b_limbs, *x_limbs;
+  a_limbs = mpz_limbs_write(a, a_size);
+  b_limbs = mpz_limbs_write(b, b_size);
+  g_limbs = mpz_limbs_write(g, a_size);
+  x_limbs = mpz_limbs_write(x, a_size);
+  g_size = mpn_gcdext(g_limbs, x_limbs, &x_size, a_limbs, a_size, b_limbs, b_size);
+  //correct sign on x_size
+  cout << "x_size premod: " << x_size << endl;
+  int sign = x_size/abs(x_size);
+  x_size=abs(x_size);
+  cout << "x_size postmod: " << x_size << endl;
+  //rebuild ZZ values
+  ZZ_limbs_set(G, g_limbs, g_size);
+  ZZ_limbs_set(X, x_limbs, x_size);
+  X = sign*X;
+
+  //(g-ax)/b
+}
 
 //
 // Partial Euclidean algorithm (for NUCOMP and fast reduce)
