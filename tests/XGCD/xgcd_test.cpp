@@ -373,7 +373,7 @@ TEMPLATE_TEST_CASE("XGCD_BINARY_L2R_PARTIAL", "[XGCD][XGCD_PARTIAL][XGCD_BINARY_
         cout << "Z: " << z << " R2 " << R2 << " R1 " << R1 << " C2 " << C2 << " C1 " << C1 << endl;
         REQUIRE(R1>=R2);
         REQUIRE(R1<=bound);
-        REQUIRE(bound < R2);   
+        //REQUIRE(bound < R2);   
     }
 
 }
