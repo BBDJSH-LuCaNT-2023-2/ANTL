@@ -414,6 +414,9 @@ using namespace ANTL;
         // interval
 //         QO.set_Lfunction_global(to<long>(H));
 
+        L_function<long> l_function;
+        l_function.create_L1_tables(to_long(H + 1), ANTL::log (ANTL::sqrt (double (2))));
+
         oldDl = to<long>(L);
         for (i = 0; i < n; ++i) {
 //           std::cout << "Dlist[i] is " << Dlist[i] << std::endl;
@@ -441,7 +444,6 @@ using namespace ANTL;
           red_plain_real_opt_object.set_RelativeGenerator(quad_number3);
           QO.set_red_best(red_plain_real_opt_object);
 
-          L_function<long> l_function;
           l_function.init(to_long(Dl), 2);
 
           tuple<double, ZZ, vector<long>> regulator_and_hstar_tuple = get_regulator_and_hstar(QO, l_function);
