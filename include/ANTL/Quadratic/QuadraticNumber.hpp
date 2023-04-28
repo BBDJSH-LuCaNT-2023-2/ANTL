@@ -201,10 +201,8 @@ template <class T> class QuadraticNumber {
 private:
   QuadraticOrder<T> *QO; /**< order to which the QuadraticNumber belongs */
   T a, b, d;             /**< coefficients of the QuadraticNumber */
-  mpfr_t to_log_val, mpfr_sqrt_D;
-
-  int mpfr_sqrt_D_prec = 100;
-  int to_log_val_prec = 100;
+  __float128 f128_sqrt_D;
+  double result;
 
   void normalize() {
     // remove common factors
@@ -234,10 +232,7 @@ public:
     ::clear(b);
     ::set(d);
 
-    mpfr_init2(mpfr_sqrt_D, mpfr_sqrt_D_prec);
-    mpfr_sqrt_ui(mpfr_sqrt_D, to_long(QO->get_discriminant()), MPFR_RNDD);
-
-    mpfr_init2(to_log_val, to_log_val_prec);
+    f128_sqrt_D = sqrtf128(to_long(QO->get_discriminant()));
   }
 
   /**
@@ -250,10 +245,7 @@ public:
     ::clear(b);
     ::set(d);
 
-    mpfr_init2(mpfr_sqrt_D, mpfr_sqrt_D_prec);
-    mpfr_sqrt_ui(mpfr_sqrt_D, to_long(QO->get_discriminant()), MPFR_RNDD);
-
-    mpfr_init2(to_log_val, to_log_val_prec);
+    f128_sqrt_D = sqrtf128(to_long(QO->get_discriminant()));
   }
 
   /**
@@ -266,10 +258,7 @@ public:
     ::clear(b);
     d = q.getDenominator();
 
-    mpfr_init2(mpfr_sqrt_D, mpfr_sqrt_D_prec);
-    mpfr_sqrt_ui(mpfr_sqrt_D, to_long(QO->get_discriminant()), MPFR_RNDD);
-
-    mpfr_init2(to_log_val, to_log_val_prec);
+    f128_sqrt_D = sqrtf128(to_long(QO->get_discriminant()));
   }
 
   /**
@@ -282,15 +271,10 @@ public:
     b = x.b;
     d = x.d;
 
-    mpfr_init2(mpfr_sqrt_D, mpfr_sqrt_D_prec);
-    mpfr_sqrt_ui(mpfr_sqrt_D, to_long(QO->get_discriminant()), MPFR_RNDD);
-
-    mpfr_init2(to_log_val, to_log_val_prec);
+    f128_sqrt_D = sqrtf128(to_long(QO->get_discriminant()));
   }
 
   ~QuadraticNumber() {
-    mpfr_clear(to_log_val);
-    mpfr_clear(mpfr_sqrt_D);
   }
 
   /**
@@ -452,12 +436,9 @@ public:
    */
   template <class S> S to_log() {
 
-    mpfr_mul_si(to_log_val, mpfr_sqrt_D, to_long(b), MPFR_RNDD);
-    mpfr_add_si(to_log_val, to_log_val, to_long(a), MPFR_RNDD);
-
-    double result_d = mpfr_get_d(to_log_val, MPFR_RNDD);
-    S result_S = to<S>(result_d) / to<S>(d);
-    return log(abs(result_S));
+    result = to_long(a) + to_long(b)*f128_sqrt_D;
+    result /= (double) to_long(d);
+    return log(fabs(result));
   }
 
   /**
