@@ -10,9 +10,9 @@ AM_CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/include
 # tabulation_CXXFLAGS = mpicC @CXXFLAGS@ -I/home/austin.docherty/ntl/include -L/home/austin.docherty/ntl/lib
 
 if EXTRADEPS
-bin_PROGRAMS = regulator classgroupBSGS classgroupBS interval
+bin_PROGRAMS = test regulator classgroupBSGS classgroupBS interval
 else
-bin_PROGRAMS = regulator classgroupBSGS classgroupBS interval
+bin_PROGRAMS = test regulator classgroupBSGS classgroupBS interval
 endif
 
 #arc_SOURCES = tests/ARC_test.cpp                                  \
@@ -276,7 +276,7 @@ classgroupBS_SOURCES = tests/UnitTests.cpp                                 \
 
 #testorder_SOURCES=tests/Cubic/catch-tests/test-order.cpp tests/Cubic/catch-tests/testingMain.cpp src/Cubic/generalFunctions.cpp src/Cubic/CubicOrder.cppquadinfelm
 
-#test_SOURCES = tests/UnitTests.cpp                                   \
+test_SOURCES = tests/UnitTests.cpp                                   \
                tests/IndexCalculus/IndCalc_Tests.cpp                  \
                tests/common_Tests.cpp                                 \
                tests/LFunction/LFunction_ZZ_Tests.cpp                 \
