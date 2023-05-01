@@ -388,4 +388,123 @@ namespace ANTL {
 //   }
 
 
+//integer negation using mask m. m must be 0 or -1
+// m=0: x->x
+// m=-1: x->-x
+//ported from liboptarith, written by Maxwell Sayles
+template <class T>
+T negate_using_mask(const uint64_t m, const T x){
+  assert(m == 0 || m == (uint64_t)(-1));
+  return (x ^ m) - m;
+
+}
+template<>
+int64_t negate_using_mask<int64_t>(const uint64_t m, const int64_t x){
+  assert(m == 0 || m == (uint64_t)(-1));
+  return (x ^ m) - m;
+}
+
+int64_t sub_with_mask(uint64_t & m, const int64_t & a, const int64_t & b){
+  int64_t r;
+  #if defined(__x86_64)
+  asm("subq %3, %0\n\t"
+      "sbbq %1, %1\n\t"  // %1 is either 0 or -1
+      : "=r"(r), "=&r"(m)
+      : "0"(a), "r"(b)
+      : "cc");
+
+#else
+  m = a < b ? -1 : 0;
+  r = a - b;
+#endif  
+return r;
+}
+
+void cond_swap2_s64(int64_t & u1, int64_t & u2, int64_t & v1, int64_t & v2){
+  uint64_t m;
+  int64_t d2 = sub_with_mask(m, u2, v2);
+  int64_t d1 = (u1 - v1) & m;
+  d2 &= m;
+  u1 -= d1;
+  u2 -= d2;
+  v1 += d1;
+  v2 += d2;
+}
+
+uint64_t cond_swap3_s64(int64_t & u1,
+				      int64_t & u2,
+				      int64_t & u3,
+				      int64_t & v1,
+				      int64_t & v2,
+				      int64_t & v3){
+                  
+  uint64_t m;
+  int64_t d3 = sub_with_mask(m, u3, v3);
+  int64_t d1 = (u1 - v1) & m;
+  int64_t d2 = (u2 - v2) & m;
+  d3 &= m;
+  u1 -= d1;
+  u2 -= d2;
+  u3 -= d3;
+  v1 += d1;
+  v2 += d2;
+  v3 += d3;
+  return m;
+}
+
+int msb_u64(uint64_t x){
+  #if defined(__x86_64)
+  int64_t k = -1;
+  asm("bsrq %1, %0\n\t"
+      : "=r"(k)
+      : "r"(x), "0"(k)
+      : "cc");
+  return k;
+#else
+  // a binary search approach to finding the most significant set bit
+  int n = 0;
+  if (x == 0) return -1;
+  if (x > 0xFFFFFFFFULL) { n += 32; x >>= 32; }
+  if (x > 0xFFFF) { n += 16; x >>= 16; }
+  if (x > 0xFF) { n += 8;  x >>= 8; }
+  if (x > 0xF) { n += 4;  x >>= 4; }
+  if (x > 0x7) { n += 2;  x >>= 2; }
+  if (x > 0x3) { n += 1;  x >>= 1; }
+  if (x > 0x1) { n ++; }
+  return n;
+#endif
+}
+
+void ZZToMpz(const ZZ & A, mpz_t & a){
+  //get array of mpz limbs from ZZ
+  const mp_limb_t * zz_limbs = ZZ_limbs_get(A);
+  //get number of limbs in ZZ 
+  //the sign matters when reconstructing the mpz, see below
+  long num_limbs = A.size(); 
+  
+
+  //get a pointer to a writable array of mp_limb_t s belonging to the mpz type
+  mp_limb_t* mpz_limbs = mpz_limbs_write(a, num_limbs);
+  for(int i=0; i<num_limbs;i++){
+    mpz_limbs[i] = zz_limbs[i];
+  }
+  //mpz_limbs_finish uses the sign of num_limbs to set the sign on the mpz_t value  
+  mpz_limbs_finish(a, sign(A)*num_limbs);
+}
+
+void MpzToZZ(const mpz_t & a, ZZ & A){
+  //Get limbs from mpz_t
+  const mp_limb_t * mpz_limbs = mpz_limbs_read(a);
+  //Get number of limbs
+  size_t num_limbs = mpz_size(a);
+  //get mpz_t sign 
+  int sign = mpz_sgn(a);
+
+  //set the limbs of the ZZ object
+  ZZ_limbs_set(A, mpz_limbs, num_limbs);
+  //this seems slow
+  A = A*ZZ(sign);
+
+}
+  
 } // ANTL

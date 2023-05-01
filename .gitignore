@@ -38,8 +38,16 @@
 
 # build artifacts
 /build/*
+**/.deps
+**/.dirstamp
 !/build/README
 !/build/data.txt
+
+#binaries
+main
+test
+testorder
+cubic
 
 #
 # Autotools rules
@@ -70,7 +78,6 @@ Makefile.in
 /stamp-h1
 
 
-
 #
 # IDE
 #
@@ -88,6 +95,8 @@ progress-log
 bin/
 unused/
 special/
+
+.vscode/*
 
 .idea/*
 cmake-build-debug/*

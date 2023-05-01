@@ -19,9 +19,11 @@
 #include <NTL/ZZ_pEX.h>
 #include <NTL/ZZ_pX.h>
 #include <NTL/lzz_pEX.h>
-#include <NTL/lzz_pX.h>
 
+#include <NTL/lzz_pX.h>
 #include <NTL/mat_ZZ.h>
+
+#include <NTL/ZZ_limbs.h>
 
 #include <NTL/GF2EXFactoring.h>
 #include <NTL/GF2XFactoring.h>
@@ -244,7 +246,23 @@ long Kronecker(const ZZ_pEX &a, const ZZ_pEX &n);
 long Kronecker(const zz_pEX &a, const zz_pEX &n);
 long Kronecker(const GF2EX &h, const GF2EX &f, const GF2EX &n);
 
-// finite field cardinality macros
+  //mask negation functions: m must be 0 or -1
+  template <class T>
+  T negate_using_mask(const uint64_t m, const T x);
+
+  int64_t sub_with_mask(uint64_t & m, const int64_t & a, const int64_t & b);
+
+  void cond_swap2_s64(int64_t & u1, int64_t & u2, int64_t & v1, int64_t & v2);
+  uint64_t cond_swap3_s64(int64_t & u1,
+				      int64_t & u2,
+				      int64_t & u3,
+				      int64_t & v1,
+				      int64_t & v2,
+				      int64_t & v3);
+
+  int msb_u64(uint64_t x);
+  // finite field cardinality macros
+
 template <class> ZZ CARDINALITY(void);
 
 template <> inline ZZ CARDINALITY<ZZ>(void) { return to_ZZ(0); }
@@ -344,55 +362,40 @@ template <> inline ZZ to<ZZ>(const ZZ &a) { return a; }
 template <> inline ZZ to<ZZ>(const RR &a) { return to_ZZ(a); }
 template <> inline ZZ to<ZZ>(const quad_float &a) { return to_ZZ(a); }
 
-template <> inline RR to<RR>(const int &a) { return to_RR(a); }
-template <> inline RR to<RR>(const long &a) { return to_RR(a); }
-template <> inline RR to<RR>(const float &a) { return to_RR(a); }
-template <> inline RR to<RR>(const double &a) { return to_RR(a); }
-template <> inline RR to<RR>(const ZZ &a) { return to_RR(a); }
-template <> inline RR to<RR>(const RR &a) { return a; }
-template <> inline RR to<RR>(const quad_float &a) { return to_RR(a); }
+  template<> inline RR to<RR>(const int& a)        { return to_RR(a); }
+  template<> inline RR to<RR>(const long& a)       { return to_RR(a); }
+  template<> inline RR to<RR>(const float& a)      { return to_RR(a); }
+  template<> inline RR to<RR>(const double& a)     { return to_RR(a); }
+  template<> inline RR to<RR>(const ZZ& a)         { return to_RR(a); }
+  template<> inline RR to<RR>(const RR& a)         { return a; }
+  template<> inline RR to<RR>(const quad_float& a) { return to_RR(a); }
 
-template <> inline quad_float to<quad_float>(const int &a) {
-  return to_quad_float(a);
-}
-template <> inline quad_float to<quad_float>(const long &a) {
-  return to_quad_float(a);
-}
-template <> inline quad_float to<quad_float>(const float &a) {
-  return to_quad_float(a);
-}
-template <> inline quad_float to<quad_float>(const double &a) {
-  return to_quad_float(a);
-}
-template <> inline quad_float to<quad_float>(const ZZ &a) {
-  return to_quad_float(a);
-}
-template <> inline quad_float to<quad_float>(const RR &a) {
-  return to_quad_float(a);
-}
-template <> inline quad_float to<quad_float>(const quad_float &a) { return a; }
+  template<> inline quad_float to<quad_float>(const int& a)        { return to_quad_float(a); }
+  template<> inline quad_float to<quad_float>(const long& a)       { return to_quad_float(a); }
+  template<> inline quad_float to<quad_float>(const float& a)      { return to_quad_float(a); }
+  template<> inline quad_float to<quad_float>(const double& a)     { return to_quad_float(a); }
+  template<> inline quad_float to<quad_float>(const ZZ& a)         { return to_quad_float(a); }
+  template<> inline quad_float to<quad_float>(const RR& a)         { return to_quad_float(a); }
+  template<> inline quad_float to<quad_float>(const quad_float& a) { return a; }
 
-template <> inline GF2EX to<GF2EX>(const int &a) { return to_GF2EX(to_ZZ(a)); }
-template <> inline GF2EX to<GF2EX>(const long &a) { return to_GF2EX(a); }
-template <> inline GF2EX to<GF2EX>(const float &a) {
-  return to_GF2EX(to_ZZ(a));
-}
-template <> inline GF2EX to<GF2EX>(const double &a) {
-  return to_GF2EX(to_ZZ(a));
-}
-template <> inline GF2EX to<GF2EX>(const ZZ &a) { return to_GF2EX(a); }
-template <> inline GF2EX to<GF2EX>(const RR &a) { return to_GF2EX(to_ZZ(a)); }
-template <> inline GF2EX to<GF2EX>(const quad_float &a) {
-  return to_GF2EX(to_ZZ(a));
-}
-template <> inline GF2EX to<GF2EX>(const GF2EX &a) { return a; }
+  template<> inline GF2EX to<GF2EX>(const int& a)        { return to_GF2EX(to_ZZ(a)); }
+  template<> inline GF2EX to<GF2EX>(const long& a)       { return to_GF2EX(a); }
+  template<> inline GF2EX to<GF2EX>(const float& a)      { return to_GF2EX(to_ZZ(a)); }
+  template<> inline GF2EX to<GF2EX>(const double& a)     { return to_GF2EX(to_ZZ(a)); }
+  template<> inline GF2EX to<GF2EX>(const ZZ& a)         { return to_GF2EX(a); }
+  template<> inline GF2EX to<GF2EX>(const RR& a)         { return to_GF2EX(to_ZZ(a)); }
+  template<> inline GF2EX to<GF2EX>(const quad_float& a) { return to_GF2EX(to_ZZ(a)); }
+  template<> inline GF2EX to<GF2EX>(const GF2EX& a) { return a; }
 
-template <> inline ZZ_pX to<ZZ_pX>(const ZZ_pX &a) { return a; }
-template <> inline ZZ_pEX to<ZZ_pEX>(const ZZ_pEX &a) { return a; }
-template <> inline zz_pX to<zz_pX>(const zz_pX &a) { return a; }
-template <> inline zz_pEX to<zz_pEX>(const zz_pEX &a) { return a; }
+  template<> inline ZZ_pX to<ZZ_pX>(const ZZ_pX& a) { return a; }
+  template<> inline ZZ_pEX to<ZZ_pEX>(const ZZ_pEX& a) { return a; }
+  template<> inline zz_pX to<zz_pX>(const zz_pX& a) { return a; }
+  template<> inline zz_pEX to<zz_pEX>(const zz_pEX& a) { return a; }
 
-template <> inline zz_pX to<zz_pX>(const int &a) { return zz_pX(a, 0); }
+  template<> inline zz_pX to<zz_pX>(const int & a) { return zz_pX(a,0); }
+
+  void ZZToMpz(const ZZ & A, mpz_t & a);
+  void MpzToZZ(const mpz_t & a, ZZ & A);
 } // namespace ANTL
 
 //
