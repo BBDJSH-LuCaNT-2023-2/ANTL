@@ -10,12 +10,12 @@ AM_CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/include
 # tabulation_CXXFLAGS = mpicC @CXXFLAGS@ -I/home/austin.docherty/ntl/include -L/home/austin.docherty/ntl/lib
 
 if EXTRADEPS
-bin_PROGRAMS = regulator classgroupBSGS classgroupBS interval tabulation harvest arc
+bin_PROGRAMS = regulator classgroupBSGS classgroupBS interval
 else
-bin_PROGRAMS = regulator classgroupBSGS classgroupBS interval tabulation harvest arc
+bin_PROGRAMS = regulator classgroupBSGS classgroupBS interval
 endif
 
-arc_SOURCES = tests/ARC_test.cpp                                  \
+#arc_SOURCES = tests/ARC_test.cpp                                  \
               tests/Quadratic/Applications/Tabulation/iq-data.cpp \
               src/common.cpp                                          \
               src/LinearAlgebra/Smith.cpp                             \
@@ -52,7 +52,7 @@ arc_SOURCES = tests/ARC_test.cpp                                  \
                src/Quadratic/QuadraticOrder_long.cpp \
                src/Quadratic/QuadraticOrder_ZZ.cpp
 
-tabulation_SOURCES = tests/Quadratic/Applications/Tabulation/QCL_Tabulation_Tabulate.cpp \
+#tabulation_SOURCES = tests/Quadratic/Applications/Tabulation/QCL_Tabulation_Tabulate.cpp \
                      tests/Quadratic/Applications/Tabulation/timer.cpp                  \
                      src/common.cpp                                          \
                      src/LinearAlgebra/Smith.cpp                             \
@@ -114,7 +114,7 @@ interval_SOURCES = tests/Quadratic/Applications/Tabulation/QCL_Tabulation_Interv
                     src/XGCD/xgcd_iter.cpp                                  \
                     src/XGCD/xgcd_plain.cpp
 
-harvest_SOURCES =    tests/Quadratic/Applications/Tabulation/QCL_Tabulation_Harvest.cpp         \
+#harvest_SOURCES =    tests/Quadratic/Applications/Tabulation/QCL_Tabulation_Harvest.cpp         \
                      tests/Quadratic/Applications/Tabulation/timer.cpp                          \
                      tests/Quadratic/Applications/Tabulation/iq-data.cpp                        \
                      src/common.cpp                                          \
