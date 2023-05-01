@@ -10,7 +10,6 @@
 
 #include <cmath>
 #include <gmp.h>
-#include <mpfr.h>
 #include <numeric>
 #include <chrono>
 
@@ -31,14 +30,9 @@
 #include <NTL/lzz_pEXFactoring.h>
 #include <NTL/lzz_pXFactoring.h>
 
-<<<<<<< HEAD
 #include <boost/math/tools/tuple.hpp>
 #include <boost/math/bindings/rr.hpp>
 using boost::math::ntl::atan;
-=======
-// #include <boost/math/bindings/rr.hpp>
-// using boost::math::ntl::atan;
->>>>>>> 88bb148b678fabfbdad9a0d9fa3e619cedf58bdc
 
 // We use the NTL namespace everywhere. Rather than have a using directive in
 // every file, we just put it here, for convenience and clarity.
