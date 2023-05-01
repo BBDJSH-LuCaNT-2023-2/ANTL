@@ -13,6 +13,7 @@ AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_LN_S
 
+# this macro figures out how to build with pthreads.
 AX_PTHREAD
 
 # this macro figures out how to build with mpi
