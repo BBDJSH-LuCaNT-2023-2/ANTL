@@ -29,11 +29,8 @@ AC_CHECK_LIB([mpfi], [main])
 AC_CHECK_LIB([ntl], [main])
 AC_CHECK_LIB([gcov], [main])
 AC_CHECK_LIB([lcov], [main])
-<<<<<<< HEAD
 
 AX_BOOST_BASE([1.73],, [AC_MSG_ERROR([Boost library 1.73 or higher required])])
-=======
->>>>>>> 88bb148b678fabfbdad9a0d9fa3e619cedf58bdc
 
 # see https://www.gnu.org/software/autoconf/manual/autoconf-2.60/html_node/External-Software.html
 # run ./configure --help in the top level directory to list all options for configure
