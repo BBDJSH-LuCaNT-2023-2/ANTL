@@ -20,14 +20,14 @@ NTL_CLIENT
 template <class T>
 void XGCD_BINARY_L2R(T & G, T & X, T & Y, const T & A, const T & B);
 template<>
-void XGCD_BINARY_L2R(int64_t & G, int64_t & X, int64_t & Y, const int64_t & A, const int64_t & B);
+void XGCD_BINARY_L2R(long & G, long & X, long & Y, const long & A, const long & B);
 
 template <class T>
 void XGCD_BINARY_L2R_LEFT(T & G, T & X, const T & A, const T & B);
 template<>
-void XGCD_BINARY_L2R_LEFT(int64_t & G, int64_t & X, const int64_t & A, const int64_t & B);
+void XGCD_BINARY_L2R_LEFT(long & G, long & X, const long & A, const long & B);
 
 template <class T>
 void XGCD_PARTIAL_BINARY_L2R(T & Z, T & R2, T & R1, T & C2, T & C1, const T bound);
 template<>
-void XGCD_PARTIAL_BINARY_L2R(int64_t & Z, int64_t & R2, int64_t & R1, int64_t & C2, int64_t & C1, const int64_t bound);
+void XGCD_PARTIAL_BINARY_L2R(long & Z, long & R2, long & R1, long & C2, long & C1, const long bound);

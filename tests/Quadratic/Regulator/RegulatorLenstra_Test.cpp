@@ -257,7 +257,7 @@ TEST_CASE("RegulatorLenstra<long>: Does it work?", "[RegulatorLenstra][long]") {
 
   std::cout << "Testing RegulatorLenstra<long>" << std::endl;
 
-  int test_method = 4;
+  int test_method = 3;
 
   if(test_method == 0) {
     int correct_count = 0;
@@ -521,16 +521,16 @@ TEST_CASE("RegulatorLenstra<long>: Special Case 1", "[RegulatorLenstra][SpecialC
 
   std::cout << "Testing RegulatorLenstra<long>" << std::endl;
 
-//   std::vector<long> special_cases = {999990000049, 83057, 100000616828, 999990979565, 100000135208, 108376};
-//   std::vector<double> special_regulators = {227505, 102.412, 4917.4, 57624, 4443.48, 95.8903};
+//   std::vector<long> special_cases = {999990000049, 83057, 100000616828, 999990979565, 100000135208, 108376, 100000000005};
+//   std::vector<double> special_regulators = {227505, 102.412, 4917.4, 57624, 4443.48, 95.8903, 6584.5};
 
-  std::vector<long> special_cases = {108376};
-  std::vector<double> special_regulators = {95.8903};
+  std::vector<long> special_cases = {100000000005};
+  std::vector<double> special_regulators = {6584.5};
 
   L_function<long> l_function;
-  l_function.create_L1_tables(1000001, ANTL::log (ANTL::sqrt (double (2))));
+//   l_function.create_L1_tables(1000001, ANTL::log (ANTL::sqrt (double (2))));
 //   l_function.create_L1_tables(100000000001, ANTL::log (ANTL::sqrt (double (2))));
-//   l_function.create_L1_tables(1000000000001, ANTL::log (ANTL::sqrt (double (2))));
+  l_function.create_L1_tables(1000000000001, ANTL::log (ANTL::sqrt (double (2))));
 
   int test_start = 0;
 //   int test_bound = 1;

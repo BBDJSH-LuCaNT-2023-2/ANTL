@@ -393,19 +393,20 @@ namespace ANTL {
 // m=-1: x->-x
 //ported from liboptarith, written by Maxwell Sayles
 template <class T>
-T negate_using_mask(const uint64_t m, const T x){
-  assert(m == 0 || m == (uint64_t)(-1));
+T negate_using_mask(const ulong m, const T x){
+  assert(m == 0 || m == (ulong)(-1));
   return (x ^ m) - m;
 
 }
 template<>
-int64_t negate_using_mask<int64_t>(const uint64_t m, const int64_t x){
-  assert(m == 0 || m == (uint64_t)(-1));
+long negate_using_mask<long>(const ulong m, const long x){
+  assert(m == 0 || m == (ulong)(-1));
   return (x ^ m) - m;
 }
 
-int64_t sub_with_mask(uint64_t & m, const int64_t & a, const int64_t & b){
-  int64_t r;
+long sub_with_mask(ulong & m, const long & a, const long & b){
+//   std::cout << "SWK: 0 - (m, r2, r1 << k) is (" << m << ", " << a << ", " << b << ")" << std::endl;
+  static long r;
   #if defined(__x86_64)
   asm("subq %3, %0\n\t"
       "sbbq %1, %1\n\t"  // %1 is either 0 or -1
@@ -416,14 +417,14 @@ int64_t sub_with_mask(uint64_t & m, const int64_t & a, const int64_t & b){
 #else
   m = a < b ? -1 : 0;
   r = a - b;
-#endif  
+#endif
 return r;
 }
 
-void cond_swap2_s64(int64_t & u1, int64_t & u2, int64_t & v1, int64_t & v2){
-  uint64_t m;
-  int64_t d2 = sub_with_mask(m, u2, v2);
-  int64_t d1 = (u1 - v1) & m;
+void cond_swap2_s64(long & u1, long & u2, long & v1, long & v2){
+  ulong m;
+  long d2 = sub_with_mask(m, u2, v2);
+  long d1 = (u1 - v1) & m;
   d2 &= m;
   u1 -= d1;
   u2 -= d2;
@@ -431,17 +432,17 @@ void cond_swap2_s64(int64_t & u1, int64_t & u2, int64_t & v1, int64_t & v2){
   v2 += d2;
 }
 
-uint64_t cond_swap3_s64(int64_t & u1,
-				      int64_t & u2,
-				      int64_t & u3,
-				      int64_t & v1,
-				      int64_t & v2,
-				      int64_t & v3){
+ulong cond_swap3_s64(long & u1,
+				      long & u2,
+				      long & u3,
+				      long & v1,
+				      long & v2,
+				      long & v3){
                   
-  uint64_t m;
-  int64_t d3 = sub_with_mask(m, u3, v3);
-  int64_t d1 = (u1 - v1) & m;
-  int64_t d2 = (u2 - v2) & m;
+  ulong m;
+  long d3 = sub_with_mask(m, u3, v3);
+  long d1 = (u1 - v1) & m;
+  long d2 = (u2 - v2) & m;
   d3 &= m;
   u1 -= d1;
   u2 -= d2;
@@ -452,9 +453,9 @@ uint64_t cond_swap3_s64(int64_t & u1,
   return m;
 }
 
-int msb_u64(uint64_t x){
+int msb_u64(ulong x){
   #if defined(__x86_64)
-  int64_t k = -1;
+  long k = -1;
   asm("bsrq %1, %0\n\t"
       : "=r"(k)
       : "r"(x), "0"(k)

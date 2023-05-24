@@ -17,7 +17,6 @@
  *   kind - bsgs or bs
  *   prec - 0 (automatic), 1 (long), 2 (long long), >2 (ZZ)
  */
-
 // #define LIST_SIZE_QUADRATIC 33554432
 #define LIST_SIZE_QUADRATIC 100000000
 
@@ -259,14 +258,30 @@ int main(int argc, char **argv) {
 //   std::cout << std::endl;
 
   std::cout << "Time spent computing regulator: "; MyTime(timings[4]); std::cout << std::endl;
-  std::cout << "  Time spent estimating hR   : "; MyTime(timings[0]); std::cout << std::endl;
-  std::cout << "  Time spent computing (h^*)R: "; MyTime(timings[1]); std::cout << std::endl;
-  std::cout << "  Time spent checking (h^*)R : "; MyTime(timings[2]); std::cout << std::endl;
-  std::cout << "  Time spent factoring (h^*)R: "; MyTime(timings[3]); std::cout << std::endl;
+  std::cout << "  Time spent estimating hR    : "; MyTime(timings[0]); std::cout << std::endl;
+  std::cout << "  Time spent computing (h^*)R : "; MyTime(timings[1]); std::cout << std::endl;
+  std::cout << "  Time spent checking (h^*)R  : "; MyTime(timings[2]); std::cout << std::endl;
+  std::cout << "  Time spent factoring (h^*)R : "; MyTime(timings[3]); std::cout << std::endl;
   if(alg > 0) {
     std::cout << "Time spent computing class grp: " << clg_str << std::endl;
     std::cout << "Time spent computing overall  : " << tot_str << std::endl;
   }
+  #if defined(USE_XGCD_BINARY)
+  std::cout << "Calculations done using XGCD_BINARY" << std::endl;
+
+  #elif defined(USE_XGCD_PLAIN)
+  std::cout << "Calculations done using XGCD_PLAIN" << std::endl;
+
+  #else
+  std::cout << "Calculations done using XGCD_NTL" << std::endl;
+
+  #endif
+
+//   std::cout << "NUCOMP: spec/reg is " << nucomp_special_case_count << "/" << nucomp_regular_case_count
+//             << " or " << 100*(((double) nucomp_special_case_count)/((double) nucomp_regular_case_count)) << "%" << std::endl;
+//
+//   std::cout << "NUDUPL: spec/reg is " << nudupl_special_case_count << "/" << nudupl_regular_case_count
+//                   << " or " << 100*(((double) nudupl_special_case_count)/((double) nudupl_regular_case_count)) << "%" << std::endl;
 
 
 }

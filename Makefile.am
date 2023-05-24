@@ -111,6 +111,7 @@ interval_SOURCES = tests/Quadratic/Applications/Tabulation/QCL_Tabulation_Interv
                     src/thresholds.cpp                                      \
                     src/XGCD/hxgcd.cpp                                      \
                     src/XGCD/xgcd.cpp                                       \
+                    src/XGCD/xgcd_binary_l2r.cpp                            \
                     src/XGCD/xgcd_iter.cpp                                  \
                     src/XGCD/xgcd_plain.cpp
 
@@ -175,6 +176,7 @@ regulator_SOURCES = tests/UnitTests.cpp                                     \
                     src/thresholds.cpp                                      \
                     src/XGCD/hxgcd.cpp                                      \
                     src/XGCD/xgcd.cpp                                       \
+                    src/XGCD/xgcd_binary_l2r.cpp                            \
                     src/XGCD/xgcd_iter.cpp                                  \
                     src/XGCD/xgcd_plain.cpp
 
@@ -207,6 +209,7 @@ classgroupBSGS_SOURCES = tests/UnitTests.cpp                                \
                     src/thresholds.cpp                                      \
                     src/XGCD/hxgcd.cpp                                      \
                     src/XGCD/xgcd.cpp                                       \
+                    src/XGCD/xgcd_binary_l2r.cpp                            \
                     src/XGCD/xgcd_iter.cpp                                  \
                     src/XGCD/xgcd_plain.cpp
 
@@ -239,6 +242,7 @@ classgroupBS_SOURCES = tests/UnitTests.cpp                                 \
                     src/thresholds.cpp                                      \
                     src/XGCD/hxgcd.cpp                                      \
                     src/XGCD/xgcd.cpp                                       \
+                    src/XGCD/xgcd_binary_l2r.cpp                            \
                     src/XGCD/xgcd_iter.cpp                                  \
                     src/XGCD/xgcd_plain.cpp
 
@@ -299,7 +303,7 @@ test_SOURCES = tests/UnitTests.cpp                                   \
                tests/Quadratic/Square/SquareNudupl_ZZ_Tests.cpp       \
                tests/Quadratic/Square/SquarePlain_ZZ_Tests.cpp        \
                tests/Quadratic/Square/SquarePlain_long_Tests.cpp      \
-			   tests/XGCD/xgcd_test.cpp								  \
+               tests/XGCD/xgcd_test.cpp                               \
                src/common.cpp                                         \
                src/L_function/Character.cpp                           \
                src/L_function/L_function_util.cpp                     \

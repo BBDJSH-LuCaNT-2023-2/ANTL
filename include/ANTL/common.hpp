@@ -248,19 +248,19 @@ long Kronecker(const GF2EX &h, const GF2EX &f, const GF2EX &n);
 
   //mask negation functions: m must be 0 or -1
   template <class T>
-  T negate_using_mask(const uint64_t m, const T x);
+  T negate_using_mask(const ulong m, const T x);
 
-  int64_t sub_with_mask(uint64_t & m, const int64_t & a, const int64_t & b);
+  long sub_with_mask(ulong & m, const long & a, const long & b);
 
-  void cond_swap2_s64(int64_t & u1, int64_t & u2, int64_t & v1, int64_t & v2);
-  uint64_t cond_swap3_s64(int64_t & u1,
-				      int64_t & u2,
-				      int64_t & u3,
-				      int64_t & v1,
-				      int64_t & v2,
-				      int64_t & v3);
+  void cond_swap2_s64(long & u1, long & u2, long & v1, long & v2);
+  ulong cond_swap3_s64(long & u1,
+				      long & u2,
+				      long & u3,
+				      long & v1,
+				      long & v2,
+				      long & v3);
 
-  int msb_u64(uint64_t x);
+  int msb_u64(ulong x);
   // finite field cardinality macros
 
 template <class> ZZ CARDINALITY(void);

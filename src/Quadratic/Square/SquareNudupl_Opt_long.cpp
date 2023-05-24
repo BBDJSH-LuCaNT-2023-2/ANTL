@@ -17,20 +17,23 @@ void SquareNuduplOpt<long>::init(const long &delta_in, const long &h_in, long g_
 template <>
 void SquareNuduplOpt<long>::square(QuadraticIdealBase<long> &C,
                                  const QuadraticIdealBase<long> &A) {
-  // temporary computation of delta and nc_bound
-//   Delta = C.get_QO()->get_discriminant();
-//   NC_BOUND = FloorToZZ(sqrt(sqrt(abs(to_RR(Delta)))));
 
   static long a1, b1, c1, Ca, Cb, Cc;
   static long S, v1, K, T;
-  static long R1, R2, C1, C2, M2, temp;
+  static long Z, R1, R2, C1, C2, M2, temp;
 
   a1 = A.get_a();
   b1 = A.get_b();
   c1 = A.get_c();
 
   // solve S = v1 b1 + u1 a1 (only need v1)
+  #if defined(USE_XGCD_BINARY)
+  XGCD_BINARY_L2R_LEFT(S, v1, b1, a1);
+  #elif defined(USE_XGCD_PLAIN)
+  XGCD_LEFT_PLAIN(S, v1, b1, a1);
+  #else
   XGCD_LEFT(S, v1, b1, a1);
+  #endif
 
   // K = -v1 c1 (mod L)
   K = -(v1 * c1);
@@ -74,7 +77,14 @@ void SquareNuduplOpt<long>::square(QuadraticIdealBase<long> &C,
     // Execute partial reduction
     R2 = a1;
     R1 = K;
+
+    #if defined(USE_XGCD_BINARY)
+    XGCD_PARTIAL_BINARY_L2R(Z, R2, R1, C2, C1, to_long(NC_BOUND));
+    #elif defined(USE_XGCD_PLAIN)
     XGCD_PARTIAL(R2, R1, C2, C1, NC_BOUND);
+    #else
+    XGCD_PARTIAL(R2, R1, C2, C1, NC_BOUND);
+    #endif
 
     // M1 = R1
 

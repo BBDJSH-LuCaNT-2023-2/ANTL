@@ -12,18 +12,19 @@
 
 
 template<>
-void XGCD_BINARY_L2R(int64_t & G, int64_t & X, int64_t & Y, const int64_t & A, const int64_t & B){
+void XGCD_BINARY_L2R(long & G, long & X, long & Y, const long & A, const long & B){
+//   std::cout << "using XGCD_BINARY_L2R" << std::endl;
 
 
-  const int64_t am = A >> 63;
-  const int64_t bm = B >> 63;
+  const long am = A >> 63;
+  const long bm = B >> 63;
 
-  int64_t u1 = 1;
-  int64_t u2 = 0;
-  int64_t u3 = ANTL::negate_using_mask(am, A);
-  int64_t v1 = 0;
-  int64_t v2 = 1;
-  int64_t v3 = ANTL::negate_using_mask(bm, B);
+  long u1 = 1;
+  long u2 = 0;
+  long u3 = ANTL::negate_using_mask(am, A);
+  long v1 = 0;
+  long v2 = 1;
+  long v3 = ANTL::negate_using_mask(bm, B);
   
   // Swap u with v if u3 < v3.
   ANTL::cond_swap3_s64(u1, u2, u3, v1, v2, v3);
@@ -31,7 +32,7 @@ void XGCD_BINARY_L2R(int64_t & G, int64_t & X, int64_t & Y, const int64_t & A, c
     int k = ANTL::msb_u64(u3) - ANTL::msb_u64(v3);
 
     // Subtract 2^k times v from u, and make sure u3 >= 0.
-    uint64_t m;
+    ulong m;
     u3 = ANTL::sub_with_mask(m, u3, v3 << k);
     u1 -= v1 << k;
     u2 -= v2 << k;
@@ -54,7 +55,7 @@ void XGCD_BINARY_L2R(int64_t & G, int64_t & X, int64_t & Y, const int64_t & A, c
   } else {
 #if (REDUCE_OUTPUT == 1)
     // Reduce u1 (mod b) and u2 (mod a) and correct for sign.
-    int64_t q = u1 / b;
+    long q = u1 / b;
     X = ANTL::negate_using_mask_s64(am, u1 - q*b);
     Y = ANTL::negate_using_mask_s64(bm, u2 + q*a);
 #else
@@ -68,16 +69,17 @@ void XGCD_BINARY_L2R(int64_t & G, int64_t & X, int64_t & Y, const int64_t & A, c
 
 
 template<>
-void XGCD_BINARY_L2R_LEFT(int64_t & G, int64_t & X, const int64_t & A, const int64_t & B){
-  assert(X);
+void XGCD_BINARY_L2R_LEFT(long & G, long & X, const long & A, const long & B){
+//   std::cout << "using XGCD_BINARY_L2R_LEFT" << std::endl;
+//   assert(X);
 
-  const int64_t am = A >> 63;
-  const int64_t bm = B >> 63;
+  const long am = A >> 63;
+  const long bm = B >> 63;
 
-  int64_t u1 = 1;
-  int64_t u3 = ANTL::negate_using_mask(am, A);
-  int64_t v1 = 0;
-  int64_t v3 = ANTL::negate_using_mask(bm, B);
+  long u1 = 1;
+  long u3 = ANTL::negate_using_mask(am, A);
+  long v1 = 0;
+  long v3 = ANTL::negate_using_mask(bm, B);
 
   // Swap u with v if u3 < v3.
   ANTL::cond_swap2_s64(u1, u3, v1, v3);
@@ -85,7 +87,7 @@ void XGCD_BINARY_L2R_LEFT(int64_t & G, int64_t & X, const int64_t & A, const int
     int k = ANTL::msb_u64(u3) - ANTL::msb_u64(v3);
 
     // Subtract 2^k times v from u, and make sure u3 >= 0.
-    uint64_t m;
+    ulong m;
     u3 = ANTL::sub_with_mask(m, u3, v3 << k);
     u1 -= v1 << k;
     u1 = ANTL::negate_using_mask(m, u1);
@@ -109,42 +111,47 @@ void XGCD_BINARY_L2R_LEFT(int64_t & G, int64_t & X, const int64_t & A, const int
 }
 
 template<>
-void XGCD_PARTIAL_BINARY_L2R(int64_t & Z, int64_t & R2, int64_t & R1, int64_t & C2, int64_t & C1, const int64_t bound){
-  assert(bound >= 0);
-  int64_t r2 = R2;
-  int64_t r1 = R1; 
-  int64_t c2 = 0;
-  int64_t c1 = -1;
-  int64_t s2 = r2 >> 63;
-  int64_t s1 = r1 >> 63;
-  uint64_t cm = s2 ^ s1;
+void XGCD_PARTIAL_BINARY_L2R(long & Z, long & R2, long & R1, long & C2, long & C1, const long bound){
+//     std::cout << "using XGCD_PARTIAL_BINARY_L2R" << std::endl;
+
+//   assert(bound >= 0);
+  int k = 0;
+  long R2_orig = R2;
+  long r2 = R2;
+  long r1 = R1;
+  long c2 = 0;
+  long c1 = -1;
+  long s2 = r2 >> 63;
+  long s1 = r1 >> 63;
+  ulong cm = s2 ^ s1, m;
   Z = 0;
-  r2 = ANTL::negate_using_mask(s2, r2);
-  r1 = ANTL::negate_using_mask(s1, r1);
-  assert(r2 >= r1);
+
+//   assert(r2 >= r1);
 
   // Swap u with v if u3 < v3.
   Z ^= ANTL::cond_swap3_s64(c2, s2, r2, c1, s1, r1);
-  while (r1 != 0 && r1 > bound) {
-    cout <<"Partial iteration: " << r1 << " " << r2 << endl;
-    int k = ANTL::msb_u64(r2) - ANTL::msb_u64(r1);
+
+  while (r1 > bound) {
+    k = ANTL::msb_u64(r2) - ANTL::msb_u64(r1);
 
     // Subtract 2^k times r1 from r2, make sure r2 >= r1 >= 0
-    uint64_t m;
+    m = 0;
     r2 = ANTL::sub_with_mask(m, r2, r1 << k);
-    c2 -= ANTL::negate_using_mask(cm, c1 << k);
+    c2 -= c1 << k;
 
-    r2 = ANTL::negate_using_mask(m, r2);
-    s2 ^= m;
-    cm ^= m;
+    while(r2 < 0) {
+      r2 += m & r1;
+      c2 += m & c1;
+    }
 
-
-    Z ^= ANTL::cond_swap3_s64(c2, (int64_t&)s2, r2, c1, (int64_t&)s1, r1);
+    Z ^= ANTL::cond_swap3_s64(c2, (long&)s2, r2, c1, (long&)s1, r1);
   }
-
-  R2 = ANTL::negate_using_mask(s2, r2);
-  R1 = ANTL::negate_using_mask(s1, r1);
+  R2 = r2;
+  R1 = r1;
   C2 = c2;
   C1 = c1;
+
+//   assert(abs(R1*C2 - R2*C1) == R2_orig);
+
 }
 

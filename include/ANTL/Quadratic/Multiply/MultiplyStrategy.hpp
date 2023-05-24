@@ -17,6 +17,7 @@
 //#include <ANTL/Quadratic/QuadraticIdealBase.hpp>
 #include <ANTL/Arithmetic/mul_exact.hpp>
 #include <ANTL/XGCD/xgcd.hpp>
+#include <ANTL/XGCD/xgcd_binary_l2r.hpp>
 
 #define MUL_CANTOR 0
 #define MUL_NUCOMP 1

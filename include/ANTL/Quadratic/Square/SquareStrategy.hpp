@@ -15,6 +15,7 @@
 #include <NTL/ZZ.h>
 
 #include <ANTL/XGCD/xgcd.hpp>
+#include <ANTL/XGCD/xgcd_binary_l2r.hpp>
 #include <ANTL/Arithmetic/mul_exact.hpp>
 
 #define SQR_CANTOR 0

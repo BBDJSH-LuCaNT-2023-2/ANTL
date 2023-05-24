@@ -43,20 +43,21 @@ void XGCD_PLAIN(ZZ_pEX & G, ZZ_pEX & X, ZZ_pEX & Y, const ZZ_pEX & A, const ZZ_p
 //Plain XGCD from liboptarith 
 //Written by Maxwell Sayles 
 template<> 
-void XGCD_PLAIN(int64_t & G, int64_t & X, int64_t & Y, const int64_t & A, const int64_t & B){
+void XGCD_PLAIN(long & G, long & X, long & Y, const long & A, const long & B){
+//   std::cout << "using XGCD_PLAIN" << std::endl;
 
-  int64_t t_a = A;
-  int64_t t_b = B;
+  long t_a = A;
+  long t_b = B;
 
-  uint64_t sm = A >> 63;
-  uint64_t sn = B >> 63;
-  t_a = ANTL::negate_using_mask<int64_t>(sm, A);
-  t_b = ANTL::negate_using_mask<int64_t>(sn, B);
+  ulong sm = A >> 63;
+  ulong sn = B >> 63;
+  t_a = ANTL::negate_using_mask<long>(sm, A);
+  t_b = ANTL::negate_using_mask<long>(sn, B);
     
-  int64_t m = 0;
-  int64_t n = 1;
-  int64_t u = 1;
-  int64_t v = 0;
+  long m = 0;
+  long n = 1;
+  long u = 1;
+  long v = 0;
   
   if (t_a == 0) {
     X = 1;
@@ -72,6 +73,7 @@ void XGCD_PLAIN(int64_t & G, int64_t & X, int64_t & Y, const int64_t & A, const 
   }
 
 #if defined(__x86_64)
+//     std::cout << "using XGCD_PLAIN ASM" << std::endl;
     asm("0:\n\t"
       "movq %0, %%rax\n\t"
       "xorq %%rdx, %%rdx\n\t"
@@ -98,7 +100,8 @@ void XGCD_PLAIN(int64_t & G, int64_t & X, int64_t & Y, const int64_t & A, const 
       : "0"(t_a), "1"(t_b), "2"(u), "3"(v), "4"(m), "5"(n)
       : "cc", "rax", "rdx");
 #else
-  int64_t q, t;
+//   std::cout << "using XGCD_PLAIN NON-ASM" << std::endl;
+  long q, t;
   while (B != 0) {
     q = t_a / t_b;
     
@@ -116,8 +119,8 @@ void XGCD_PLAIN(int64_t & G, int64_t & X, int64_t & Y, const int64_t & A, const 
   }
 #endif
 
-  X = ANTL::negate_using_mask<int64_t>(sm, u);
-  Y = ANTL::negate_using_mask<int64_t>(sn, v);
+  X = ANTL::negate_using_mask<long>(sm, u);
+  Y = ANTL::negate_using_mask<long>(sn, v);
   G = t_a;
 
 }
@@ -157,14 +160,15 @@ void XGCD_LEFT_PLAIN(ZZ_pEX & G, ZZ_pEX & X, const ZZ_pEX & A, const ZZ_pEX & B)
 }
 
 template<>
-void XGCD_LEFT_PLAIN(int64_t & G, int64_t & X, const int64_t & A, const int64_t & B) {
-  int64_t ma = A;
-  int64_t mb = B;
+void XGCD_LEFT_PLAIN(long & G, long & X, const long & A, const long & B) {
+//   std::cout << "using XGCD_LEFT_PLAIN" << std::endl;
+  long ma = A;
+  long mb = B;
 
-  int64_t ta;
+  long ta;
   int sa;
 #if !defined(__x86_64)
-  int64_t q, t;
+  long q, t;
 #endif
 
   if (ma < 0) {
@@ -191,6 +195,7 @@ void XGCD_LEFT_PLAIN(int64_t & G, int64_t & X, const int64_t & A, const int64_t 
   }
 
 #if defined(__x86_64)
+//   std::cout << "using XGCD_LEFT_PLAIN ASM" << std::endl;
   // 64bit gcd
   asm("0:\n\t"
       "xorq %%rdx, %%rdx\n\t"
@@ -214,7 +219,7 @@ void XGCD_LEFT_PLAIN(int64_t & G, int64_t & X, const int64_t & A, const int64_t 
 
       "1:\n\t"
       : "=r"(X), "=r"(ma), "=r"(mb), "=r"(ta)
-      : "0"(X), "1"(ma), "2"(mb), "3"(ta), "r"((int64_t)0x7FFFFFFFLL)
+      : "0"(X), "1"(ma), "2"(mb), "3"(ta), "r"((long)0x7FFFFFFFLL)
       : "cc", "rax", "rdx");
   // either b == 0, or both a and b are 32bit
 
@@ -244,6 +249,7 @@ void XGCD_LEFT_PLAIN(int64_t & G, int64_t & X, const int64_t & A, const int64_t 
     mb = b32;
   }
 #else
+//   std::cout << "using XGCD_LEFT_PLAIN NON-ASM" << std::endl;
   while (B != 0) {
     q = A / B;
 

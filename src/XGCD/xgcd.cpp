@@ -22,6 +22,7 @@ void XGCD_LEFT(ZZ & G, ZZ & X, const ZZ & A, const ZZ & B)
 template <>
 void XGCD_LEFT(long & G, long & X, const long & A, const long & B)
 {
+//   std::cout << "using XGCD_PLAIN" << std::endl;
   long Y;
   NTL::XGCD(G,X,Y,A,B);
 }
@@ -153,7 +154,29 @@ void XGCD_PARTIAL(ZZ & R2, ZZ & R1, ZZ & C2, ZZ & C1, const ZZ & bound) {
 //   if (R2 < 0) { NTL::negate(C2, C2); NTL::negate(C1, C1); NTL::negate(R2, R2);  }
 }
 
+// void XGCD_PARTIAL(long & R2, long & R1, long & C2, long & C1, const ZZ & bound) {
+//     static long  q, r;
+//
+//     C2 = 0;
+//     C1 = -1;
+//
+//     while (R1 > bound) {
+//       q = R2 / R1;
+// //       r = R2 % R1;
+//       r = R2 - R1 * q;
+//       R2 = R1;
+//       R1 = r;
+//
+//       r = C2 - q * C1;
+//       C2 = C1;
+//       C1 = r;
+// //       std::cout << "(R2, R1, C2, C1) is (" << R2 << ", " << R1 << ", " << C2 << ", " << C1 << ")" << std::endl;
+// //       std::cout << "Z is " << Z << std::endl;
+//     }
+// }
+
 void XGCD_PARTIAL(long & R2, long & R1, long & C2, long & C1, const ZZ & bound) {
+//   std::cout << "using XGCD_PARTIAL" << std::endl;
   static long q, r, t1, t2;
   static long A2, A1, TA, B2, B1, TB, rr2, rr1, Tr, qq, bb, T, T1;
   static int i;
@@ -251,18 +274,18 @@ void XGCD_PARTIAL(long & R2, long & R1, long & C2, long & C1, const ZZ & bound) 
       //MulAddTo(C1, C2, B1);
       C2 = r;
 
-      if (R1 < 0) {
-        C1 -= C1;
-        R1 -= R1;
-//      NTL::negate(C1, C1);
-//      NTL::negate(R1, R1);
-      }
-      if (R2 < 0) {
-        C2 -= C2;
-        R2 -= C2;
-//      NTL::negate(C2, C2);
-//      NTL::negate(R2, R2);
-      }
+//       if (R1 < 0) {
+//         C1 -= C1;
+//         R1 -= R1;
+// //      NTL::negate(C1, C1);
+// //      NTL::negate(R1, R1);
+//       }
+//       if (R2 < 0) {
+//         C2 -= C2;
+//         R2 -= C2;
+// //      NTL::negate(C2, C2);
+// //      NTL::negate(R2, R2);
+//       }
     }
 
 /*
@@ -275,14 +298,14 @@ void XGCD_PARTIAL(long & R2, long & R1, long & C2, long & C1, const ZZ & bound) 
 
   }
 
-  if (R2 < 0) {
-    C2 -= C2;
-    C1 -= C2;
-    R2 -= R2;
-//     NTL::negate(C2, C2);
-//     NTL::negate(C1, C1);
-//     NTL::negate(R2, R2);
-  }
+//   if (R2 < 0) {
+//     C2 -= C2;
+//     C1 -= C2;
+//     R2 -= R2;
+// //     NTL::negate(C2, C2);
+// //     NTL::negate(C1, C1);
+// //     NTL::negate(R2, R2);
+//   }
 }
 
 

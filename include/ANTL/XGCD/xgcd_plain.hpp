@@ -47,7 +47,7 @@ NTL_CLIENT
 template < class T >
 void XGCD_PLAIN(T & G, T & X, T & Y, const T & A, const T & B);
 template<>
-void XGCD_PLAIN(int64_t&, int64_t&, int64_t&, const int64_t&, const int64_t&);
+void XGCD_PLAIN(long&, long&, long&, const long&, const long&);
 template<>
 void XGCD_PLAIN(ZZ&, ZZ&, ZZ&, const ZZ&, const ZZ&);
 
@@ -60,7 +60,7 @@ void XGCD_PLAIN(ZZ&, ZZ&, ZZ&, const ZZ&, const ZZ&);
 template < class T >
 void XGCD_LEFT_PLAIN(T & G, T & X, const T & A, const T & B);
 template<>
-void XGCD_LEFT_PLAIN(int64_t & G, int64_t & X, const int64_t & A, const int64_t & B);
+void XGCD_LEFT_PLAIN(long & G, long & X, const long & A, const long & B);
 
 
 //
