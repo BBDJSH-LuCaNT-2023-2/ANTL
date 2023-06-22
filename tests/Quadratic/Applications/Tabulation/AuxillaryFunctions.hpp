@@ -54,7 +54,7 @@ std::tuple<double, ZZ, vector<long>> get_regulator_and_hstar(QuadraticOrder<long
   return {regulator, h_star, timings};
 }
 
-std::pair<vector<long>, long> get_class_group_BSGS(QuadraticOrder<long> &quad_order, double regulator, ZZ h_star) {
+std::tuple<vector<long>, long, long, long> get_class_group_BSGS(QuadraticOrder<long> &quad_order, double regulator, ZZ h_star) {
   // Setting up the ClassGroupBSGSReal object
   ClassGroupBSGSReal<long> class_group_bsgs_real1{&quad_order};
   class_group_bsgs_real1.set_regulator(regulator);
@@ -80,10 +80,10 @@ std::pair<vector<long>, long> get_class_group_BSGS(QuadraticOrder<long> &quad_or
 
   long clg_mins = dur_class_group_trial.count();
 
-  return {class_group_long, clg_mins};
+  return {class_group_long, 0, 0, clg_mins};
 }
 
-std::pair<vector<long>, long> get_class_group_BS(QuadraticOrder<long> &quad_order, double regulator, ZZ h_star) {
+std::tuple<vector<long>, long, long, long> get_class_group_BS(QuadraticOrder<long> &quad_order, double regulator, ZZ h_star) {
   // Setting up the ClassGroupBSGSReal object
   ClassGroupBSReal<long> class_group_bs_real1{&quad_order};
   class_group_bs_real1.set_regulator(regulator);
@@ -92,6 +92,10 @@ std::pair<vector<long>, long> get_class_group_BS(QuadraticOrder<long> &quad_orde
   auto start_trial_time = std::chrono::high_resolution_clock::now();
   class_group_bs_real1.cg_bs_real(h_star);
   auto finish_trial_time = std::chrono::high_resolution_clock::now();
+
+  // Getting number of prime ideals and pmax
+  long nump = class_group_bs_real1.get_nump();
+  long pmax = class_group_bs_real1.get_pmax();
 
   // Adding computed class group to reslults vector
   vector<ZZ> class_group_ZZ = class_group_bs_real1.get_class_group();
@@ -108,7 +112,7 @@ std::pair<vector<long>, long> get_class_group_BS(QuadraticOrder<long> &quad_orde
 
   long clg_mins = dur_class_group_trial.count();
 
-  return {class_group_long, clg_mins};
+  return {class_group_long, nump, pmax, clg_mins};
 }
 
 void get_DList_real_custom(long ubound, std::list<long> &discriminants);

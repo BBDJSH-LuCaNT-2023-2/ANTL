@@ -316,12 +316,12 @@ int main(int argc, char **argv) {
           l_function.init(to_long(Dl), 2);
 
 //           Cl = QO.class_group(CLASS_GROUP_BSGS);
-          tuple<double, ZZ, long> regulator_and_hstar = get_regulator_and_hstar(QO, l_function);
+          tuple<double, ZZ, vector<long>> regulator_and_hstar = get_regulator_and_hstar(QO, l_function);
 
           double regulator = std::get<0>(regulator_and_hstar);
           ZZ h_star = std::get<1>(regulator_and_hstar);
 
-          pair<vector<long>, long> class_group_and_time;
+          tuple<vector<long>, long, long, long> class_group_and_time;
           // Computing and timing a single class group BS computation
           class_group_and_time = get_class_group_BS(QO, regulator, h_star);
 
@@ -332,8 +332,8 @@ int main(int argc, char **argv) {
           rank = class_group.size();
 
           outfile << (D - oldD) << " " << flush;
-//           outfile << QO.get_nump() << " " << flush;
-//           outfile << QO.get_pmax() << " " << flush;
+          outfile << std::get<1>(class_group_and_time) << " " << flush;
+          outfile << std::get<2>(class_group_and_time) << " " << flush;
           outfile << 1 << " " << 1 << " " << flush;
 
           outfile << regulator << " " << flush;

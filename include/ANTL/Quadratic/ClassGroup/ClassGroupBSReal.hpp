@@ -50,6 +50,9 @@ private:
   // number of primes used for BSGS
   long num_prime_ideals;
 
+  // max prime ideal norm
+  T max_p;
+
   // class number
   ZZ h;
 
@@ -74,6 +77,15 @@ public:
   void set_regulator(double &ext_regulator){regulator = ext_regulator;}
 
   vector<ZZ> get_class_group(){return CL;}
+
+  T get_pmax()  {
+//     return fact_base[contributors[numFB-1]].get_a();
+    return max_p;
+  };
+
+  long get_nump()  {
+    return num_prime_ideals;
+  };
 
 private:
   ZZ get_dist_mod(const T &Delta) { return CeilToZZ(log(to_RR(to_ZZ(Delta)))); }
@@ -726,9 +738,10 @@ void ClassGroupBSReal<T>::get_next_prime(QuadraticClassGroupElement<T> &G) {
   }
 
   long p = PS.next();
-
-  while (!G.assign_prime(to<T>(p)))
+  while (!G.assign_prime(to<T>(p))) {
     p = PS.next();
+  }
+  max_p = p;
 }
 
 } // namespace ANTL
