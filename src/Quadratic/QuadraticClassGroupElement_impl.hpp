@@ -139,7 +139,7 @@ bool QuadraticClassGroupElement<T>::assign_prime(const T &p) {
 
   bool OK = QuadraticIdealBase<T>::assign_prime(p);
 
-  if (OK) {
+  if (!this->is_reduced()) {
     this->reduce();
   }
 

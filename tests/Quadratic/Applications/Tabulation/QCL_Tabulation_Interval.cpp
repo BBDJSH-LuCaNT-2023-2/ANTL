@@ -45,6 +45,7 @@ int main(int argc, char **argv) {
   long n, i, Dl;
   //   timer t;
   vector<long> timings = {0, 0, 0, 0, 0};
+  long tc = 0;
   int vb, tp, table, uncond, alg, prec;
 
   if (argc != 9) {
@@ -177,7 +178,7 @@ int main(int argc, char **argv) {
       timings[i] += trial_timings[i];
     }
 
-    pair<vector<long>, long> class_group_and_time;
+    tuple<vector<long>, long, long, long> class_group_and_time;
     if(alg == 1) {
       // Computing and timing a single class group BSGS computation
       start_trial_time = high_resolution_clock::now();
@@ -188,11 +189,11 @@ int main(int argc, char **argv) {
     }
     else if(alg == 2) {
       // Computing and timing a single class group BS computation
-      start_trial_time = high_resolution_clock::now();
+//       start_trial_time = high_resolution_clock::now();
       class_group_and_time = get_class_group_BS(QO, regulator, h_star);
-      finish_trial_time = high_resolution_clock::now();
+//       finish_trial_time = high_resolution_clock::now();
 
-      dur_class_group_trial = duration_cast<microseconds>(finish_trial_time - start_trial_time);
+      tc += std::get<3>(class_group_and_time);
     }
 
     std::cout << " " << long(floor(regulator*1000)) << flush;
@@ -200,12 +201,14 @@ int main(int argc, char **argv) {
     if(alg > 0) {
       //Formatting the class group first
       vector<long> class_group = std::get<0>(class_group_and_time);
+      long nump = std::get<1>(class_group_and_time);
+      long pmax = std::get<2>(class_group_and_time);
       class_group.erase(std::remove(class_group.begin(), class_group.end(), 1), class_group.end());
 
       //Computing new durations totals
       total_dur_class_group_trial += dur_class_group_trial;
 
-      std::cout << " " << class_group << std::flush;
+      std::cout << " " << nump << " " << pmax << " " << class_group << std::flush;
     }
 
     std::cout << std::endl;
@@ -263,7 +266,7 @@ int main(int argc, char **argv) {
   std::cout << "  Time spent checking (h^*)R  : "; MyTime(timings[2]); std::cout << std::endl;
   std::cout << "  Time spent factoring (h^*)R : "; MyTime(timings[3]); std::cout << std::endl;
   if(alg > 0) {
-    std::cout << "Time spent computing class grp: " << clg_str << std::endl;
+    std::cout << "Time spent computing class grp: "; MyTime(tc); std::cout << std::endl;
     std::cout << "Time spent computing overall  : " << tot_str << std::endl;
   }
   #if defined(USE_XGCD_BINARY)

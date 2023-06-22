@@ -206,7 +206,7 @@ namespace ANTL
   MyTime(long tt)
   {
     long d=0,h=0,m=0,s=0,ms=0,t;
-
+//     std::cout << "MyTime is " << tt << std::endl;
     t = tt;
     ms = t % 1000;
     t /= 1000000;

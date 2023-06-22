@@ -36,7 +36,7 @@
 #define INVARIANTS_TABULATION_TEST
 
 // #define LIST_SIZE_QUADRATIC 33554432
-#define LIST_SIZE_QUADRATIC 1000000
+#define LIST_SIZE_QUADRATIC 10000000
 
 #include "AuxillaryFunctions.hpp"
 
@@ -200,6 +200,9 @@ using namespace ANTL;
           MPI_Unpack(buffer, BUFLEN, &position, &tc, 1, MPI_LONG,
                      MPI_COMM_WORLD);
 
+//           tr *= 10;
+//           tc *= 10;
+
           cout << "Interval " << i << " - " << n << " fields, Total Time: " << flush;
           MyTime(t1*10000);
           cout << " (Regulator: " << flush; MyTime(tr);
@@ -293,7 +296,7 @@ using namespace ANTL;
       cout << "Total regulator time:  " << flush;
       MyTime(total_tr);
       cout << endl;
-      cout << "Total classgroup time:  " << flush;
+      cout << "Total class group time:  " << flush;
       MyTime(total_tc);
       cout << endl;
       cout << "Real time:  " << flush;
@@ -455,17 +458,23 @@ using namespace ANTL;
           }
 
           vector<long> class_group;
+          long nump;
+          long pmax;
           if(alg == 0) {
             // Computing and timing a single class group BSGS computation
-            std::pair<vector<long>, long> class_group_pair = get_class_group_BSGS(QO, regulator, h_star);
+            std::tuple<vector<long>, long, long, long> class_group_pair = get_class_group_BSGS(QO, regulator, h_star);
             class_group = std::get<0>(class_group_pair);
-            tc += std::get<1>(class_group_pair);
+            nump = std::get<1>(class_group_pair);
+            pmax = std::get<2>(class_group_pair);
+            tc += std::get<3>(class_group_pair);
           }
           else if(alg == 1) {
             // Computing and timing a single class group BS computation
-            std::pair<vector<long>, long> class_group_pair = get_class_group_BS(QO, regulator, h_star);
+            std::tuple<vector<long>, long, long, long> class_group_pair = get_class_group_BS(QO, regulator, h_star);
             class_group = std::get<0>(class_group_pair);
-            tc += std::get<1>(class_group_pair);
+            nump = std::get<1>(class_group_pair);
+            pmax = std::get<2>(class_group_pair);
+            tc += std::get<3>(class_group_pair);
           }
 
           //Formatting the class group first
@@ -474,8 +483,7 @@ using namespace ANTL;
           //Outputting to stream
 //           std::cout << " " << regulator*1000 << flush;
           outfile << std::fixed;
-          outfile << " " << regulator << flush;
-          outfile << " " << class_group << std::endl;
+          outfile << " " << nump << " " << pmax << " " << class_group << " " << regulator << std::endl;
         }
 
         t.stop_timer();
@@ -496,7 +504,7 @@ using namespace ANTL;
         MPI_Pack(&idx, 1, MPI_LONG, buffer, BUFLEN, &position, MPI_COMM_WORLD);
         MPI_Pack(&n, 1, MPI_LONG, buffer, BUFLEN, &position, MPI_COMM_WORLD);
         MPI_Pack(&t1, 1, MPI_LONG, buffer, BUFLEN, &position, MPI_COMM_WORLD);
-        MPI_Pack(&tr[0], 1, MPI_LONG, buffer, BUFLEN, &position, MPI_COMM_WORLD);
+        MPI_Pack(&tr[4], 1, MPI_LONG, buffer, BUFLEN, &position, MPI_COMM_WORLD);
         MPI_Pack(&tc, 1, MPI_LONG, buffer, BUFLEN, &position, MPI_COMM_WORLD);
         MPI_Send(buffer, BUFLEN, MPI_PACKED, 0, TIME_DATA, MPI_COMM_WORLD);
 
